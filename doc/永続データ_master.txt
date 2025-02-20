@@ -1,0 +1,15 @@
+■master
+
+・front_user_info_master
+　・PK
+　　・userId
+
+
+・front_user_login_master
+　・PK
+　　・userId
+
+
+
+
+
