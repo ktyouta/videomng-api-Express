@@ -14,6 +14,41 @@ datasource db {
 }
 
 
+// テスト接続用
 model TestConnection {
   id    Int     @id @default(autoincrement())
+  @@map("test_connection")
+}
+
+
+// ログインマスタ
+model FrontUserLoginMaster {
+  userId      String   @id @db.VarChar(36)  @map("user_id")
+  password    String   @db.VarChar(255)  @map("password")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@map("front_user_login_master")
+}
+
+
+// フロントユーザーマスタ
+model FrontUserInfoMaster {
+  userId      String   @id @db.VarChar(36)  @map("user_id")
+  userName    String   @db.VarChar(255)  @map("user_name")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@map("front_user_info_master")
+}
+
+
+// お気に入り動画
+model FavariteMovieTransaction {
+  userId      String   @id @db.VarChar(36)  @map("user_id")
+  movieId    String   @db.VarChar(255)  @map("movie_id")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@map("favarite_movie_transaction")
 }
