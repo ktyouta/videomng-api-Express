@@ -1,6 +1,6 @@
 import { RepositoryType } from "../../../util/const/CommonConst";
 import { SeqMasterRepositoryPostgres } from "./concrete/SeqMasterRepositoryPostgres";
-import { SeqMasterRepositoryPostgresRepositoryInterface } from "./interface/SeqMasterRepositoryPostgresRepositoryInterface";
+import { SeqMasterRepositoryInterface } from "./interface/SeqMasterRepositoryInterface";
 
 
 
@@ -11,11 +11,11 @@ import { SeqMasterRepositoryPostgresRepositoryInterface } from "./interface/SeqM
 export class SeqMasterRepositorys {
 
 
-    private readonly repositorys: Record<RepositoryType, SeqMasterRepositoryPostgresRepositoryInterface>;
+    private readonly repositorys: Record<RepositoryType, SeqMasterRepositoryInterface>;
 
     constructor() {
 
-        const repositorys: Record<RepositoryType, SeqMasterRepositoryPostgresRepositoryInterface> = {
+        const repositorys: Record<RepositoryType, SeqMasterRepositoryInterface> = {
             [RepositoryType.POSTGRESQL]: (new SeqMasterRepositoryPostgres())
         }
 
@@ -28,7 +28,7 @@ export class SeqMasterRepositorys {
      * @param repositoryType 
      * @returns 
      */
-    public get(repositoryType: RepositoryType): SeqMasterRepositoryPostgresRepositoryInterface {
+    public get(repositoryType: RepositoryType): SeqMasterRepositoryInterface {
         return this.repositorys[repositoryType];
     }
 }
