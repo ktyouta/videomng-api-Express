@@ -8,5 +8,5 @@ export const FLG = {
  * リポジトリ切り替え用
  */
 export enum RepositoryType {
-    JSON = "JSON",
+    POSTGRESQL = `POSTGRESQL`,
 }
