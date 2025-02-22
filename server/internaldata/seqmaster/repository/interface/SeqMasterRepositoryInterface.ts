@@ -1,4 +1,4 @@
-import { SeqMaster } from "@prisma/client";
+import { Prisma, SeqMaster } from "@prisma/client";
 import { SeqKeyModel } from "../../properties/SeqKeyModel";
 
 
@@ -10,7 +10,7 @@ export interface SeqMasterRepositoryInterface {
     /**
      * シーケンスを取得
      */
-    getSequenceByKey(seqKeyModel: SeqKeyModel): Promise<SeqMaster | null>;
+    getSequenceByKey(seqKeyModel: SeqKeyModel, tx: Prisma.TransactionClient): Promise<SeqMaster | null>;
 
 
     /**
@@ -18,6 +18,6 @@ export interface SeqMasterRepositoryInterface {
      * @param key 
      * @param nextId 
      */
-    updateSequence(seqKeyModel: SeqKeyModel, nextId: number): Promise<SeqMaster>;
+    updateSequence(seqKeyModel: SeqKeyModel, nextId: number, tx: Prisma.TransactionClient): Promise<SeqMaster>;
 }
 

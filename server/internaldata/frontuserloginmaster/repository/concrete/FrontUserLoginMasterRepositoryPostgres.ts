@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { FLG } from "../../../../util/const/CommonConst";
 import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
 import { FrontUserLoginMasterInsertEntity } from "../../entity/FrontUserLoginMasterInsertEntity";
@@ -19,12 +20,14 @@ export class FrontUserLoginMasterRepositoryPostgres implements FrontUserLoginMas
     /**
      * フロントのユーザー情報を作成
      */
-    async insert(frontUserLoginMasterInsertEntity: FrontUserLoginMasterInsertEntity) {
+    async insert(frontUserLoginMasterInsertEntity: FrontUserLoginMasterInsertEntity,
+        tx: Prisma.TransactionClient
+    ) {
 
         const userId = frontUserLoginMasterInsertEntity.frontUserId;
         const password = frontUserLoginMasterInsertEntity.frontUserPassword;
 
-        const newUserInfo = PrismaClientInstance.getInstance().frontUserLoginMaster.create({
+        const newUserInfo = tx.frontUserLoginMaster.create({
             data: {
                 userId,
                 password,
@@ -41,12 +44,13 @@ export class FrontUserLoginMasterRepositoryPostgres implements FrontUserLoginMas
     /**
      * フロントのユーザー情報を更新
      */
-    async update(frontUserLoginMasterUpdateEntity: FrontUserLoginMasterUpdateEntity) {
+    async update(frontUserLoginMasterUpdateEntity: FrontUserLoginMasterUpdateEntity,
+        tx: Prisma.TransactionClient) {
 
         const userId = frontUserLoginMasterUpdateEntity.frontUserId;
         const password = frontUserLoginMasterUpdateEntity.frontUserPassword;
 
-        const seqData = PrismaClientInstance.getInstance().frontUserLoginMaster.update({
+        const seqData = tx.frontUserLoginMaster.update({
             where: { userId },
             data: {
                 password,

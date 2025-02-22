@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
 import { SeqKeyModel } from "../../properties/SeqKeyModel";
 import { SeqMasterRepositoryInterface } from "../interface/SeqMasterRepositoryInterface";
@@ -18,11 +19,11 @@ export class SeqMasterRepositoryPostgres implements SeqMasterRepositoryInterface
     /**
      * シーケンスを取得
      */
-    async getSequenceByKey(seqKeyModel: SeqKeyModel) {
+    async getSequenceByKey(seqKeyModel: SeqKeyModel, tx: Prisma.TransactionClient) {
 
         const key = seqKeyModel.key;
 
-        const seqData = PrismaClientInstance.getInstance().seqMaster.findUnique({
+        const seqData = tx.seqMaster.findUnique({
             where: { key },
         });
 
@@ -33,11 +34,11 @@ export class SeqMasterRepositoryPostgres implements SeqMasterRepositoryInterface
     /**
      * シーケンスを更新
      */
-    async updateSequence(seqKeyModel: SeqKeyModel, nextId: number) {
+    async updateSequence(seqKeyModel: SeqKeyModel, nextId: number, tx: Prisma.TransactionClient) {
 
         const key = seqKeyModel.key;
 
-        const seqData = PrismaClientInstance.getInstance().seqMaster.update({
+        const seqData = tx.seqMaster.update({
             where: { key },
             data: {
                 nextId,

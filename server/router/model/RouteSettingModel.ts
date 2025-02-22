@@ -26,7 +26,8 @@ export class RouteSettingModel {
 
     constructor(httpMthodType: HttpMethodType,
         executeFunction: ((req: Request, res: Response, id: string) => Response<any, Record<string, any>>) | (
-            (req: Request, res: Response, id?: string) => Promise<Response<any, Record<string, any>>>),
+            (req: Request, res: Response, id?: string) => Promise<Response<any, Record<string, any>>>) |
+            ((req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>),
         endPoint: ApiEndopoint,
     ) {
 

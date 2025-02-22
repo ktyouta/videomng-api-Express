@@ -8,7 +8,7 @@ import { FrontUserInfoMasterRepositoryInterface } from "./interface/FrontUserInf
  * 永続ロジック用クラスの管理用
  * ロジックを追加する場合はコンストラクタ内でrepositorysに追加する
  */
-export class FrontUserInfoMasterRepository {
+export class FrontUserInfoMasterRepositorys {
 
 
     private readonly repositorys: Record<RepositoryType, FrontUserInfoMasterRepositoryInterface>;

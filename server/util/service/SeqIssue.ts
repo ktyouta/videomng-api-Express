@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import { SeqKeyModel } from "../../internaldata/seqmaster/properties/SeqKeyModel";
 import { SeqMasterRepositoryInterface } from "../../internaldata/seqmaster/repository/interface/SeqMasterRepositoryInterface";
 import { SeqMasterRepositorys } from "../../internaldata/seqmaster/repository/SeqMasterRepositorys";
@@ -18,10 +19,10 @@ export class SeqIssue {
      */
     static async get(keyModel: SeqKeyModel) {
 
-        const retId = PrismaClientInstance.getInstance().$transaction(async (tx) => {
+        const retId = PrismaClientInstance.getInstance().$transaction(async (tx: Prisma.TransactionClient) => {
 
             // シーケンスを取得
-            const sequence = await this._seqMasterRepository.getSequenceByKey(keyModel);
+            const sequence = await this._seqMasterRepository.getSequenceByKey(keyModel, tx);
 
             if (!sequence) {
                 throw Error(`キーに対するシーケンスを取得できませんでした。key:${keyModel.key}`);
@@ -31,7 +32,7 @@ export class SeqIssue {
             const nextId = retId + SeqIssue.INCREMENT_SEQ;
 
             // シーケンスを更新
-            await this._seqMasterRepository.updateSequence(keyModel, nextId);
+            await this._seqMasterRepository.updateSequence(keyModel, nextId, tx);
 
             return retId;
         });

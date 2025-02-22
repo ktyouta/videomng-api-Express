@@ -1,4 +1,4 @@
-import { FrontUserInfoMaster, FrontUserLoginMaster, SeqMaster } from "@prisma/client";
+import { FrontUserInfoMaster, FrontUserLoginMaster, Prisma, SeqMaster } from "@prisma/client";
 import { FrontUserLoginMasterInsertEntity } from "../../entity/FrontUserLoginMasterInsertEntity";
 import { FrontUserLoginMasterUpdateEntity } from "../../entity/FrontUserLoginMasterUpdateEntity";
 
@@ -11,11 +11,13 @@ export interface FrontUserLoginMasterRepositoryInterface {
     /**
      * フロントのユーザーログイン情報を作成
      */
-    insert(frontUserLoginMasterInsertEntity: FrontUserLoginMasterInsertEntity): Promise<FrontUserLoginMaster>;
+    insert(frontUserLoginMasterInsertEntity: FrontUserLoginMasterInsertEntity,
+        tx: Prisma.TransactionClient): Promise<FrontUserLoginMaster>;
 
     /**
      * フロントのユーザーログイン情報を更新
      */
-    update(frontUserLoginMasterUpdateEntity: FrontUserLoginMasterUpdateEntity): Promise<FrontUserLoginMaster>;
+    update(frontUserLoginMasterUpdateEntity: FrontUserLoginMasterUpdateEntity,
+        tx: Prisma.TransactionClient): Promise<FrontUserLoginMaster>;
 }
 
