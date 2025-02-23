@@ -55,7 +55,7 @@ export class CreateFrontUserInfoService {
         // ユーザー情報を取得
         const activeUserInfoMasterList = await frontUserInfoCreateRepository.select(frontUserInfoCreateSelectEntity);
 
-        return [].length > 0;
+        return activeUserInfoMasterList.length > 0;
     }
 
 

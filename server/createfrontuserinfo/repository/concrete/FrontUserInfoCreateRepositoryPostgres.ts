@@ -17,11 +17,11 @@ export class FrontUserInfoCreateRepositoryPostgres implements FrontUserInfoCreat
      * ユーザー取得
      * @returns 
      */
-    async select(frontUserInfoCreateSelectEntity: FrontUserInfoCreateSelectEntity): Promise<FrontUserInfoMaster> {
+    async select(frontUserInfoCreateSelectEntity: FrontUserInfoCreateSelectEntity): Promise<FrontUserInfoMaster[]> {
 
         const userName = frontUserInfoCreateSelectEntity.frontUserName;
 
-        const users = await PrismaClientInstance.getInstance().$queryRaw<FrontUserInfoMaster>`
+        const users = await PrismaClientInstance.getInstance().$queryRaw<FrontUserInfoMaster[]>`
             SELECT * FROM "front_user_info_master" WHERE user_name = ${userName} AND delete_flg = '0'
             `;
 

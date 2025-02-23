@@ -20,7 +20,7 @@ import { Prisma } from "@prisma/client";
 
 export class CreateFrontUserInfoController extends RouteController {
 
-    private createFrontUserInfoService = new CreateFrontUserInfoService();
+    private readonly createFrontUserInfoService = new CreateFrontUserInfoService();
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -37,7 +37,7 @@ export class CreateFrontUserInfoController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response) {
+    public doExecute(req: Request, res: Response) {
 
         // リクエストボディ
         const requestBody: FrontUserInfoCreateRequestType = req.body;

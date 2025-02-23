@@ -1,4 +1,4 @@
-import { IRouterMatcher, Router, Request, Response } from "express";
+import { IRouterMatcher, Router, Request, Response, NextFunction } from "express";
 import { ApiEndopoint } from "../conf/ApiEndpoint";
 
 /**
@@ -14,7 +14,8 @@ export enum HttpMethodType {
 // 実行関数の型
 type executeFunctionType = ((req: Request, res: Response, id: string) => Response<any, Record<string, any>>) |
     ((req: Request, res: Response, id: string) => Promise<Response<any, Record<string, any>>>) |
-    ((req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>)
+    ((req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>) |
+    ((req: Request, res: Response) => Response<any, Record<string, any>> | undefined);
 
 
 export class RouteSettingModel {

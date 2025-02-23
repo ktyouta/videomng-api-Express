@@ -10,6 +10,6 @@ export interface FrontUserInfoCreateRepositoryInterface {
     /**
      * ユーザー取得
      */
-    select(frontUserInfoCreateSelectEntity: FrontUserInfoCreateSelectEntity): Promise<FrontUserInfoMaster>;
+    select(frontUserInfoCreateSelectEntity: FrontUserInfoCreateSelectEntity): Promise<FrontUserInfoMaster[]>;
 
 }
