@@ -1,6 +1,6 @@
 import { HTTP_STATUS_CREATED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { CreateFrontUserInfoService } from "../service/CreateFrontUserInfoService";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
@@ -16,6 +16,7 @@ import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinf
 import { FrontUserInfoCreateResponseModel } from "../model/FrontUserInfoCreateResponseModel";
 import { RouteController } from "../../router/controller/RouteController";
 import { Prisma } from "@prisma/client";
+import { PrismaTransaction } from "../../util/service/PrismaTransaction";
 
 
 export class CreateFrontUserInfoController extends RouteController {
@@ -37,7 +38,7 @@ export class CreateFrontUserInfoController extends RouteController {
      * @param res 
      * @returns 
      */
-    public doExecute(req: Request, res: Response) {
+    public doExecute(req: Request, res: Response, next: NextFunction) {
 
         // リクエストボディ
         const requestBody: FrontUserInfoCreateRequestType = req.body;
@@ -56,12 +57,12 @@ export class CreateFrontUserInfoController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        // リクエストボディの型を変換する
-        const frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel =
-            this.createFrontUserInfoService.parseRequestBody(requestBody);
-
         // トランザクション開始
-        PrismaClientInstance.getInstance().$transaction(async (tx: Prisma.TransactionClient) => {
+        PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
+
+            // リクエストボディの型を変換する
+            const frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel =
+                this.createFrontUserInfoService.parseRequestBody(requestBody);
 
             // ユーザー重複チェック
             const isExistUser = await this.createFrontUserInfoService.checkUserNameExists(frontUserInfoCreateRequestBody);
@@ -104,6 +105,6 @@ export class CreateFrontUserInfoController extends RouteController {
                 this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody, newJsonWebTokenModel);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の登録が完了しました。`, frontUserInfoCreateResponse);
-        }, { timeout: 10000 });
+        }, next);
     }
 }

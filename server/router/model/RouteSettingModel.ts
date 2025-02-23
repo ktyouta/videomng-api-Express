@@ -11,25 +11,19 @@ export enum HttpMethodType {
     DELETE = `DELETE`,
 }
 
-// 実行関数の型
-type executeFunctionType = ((req: Request, res: Response, id: string) => Response<any, Record<string, any>>) |
-    ((req: Request, res: Response, id: string) => Promise<Response<any, Record<string, any>>>) |
-    ((req: Request, res: Response) => Promise<Response<any, Record<string, any>> | undefined>) |
-    ((req: Request, res: Response) => Response<any, Record<string, any>> | undefined);
-
 
 export class RouteSettingModel {
 
     // httpメソッド
     private readonly _httpMethodType: HttpMethodType;
     // 実行関数
-    private readonly _executeFunction: executeFunctionType;
+    private readonly _executeFunction: Function;
     // エンドポイント
     private readonly _endPoint: ApiEndopoint;
 
 
     constructor(httpMthodType: HttpMethodType,
-        executeFunction: executeFunctionType,
+        executeFunction: Function,
         endPoint: ApiEndopoint,
     ) {
 
