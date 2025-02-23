@@ -13,6 +13,8 @@ import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
 import { FrontUserInfoMasterRepositorys } from "../../internaldata/frontuserinfomaster/repository/FrontUserInfoMasterRepositorys";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { FrontUserInfoCreateRepositorys } from "../repository/FrontUserInfoCreateRepositorys";
+import { FrontUserInfoCreateSelectEntity } from "../entity/FrontUserInfoCreateSelectEntity";
 
 
 export class CreateFrontUserInfoService {
@@ -39,20 +41,19 @@ export class CreateFrontUserInfoService {
      * ユーザー重複チェック
      * @param userNameModel 
      */
-    public checkUserNameExists(frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel): boolean {
+    public async checkUserNameExists(frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel): Promise<boolean> {
 
         const userNameModel: FrontUserNameModel = frontUserInfoCreateRequestBody.frontUserNameModel;
 
         // 永続ロジック用オブジェクトを取得
-        // const frontUserInfoCreateRepositorys = new FrontUserInfoCreateRepositorys();
-        // const frontUserInfoCreateRepository = frontUserInfoCreateRepositorys.get(RepositoryType.POSTGRESQL);
+        const frontUserInfoCreateRepositorys = new FrontUserInfoCreateRepositorys();
+        const frontUserInfoCreateRepository = frontUserInfoCreateRepositorys.get(RepositoryType.POSTGRESQL);
 
-        // // ユーザー情報取得用Entity
-        // const frontUserInfoCreateSelectEntity = new FrontUserInfoCreateSelectEntity(userNameModel);
+        // ユーザー情報取得用Entity
+        const frontUserInfoCreateSelectEntity = new FrontUserInfoCreateSelectEntity(userNameModel);
 
-        // // 未削除のユーザー情報を取得
-        // const activeUserInfoMasterList: ReadonlyArray<FrontUserInfoMasterJsonModelType> =
-        //     frontUserInfoCreateRepository.select(frontUserInfoCreateSelectEntity);
+        // ユーザー情報を取得
+        const activeUserInfoMasterList = await frontUserInfoCreateRepository.select(frontUserInfoCreateSelectEntity);
 
         return [].length > 0;
     }

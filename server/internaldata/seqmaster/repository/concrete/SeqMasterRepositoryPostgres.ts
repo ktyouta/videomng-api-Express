@@ -23,7 +23,7 @@ export class SeqMasterRepositoryPostgres implements SeqMasterRepositoryInterface
 
         const key = seqKeyModel.key;
 
-        const seqData = tx.seqMaster.findUnique({
+        const seqData = await tx.seqMaster.findUnique({
             where: { key },
         });
 
@@ -38,7 +38,7 @@ export class SeqMasterRepositoryPostgres implements SeqMasterRepositoryInterface
 
         const key = seqKeyModel.key;
 
-        const seqData = tx.seqMaster.update({
+        const seqData = await tx.seqMaster.update({
             where: { key },
             data: {
                 nextId,

@@ -17,25 +17,20 @@ export class SeqIssue {
     /**
      * シーケンスを発番する
      */
-    static async get(keyModel: SeqKeyModel) {
+    static async get(keyModel: SeqKeyModel, tx: Prisma.TransactionClient) {
 
-        const retId = PrismaClientInstance.getInstance().$transaction(async (tx: Prisma.TransactionClient) => {
+        // シーケンスを取得
+        const sequence = await this._seqMasterRepository.getSequenceByKey(keyModel, tx);
 
-            // シーケンスを取得
-            const sequence = await this._seqMasterRepository.getSequenceByKey(keyModel, tx);
+        if (!sequence) {
+            throw Error(`キーに対するシーケンスを取得できませんでした。key:${keyModel.key}`);
+        }
 
-            if (!sequence) {
-                throw Error(`キーに対するシーケンスを取得できませんでした。key:${keyModel.key}`);
-            }
+        const retId = sequence.nextId;
+        const nextId = retId + SeqIssue.INCREMENT_SEQ;
 
-            const retId = sequence.nextId;
-            const nextId = retId + SeqIssue.INCREMENT_SEQ;
-
-            // シーケンスを更新
-            await this._seqMasterRepository.updateSequence(keyModel, nextId, tx);
-
-            return retId;
-        });
+        // シーケンスを更新
+        await this._seqMasterRepository.updateSequence(keyModel, nextId, tx);
 
         return retId;
     }

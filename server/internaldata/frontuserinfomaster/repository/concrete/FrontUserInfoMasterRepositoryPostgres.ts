@@ -28,7 +28,7 @@ export class FrontUserInfoMasterRepositoryPostgres implements FrontUserInfoMaste
         const userName = frontUserInfoMasterInsertEntity.frontUserName;
         const userBirthday = frontUserInfoMasterInsertEntity.frontUserBirthDay;
 
-        const newUserInfo = tx.frontUserInfoMaster.create({
+        const newUserInfo = await tx.frontUserInfoMaster.create({
             data: {
                 userId,
                 userName,
@@ -54,7 +54,7 @@ export class FrontUserInfoMasterRepositoryPostgres implements FrontUserInfoMaste
         const userName = frontUserInfoMasterUpdateEntity.frontUserName;
         const userBirthday = frontUserInfoMasterUpdateEntity.frontUserBirthDay;
 
-        const seqData = tx.frontUserInfoMaster.update({
+        const seqData = await tx.frontUserInfoMaster.update({
             where: { userId },
             data: {
                 userName,

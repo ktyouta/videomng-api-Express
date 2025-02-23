@@ -14,9 +14,11 @@ import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/fron
 import { FrontUserIdModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserIdModel";
 import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { FrontUserInfoCreateResponseModel } from "../model/FrontUserInfoCreateResponseModel";
+import { RouteController } from "../../router/controller/RouteController";
+import { Prisma } from "@prisma/client";
 
 
-export class CreateFrontUserInfoController {
+export class CreateFrontUserInfoController extends RouteController {
 
     private createFrontUserInfoService = new CreateFrontUserInfoService();
 
@@ -59,10 +61,12 @@ export class CreateFrontUserInfoController {
             this.createFrontUserInfoService.parseRequestBody(requestBody);
 
         // トランザクション開始
-        PrismaClientInstance.getInstance().$transaction(async (tx) => {
+        PrismaClientInstance.getInstance().$transaction(async (tx: Prisma.TransactionClient) => {
 
             // ユーザー重複チェック
-            if (this.createFrontUserInfoService.checkUserNameExists(frontUserInfoCreateRequestBody)) {
+            const isExistUser = await this.createFrontUserInfoService.checkUserNameExists(frontUserInfoCreateRequestBody);
+
+            if (isExistUser) {
                 return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, `既にユーザーが存在しています。`);
             }
 
@@ -75,21 +79,21 @@ export class CreateFrontUserInfoController {
                 this.createFrontUserInfoService.getFrontUserLoginMasterRepository();
 
             // ユーザーIDを採番する
-            const userIdModel: FrontUserIdModel = await FrontUserIdModel.create();
+            const userIdModel: FrontUserIdModel = await FrontUserIdModel.create(tx);
 
             // ユーザーマスタ登録用データの作成
             const frontUserInfoMasterInsertEntity: FrontUserInfoMasterInsertEntity =
                 this.createFrontUserInfoService.createUserInfoMasterCreateBody(userIdModel, frontUserInfoCreateRequestBody);
 
             // ユーザー情報を追加する
-            frontUserInfoMasterRepository.insert(frontUserInfoMasterInsertEntity, tx);
+            await frontUserInfoMasterRepository.insert(frontUserInfoMasterInsertEntity, tx);
 
             // ユーザーマスタログインマスタ登録用データの作成
             const frontUserLoginMasterInsertEntity =
                 this.createFrontUserInfoService.createUserLoginMasterCreateBody(userIdModel, frontUserInfoCreateRequestBody);
 
             // ユーザーログイン情報を追加する
-            frontUserLoginMasterRepository.insert(frontUserLoginMasterInsertEntity, tx);
+            await frontUserLoginMasterRepository.insert(frontUserLoginMasterInsertEntity, tx);
 
             // jwtを作成
             const newJsonWebTokenModel =
@@ -100,6 +104,6 @@ export class CreateFrontUserInfoController {
                 this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody, newJsonWebTokenModel);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の登録が完了しました。`, frontUserInfoCreateResponse);
-        });
+        }, { timeout: 10000 });
     }
 }
