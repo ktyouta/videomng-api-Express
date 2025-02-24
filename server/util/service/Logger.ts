@@ -1,21 +1,25 @@
 import { ERROR_LOG_FILE, INFO_LOG_FILE, LOG_FILE_PATH, WARN_LOG_FILE } from "../const/FileInfoConst";
 import { DateUtil } from "./DateUtil";
 import { FileData } from "./FileData";
+import { LogError } from "./LogError";
+import { LogInfo } from "./LogInfo";
+import { LogInterface } from "./LogInterface";
+import { LogWarn } from "./LogWarn";
+
+// ログレベル
+export enum LogLevel {
+    info = `INFO`,
+    warn = `WARN`,
+    error = `ERROR`,
+}
 
 export class Logger {
 
-    // ログレベル
-    private static readonly LOG_LEVEL = {
-        INFO: "INFO",
-        WARN: "WARN",
-        ERROR: "ERROR",
-    }
-
-    // 出力先ファイル
-    private static readonly LOG_FILE_PATH = {
-        INFO: `${LOG_FILE_PATH}${INFO_LOG_FILE}`,
-        WARN: `${LOG_FILE_PATH}${WARN_LOG_FILE}`,
-        ERROR: `${LOG_FILE_PATH}${ERROR_LOG_FILE}`,
+    // ログレベルを追加する場合はloggersに追加する
+    private static readonly loggers: Record<LogLevel, LogInterface> = {
+        [LogLevel.info]: (new LogInfo()),
+        [LogLevel.warn]: (new LogWarn()),
+        [LogLevel.error]: (new LogError()),
     }
 
     /**
@@ -23,34 +27,17 @@ export class Logger {
      * @param level 
      * @param message 
      */
-    private static log(level: string, message: string,) {
+    private static log(level: LogLevel, message: string,) {
 
         // 現在時刻
         const timestamp = DateUtil.getNowDatetime('yyyy-MM-dd HH:mm:ss');
         // 出力内容
         const output = `[${timestamp}] [${level}] ${message}\n`;
-        // 出力先
-        let outputFile = "";
 
-        // 出力先を取得
-        switch (level) {
-            case Logger.LOG_LEVEL.INFO:
-                outputFile = Logger.LOG_FILE_PATH.INFO;
-                break;
-            case Logger.LOG_LEVEL.WARN:
-                outputFile = Logger.LOG_FILE_PATH.WARN;
-                break;
-            case Logger.LOG_LEVEL.ERROR:
-                outputFile = Logger.LOG_FILE_PATH.ERROR;
-                break;
-        }
+        // ログレベルに応じて出力
+        const logger = this.loggers[level];
 
-        if (!outputFile) {
-            return;
-        }
-
-        // ログファイルに出力
-        FileData.append(outputFile, output);
+        logger.output(output);
     }
 
 
@@ -59,8 +46,7 @@ export class Logger {
      * @param message 
      */
     public static info(message: string) {
-
-        Logger.log(Logger.LOG_LEVEL.INFO, message);
+        Logger.log(LogLevel.info, message);
     }
 
 
@@ -69,8 +55,7 @@ export class Logger {
      * @param message 
      */
     public static warn(message: string) {
-
-        Logger.log(Logger.LOG_LEVEL.WARN, message);
+        Logger.log(LogLevel.warn, message);
     }
 
 
@@ -79,7 +64,6 @@ export class Logger {
      * @param message 
      */
     public static error(message: string) {
-
-        Logger.log(Logger.LOG_LEVEL.ERROR, message);
+        Logger.log(LogLevel.error, message);
     }
 }

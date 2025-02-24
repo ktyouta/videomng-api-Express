@@ -80,6 +80,10 @@ export class FileData {
      */
     public static append<T>(filePath: string, data: T) {
 
+        if (!filePath) {
+            throw Error(`出力先のファイルパスが指定されていません。`);
+        }
+
         try {
             this.fs.appendFileSync(filePath, data, { encoding: 'utf8' });
         } catch (err) {

@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Logger } from './util/service/Logger';
 import bodyParser from 'body-parser';
 import { ROUTE_CONTROLLER_LIST } from './router/conf/RouteControllerList';
+import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './util/const/HttpStatusConst';
 
 
 const express = require('express');
@@ -69,8 +70,8 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     // エラーログ出力
     errorLogMiddleware(err, req);
 
-    res.status(500).json({
-        status: "error",
+    res.status(HTTP_STATUS_INTERNAL_SERVER_ERROR).json({
+        status: HTTP_STATUS_INTERNAL_SERVER_ERROR,
         message: "予期しないエラーが発生しました。",
     });
 });
