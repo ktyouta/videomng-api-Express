@@ -1,19 +1,20 @@
 import ENV from '../../../../env.json';
 import { ApiClient } from '../../../../util/service/ApiClient';
 import { QueryBuilder } from '../../../../util/service/QueryBuilder';
-import { YoutubeDataApiVideoListType } from '../model/YoutubeDataApiVideoListType';
-import { YoutubeDataApiKeyword } from '../properties/YoutubeDataApiKeyword';
+import { YouTubeDataApiPath } from '../../common/model/YouTubeDataApiPath';
+import { YouTubeDataApiVideoListResponseType } from '../model/YouTubeDataApiVideoListResponseType';
+import { YouTubeDataApiKeyword } from '../properties/YouTubeDataApiKeyword';
 
 
-export class YoutubeDataApiVideoList {
+export class YouTubeDataApiVideoList {
 
     // api通信用クラス
     private static readonly _apiClient: ApiClient = new ApiClient();
-    // YoutubeDataApiの動画リストのレスポンス
-    private readonly _videoList: YoutubeDataApiVideoListType[];
+    // YouTube Data Apiの動画リストのレスポンス
+    private readonly _videoList: YouTubeDataApiVideoListResponseType[];
 
 
-    private constructor(videoList: YoutubeDataApiVideoListType[]) {
+    private constructor(videoList: YouTubeDataApiVideoListResponseType[]) {
 
         this._videoList = videoList;
     }
@@ -23,20 +24,20 @@ export class YoutubeDataApiVideoList {
     }
 
     /**
-     * YoutubeDataApiを呼び出す
+     * YouTube Data Apiを呼び出す
      */
-    static async call(youtubeDataApiKeyword: YoutubeDataApiKeyword) {
+    static async call(youtubeDataApiKeyword: YouTubeDataApiKeyword) {
 
         const apiUrl = this.getUrl(youtubeDataApiKeyword);
 
         try {
-            // YoutubeDataApiを呼び出す
-            const response: YoutubeDataApiVideoListType[] = await this._apiClient.get(apiUrl);
-            return new YoutubeDataApiVideoList(response);
+            // YouTube Data Apiを呼び出す
+            const response: YouTubeDataApiVideoListResponseType[] = await this._apiClient.get(apiUrl);
+            return new YouTubeDataApiVideoList(response);
         } catch (err) {
 
             const errorDetails = {
-                message: `YoutubeDataApiの呼び出しでエラーが発生しました。`,
+                message: `YouTube Data Apiの呼び出しでエラーが発生しました。`,
                 url: apiUrl,
                 error: err
             };
@@ -46,37 +47,44 @@ export class YoutubeDataApiVideoList {
     }
 
 
-    private static getUrl(youtubeDataApiKeyword: YoutubeDataApiKeyword) {
+    /**
+     * YouTube Data Api(動画リスト)のエンドポイント
+     * @param youtubeDataApiKeyword 
+     * @returns 
+     */
+    private static getUrl(youtubeDataApiKeyword: YouTubeDataApiKeyword) {
 
-        if (!ENV.YOUTUBE_DATA_API.PROTOCOL) {
-            throw Error("設定ファイルにプロトコルが存在しません。");
-        }
+        const apiPath = new YouTubeDataApiPath();
 
-        if (!ENV.YOUTUBE_DATA_API.DOMAIN) {
-            throw Error("設定ファイルにYoutubeDataApiのドメインが存在しません。");
-        }
-
-        if (!ENV.YOUTUBE_DATA_API.PATH) {
-            throw Error("設定ファイルにYoutubeDataApiのパスが存在しません。");
+        if (!ENV.YOUTUBE_DATA_API.LIST.API_RESOURCE) {
+            throw Error("設定ファイルにYouTubeDataApiのリソースが存在しません。");
         }
 
         if (!ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_KEYWORD) {
-            throw Error("設定ファイルにYoutubeDataApiのクエリキー(キーワード)が存在しません。");
+            throw Error("設定ファイルにYouTubeDataApiのクエリキー(キーワード)が存在しません。");
+        }
+
+        if (!ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_KEYWORD) {
+            throw Error("設定ファイルにYouTubeDataApiのクエリキー(キーワード)が存在しません。");
         }
 
         if (!ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_MAXRESULTS) {
-            throw Error("設定ファイルにYoutubeDataApiのクエリキー(最大取得件数)が存在しません。");
+            throw Error("設定ファイルにYouTubeDataApiのクエリキー(最大取得件数)が存在しません。");
         }
 
         if (!ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_MAXRESULTS) {
-            throw Error("設定ファイルにYoutubeDataApiの最大取得件数が存在しません。");
+            throw Error("設定ファイルにYouTubeDataApiの最大取得件数が存在しません。");
         }
 
-        const apiBaseUrl = `${ENV.YOUTUBE_DATA_API.PROTOCOL}${ENV.YOUTUBE_DATA_API.DOMAIN}${ENV.YOUTUBE_DATA_API.PATH}`;
+        if (!ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY) {
+            throw Error("設定ファイルにYouTubeDataApiのクエリキー(APIキー)が存在しません。");
+        }
+
+        const apiBaseUrl = `${apiPath}${ENV.YOUTUBE_DATA_API.LIST.API_RESOURCE}`;
 
         // クエリパラメータを作成
         const queryParam = this.createQuery(youtubeDataApiKeyword);
-        return `${apiBaseUrl}${queryParam ? `?${queryParam}` : ""}`;
+        return `${apiBaseUrl}${queryParam ? `?${queryParam}` : ``}`;
     }
 
     /**
@@ -84,7 +92,7 @@ export class YoutubeDataApiVideoList {
      * @param googleBookInfoApisKeyword 
      * @returns 
      */
-    private static createQuery(googleBookInfoApisKeyword: YoutubeDataApiKeyword) {
+    private static createQuery(googleBookInfoApisKeyword: YouTubeDataApiKeyword) {
 
         // 最大取得件数
         const apiMaxResultKey = `${ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_MAXRESULTS}`;
@@ -92,14 +100,22 @@ export class YoutubeDataApiVideoList {
         // 検索キーワード
         const searchKeywordKey = `${ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_KEYWORD}`;
         const searchKeyWordValue = googleBookInfoApisKeyword.keywrod;
+        // APIキー
+        const apiKey = `${ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY}`;
+        const apiKeyValue = process.env.YOUTUBE_API_KEY;
+
+        if (!apiKeyValue) {
+            throw Error("設定ファイルにYouTubeDataApiのAPIキーが存在しません。");
+        }
 
         // クエリパラメータ作成用オブジェクト
         const queryBuilder: QueryBuilder = new QueryBuilder(apiMaxResultKey, apiMaxResultValue);
 
         // キーワードをクエリパラメータにセット
-        const addeKeywordqueryBuilder = queryBuilder.add(searchKeywordKey, searchKeyWordValue);
+        const addeKeywordQueryBuilder = queryBuilder.add(searchKeywordKey, searchKeyWordValue);
+        const addApiKeyQueryBuilder = addeKeywordQueryBuilder.add(apiKey, apiKeyValue);
 
         // クエリパラメータを作成
-        return addeKeywordqueryBuilder.createParam();
+        return addApiKeyQueryBuilder.createParam();
     }
 }

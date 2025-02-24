@@ -1,4 +1,4 @@
-export class YoutubeDataApiKeyword {
+export class YouTubeDataApiKeyword {
 
     private readonly _keyword: string;
 

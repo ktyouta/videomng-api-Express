@@ -79,6 +79,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 // サーバーを起動
 app.listen(ENV.PORT, () => {
-
     console.log(`Youtube Manage API Server listening on port ${ENV.PORT}`);
 });
