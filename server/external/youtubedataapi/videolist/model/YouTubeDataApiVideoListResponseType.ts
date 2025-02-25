@@ -1,4 +1,4 @@
-import { YouTubeDataApiItemType } from "./YouTubeDataApiItemType";
+import { YouTubeDataApiVideoListItemType } from "./YouTubeDataApiVideoListItemType";
 
 //YouTube Data Api(動画リスト)のレスポンス
 export type YouTubeDataApiVideoListResponseType = {
@@ -10,5 +10,5 @@ export type YouTubeDataApiVideoListResponseType = {
         totalResults: number;
         resultsPerPage: number;
     };
-    readonly items: YouTubeDataApiItemType[];
+    readonly items: YouTubeDataApiVideoListItemType[];
 };

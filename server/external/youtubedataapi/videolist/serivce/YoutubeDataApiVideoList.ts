@@ -11,10 +11,10 @@ export class YouTubeDataApiVideoList {
     // api通信用クラス
     private static readonly _apiClient: ApiClient = new ApiClient();
     // YouTube Data Apiの動画リストのレスポンス
-    private readonly _videoList: YouTubeDataApiVideoListResponseType[];
+    private readonly _videoList: YouTubeDataApiVideoListResponseType;
 
 
-    private constructor(videoList: YouTubeDataApiVideoListResponseType[]) {
+    private constructor(videoList: YouTubeDataApiVideoListResponseType) {
 
         this._videoList = videoList;
     }
@@ -32,12 +32,12 @@ export class YouTubeDataApiVideoList {
 
         try {
             // YouTube Data Apiを呼び出す
-            const response: YouTubeDataApiVideoListResponseType[] = await this._apiClient.get(apiUrl);
+            const response: YouTubeDataApiVideoListResponseType = await this._apiClient.get(apiUrl);
             return new YouTubeDataApiVideoList(response);
         } catch (err) {
 
             const errorDetails = {
-                message: `YouTube Data Apiの呼び出しでエラーが発生しました。`,
+                message: `YouTube Data Api(動画一覧)の呼び出しでエラーが発生しました。`,
                 url: apiUrl,
                 error: err
             };
@@ -57,27 +57,27 @@ export class YouTubeDataApiVideoList {
         const apiPath = new YouTubeDataApiPath();
 
         if (!ENV.YOUTUBE_DATA_API.LIST.API_RESOURCE) {
-            throw Error("設定ファイルにYouTubeDataApiのリソースが存在しません。");
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のリソースが存在しません。");
         }
 
         if (!ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_KEYWORD) {
-            throw Error("設定ファイルにYouTubeDataApiのクエリキー(キーワード)が存在しません。");
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のクエリキー(キーワード)が存在しません。");
         }
 
         if (!ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_KEYWORD) {
-            throw Error("設定ファイルにYouTubeDataApiのクエリキー(キーワード)が存在しません。");
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のクエリキー(キーワード)が存在しません。");
         }
 
         if (!ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_MAXRESULTS) {
-            throw Error("設定ファイルにYouTubeDataApiのクエリキー(最大取得件数)が存在しません。");
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のクエリキー(最大取得件数)が存在しません。");
         }
 
         if (!ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_MAXRESULTS) {
-            throw Error("設定ファイルにYouTubeDataApiの最大取得件数が存在しません。");
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)の最大取得件数が存在しません。");
         }
 
         if (!ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY) {
-            throw Error("設定ファイルにYouTubeDataApiのクエリキー(APIキー)が存在しません。");
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のクエリキー(APIキー)が存在しません。");
         }
 
         const apiBaseUrl = `${apiPath}${ENV.YOUTUBE_DATA_API.LIST.API_RESOURCE}`;

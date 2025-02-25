@@ -1,5 +1,5 @@
 //YouTube Data Api(動画リスト)のレスポンス
-export type YouTubeDataApiItemType = {
+export type YouTubeDataApiVideoListItemType = {
     readonly kind: string;
     readonly etag: string;
     readonly id: {
