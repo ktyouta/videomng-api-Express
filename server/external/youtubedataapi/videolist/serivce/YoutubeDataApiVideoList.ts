@@ -76,6 +76,14 @@ export class YouTubeDataApiVideoList {
             throw Error("設定ファイルにYouTubeDataApi(動画一覧)の最大取得件数が存在しません。");
         }
 
+        if (!ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_PART) {
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のクエリキー(part)が存在しません。");
+        }
+
+        if (!ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_PART) {
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のpartが存在しません。");
+        }
+
         if (!ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY) {
             throw Error("設定ファイルにYouTubeDataApi(動画一覧)のクエリキー(APIキー)が存在しません。");
         }
@@ -103,6 +111,9 @@ export class YouTubeDataApiVideoList {
         // APIキー
         const apiKey = `${ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY}`;
         const apiKeyValue = process.env.YOUTUBE_API_KEY;
+        // part
+        const videoPartKey = `${ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_PART}`;
+        const videoPartValue = `${ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_PART}`;
 
         if (!apiKeyValue) {
             throw Error("設定ファイルにYouTubeDataApiのAPIキーが存在しません。");
@@ -110,12 +121,11 @@ export class YouTubeDataApiVideoList {
 
         // クエリパラメータ作成用オブジェクト
         const queryBuilder: QueryBuilder = new QueryBuilder(apiMaxResultKey, apiMaxResultValue);
-
-        // キーワードをクエリパラメータにセット
-        const addeKeywordQueryBuilder = queryBuilder.add(searchKeywordKey, searchKeyWordValue);
-        const addApiKeyQueryBuilder = addeKeywordQueryBuilder.add(apiKey, apiKeyValue);
+        queryBuilder.add(searchKeywordKey, searchKeyWordValue);
+        queryBuilder.add(apiKey, apiKeyValue);
+        queryBuilder.add(videoPartKey, videoPartValue);
 
         // クエリパラメータを作成
-        return addApiKeyQueryBuilder.createParam();
+        return queryBuilder.createParam();
     }
 }

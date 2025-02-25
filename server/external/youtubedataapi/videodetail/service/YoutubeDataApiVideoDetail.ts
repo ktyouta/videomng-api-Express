@@ -93,6 +93,9 @@ export class YoutubeDataApiVideoDetail {
         // APIキー
         const apiKey = `${ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY}`;
         const apiKeyValue = process.env.YOUTUBE_API_KEY;
+        // part
+        const videoPartKey = `${ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_PART}`;
+        const videoPartValue = `${ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_PART}`;
 
         if (!apiKeyValue) {
             throw Error("設定ファイルにYouTubeDataApiのAPIキーが存在しません。");
@@ -100,11 +103,10 @@ export class YoutubeDataApiVideoDetail {
 
         // クエリパラメータ作成用オブジェクト
         const queryBuilder: QueryBuilder = new QueryBuilder(videoIdKey, videoIdValue);
-
-        // キーワードをクエリパラメータにセット
-        const addApiKeyQueryBuilder = queryBuilder.add(apiKey, apiKeyValue);
+        queryBuilder.add(apiKey, apiKeyValue);
+        queryBuilder.add(videoPartKey, videoPartValue);
 
         // クエリパラメータを作成
-        return addApiKeyQueryBuilder.createParam();
+        return queryBuilder.createParam();
     }
 }
