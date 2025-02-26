@@ -7,21 +7,21 @@ import { YouTubeDataApiVideoDetailResponseType } from '../model/YouTubeDataApiVi
 import { YouTubeDataApiVideoId } from '../properties/YouTubeDataApiVideoId';
 
 
-export class YoutubeDataApiVideoDetail {
+export class YoutubeVideoDetailApi {
 
     // api通信用クラス
     private static readonly _apiClient: ApiClient = new ApiClient();
     // YouTube Data Apiの動画詳細のレスポンス
-    private readonly _videoDetail: YouTubeDataApiVideoDetailResponseType;
+    private readonly _response: YouTubeDataApiVideoDetailResponseType;
 
 
-    private constructor(videoDetail: YouTubeDataApiVideoDetailResponseType) {
+    private constructor(response: YouTubeDataApiVideoDetailResponseType) {
 
-        this._videoDetail = videoDetail;
+        this._response = response;
     }
 
-    get videoDetail() {
-        return this._videoDetail;
+    get response() {
+        return this._response;
     }
 
     /**
@@ -34,7 +34,7 @@ export class YoutubeDataApiVideoDetail {
         try {
             // YouTube Data Api(動画詳細)を呼び出す
             const response: YouTubeDataApiVideoDetailResponseType = await this._apiClient.get(apiUrl);
-            return new YoutubeDataApiVideoDetail(response);
+            return new YoutubeVideoDetailApi(response);
         } catch (err) {
 
             const errorDetails = {

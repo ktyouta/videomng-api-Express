@@ -6,7 +6,7 @@ import { YouTubeDataApiVideoListResponseType } from '../model/YouTubeDataApiVide
 import { YouTubeDataApiKeyword } from '../properties/YouTubeDataApiKeyword';
 
 
-export class YouTubeDataApiVideoList {
+export class YouTubeVideoListApi {
 
     // api通信用クラス
     private static readonly _apiClient: ApiClient = new ApiClient();
@@ -33,7 +33,7 @@ export class YouTubeDataApiVideoList {
         try {
             // YouTube Data Apiを呼び出す
             const response: YouTubeDataApiVideoListResponseType = await this._apiClient.get(apiUrl);
-            return new YouTubeDataApiVideoList(response);
+            return new YouTubeVideoListApi(response);
         } catch (err) {
 
             const errorDetails = {

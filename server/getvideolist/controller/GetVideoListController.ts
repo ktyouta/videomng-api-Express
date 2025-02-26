@@ -11,6 +11,7 @@ import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSetti
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { GetVideoListQueryParameterSchema } from '../model/GetVideoListQueryParameterSchema';
 import { GetVideoListResponseModel } from '../model/GetVideoListResponseModel';
+import { YouTubeDataApiKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiKeyword';
 
 
 export class GetVideoListController extends RouteController {
@@ -54,12 +55,13 @@ export class GetVideoListController extends RouteController {
 
         // キーワードを取得
         const keyword = query[`q`] as string;
+        const youTubeDataApiKeyword = new YouTubeDataApiKeyword(keyword);
 
         // YouTube Data Apiから動画を取得する
-        const youtubeDataList = await this.GetVideoListService.callYouTubeDataListApi(keyword);
+        const youTubeVideoListApi = await this.GetVideoListService.callYouTubeDataListApi(youTubeDataApiKeyword);
 
         // レスポンスのYouTube動画
-        const getVideoListResponseModel = new GetVideoListResponseModel(youtubeDataList);
+        const getVideoListResponseModel = new GetVideoListResponseModel(youTubeVideoListApi);
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, getVideoListResponseModel);
     }
