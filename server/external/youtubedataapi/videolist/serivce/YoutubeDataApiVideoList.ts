@@ -11,16 +11,16 @@ export class YouTubeDataApiVideoList {
     // api通信用クラス
     private static readonly _apiClient: ApiClient = new ApiClient();
     // YouTube Data Apiの動画リストのレスポンス
-    private readonly _videoList: YouTubeDataApiVideoListResponseType;
+    private readonly _response: YouTubeDataApiVideoListResponseType;
 
 
-    private constructor(videoList: YouTubeDataApiVideoListResponseType) {
+    private constructor(response: YouTubeDataApiVideoListResponseType) {
 
-        this._videoList = videoList;
+        this._response = response;
     }
 
-    get videoList() {
-        return this._videoList;
+    get response() {
+        return this._response;
     }
 
     /**
