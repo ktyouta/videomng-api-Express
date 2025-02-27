@@ -1,0 +1,63 @@
+import { Prisma } from "@prisma/client";
+import { FLG } from "../../../../util/const/CommonConst";
+import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
+import { FavoriteVideoTransactionInsertEntity } from "../../entity/FavoriteVideoTransactionInsertEntity";
+import { FavoriteVideoTransactionUpdateEntity } from "../../entity/FavoriteVideoTransactionUpdateEntity";
+import { FavoriteVideoTransactionRepositoryInterface } from "../interface/FavoriteVideoTransactionRepositoryInterface";
+
+
+
+/**
+ * json形式の永続ロジック用クラス
+ */
+export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideoTransactionRepositoryInterface {
+
+
+    constructor() {
+
+    }
+
+    /**
+     * お気に入り動画情報を作成
+     */
+    async insert(favoriteVideoTransactionInsertEntity: FavoriteVideoTransactionInsertEntity,
+        tx: Prisma.TransactionClient
+    ) {
+
+        const userId = favoriteVideoTransactionInsertEntity.frontUserId;
+        const videoId = favoriteVideoTransactionInsertEntity.videoId;
+
+        const favoriteVideo = await tx.favoriteVideoTransaction.create({
+            data: {
+                userId,
+                videoId,
+                createDate: new Date(),
+                updateDate: new Date(),
+                deleteFlg: FLG.OFF,
+            },
+        });
+
+        return favoriteVideo;
+    }
+
+
+    /**
+     * お気に入り動画情報を更新
+     */
+    async update(favoriteVideoTransactionUpdateEntity: FavoriteVideoTransactionUpdateEntity,
+        tx: Prisma.TransactionClient
+    ) {
+
+        const userId = favoriteVideoTransactionUpdateEntity.frontUserId;
+        const videoId = favoriteVideoTransactionUpdateEntity.videoId;
+
+        const seqData = await tx.favoriteVideoTransaction.update({
+            where: { userId, videoId },
+            data: {
+                updateDate: new Date(),
+            },
+        });
+
+        return seqData;
+    }
+}

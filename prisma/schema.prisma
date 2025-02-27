@@ -45,13 +45,13 @@ model FrontUserInfoMaster {
 
 
 // お気に入り動画
-model FavariteMovieTransaction {
+model FavoriteVideoTransaction {
   userId      Int   @id @map("user_id")
-  movieId    String   @db.VarChar(255)  @map("movie_id")
+  videoId    String   @db.VarChar(255)  @map("video_id")
   createDate  DateTime  @map("create_date")
   updateDate  DateTime  @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")
-  @@map("favarite_movie_transaction")
+  @@map("favorite_video_transaction")
 }
 
 
