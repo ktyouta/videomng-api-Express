@@ -1,6 +1,8 @@
 import { FavoriteVideoTransactionUpdateEntity } from "../../entity/FavoriteVideoTransactionUpdateEntity";
 import { FavoriteVideoTransactionInsertEntity } from "../../entity/FavoriteVideoTransactionInsertEntity";
 import { FavoriteVideoTransaction, Prisma } from "@prisma/client";
+import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../properties/VideoIdModel";
 
 
 /**
@@ -20,5 +22,12 @@ export interface FavoriteVideoTransactionRepositoryInterface {
     update(favoriteVideoTransactionUpdateEntity: FavoriteVideoTransactionUpdateEntity,
         tx: Prisma.TransactionClient
     ): Promise<FavoriteVideoTransaction>;
+
+    /**
+     * 削除動画の復元
+     */
+    recovery(userId: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        tx: Prisma.TransactionClient): Promise<FavoriteVideoTransaction>;
 }
 

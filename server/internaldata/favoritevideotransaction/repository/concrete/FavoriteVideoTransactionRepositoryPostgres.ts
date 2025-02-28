@@ -4,6 +4,8 @@ import { PrismaClientInstance } from "../../../../util/service/PrismaClientInsta
 import { FavoriteVideoTransactionInsertEntity } from "../../entity/FavoriteVideoTransactionInsertEntity";
 import { FavoriteVideoTransactionUpdateEntity } from "../../entity/FavoriteVideoTransactionUpdateEntity";
 import { FavoriteVideoTransactionRepositoryInterface } from "../interface/FavoriteVideoTransactionRepositoryInterface";
+import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../properties/VideoIdModel";
 
 
 
@@ -51,10 +53,31 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
         const userId = favoriteVideoTransactionUpdateEntity.frontUserId;
         const videoId = favoriteVideoTransactionUpdateEntity.videoId;
 
-        const seqData = await tx.favoriteVideoTransaction.update({
+        const favoriteVideo = await tx.favoriteVideoTransaction.update({
             where: { userId, videoId },
             data: {
                 updateDate: new Date(),
+            },
+        });
+
+        return favoriteVideo;
+    }
+
+
+    /**
+     * 削除動画の復元
+     */
+    async recovery(userIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        tx: Prisma.TransactionClient) {
+
+        const userId = userIdModel.frontUserId;
+        const videoId = videoIdModel.videoId;
+
+        const seqData = await tx.favoriteVideoTransaction.update({
+            where: { userId, videoId },
+            data: {
+                deleteFlg: FLG.OFF,
             },
         });
 
