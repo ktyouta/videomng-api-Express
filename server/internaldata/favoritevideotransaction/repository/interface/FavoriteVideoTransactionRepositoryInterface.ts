@@ -29,5 +29,15 @@ export interface FavoriteVideoTransactionRepositoryInterface {
     recovery(userId: FrontUserIdModel,
         videoIdModel: VideoIdModel,
         tx: Prisma.TransactionClient): Promise<FavoriteVideoTransaction>;
+
+    /**
+     * お気に入り動画を論理削除
+     * @param userId 
+     * @param videoIdModel 
+     * @param tx 
+     */
+    softDelete(userId: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        tx: Prisma.TransactionClient): Promise<FavoriteVideoTransaction>;
 }
 

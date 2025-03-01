@@ -79,7 +79,7 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
         const userId = userIdModel.frontUserId;
         const videoId = videoIdModel.videoId;
 
-        const seqData = await tx.favoriteVideoTransaction.update({
+        const favoriteVideo = await tx.favoriteVideoTransaction.update({
             where: {
                 userId_videoId: {
                     userId,
@@ -91,6 +91,32 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
             },
         });
 
-        return seqData;
+        return favoriteVideo;
+    }
+
+
+    /**
+     * お気に入り動画を論理削除
+     */
+    async softDelete(userIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        tx: Prisma.TransactionClient) {
+
+        const userId = userIdModel.frontUserId;
+        const videoId = videoIdModel.videoId;
+
+        const favoriteVideo = await tx.favoriteVideoTransaction.update({
+            where: {
+                userId_videoId: {
+                    userId,
+                    videoId
+                }
+            },
+            data: {
+                deleteFlg: FLG.ON,
+            },
+        });
+
+        return favoriteVideo;
     }
 }
