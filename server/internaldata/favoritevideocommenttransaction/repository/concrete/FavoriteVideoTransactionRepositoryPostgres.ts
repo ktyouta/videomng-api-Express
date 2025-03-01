@@ -98,30 +98,26 @@ export class FavoriteVideoCommentTransactionRepositoryPostgres implements Favori
 
 
     /**
-     * 削除動画の復元
+     * 削除コメントの復元
      */
     async recovery(userIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel,
-        videoCommentSeqModel: VideoCommentSeqModel,
         tx: Prisma.TransactionClient) {
 
         const userId = userIdModel.frontUserId;
         const videoId = videoIdModel.videoId;
-        const videoCommentSeq = videoCommentSeqModel.videoCommentSeq;
 
-        const seqData = await tx.favoriteVideoCommentTransaction.update({
+        const favoriteVideoComment = await tx.favoriteVideoCommentTransaction.updateMany({
             where: {
-                userId_videoId_videoCommentSeq: {
-                    userId,
-                    videoId,
-                    videoCommentSeq,
-                },
+                userId,
+                videoId,
             },
             data: {
                 deleteFlg: FLG.OFF,
+                updateDate: new Date(),
             },
         });
 
-        return seqData;
+        return favoriteVideoComment;
     }
 }

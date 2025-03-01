@@ -71,9 +71,19 @@ export class CreateFavoriteVideoController extends RouteController {
 
             // 重複している場合は削除動画を復元する
             if (isExistFavoriteVideo) {
+                // お気に入り動画コメントの永続ロジックを取得
+                const favoriteVideoCommentRepository = this.createFavoriteVideoService.getFavoriteVideoCommentRepository();
+
                 // 削除動画を復元
-                await this.createFavoriteVideoService.recovery(
+                await this.createFavoriteVideoService.recoveryVideo(
                     favoriteVideoRepository,
+                    createFavoriteVideoRequestModel,
+                    frontUserIdModel,
+                    tx);
+
+                // 削除コメントを復元
+                await this.createFavoriteVideoService.recoveryComment(
+                    favoriteVideoCommentRepository,
                     createFavoriteVideoRequestModel,
                     frontUserIdModel,
                     tx);

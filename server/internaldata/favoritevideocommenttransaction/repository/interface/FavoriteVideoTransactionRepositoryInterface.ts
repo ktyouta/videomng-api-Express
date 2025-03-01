@@ -31,5 +31,15 @@ export interface FavoriteVideoCommentTransactionRepositoryInterface {
     delete(frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel,
         tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
+     * お気に入り動画コメント情報を復元
+     * @param userIdModel 
+     * @param videoIdModel 
+     * @param tx 
+     */
+    recovery(userIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
 }
 
