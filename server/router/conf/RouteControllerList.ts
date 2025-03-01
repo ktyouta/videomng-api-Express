@@ -3,6 +3,7 @@ import { CreateFrontUserInfoController } from "../../createfrontuserinfo/control
 import { FrontUserLoginController } from "../../frontuserlogin/controller/FrontUserLoginController";
 import { GetVideoDetailController } from "../../getvideodetail/controller/GetVideoDetailController";
 import { GetVideoListController } from "../../getvideolist/controller/GetVideoListController";
+import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
 import { RouteController } from "../controller/RouteController";
 
 /**
@@ -19,4 +20,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new FrontUserLoginController(),
     // お気に入り動画登録処理
     new CreateFavoriteVideoController(),
+    // お気に入り動画更新処理
+    new UpdateFavoriteVideoController(),
 ]

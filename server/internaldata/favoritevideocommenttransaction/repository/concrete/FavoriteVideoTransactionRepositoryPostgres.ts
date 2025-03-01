@@ -21,7 +21,7 @@ export class FavoriteVideoCommentTransactionRepositoryPostgres implements Favori
     }
 
     /**
-     * お気に入り動画情報を作成
+     * お気に入り動画コメント情報を作成
      */
     async insert(favoriteVideoCommentTransactionInsertEntity: FavoriteVideoCommentTransactionInsertEntity,
         tx: Prisma.TransactionClient
@@ -49,7 +49,7 @@ export class FavoriteVideoCommentTransactionRepositoryPostgres implements Favori
 
 
     /**
-     * お気に入り動画情報を更新
+     * お気に入り動画コメント情報を更新
      */
     async update(favoriteVideoCommentTransactionUpdateEntity: FavoriteVideoCommentTransactionUpdateEntity,
         tx: Prisma.TransactionClient
@@ -75,6 +75,25 @@ export class FavoriteVideoCommentTransactionRepositoryPostgres implements Favori
         });
 
         return favoriteVideoComment;
+    }
+
+
+    /**
+     * お気に入り動画コメント情報を削除
+     */
+    async delete(userIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        tx: Prisma.TransactionClient) {
+
+        const userId = userIdModel.frontUserId;
+        const videoId = videoIdModel.videoId;
+
+        await tx.favoriteVideoCommentTransaction.deleteMany({
+            where: {
+                userId,
+                videoId,
+            }
+        });
     }
 
 
