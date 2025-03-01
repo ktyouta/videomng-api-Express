@@ -46,12 +46,27 @@ model FrontUserInfoMaster {
 
 // お気に入り動画
 model FavoriteVideoTransaction {
-  userId      Int   @id @map("user_id")
+  userId      Int   @map("user_id")
   videoId    String   @db.VarChar(255)  @map("video_id")
   createDate  DateTime  @map("create_date")
   updateDate  DateTime  @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@id([userId, videoId])
   @@map("favorite_video_transaction")
+}
+
+
+// お気に入り動画コメント
+model FavoriteVideoCommentTransaction {
+  userId      Int   @map("user_id")
+  videoId    String   @db.VarChar(255)  @map("video_id")
+  videoCommentSeq    Int  @map("video_comment_seq")
+  videoComment    String  @db.Text  @map("video_comment")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@id([userId, videoId, videoCommentSeq])
+  @@map("favorite_video_comment_transaction")
 }
 
 

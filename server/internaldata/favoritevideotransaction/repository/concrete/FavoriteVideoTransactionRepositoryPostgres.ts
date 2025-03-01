@@ -54,7 +54,12 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
         const videoId = favoriteVideoTransactionUpdateEntity.videoId;
 
         const favoriteVideo = await tx.favoriteVideoTransaction.update({
-            where: { userId, videoId },
+            where: {
+                userId_videoId: {
+                    userId,
+                    videoId
+                }
+            },
             data: {
                 updateDate: new Date(),
             },
@@ -75,7 +80,12 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
         const videoId = videoIdModel.videoId;
 
         const seqData = await tx.favoriteVideoTransaction.update({
-            where: { userId, videoId },
+            where: {
+                userId_videoId: {
+                    userId,
+                    videoId
+                }
+            },
             data: {
                 deleteFlg: FLG.OFF,
             },
