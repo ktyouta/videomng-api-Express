@@ -1,10 +1,10 @@
 import ENV from '../../../../env.json';
+import { VideoIdModel } from '../../../../internaldata/favoritevideotransaction/properties/VideoIdModel';
 import { ApiClient } from '../../../../util/service/ApiClient';
 import { QueryBuilder } from '../../../../util/service/QueryBuilder';
 import { YouTubeDataApiPath } from '../../common/model/YouTubeDataApiPath';
 import { YouTubeDataApiVideoListResponseType } from '../../videolist/model/YouTubeDataApiVideoListResponseType';
 import { YouTubeDataApiVideoDetailResponseType } from '../model/YouTubeDataApiVideoDetailResponseType';
-import { YouTubeDataApiVideoId } from '../properties/YouTubeDataApiVideoId';
 
 
 export class YoutubeVideoDetailApi {
@@ -27,9 +27,9 @@ export class YoutubeVideoDetailApi {
     /**
      * YouTube Data Apiを呼び出す
      */
-    static async call(youTubeDataApiVideoId: YouTubeDataApiVideoId) {
+    static async call(videoIdModel: VideoIdModel) {
 
-        const apiUrl = this.getUrl(youTubeDataApiVideoId);
+        const apiUrl = this.getUrl(videoIdModel);
 
         try {
             // YouTube Data Api(動画詳細)を呼び出す
@@ -50,10 +50,10 @@ export class YoutubeVideoDetailApi {
 
     /**
      * YouTube Data Api(動画リスト)のエンドポイント
-     * @param youTubeDataApiVideoId 
+     * @param videoId 
      * @returns 
      */
-    private static getUrl(youTubeDataApiVideoId: YouTubeDataApiVideoId) {
+    private static getUrl(videoIdModel: VideoIdModel) {
 
         const apiPath = new YouTubeDataApiPath();
 
@@ -76,20 +76,20 @@ export class YoutubeVideoDetailApi {
         const apiBaseUrl = `${apiPath}${ENV.YOUTUBE_DATA_API.DETAIL.API_RESOURCE}`;
 
         // クエリパラメータを作成
-        const queryParam = this.createQuery(youTubeDataApiVideoId);
+        const queryParam = this.createQuery(videoIdModel);
         return `${apiBaseUrl}${queryParam ? `?${queryParam}` : ``}`;
     }
 
     /**
      * api用のクエリパラメータを作成する
-     * @param youTubeDataApiVideoId 
+     * @param videoId 
      * @returns 
      */
-    private static createQuery(youTubeDataApiVideoId: YouTubeDataApiVideoId) {
+    private static createQuery(videoIdModel: VideoIdModel) {
 
         // 動画ID
         const videoIdKey = `${ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_KEYWORD}`;
-        const videoIdValue = youTubeDataApiVideoId.videoId;
+        const videoIdValue = videoIdModel.videoId;
         // APIキー
         const apiKey = `${ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY}`;
         const apiKeyValue = process.env.YOUTUBE_API_KEY;

@@ -11,7 +11,7 @@ import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { GetVideoDetailService } from '../service/GetVideoDetailService';
 import { GetVideoDetailResponseModel } from '../model/GetVideoDetailResponseModel';
 import { GetVideoDetailQueryParameterSchema } from '../model/GetVideoDetailQueryParameterSchema';
-import { YouTubeDataApiVideoId } from '../../external/youtubedataapi/videodetail/properties/YouTubeDataApiVideoId';
+import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
 
 
 export class GetVideoDetailController extends RouteController {
@@ -40,10 +40,10 @@ export class GetVideoDetailController extends RouteController {
             throw Error(`動画IDが指定されていません。`);
         }
 
-        const youTubeDataApiVideoId = new YouTubeDataApiVideoId(id);
+        const videoIdModel = new VideoIdModel(id);
 
         // YouTube Data Apiから動画詳細を取得する
-        const youTubeVideoDetailApi = await this.getVideoDetailService.callYouTubeDataDetailApi(youTubeDataApiVideoId);
+        const youTubeVideoDetailApi = await this.getVideoDetailService.callYouTubeDataDetailApi(videoIdModel);
 
         // レスポンスのYouTube動画
         const getVideoDetailResponseModel = new GetVideoDetailResponseModel(youTubeVideoDetailApi);
