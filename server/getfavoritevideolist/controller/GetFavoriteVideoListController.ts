@@ -48,9 +48,12 @@ export class GetFavoriteVideoListController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `お気に入り動画が登録されていません。`)
         }
 
+        // お気に入り動画リストからYouTube Data Apiの情報を取得してマージする
+        const favoriteVideoListMergedList = await this.getFavoriteVideoListService.mergeYouTubeDataList(favoriteVideoList);
+
         // レスポンスを作成
         const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel =
-            this.getFavoriteVideoListService.createResponse(favoriteVideoList);
+            this.getFavoriteVideoListService.createResponse(favoriteVideoListMergedList);
 
         return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoListResponse);
     }

@@ -1,12 +1,13 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
+import { FavoriteVideoListMergedType } from "./FavoriteVideoListMergedType";
 
 export class GetFavoriteVideoListResponseModel {
 
     private readonly data: FavoriteVideoTransaction[];
 
-    constructor(favoriteVideoTransaction: FavoriteVideoTransaction[]) {
+    constructor(favoriteVideoListMergedList: FavoriteVideoListMergedType[]) {
 
-        this.data = favoriteVideoTransaction;
+        this.data = favoriteVideoListMergedList;
     }
 
 }

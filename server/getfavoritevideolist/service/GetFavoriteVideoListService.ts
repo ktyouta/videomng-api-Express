@@ -16,6 +16,9 @@ import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoList
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { GetFavoriteVideoListRepositoryInterface } from "../repository/interface/GetFavoriteVideoListRepositoryInterface";
 import { FavoriteVideoTransaction } from "@prisma/client";
+import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
+import { YoutubeVideoDetailApi } from "../../external/youtubedataapi/videodetail/service/YoutubeVideoDetailApi";
+import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
 
 
 export class GetFavoriteVideoListService {
@@ -68,8 +71,53 @@ export class GetFavoriteVideoListService {
      * @param frontUserInfoCreateRequestBody 
      * @param newJsonWebTokenModel 
      */
-    public createResponse(favoriteVideoTransaction: FavoriteVideoTransaction[]): GetFavoriteVideoListResponseModel {
-        return new GetFavoriteVideoListResponseModel(favoriteVideoTransaction);
+    public createResponse(favoriteVideoListMergedList: FavoriteVideoListMergedType[]): GetFavoriteVideoListResponseModel {
+        return new GetFavoriteVideoListResponseModel(favoriteVideoListMergedList);
     }
 
+
+    /**
+     * お気に入り動画リストからYouTube Data Apiの情報を取得してマージする
+     * @param favoriteVideoList 
+     * @returns 
+     */
+    public async mergeYouTubeDataList(favoriteVideoList: FavoriteVideoTransaction[]) {
+
+        // お気に入り動画リストとYouTube Data Apiの動画詳細のマージ結果リスト
+        const favoriteVideoListMergedList: FavoriteVideoListMergedType[] = [];
+
+        // 取得したお気に入り動画の詳細情報をYouTube Data Apiから取得する
+        await Promise.all(favoriteVideoList.map(async (e: FavoriteVideoTransaction) => {
+
+            const videoIdModel = new VideoIdModel(e.videoId);
+            // YouTube Data Apiから動画詳細を取得
+            const youtubeVideoDetailApi = await this.callYouTubeDataDetailApi(videoIdModel);
+
+            const youtubeVideoItems = youtubeVideoDetailApi.response.items;
+            const favoriteVideoListMergedInfo = { ...e, items: youtubeVideoItems };
+
+            favoriteVideoListMergedList.push(favoriteVideoListMergedInfo);
+        }));
+
+        return favoriteVideoListMergedList;
+    }
+
+
+    /**
+     * YouTube Data Apiを呼び出す
+     * @param videoIdModel 
+     * @returns 
+     */
+    private async callYouTubeDataDetailApi(videoIdModel: VideoIdModel) {
+
+        try {
+
+            // YouTube Data Apiデータ取得
+            const youtubeVideoDetailApi = await YoutubeVideoDetailApi.call(videoIdModel);
+
+            return youtubeVideoDetailApi;
+        } catch (err) {
+            throw Error(`ERROR:${err} endpoint:${ApiEndopoint.VIDEO_INFO_ID} id:${videoIdModel}`);
+        }
+    }
 }

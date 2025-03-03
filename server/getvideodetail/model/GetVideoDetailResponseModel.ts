@@ -5,11 +5,11 @@ import { YouTubeVideoListApi } from "../../external/youtubedataapi/videolist/ser
 
 export class GetVideoDetailResponseModel {
 
-    private readonly response: YouTubeDataApiVideoDetailResponseType;
+    private readonly data: YouTubeDataApiVideoDetailResponseType;
 
     constructor(youTubeVideoDetailApi: YoutubeVideoDetailApi) {
 
-        this.response = youTubeVideoDetailApi.response;
+        this.data = youTubeVideoDetailApi.response;
     }
 
 }
