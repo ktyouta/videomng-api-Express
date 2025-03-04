@@ -1,0 +1,5 @@
+■YouTubeDataApi_利用方法
+
+参考サイト
+https://kuds.blog/youtube/start-youtube-data-api-v3/
+https://qiita.com/nbayashi/items/bde26cd04f08de21d552

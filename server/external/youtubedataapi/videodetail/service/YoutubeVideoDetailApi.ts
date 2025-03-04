@@ -1,5 +1,6 @@
 import ENV from '../../../../env.json';
 import { VideoIdModel } from '../../../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { envConfig } from '../../../../util/const/EnvConfig';
 import { ApiClient } from '../../../../util/service/ApiClient';
 import { QueryBuilder } from '../../../../util/service/QueryBuilder';
 import { YouTubeDataApiPath } from '../../common/model/YouTubeDataApiPath';
@@ -92,7 +93,7 @@ export class YoutubeVideoDetailApi {
         const videoIdValue = videoIdModel.videoId;
         // APIキー
         const apiKey = `${ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY}`;
-        const apiKeyValue = process.env.YOUTUBE_API_KEY;
+        const apiKeyValue = envConfig.youtubeApiKey;
         // part
         const videoPartKey = `${ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_PART}`;
         const videoPartValue = `${ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_PART}`;

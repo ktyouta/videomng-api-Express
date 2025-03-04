@@ -1,6 +1,7 @@
 import ENV from '../../env.json';
 import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
+import { envConfig } from '../../util/const/EnvConfig';
 
 
 export class NewJsonWebTokenModel {
@@ -10,7 +11,7 @@ export class NewJsonWebTokenModel {
 
     constructor(frontUserIdModel: FrontUserIdModel, frontUserPasswordModel: FrontUserPasswordModel) {
 
-        const jwtSecretKey = ENV.JSON_WEB_TOKEN_KEY;
+        const jwtSecretKey = envConfig.jwtKey;
 
         if (!jwtSecretKey) {
             throw Error(`設定ファイルにjwtの秘密鍵が設定されていません。`);

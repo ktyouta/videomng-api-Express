@@ -121,7 +121,10 @@ yarn-debug.log*
 yarn-error.log*
 
 
-
+⑩プロジェクトのルートフォルダに.envファイルを作成して以下の設定を記載する
+DATABASE_URL=データベースのURL
+YOUTUBE_API_KEY=YouTube Data APIのキー
+VIDEOMNG_JWT_KEY=jwtのキー
 
 
 

@@ -1,4 +1,4 @@
-■Prisma仕様手順
+■Prisma使用手順
 
 
 ①Prismaをインストールする
