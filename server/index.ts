@@ -8,9 +8,18 @@ import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './util/const/HttpStatusConst'
 
 const express = require('express');
 const app = express();
+const cors = require('cors');
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+// cors設定
+app.use(cors({
+    credentials: true,
+    origin: `${ENV.CORS.PROTOCOL}${ENV.CORS.DOMAIN}${ENV.CORS.PORT}`
+}));
 
 
 // コントローラーアクセス時のログ出力
@@ -41,8 +50,6 @@ function errorLogMiddleware(err: Error, req: Request) {
     // エラーログに出力
     Logger.error(output);
 };
-
-
 
 
 //コントローラーアクセス時のログ出力
