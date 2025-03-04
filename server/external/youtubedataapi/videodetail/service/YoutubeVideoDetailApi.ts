@@ -3,7 +3,7 @@ import { VideoIdModel } from '../../../../internaldata/favoritevideotransaction/
 import { envConfig } from '../../../../util/const/EnvConfig';
 import { ApiClient } from '../../../../util/service/ApiClient';
 import { QueryBuilder } from '../../../../util/service/QueryBuilder';
-import { YouTubeDataApiPath } from '../../common/model/YouTubeDataApiPath';
+import { YouTubeDataApiBasePathModel } from '../../common/model/YouTubeDataApiBasePathModel';
 import { YouTubeDataApiVideoListResponseType } from '../../videolist/model/YouTubeDataApiVideoListResponseType';
 import { YouTubeDataApiVideoDetailResponseType } from '../model/YouTubeDataApiVideoDetailResponseType';
 
@@ -56,7 +56,7 @@ export class YoutubeVideoDetailApi {
      */
     private static getUrl(videoIdModel: VideoIdModel) {
 
-        const apiPath = new YouTubeDataApiPath();
+        const apiPath = new YouTubeDataApiBasePathModel();
 
         if (!ENV.YOUTUBE_DATA_API.DETAIL.API_RESOURCE) {
             throw Error("設定ファイルにYouTubeDataApi(動画詳細)のリソースが存在しません。");
@@ -74,7 +74,7 @@ export class YoutubeVideoDetailApi {
             throw Error("設定ファイルにYouTubeDataApiのクエリキー(APIキー)が存在しません。");
         }
 
-        const apiBaseUrl = `${apiPath}${ENV.YOUTUBE_DATA_API.DETAIL.API_RESOURCE}`;
+        const apiBaseUrl = `${apiPath.basePath}${ENV.YOUTUBE_DATA_API.DETAIL.API_RESOURCE}`;
 
         // クエリパラメータを作成
         const queryParam = this.createQuery(videoIdModel);

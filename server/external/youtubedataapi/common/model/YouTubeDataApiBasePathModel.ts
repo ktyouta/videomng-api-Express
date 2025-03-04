@@ -1,8 +1,8 @@
 import ENV from '../../../../env.json';
 
-export class YouTubeDataApiPath {
+export class YouTubeDataApiBasePathModel {
 
-    private readonly _apiPath: string;
+    private readonly _basePath: string;
 
     constructor() {
 
@@ -18,10 +18,10 @@ export class YouTubeDataApiPath {
             throw Error("設定ファイルにYouTubeDataApiのパスが存在しません。");
         }
 
-        this._apiPath = `${ENV.YOUTUBE_DATA_API.PROTOCOL}${ENV.YOUTUBE_DATA_API.DOMAIN}${ENV.YOUTUBE_DATA_API.PATH}`;
+        this._basePath = `${ENV.YOUTUBE_DATA_API.PROTOCOL}${ENV.YOUTUBE_DATA_API.DOMAIN}${ENV.YOUTUBE_DATA_API.PATH}`;
     }
 
-    get apiPath() {
-        return this._apiPath;
+    get basePath() {
+        return this._basePath;
     }
 }
