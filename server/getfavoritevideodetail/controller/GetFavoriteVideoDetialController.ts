@@ -36,7 +36,9 @@ export class GetFavoriteVideoDetialController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction, id: string) {
+    public async doExecute(req: Request, res: Response, next: NextFunction) {
+
+        const id = req.params.id;
 
         if (!id) {
             throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_ID} | method:${HttpMethodType.GET}`);
