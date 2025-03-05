@@ -26,7 +26,7 @@ export class YouTubeVideoListApi {
     // YouTubeDataApi(動画一覧)のpart
     private static readonly YOUTUBE_DATA_API_PART: string = ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_PART;
     // YouTubeDataApi(動画一覧)のクエリキー(APIキー)
-    private static readonly QUERYKEY_API_KEY: string = ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY;
+    private static readonly QUERYKEY_API_KEY: string = ENV.YOUTUBE_DATA_API.QUERYKEY_API_KEY;
     // YouTubeDataApi(動画一覧)のAPIキー
     private static readonly YOUTUBE_DATA_API_API_KEY = envConfig.youtubeApiKey;
 

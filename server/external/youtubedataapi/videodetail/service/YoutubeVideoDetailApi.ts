@@ -14,6 +14,18 @@ export class YoutubeVideoDetailApi {
     private static readonly _apiClient: ApiClient = new ApiClient();
     // YouTube Data Apiの動画詳細のレスポンス
     private readonly _response: YouTubeDataApiVideoDetailResponseType;
+    // YouTubeDataApi(動画詳細)のリソース
+    private static readonly API_RESOURCE: string = ENV.YOUTUBE_DATA_API.DETAIL.API_RESOURCE;
+    // YouTubeDataApi(動画詳細)のクエリキー(動画ID)
+    private static readonly QUERYKEY_VIDEOID: string = ENV.YOUTUBE_DATA_API.DETAIL.QUERYKEY_VIDEOID;
+    // YouTubeDataApi(動画詳細)のクエリキー(part)
+    private static readonly QUERYKEY_PART: string = ENV.YOUTUBE_DATA_API.DETAIL.QUERYKEY_PART;
+    // YouTubeDataApi(動画詳細)のpart
+    private static readonly YOUTUBE_DATA_API_PART: string = ENV.YOUTUBE_DATA_API.DETAIL.YOUTUBE_DATA_API_PART;
+    // YouTubeDataApi(動画詳細)のクエリキー(APIキー)
+    private static readonly QUERYKEY_API_KEY: string = ENV.YOUTUBE_DATA_API.QUERYKEY_API_KEY;
+    // YouTubeDataApi(動画詳細)のAPIキー
+    private static readonly YOUTUBE_DATA_API_API_KEY = envConfig.youtubeApiKey;
 
 
     private constructor(response: YouTubeDataApiVideoDetailResponseType) {
@@ -58,23 +70,23 @@ export class YoutubeVideoDetailApi {
 
         const apiPath = new YouTubeDataApiBasePathModel();
 
-        if (!ENV.YOUTUBE_DATA_API.DETAIL.API_RESOURCE) {
+        if (!this.API_RESOURCE) {
             throw Error("設定ファイルにYouTubeDataApi(動画詳細)のリソースが存在しません。");
         }
 
-        if (!ENV.YOUTUBE_DATA_API.DETAIL.QUERYKEY_PART) {
+        if (!this.QUERYKEY_PART) {
             throw Error("設定ファイルにYouTubeDataApi(動画詳細)のクエリキー(part)が存在しません。");
         }
 
-        if (!ENV.YOUTUBE_DATA_API.DETAIL.YOUTUBE_DATA_API_PART) {
+        if (!this.YOUTUBE_DATA_API_PART) {
             throw Error("設定ファイルにYouTubeDataApi(動画詳細)のpartが存在しません。");
         }
 
-        if (!ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY) {
+        if (!this.QUERYKEY_API_KEY) {
             throw Error("設定ファイルにYouTubeDataApiのクエリキー(APIキー)が存在しません。");
         }
 
-        const apiBaseUrl = `${apiPath.basePath}${ENV.YOUTUBE_DATA_API.DETAIL.API_RESOURCE}`;
+        const apiBaseUrl = `${apiPath.basePath}${this.API_RESOURCE}`;
 
         // クエリパラメータを作成
         const queryParam = this.createQuery(videoIdModel);
@@ -89,23 +101,16 @@ export class YoutubeVideoDetailApi {
     private static createQuery(videoIdModel: VideoIdModel) {
 
         // 動画ID
-        const videoIdKey = `${ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_KEYWORD}`;
         const videoIdValue = videoIdModel.videoId;
-        // APIキー
-        const apiKey = `${ENV.YOUTUBE_DATA_API.QUERYKEY_APIKEY}`;
-        const apiKeyValue = envConfig.youtubeApiKey;
-        // part
-        const videoPartKey = `${ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_PART}`;
-        const videoPartValue = `${ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_PART}`;
 
-        if (!apiKeyValue) {
+        if (!this.YOUTUBE_DATA_API_API_KEY) {
             throw Error("設定ファイルにYouTubeDataApiのAPIキーが存在しません。");
         }
 
         // クエリパラメータ作成用オブジェクト
-        const queryBuilder: QueryBuilder = new QueryBuilder(videoIdKey, videoIdValue);
-        queryBuilder.add(apiKey, apiKeyValue);
-        queryBuilder.add(videoPartKey, videoPartValue);
+        const queryBuilder: QueryBuilder = new QueryBuilder(this.QUERYKEY_VIDEOID, videoIdValue);
+        queryBuilder.add(this.QUERYKEY_API_KEY, this.YOUTUBE_DATA_API_API_KEY);
+        queryBuilder.add(this.QUERYKEY_PART, this.YOUTUBE_DATA_API_PART);
 
         // クエリパラメータを作成
         return queryBuilder.createParam();
