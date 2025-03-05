@@ -63,6 +63,6 @@ export class GetVideoListController extends RouteController {
         // レスポンスのYouTube動画
         const getVideoListResponseModel = new GetVideoListResponseModel(youTubeVideoListApi);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, getVideoListResponseModel);
+        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, getVideoListResponseModel.data);
     }
 }
