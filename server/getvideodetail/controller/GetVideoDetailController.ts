@@ -50,6 +50,6 @@ export class GetVideoDetailController extends RouteController {
         // レスポンスのYouTube動画
         const getVideoDetailResponseModel = new GetVideoDetailResponseModel(youTubeVideoDetailApi);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, getVideoDetailResponseModel);
+        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, getVideoDetailResponseModel.data);
     }
 }
