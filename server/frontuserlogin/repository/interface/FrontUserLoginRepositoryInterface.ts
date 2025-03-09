@@ -1,5 +1,6 @@
-import { FrontUserLoginMaster } from "@prisma/client";
+import { FrontUserInfoMaster, FrontUserLoginMaster } from "@prisma/client";
 import { FrontUserLoginSelectEntity } from "../../entity/FrontUserLoginSelectEntity";
+import { FrontUserInfoSelectEntity } from "../../entity/FrontUserInfoSelectEntity";
 
 
 /**
@@ -8,8 +9,12 @@ import { FrontUserLoginSelectEntity } from "../../entity/FrontUserLoginSelectEnt
 export interface FrontUserLoginRepositoryInterface {
 
     /**
-     * ユーザー取得
+     * ログイン情報を取得
      */
-    select(frontUserLoginSelectEntity: FrontUserLoginSelectEntity): Promise<FrontUserLoginMaster[]>;
+    selectLoginUser(frontUserLoginSelectEntity: FrontUserLoginSelectEntity): Promise<FrontUserLoginMaster[]>;
 
+    /**
+     * ユーザー情報を取得
+     */
+    selectUserInfo(frontUserInfoSelectEntity: FrontUserInfoSelectEntity): Promise<FrontUserInfoMaster[]>;
 }

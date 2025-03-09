@@ -1,10 +1,10 @@
 import { scryptSync, randomBytes, timingSafeEqual } from "crypto";
+import { FrontUserSaltValueModel } from "./FrontUserSaltValueModel";
 
 
 export class FrontUserPasswordModel {
 
     private _frontUserPassword: string;
-    private static BYTE_SIZE = 16;
     private static ENCODING: BufferEncoding = `hex`;
     private static HASH_LENGTH = 64;
 
@@ -13,14 +13,17 @@ export class FrontUserPasswordModel {
         this._frontUserPassword = hashedPassword;
     }
 
-    static hash(inputPassword: string) {
+    /**
+     * ハッシュ化
+     */
+    static hash(inputPassword: string, frontUserSaltValueModel: FrontUserSaltValueModel) {
 
         if (!inputPassword) {
             throw Error(`ユーザーのパスワードが設定されていません。`);
         }
 
         // パスワードをハッシュ化
-        const salt = randomBytes(FrontUserPasswordModel.BYTE_SIZE).toString(FrontUserPasswordModel.ENCODING);
+        const salt = frontUserSaltValueModel.salt;
         const hashedPassword =
             scryptSync(inputPassword, salt, FrontUserPasswordModel.HASH_LENGTH).toString(FrontUserPasswordModel.ENCODING);
 
@@ -29,7 +32,6 @@ export class FrontUserPasswordModel {
 
     static reConstruct(hashedPassword: string) {
         return new FrontUserPasswordModel(hashedPassword);
-
     }
 
     public get frontUserPassword() {

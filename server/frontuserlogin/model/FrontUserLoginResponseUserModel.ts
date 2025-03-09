@@ -1,12 +1,13 @@
+import { FrontUserInfoMaster } from "@prisma/client";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 
-export class FrontUserLoginCreateResponseUserModel {
+export class FrontUserLoginResponseUserModel {
 
     private readonly userName: string;
 
-    constructor(userNameModel: FrontUserNameModel) {
+    constructor(frontUserInfoMaster: FrontUserInfoMaster) {
 
-        this.userName = userNameModel.frontUserName;
+        this.userName = frontUserInfoMaster.userName;
     }
 
 }

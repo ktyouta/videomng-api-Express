@@ -23,3 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 .env
+
+/public/log/info.log
+/public/log/warn.log
+/public/log/error.log

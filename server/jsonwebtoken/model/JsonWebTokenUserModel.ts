@@ -60,7 +60,7 @@ export class JsonWebTokenUserModel {
             const userId = Number.parseInt(verifyArray[0]);
 
             const frontUserIdModel: FrontUserIdModel = FrontUserIdModel.reConstruct(userId);
-            const frontUserPassword: FrontUserPasswordModel = FrontUserPasswordModel.hash(verifyArray[1]);
+            const frontUserPassword: FrontUserPasswordModel = FrontUserPasswordModel.reConstruct(verifyArray[1]);
 
             // ユーザーマスタファイルからデータを取得
             const userInfoMaster = await this.getFrontUser(frontUserIdModel, frontUserPassword);

@@ -93,7 +93,7 @@ export class CreateFrontUserInfoService {
 
             return newJsonWebTokenModel;
         } catch (err) {
-            throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_INFO}`);
+            throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_LOGIN}`);
         }
     }
 
@@ -136,6 +136,7 @@ export class CreateFrontUserInfoService {
         return new FrontUserLoginMasterInsertEntity(
             userId,
             parsedRequestBody.frontUserPasswordModel,
+            parsedRequestBody.frontUserSaltModel,
         );
     }
 }

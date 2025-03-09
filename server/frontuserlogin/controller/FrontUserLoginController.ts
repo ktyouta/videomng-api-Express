@@ -8,16 +8,19 @@ import { ZodIssue } from 'zod';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { FrontUserLoginRequestModelSchema } from '../model/FrontUserLoginRequestModelSchema';
 import { FrontUserLoginRequestType } from '../model/FrontUserLoginRequestType';
-import { FrontUserLoginRequestModel } from '../model/FrontUserLoginRequestModel';
-import { FrontUserLoginMasterRepositoryInterface } from '../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface';
 import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
+import { FrontUserSaltValueModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel';
+import { FrontUserLoginCreateResponseModel } from '../model/FrontUserLoginResponseModel';
+import { LOGIN_ERR_MESSAGE } from '../const/FrontUserLoginConst';
 
 
 export class FrontUserLoginController extends RouteController {
 
-    private FrontUserLoginService = new FrontUserLoginService();
+    private frontUserLoginService = new FrontUserLoginService();
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -53,22 +56,53 @@ export class FrontUserLoginController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        // リクエストボディの型を変換する
-        const frontUserLoginRequestBody: FrontUserLoginRequestModel =
-            this.FrontUserLoginService.parseRequestBody(requestBody);
+        const inputFrontUserId = FrontUserIdModel.reConstruct(requestBody.userId);
 
         // 永続ロジックを取得する
         const frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface =
-            this.FrontUserLoginService.getFrontUserLoginMasterRepository();
+            this.frontUserLoginService.getFrontUserLoginMasterRepository();
 
         // ログインユーザーを取得
-        const frontUserList = await this.FrontUserLoginService.getLoginUser(frontUserLoginMasterRepository, frontUserLoginRequestBody);
+        const frontUserLoginList = await this.frontUserLoginService.getLoginUser(frontUserLoginMasterRepository, inputFrontUserId);
+
+        // ユーザーの取得に失敗
+        if (frontUserLoginList.length === 0) {
+            return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
+        }
+
+        const frontUserLogin = frontUserLoginList[0];
+        const salt = frontUserLogin.salt;
+
+        if (!salt) {
+            throw Error(`ソルト値を取得できませんでした。ユーザーID:${inputFrontUserId.frontUserId}`);
+        }
+
+        // テーブルから取得したソルト値をもとに入力されたパスワードをハッシュ化する
+        const saltModel = FrontUserSaltValueModel.reConstruct(salt);
+        const inputPasswordModel = FrontUserPasswordModel.hash(requestBody.password, saltModel);
+
+        if (inputPasswordModel.frontUserPassword !== frontUserLogin.password) {
+            return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
+        }
+
+        // ユーザー情報を取得
+        const frontUserList = await this.frontUserLoginService.getUserInfo(frontUserLoginMasterRepository, inputFrontUserId);
 
         // ユーザーの取得に失敗
         if (frontUserList.length === 0) {
-            return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `IDかパスワードが間違っています。`);
+            return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
         }
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`);
+        const frontUser = frontUserList[0];
+
+        // jwtを作成
+        const newJsonWebTokenModel =
+            await this.frontUserLoginService.createJsonWebToken(inputFrontUserId, inputPasswordModel);
+
+        // レスポンスを作成
+        const frontUserLoginCreateResponseModel =
+            new FrontUserLoginCreateResponseModel(frontUser, newJsonWebTokenModel);
+
+        return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`, frontUserLoginCreateResponseModel);
     }
 }

@@ -1,22 +1,16 @@
+import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
+import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RepositoryType } from '../../util/const/CommonConst';
+import { FrontUserInfoSelectEntity } from '../entity/FrontUserInfoSelectEntity';
 import { FrontUserLoginSelectEntity } from '../entity/FrontUserLoginSelectEntity';
-import { FrontUserLoginRequestModel } from '../model/FrontUserLoginRequestModel';
 import { FrontUserLoginRequestType } from '../model/FrontUserLoginRequestType';
 import { FrontUserLoginRepositorys } from '../repository/FrontUserLoginRepositorys';
 import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
 
 
 export class FrontUserLoginService {
-
-
-    /**
-     * リクエストボディの型変換
-     * @param requestBody 
-     */
-    public parseRequestBody(requestBody: FrontUserLoginRequestType): FrontUserLoginRequestModel {
-
-        return new FrontUserLoginRequestModel(requestBody);
-    }
 
 
     /**
@@ -33,16 +27,51 @@ export class FrontUserLoginService {
      * @param frontUserLoginRequestBody 
      */
     public async getLoginUser(frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface,
-        frontUserLoginRequestBody: FrontUserLoginRequestModel) {
+        inputFrontUserId: FrontUserIdModel) {
 
         const frontUserLoginSelectEntity = new FrontUserLoginSelectEntity(
-            frontUserLoginRequestBody.frontUserIdModel,
-            frontUserLoginRequestBody.frontUserPasswordModel
+            inputFrontUserId
         );
 
-        const frontUserList = frontUserLoginMasterRepository.select(frontUserLoginSelectEntity);
+        const frontUserLoginList = frontUserLoginMasterRepository.selectLoginUser(frontUserLoginSelectEntity);
+
+        return frontUserLoginList;
+    }
+
+
+    /**
+     * ユーザーを情報
+     * @param frontUserLoginRequestBody 
+     */
+    public async getUserInfo(frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface,
+        inputFrontUserId: FrontUserIdModel) {
+
+        const rontUserInfoSelectEntity = new FrontUserInfoSelectEntity(
+            inputFrontUserId
+        );
+
+        const frontUserList = frontUserLoginMasterRepository.selectUserInfo(rontUserInfoSelectEntity);
 
         return frontUserList;
     }
 
+
+    /**
+     * jwtを作成する
+     * @param userIdModel 
+     * @param frontUserInfoCreateRequestBody 
+     * @returns 
+     */
+    public createJsonWebToken(userIdModel: FrontUserIdModel,
+        inputPasswordModel: FrontUserPasswordModel
+    ) {
+
+        try {
+            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel, inputPasswordModel);
+
+            return newJsonWebTokenModel;
+        } catch (err) {
+            throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_INFO}`);
+        }
+    }
 }

@@ -25,6 +25,7 @@ model TestConnection {
 model FrontUserLoginMaster {
   userId      Int   @id @map("user_id")
   password    String   @db.VarChar(255)  @map("password")
+  salt    String   @db.VarChar(32)  @map("salt")
   createDate  DateTime  @map("create_date")
   updateDate  DateTime  @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")

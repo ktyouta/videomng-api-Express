@@ -4,7 +4,7 @@ import { FLG } from "../../util/const/CommonConst";
 
 
 
-export class FrontUserLoginSelectEntity {
+export class FrontUserInfoSelectEntity {
 
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
