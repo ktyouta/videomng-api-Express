@@ -23,7 +23,7 @@ export class CreateFavoriteVideoController extends RouteController {
     protected getRouteSettingModel(): RouteSettingModel {
 
         return new RouteSettingModel(
-            HttpMethodType.GET,
+            HttpMethodType.POST,
             this.doExecute,
             ApiEndopoint.FAVORITE_VIDEO
         );
