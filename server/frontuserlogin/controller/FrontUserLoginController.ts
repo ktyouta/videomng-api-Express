@@ -16,6 +16,7 @@ import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/
 import { FrontUserSaltValueModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel';
 import { FrontUserLoginCreateResponseModel } from '../model/FrontUserLoginResponseModel';
 import { LOGIN_ERR_MESSAGE } from '../const/FrontUserLoginConst';
+import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 
 
 export class FrontUserLoginController extends RouteController {
@@ -101,7 +102,10 @@ export class FrontUserLoginController extends RouteController {
 
         // レスポンスを作成
         const frontUserLoginCreateResponseModel =
-            new FrontUserLoginCreateResponseModel(frontUser, newJsonWebTokenModel);
+            new FrontUserLoginCreateResponseModel(frontUser);
+
+        // cookieを返却
+        res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
         return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`, frontUserLoginCreateResponseModel);
     }

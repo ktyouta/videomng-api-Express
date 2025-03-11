@@ -5,13 +5,11 @@ import { FrontUserLoginResponseUserModel } from "./FrontUserLoginResponseUserMod
 
 export class FrontUserLoginCreateResponseModel {
 
-    private readonly userInfo: FrontUserLoginResponseUserModel;
-    private readonly token: string;
+    private readonly userName: string;
 
-    constructor(frontUserInfoMaster: FrontUserInfoMaster, newJsonWebTokenModel: NewJsonWebTokenModel) {
+    constructor(frontUserInfoMaster: FrontUserInfoMaster) {
 
-        this.userInfo = new FrontUserLoginResponseUserModel(frontUserInfoMaster);
-        this.token = newJsonWebTokenModel.token;
+        this.userName = frontUserInfoMaster.userName;
     }
 
 }
