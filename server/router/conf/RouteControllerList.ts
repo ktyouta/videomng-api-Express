@@ -1,6 +1,7 @@
 import { CreateFavoriteVideoController } from "../../createfavoritevideo/controller/CreateFavoriteVideoController";
 import { CreateFrontUserInfoController } from "../../createfrontuserinfo/controller/CreateFrontUserInfoController";
 import { DeleteFavoriteVideoController } from "../../deletefavoritevideo/controller/DeleteFavoriteVideoController";
+import { FrontUserCheckAuthController } from "../../frontusercheckauth/controller/FrontUserCheckAuthController";
 import { FrontUserLoginController } from "../../frontuserlogin/controller/FrontUserLoginController";
 import { FrontUserLogoutController } from "../../frontuserlogout/controller/FrontUserLogoutController";
 import { GetFavoriteVideoDetialController } from "../../getfavoritevideodetail/controller/GetFavoriteVideoDetialController";
@@ -24,6 +25,8 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new FrontUserLoginController(),
     // ログアウト
     new FrontUserLogoutController(),
+    // 認証チェック
+    new FrontUserCheckAuthController(),
     // お気に入り動画登録処理
     new CreateFavoriteVideoController(),
     // お気に入り動画更新処理
