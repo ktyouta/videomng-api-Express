@@ -1,3 +1,4 @@
+import { CookieModel } from '../../cookie/model/CookieModel';
 import ENV from '../../env.json';
 import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
@@ -6,6 +7,7 @@ import { envConfig } from '../../util/const/EnvConfig';
 import { JsonFileData } from '../../util/service/JsonFileData';
 import { JsonWebTokenUserInfoSelectEntity } from '../entity/JsonWebTokenUserInfoSelectEntity';
 import { JsonWebTokenUserInfoRepositorys } from '../repository/JsonWebTokenUserInfoRepositorys';
+import { NewJsonWebTokenModel } from './NewJsonWebTokenModel';
 
 
 export class JsonWebTokenUserModel {
@@ -31,7 +33,14 @@ export class JsonWebTokenUserModel {
      * @param token 
      * @returns 
      */
-    static async get(token: string) {
+    static async get(cookieModel: CookieModel) {
+
+        if (!NewJsonWebTokenModel.COOKIE_KEY) {
+            throw Error(`設定ファイルにcookie(jwt)のキーが設定されていません。`);
+        }
+
+        const token = cookieModel.cookie[NewJsonWebTokenModel.COOKIE_KEY];
+
         if (!token) {
             throw Error(`トークンが存在しません。`);
         }

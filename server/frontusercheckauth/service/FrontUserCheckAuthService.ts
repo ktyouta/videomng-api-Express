@@ -7,6 +7,8 @@ import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUser
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { CookieModel } from "../../cookie/model/CookieModel";
+import { Request } from 'express';
 
 
 export class FrontUserCheckAuthService {
@@ -16,12 +18,13 @@ export class FrontUserCheckAuthService {
      * @param jwt 
      * @returns 
      */
-    public checkJwtVerify(jwt: string) {
+    public checkJwtVerify(req: Request) {
 
         try {
-            const jsonWebTokenVerifyModel = JsonWebTokenUserModel.get(jwt);
+            const cookieModel = new CookieModel(req);
+            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
 
-            return jsonWebTokenVerifyModel;
+            return jsonWebTokenUserModel;
         } catch (err) {
             throw Error(`お気に入り動画登録時の認証エラー ERROR:${err}`);
         }

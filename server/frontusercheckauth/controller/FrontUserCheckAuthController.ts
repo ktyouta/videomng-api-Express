@@ -38,7 +38,7 @@ export class FrontUserCheckAuthController extends RouteController {
         try {
 
             // jwtの認証を実行する
-            const jsonWebTokenVerifyModel = await this.frontUserCheckAuthService.checkJwtVerify(req.cookies.jwt);
+            const jsonWebTokenVerifyModel = await this.frontUserCheckAuthService.checkJwtVerify(req);
             const frontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
             const frontUserPasswordModel = jsonWebTokenVerifyModel.frontUserPasswordModel;
 

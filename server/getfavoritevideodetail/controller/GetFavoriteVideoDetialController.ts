@@ -47,7 +47,7 @@ export class GetFavoriteVideoDetialController extends RouteController {
         const videoIdModel = new VideoIdModel(id);
 
         // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFavoriteVideoDetialService.checkJwtVerify(req.cookies.jwt);
+        const jsonWebTokenVerifyModel = await this.getFavoriteVideoDetialService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // 永続ロジック用オブジェクトを取得

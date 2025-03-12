@@ -26,7 +26,7 @@ export class NewJsonWebTokenModel {
         }
 
         if (!NewJsonWebTokenModel.COOKIE_KEY) {
-            throw Error(`設定ファイルにcookieのキーが設定されていません。`);
+            throw Error(`設定ファイルにcookie(jwt)のキーが設定されていません。`);
         }
 
         const frontUserId = frontUserIdModel.frontUserId;

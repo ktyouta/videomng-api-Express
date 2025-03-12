@@ -11,6 +11,8 @@ import { CreateFavoriteVideoRepositorys } from "../repository/CreateFavoriteVide
 import { CreateFavoriteVideoRepositoryInterface } from "../repository/interface/CreateFavoriteVideoRepositoryInterface";
 import { FavoriteVideoCommentTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
 import { FavoriteVideoCommentTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoTransactionRepositorys";
+import { CookieModel } from "../../cookie/model/CookieModel";
+import { Request } from 'express';
 
 
 export class CreateFavoriteVideoService {
@@ -20,12 +22,14 @@ export class CreateFavoriteVideoService {
      * @param jwt 
      * @returns 
      */
-    public checkJwtVerify(jwt: string) {
+    public checkJwtVerify(req: Request) {
 
         try {
-            const jsonWebTokenVerifyModel = JsonWebTokenUserModel.get(jwt);
 
-            return jsonWebTokenVerifyModel;
+            const cookieModel = new CookieModel(req);
+            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
+
+            return jsonWebTokenUserModel;
         } catch (err) {
             throw Error(`お気に入り動画登録時の認証エラー ERROR:${err}`);
         }

@@ -37,7 +37,7 @@ export class GetFavoriteVideoListController extends RouteController {
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
         // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFavoriteVideoListService.checkJwtVerify(req.cookies.jwt);
+        const jsonWebTokenVerifyModel = await this.getFavoriteVideoListService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // お気に入り動画リストを取得

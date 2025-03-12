@@ -11,6 +11,8 @@ import { FavoriteVideoCommentTransactionInsertEntity } from "../../internaldata/
 import { VideoCommentModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoCommentModel";
 import { VideoCommentSeqModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoCommentSeqModel";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
+import { CookieModel } from "../../cookie/model/CookieModel";
+import { Request } from 'express';
 
 
 export class DeleteFavoriteVideoService {
@@ -20,12 +22,13 @@ export class DeleteFavoriteVideoService {
      * @param jwt 
      * @returns 
      */
-    public checkJwtVerify(jwt: string) {
+    public checkJwtVerify(req: Request) {
 
         try {
-            const jsonWebTokenVerifyModel = JsonWebTokenUserModel.get(jwt);
+            const cookieModel = new CookieModel(req);
+            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
 
-            return jsonWebTokenVerifyModel;
+            return jsonWebTokenUserModel;
         } catch (err) {
             throw Error(`お気に入り動画更新時の認証エラー ERROR:${err}`);
         }

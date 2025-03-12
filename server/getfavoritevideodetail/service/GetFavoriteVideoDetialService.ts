@@ -18,6 +18,8 @@ import { GetFavoriteVideoDetialRepositoryInterface } from "../repository/interfa
 import { FavoriteVideoCommentTransaction, FavoriteVideoTransaction } from "@prisma/client";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
 import { YoutubeVideoDetailApi } from "../../external/youtubedataapi/videodetail/service/YoutubeVideoDetailApi";
+import { Request } from 'express';
+import { CookieModel } from "../../cookie/model/CookieModel";
 
 
 export class GetFavoriteVideoDetialService {
@@ -27,12 +29,13 @@ export class GetFavoriteVideoDetialService {
      * @param jwt 
      * @returns 
      */
-    public checkJwtVerify(jwt: string) {
+    public checkJwtVerify(req: Request) {
 
         try {
-            const jsonWebTokenVerifyModel = JsonWebTokenUserModel.get(jwt);
+            const cookieModel = new CookieModel(req);
+            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
 
-            return jsonWebTokenVerifyModel;
+            return jsonWebTokenUserModel;
         } catch (err) {
             throw Error(`お気に入り動画リスト取得時の認証エラー ERROR:${err}`);
         }

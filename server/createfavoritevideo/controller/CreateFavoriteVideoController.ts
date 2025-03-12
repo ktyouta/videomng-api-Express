@@ -58,7 +58,7 @@ export class CreateFavoriteVideoController extends RouteController {
         const createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel = new CreateFavoriteVideoRequestModel(requestBody);
 
         // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.createFavoriteVideoService.checkJwtVerify(req.cookies.jwt);
+        const jsonWebTokenVerifyModel = await this.createFavoriteVideoService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始

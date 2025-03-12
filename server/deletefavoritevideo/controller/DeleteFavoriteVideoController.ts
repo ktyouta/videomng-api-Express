@@ -44,7 +44,7 @@ export class DeleteFavoriteVideoController extends RouteController {
         const videoId = new VideoIdModel(id);
 
         // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.deleteFavoriteVideoService.checkJwtVerify(req.cookies.jwt);
+        const jsonWebTokenVerifyModel = await this.deleteFavoriteVideoService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
