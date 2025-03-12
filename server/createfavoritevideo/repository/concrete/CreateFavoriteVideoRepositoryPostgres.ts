@@ -28,7 +28,7 @@ export class CreateFavoriteVideoRepositoryPostgres implements CreateFavoriteVide
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoTransaction[]>`
             SELECT * 
             FROM "favorite_video_transaction" 
-            WHERE user_id = ${userId} AND
+            WHERE user_id = CAST(${userId} AS INTEGER) AND
             video_id = ${videoId}
         `;
 

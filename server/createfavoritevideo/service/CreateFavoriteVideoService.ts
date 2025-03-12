@@ -84,7 +84,7 @@ export class CreateFavoriteVideoService {
      * @param createFavoriteVideoRequestModel 
      * @param frontUserIdModel 
      */
-    public insert(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
+    public async insert(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
         createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
@@ -93,7 +93,7 @@ export class CreateFavoriteVideoService {
             frontUserIdModel,
             createFavoriteVideoRequestModel.videoIdModel);
 
-        favoriteVideoRepository.insert(favoriteVideoInsertEntity, tx);
+        await favoriteVideoRepository.insert(favoriteVideoInsertEntity, tx);
     }
 
     /**
@@ -102,12 +102,12 @@ export class CreateFavoriteVideoService {
      * @param createFavoriteVideoRequestModel 
      * @param frontUserIdModel 
      */
-    public recoveryVideo(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
+    public async recoveryVideo(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
         createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        favoriteVideoRepository.recovery(frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel, tx);
+        await favoriteVideoRepository.recovery(frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel, tx);
     }
 
 
@@ -118,11 +118,11 @@ export class CreateFavoriteVideoService {
      * @param frontUserIdModel 
      * @param tx 
      */
-    public recoveryComment(favoriteVideoCommentRepository: FavoriteVideoCommentTransactionRepositoryInterface,
+    public async recoveryComment(favoriteVideoCommentRepository: FavoriteVideoCommentTransactionRepositoryInterface,
         createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        favoriteVideoCommentRepository.recovery(frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel, tx);
+        await favoriteVideoCommentRepository.recovery(frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel, tx);
     }
 }
