@@ -97,7 +97,13 @@ export class GetFavoriteVideoListService {
             const youtubeVideoDetailApi = await this.callYouTubeDataDetailApi(videoIdModel);
 
             const youtubeVideoItems = youtubeVideoDetailApi.response.items;
-            const favoriteVideoListMergedInfo = { ...e, items: youtubeVideoItems };
+
+            // YouTube Data APIからのデータ取得に失敗
+            if (youtubeVideoItems.length === 0) {
+                Promise.resolve(null);
+            }
+
+            const favoriteVideoListMergedInfo = { ...e, ...youtubeVideoItems[0] };
 
             favoriteVideoListMergedList.push(favoriteVideoListMergedInfo);
         }));

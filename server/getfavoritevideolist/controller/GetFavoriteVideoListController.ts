@@ -55,6 +55,6 @@ export class GetFavoriteVideoListController extends RouteController {
         const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel =
             this.getFavoriteVideoListService.createResponse(favoriteVideoListMergedList);
 
-        return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoListResponse);
+        return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoListResponse.data);
     }
 }

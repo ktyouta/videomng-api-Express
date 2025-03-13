@@ -3,6 +3,4 @@ import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi
 
 // お気に入り動画情報と外部APIの動画情報をマージした型
 export type FavoriteVideoListMergedType =
-    FavoriteVideoTransaction & {
-        items: YouTubeDataApiVideoDetailItemType[]
-    };
+    FavoriteVideoTransaction & YouTubeDataApiVideoDetailItemType;

@@ -3,11 +3,14 @@ import { FavoriteVideoListMergedType } from "./FavoriteVideoListMergedType";
 
 export class GetFavoriteVideoListResponseModel {
 
-    private readonly data: FavoriteVideoTransaction[];
+    private readonly _data: FavoriteVideoTransaction[];
 
     constructor(favoriteVideoListMergedList: FavoriteVideoListMergedType[]) {
 
-        this.data = favoriteVideoListMergedList;
+        this._data = favoriteVideoListMergedList;
     }
 
+    get data() {
+        return this._data;
+    }
 }

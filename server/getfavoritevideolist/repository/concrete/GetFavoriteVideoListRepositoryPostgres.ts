@@ -22,10 +22,12 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         const frontUserId = getFavoriteVideoListSelectEntity.frontUserId;
 
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoTransaction[]>`
-            SELECT * 
+            SELECT
+                user_id as "userId",
+                video_id as "videoId" 
             FROM "favorite_video_transaction" 
-            WHERE user_id = ${frontUserId} AND
-            delete_flg = '0'
+            WHERE "user_id" = ${frontUserId} AND
+            "delete_flg" = '0'
             `;
 
         return favoriteVideoList;
