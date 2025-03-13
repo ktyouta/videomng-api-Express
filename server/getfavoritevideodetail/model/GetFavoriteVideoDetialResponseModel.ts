@@ -4,11 +4,14 @@ import { FavoriteVideoDetailMergedModel } from "./FavoriteVideoDetailMergedModel
 
 export class GetFavoriteVideoDetialResponseModel {
 
-    private readonly data: FavoriteVideoDetailMergedModel;
+    private readonly _data: FavoriteVideoDetailMergedModel;
 
     constructor(favoriteVideoDetailMergedModel: FavoriteVideoDetailMergedModel) {
 
-        this.data = favoriteVideoDetailMergedModel;
+        this._data = favoriteVideoDetailMergedModel;
     }
 
+    get data() {
+        return this._data;
+    }
 }

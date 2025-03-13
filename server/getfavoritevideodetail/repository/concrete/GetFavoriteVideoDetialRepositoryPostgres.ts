@@ -23,7 +23,9 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
         const videoId = getFavoriteVideoDetialSelectEntity.videoId;
 
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoTransaction[]>`
-            SELECT * 
+            SELECT 
+                user_id as "userId",
+                video_id as "videoId"  
             FROM "favorite_video_transaction" 
             WHERE user_id = ${frontUserId} AND
             video_id = ${videoId} AND
@@ -43,7 +45,11 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
         const videoId = getFavoriteVideoDetialSelectEntity.videoId;
 
         const favoriteVideoComment = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoCommentTransaction[]>`
-            SELECT * 
+            SELECT 
+                user_id as "userId",
+                video_id as "videoId",
+                video_comment_seq as "videoCommentSeq",
+                video_comment as "videoComment"
             FROM "favorite_video_comment_transaction" 
             WHERE user_id = ${frontUserId} AND
             video_id = ${videoId} AND

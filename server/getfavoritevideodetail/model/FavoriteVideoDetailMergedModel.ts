@@ -4,7 +4,7 @@ import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi
 export class FavoriteVideoDetailMergedModel {
 
     private readonly detail: FavoriteVideoTransaction;
-    private readonly comments: FavoriteVideoTransaction[];
+    private readonly comments: FavoriteVideoCommentTransaction[];
     private readonly item: YouTubeDataApiVideoDetailItemType;
 
     constructor(favoriteVideoList: FavoriteVideoTransaction[],

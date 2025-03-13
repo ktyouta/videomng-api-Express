@@ -88,8 +88,8 @@ export class GetFavoriteVideoDetialController extends RouteController {
         );
 
         // レスポンスを作成
-        const getFavoriteVideoDetialResponse = new GetFavoriteVideoDetialResponseModel(favoriteVideoDetailMergedModel);;
+        const getFavoriteVideoDetialResponse = new GetFavoriteVideoDetialResponseModel(favoriteVideoDetailMergedModel);
 
-        return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画を取得しました。`, getFavoriteVideoDetialResponse);
+        return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画を取得しました。`, getFavoriteVideoDetialResponse.data);
     }
 }
