@@ -1,14 +1,14 @@
-import { FavoriteVideoCommentTransaction, FavoriteVideoTransaction } from "@prisma/client";
+import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
 import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailItemType";
 
 export class FavoriteVideoDetailMergedModel {
 
     private readonly detail: FavoriteVideoTransaction;
-    private readonly comments: FavoriteVideoCommentTransaction[];
+    private readonly memos: FavoriteVideoMemoTransaction[];
     private readonly item: YouTubeDataApiVideoDetailItemType;
 
     constructor(favoriteVideoList: FavoriteVideoTransaction[],
-        favoriteVideoCommentList: FavoriteVideoCommentTransaction[],
+        favoriteVideoMemoList: FavoriteVideoMemoTransaction[],
         youtubeVideoItemList: YouTubeDataApiVideoDetailItemType[]) {
 
         if (favoriteVideoList.length === 0) {
@@ -20,7 +20,7 @@ export class FavoriteVideoDetailMergedModel {
         }
 
         this.detail = favoriteVideoList[0];
-        this.comments = favoriteVideoCommentList;
+        this.memos = favoriteVideoMemoList;
         this.item = youtubeVideoItemList[0];
     }
 }

@@ -9,8 +9,8 @@ import { CreateFavoriteVideoSelectEntity } from "../entity/CreateFavoriteVideoSe
 import { CreateFavoriteVideoRequestModel } from "../model/CreateFavoriteVideoRequestModel";
 import { CreateFavoriteVideoRepositorys } from "../repository/CreateFavoriteVideoRepositorys";
 import { CreateFavoriteVideoRepositoryInterface } from "../repository/interface/CreateFavoriteVideoRepositoryInterface";
-import { FavoriteVideoCommentTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
-import { FavoriteVideoCommentTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoTransactionRepositorys";
+import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
+import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoMemoTransactionRepositorys";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
 
@@ -74,8 +74,8 @@ export class CreateFavoriteVideoService {
      * お気に入り動画コメントの永続ロジックを取得
      * @returns 
      */
-    public getFavoriteVideoCommentRepository(): FavoriteVideoCommentTransactionRepositoryInterface {
-        return (new FavoriteVideoCommentTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
+    public getFavoriteVideoMemoRepository(): FavoriteVideoMemoTransactionRepositoryInterface {
+        return (new FavoriteVideoMemoTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
     }
 
     /**
@@ -118,11 +118,11 @@ export class CreateFavoriteVideoService {
      * @param frontUserIdModel 
      * @param tx 
      */
-    public async recoveryComment(favoriteVideoCommentRepository: FavoriteVideoCommentTransactionRepositoryInterface,
+    public async recoveryMemo(favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
         createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        await favoriteVideoCommentRepository.recovery(frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel, tx);
+        await favoriteVideoMemoRepository.recovery(frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel, tx);
     }
 }

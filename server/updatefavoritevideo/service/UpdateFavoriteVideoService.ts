@@ -6,11 +6,11 @@ import { FrontUserIdModel } from "../../internaldata/frontuserinfomaster/propert
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { RepositoryType } from "../../util/const/CommonConst";
 import { UpdateFavoriteVideoRequestModel } from "../model/UpdateFavoriteVideoRequestModel";
-import { FavoriteVideoCommentTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
-import { FavoriteVideoCommentTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoTransactionRepositorys";
-import { FavoriteVideoCommentTransactionInsertEntity } from "../../internaldata/favoritevideocommenttransaction/entity/FavoriteVideoTransactionInsertEntity";
-import { VideoCommentModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoCommentModel";
-import { VideoCommentSeqModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoCommentSeqModel";
+import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
+import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoMemoTransactionRepositorys";
+import { FavoriteVideoMemoTransactionInsertEntity } from "../../internaldata/favoritevideocommenttransaction/entity/FavoriteVideoMemoTransactionInsertEntity";
+import { VideoMemoModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoMemoModel";
+import { VideoMemoSeqModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoMemoSeqModel";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
 
@@ -39,8 +39,8 @@ export class UpdateFavoriteVideoService {
      * お気に入り動画コメントの永続ロジックを取得
      * @returns 
      */
-    public getFavoriteVideoCommentRepository(): FavoriteVideoCommentTransactionRepositoryInterface {
-        return (new FavoriteVideoCommentTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
+    public getFavoriteVideoMemoRepository(): FavoriteVideoMemoTransactionRepositoryInterface {
+        return (new FavoriteVideoMemoTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
     }
 
 
@@ -51,13 +51,13 @@ export class UpdateFavoriteVideoService {
      * @param frontUserIdModel 
      * @param tx 
      */
-    public async deleteComment(favoriteVideoCommentRepository: FavoriteVideoCommentTransactionRepositoryInterface,
+    public async deleteMemo(favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
         updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
         // 対象ユーザーのコメントを全て削除する
-        await favoriteVideoCommentRepository.delete(
+        await favoriteVideoMemoRepository.delete(
             frontUserIdModel,
             updateFavoriteVideoRequestModel.videoIdModel,
             tx);
@@ -69,18 +69,18 @@ export class UpdateFavoriteVideoService {
      * @param updateFavoriteVideoRequestModel 
      * @param frontUserIdModel 
      */
-    public async insertComment(favoriteVideoCommentRepository: FavoriteVideoCommentTransactionRepositoryInterface,
+    public async insertMemo(favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
         updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        await Promise.all(updateFavoriteVideoRequestModel.videoCommentModel.map((e, index) => {
+        await Promise.all(updateFavoriteVideoRequestModel.videoMemoModel.map((e, index) => {
 
-            return favoriteVideoCommentRepository.insert(
-                new FavoriteVideoCommentTransactionInsertEntity(
+            return favoriteVideoMemoRepository.insert(
+                new FavoriteVideoMemoTransactionInsertEntity(
                     frontUserIdModel,
                     updateFavoriteVideoRequestModel.videoIdModel,
-                    new VideoCommentSeqModel(index + 1),
+                    new VideoMemoSeqModel(index + 1),
                     e
                 ), tx);
         }));

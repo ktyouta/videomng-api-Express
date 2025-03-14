@@ -15,7 +15,7 @@ import { GetFavoriteVideoDetialRepositorys } from "../repository/GetFavoriteVide
 import { GetFavoriteVideoDetialSelectEntity } from "../entity/GetFavoriteVideoDetialSelectEntity";
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { GetFavoriteVideoDetialRepositoryInterface } from "../repository/interface/GetFavoriteVideoDetialRepositoryInterface";
-import { FavoriteVideoCommentTransaction, FavoriteVideoTransaction } from "@prisma/client";
+import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
 import { YoutubeVideoDetailApi } from "../../external/youtubedataapi/videodetail/service/YoutubeVideoDetailApi";
 import { Request } from 'express';
@@ -71,7 +71,7 @@ export class GetFavoriteVideoDetialService {
      * お気に入り動画コメント取得
      * @param userNameModel 
      */
-    public async getFavoriteVideoComment(getGetFavoriteVideoDetialRepository: GetFavoriteVideoDetialRepositoryInterface,
+    public async getFavoriteVideoMemo(getGetFavoriteVideoDetialRepository: GetFavoriteVideoDetialRepositoryInterface,
         frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel) {
 
@@ -79,9 +79,9 @@ export class GetFavoriteVideoDetialService {
         const getFavoriteVideoDetialSelectEntity = new GetFavoriteVideoDetialSelectEntity(frontUserIdModel, videoIdModel);
 
         // お気に入り動画取得
-        const favoriteVideoComment = await getGetFavoriteVideoDetialRepository.selectVideoComment(getFavoriteVideoDetialSelectEntity);
+        const favoriteVideoMemo = await getGetFavoriteVideoDetialRepository.selectVideoMemo(getFavoriteVideoDetialSelectEntity);
 
-        return favoriteVideoComment;
+        return favoriteVideoMemo;
     }
 
     /**

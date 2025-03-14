@@ -1,4 +1,4 @@
-import { VideoCommentModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoCommentModel";
+import { VideoMemoModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoMemoModel";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
 import { UpdateFavoriteVideoRequestType } from "./UpdateFavoriteVideoRequestType";
 
@@ -7,24 +7,24 @@ export class UpdateFavoriteVideoRequestModel {
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
     // コメント
-    private readonly _videoCommentModel: VideoCommentModel[];
+    private readonly _videoMemoModel: VideoMemoModel[];
 
     constructor(videoIdModel: VideoIdModel,
         updateFavoriteVideoRequestType: UpdateFavoriteVideoRequestType) {
 
         const comments = updateFavoriteVideoRequestType.comments.map((e: string) => {
-            return new VideoCommentModel(e);
+            return new VideoMemoModel(e);
         });
 
         this._videoIdModel = videoIdModel;
-        this._videoCommentModel = comments;
+        this._videoMemoModel = comments;
     }
 
     public get videoIdModel() {
         return this._videoIdModel;
     }
 
-    public get videoCommentModel() {
-        return this._videoCommentModel;
+    public get videoMemoModel() {
+        return this._videoMemoModel;
     }
 }

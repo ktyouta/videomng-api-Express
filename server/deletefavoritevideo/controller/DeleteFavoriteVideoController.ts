@@ -53,7 +53,7 @@ export class DeleteFavoriteVideoController extends RouteController {
             // お気に入り動画の永続ロジックを取得
             const favoriteVideoRepository = this.deleteFavoriteVideoService.getFavoriteVideoRepository();
             // お気に入り動画コメントの永続ロジックを取得
-            const favoriteVideoCommentRepository = this.deleteFavoriteVideoService.getFavoriteVideoCommentRepository();
+            const favoriteVideoMemoRepository = this.deleteFavoriteVideoService.getFavoriteVideoMemoRepository();
 
             // お気に入り動画を削除
             this.deleteFavoriteVideoService.deleteVideo(
@@ -64,8 +64,8 @@ export class DeleteFavoriteVideoController extends RouteController {
             );
 
             // コメントを削除
-            this.deleteFavoriteVideoService.deleteComment(
-                favoriteVideoCommentRepository,
+            this.deleteFavoriteVideoService.deleteMemo(
+                favoriteVideoMemoRepository,
                 videoId,
                 frontUserIdModel,
                 tx

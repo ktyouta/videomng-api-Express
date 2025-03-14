@@ -57,17 +57,17 @@ model FavoriteVideoTransaction {
 }
 
 
-// お気に入り動画コメント
-model FavoriteVideoCommentTransaction {
+// お気に入り動画メモ
+model FavoriteVideoMemoTransaction {
   userId      Int   @map("user_id")
   videoId    String   @db.VarChar(255)  @map("video_id")
-  videoCommentSeq    Int  @map("video_comment_seq")
-  videoComment    String  @db.Text  @map("video_comment")
+  videoMemoSeq    Int  @map("video_memo_seq")
+  videoMemo    String  @db.Text  @map("video_memo")
   createDate  DateTime  @map("create_date")
   updateDate  DateTime  @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")
-  @@id([userId, videoId, videoCommentSeq])
-  @@map("favorite_video_comment_transaction")
+  @@id([userId, videoId, videoMemoSeq])
+  @@map("favorite_video_memo_transaction")
 }
 
 

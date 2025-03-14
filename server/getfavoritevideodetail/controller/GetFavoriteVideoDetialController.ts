@@ -65,7 +65,7 @@ export class GetFavoriteVideoDetialController extends RouteController {
         }
 
         // お気に入り動画コメントを取得する
-        const favoriteVideoCommentList = await this.getFavoriteVideoDetialService.getFavoriteVideoComment(
+        const favoriteVideoMemoList = await this.getFavoriteVideoDetialService.getFavoriteVideoMemo(
             getGetFavoriteVideoDetialRepository,
             frontUserIdModel,
             videoIdModel);
@@ -83,7 +83,7 @@ export class GetFavoriteVideoDetialController extends RouteController {
         // 取得したデータをマージ
         const favoriteVideoDetailMergedModel = new FavoriteVideoDetailMergedModel(
             favoriteVideoList,
-            favoriteVideoCommentList,
+            favoriteVideoMemoList,
             youtubeVideoItemList,
         );
 

@@ -5,11 +5,11 @@ import { FavoriteVideoTransactionRepositoryInterface } from "../../internaldata/
 import { FrontUserIdModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserIdModel";
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { RepositoryType } from "../../util/const/CommonConst";
-import { FavoriteVideoCommentTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
-import { FavoriteVideoCommentTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoTransactionRepositorys";
-import { FavoriteVideoCommentTransactionInsertEntity } from "../../internaldata/favoritevideocommenttransaction/entity/FavoriteVideoTransactionInsertEntity";
-import { VideoCommentModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoCommentModel";
-import { VideoCommentSeqModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoCommentSeqModel";
+import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
+import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoMemoTransactionRepositorys";
+import { FavoriteVideoMemoTransactionInsertEntity } from "../../internaldata/favoritevideocommenttransaction/entity/FavoriteVideoMemoTransactionInsertEntity";
+import { VideoMemoModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoMemoModel";
+import { VideoMemoSeqModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoMemoSeqModel";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
@@ -48,8 +48,8 @@ export class DeleteFavoriteVideoService {
      * お気に入り動画コメントの永続ロジックを取得
      * @returns 
      */
-    public getFavoriteVideoCommentRepository(): FavoriteVideoCommentTransactionRepositoryInterface {
-        return (new FavoriteVideoCommentTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
+    public getFavoriteVideoMemoRepository(): FavoriteVideoMemoTransactionRepositoryInterface {
+        return (new FavoriteVideoMemoTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
     }
 
 
@@ -78,13 +78,13 @@ export class DeleteFavoriteVideoService {
      * @param deleteFavoriteVideoRequestModel 
      * @param frontUserIdModel 
      */
-    public async deleteComment(favoriteVideoCommentRepository: FavoriteVideoCommentTransactionRepositoryInterface,
+    public async deleteMemo(favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
         videoId: VideoIdModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
         // 対象ユーザーのコメントを全て削除する
-        await favoriteVideoCommentRepository.delete(
+        await favoriteVideoMemoRepository.delete(
             frontUserIdModel,
             videoId,
             tx);

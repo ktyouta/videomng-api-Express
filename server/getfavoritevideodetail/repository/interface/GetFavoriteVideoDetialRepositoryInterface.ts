@@ -1,4 +1,4 @@
-import { FavoriteVideoCommentTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
 import { GetFavoriteVideoDetialSelectEntity } from "../../entity/GetFavoriteVideoDetialSelectEntity";
 
 
@@ -16,6 +16,6 @@ export interface GetFavoriteVideoDetialRepositoryInterface {
      * お気に入り動画コメント取得
      * @param getFavoriteVideoDetialSelectEntity 
      */
-    selectVideoComment(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialSelectEntity): Promise<FavoriteVideoCommentTransaction[]>;
+    selectVideoMemo(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialSelectEntity): Promise<FavoriteVideoMemoTransaction[]>;
 
 }
