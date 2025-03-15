@@ -7,4 +7,5 @@ export enum ApiEndopoint {
     VIDEO_INFO_ID = "/videoinfo/v1/volumes/:id",
     FAVORITE_VIDEO = "/favoritevideo/v1/volumes",
     FAVORITE_VIDEO_ID = "/favoritevideo/v1/volumes/:id",
+    FAVORITE_VIDEO_MEMO = "/favoritevideomemo/v1/volumes",
 }
