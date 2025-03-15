@@ -49,7 +49,9 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
                 user_id as "userId",
                 video_id as "videoId",
                 video_memo_seq as "videoMemoSeq",
-                video_memo as "videoMemo"
+                video_memo as "videoMemo",
+                create_date as "createDate",
+                update_date as "updateDate"
             FROM "favorite_video_memo_transaction" 
             WHERE user_id = ${frontUserId} AND
             video_id = ${videoId} AND
