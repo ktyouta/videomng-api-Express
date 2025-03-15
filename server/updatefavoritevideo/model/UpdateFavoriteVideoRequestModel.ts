@@ -1,4 +1,4 @@
-import { VideoMemoModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoMemoModel";
+import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
 import { UpdateFavoriteVideoRequestType } from "./UpdateFavoriteVideoRequestType";
 

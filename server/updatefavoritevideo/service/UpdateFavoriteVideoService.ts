@@ -6,11 +6,11 @@ import { FrontUserIdModel } from "../../internaldata/frontuserinfomaster/propert
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { RepositoryType } from "../../util/const/CommonConst";
 import { UpdateFavoriteVideoRequestModel } from "../model/UpdateFavoriteVideoRequestModel";
-import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
-import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoMemoTransactionRepositorys";
-import { FavoriteVideoMemoTransactionInsertEntity } from "../../internaldata/favoritevideocommenttransaction/entity/FavoriteVideoMemoTransactionInsertEntity";
-import { VideoMemoModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoMemoModel";
-import { VideoMemoSeqModel } from "../../internaldata/favoritevideocommenttransaction/properties/VideoMemoSeqModel";
+import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideomemotransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
+import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";
+import { FavoriteVideoMemoTransactionInsertEntity } from "../../internaldata/favoritevideomemotransaction/entity/FavoriteVideoMemoTransactionInsertEntity";
+import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
+import { VideoMemoSeqModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
 

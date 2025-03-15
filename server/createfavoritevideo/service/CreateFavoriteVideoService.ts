@@ -9,8 +9,8 @@ import { CreateFavoriteVideoSelectEntity } from "../entity/CreateFavoriteVideoSe
 import { CreateFavoriteVideoRequestModel } from "../model/CreateFavoriteVideoRequestModel";
 import { CreateFavoriteVideoRepositorys } from "../repository/CreateFavoriteVideoRepositorys";
 import { CreateFavoriteVideoRepositoryInterface } from "../repository/interface/CreateFavoriteVideoRepositoryInterface";
-import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideocommenttransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
-import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideocommenttransaction/repository/FavoriteVideoMemoTransactionRepositorys";
+import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideomemotransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
+import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
 

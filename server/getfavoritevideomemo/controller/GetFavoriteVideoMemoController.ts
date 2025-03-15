@@ -12,7 +12,6 @@ import { RouteController } from "../../router/controller/RouteController";
 import { Prisma } from "@prisma/client";
 import { PrismaTransaction } from "../../util/service/PrismaTransaction";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
-import { FavoriteVideoDetailMergedModel } from "../model/FavoriteVideoDetailMergedModel";
 import { GetFavoriteVideoMemoService } from "../service/GetFavoriteVideoMemoService";
 import { GetFavoriteVideoMemoResponseModel } from "../model/GetFavoriteVideoMemoResponseModel";
 
