@@ -25,7 +25,7 @@ export class GetFavoriteVideoMemoController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_MEMO
+            ApiEndopoint.FAVORITE_VIDEO_MEMO_ID
         );
     }
 
