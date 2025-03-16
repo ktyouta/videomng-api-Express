@@ -6,6 +6,7 @@ import { FavoriteVideoMemoTransactionRepositoryInterface } from "../interface/Fa
 import { FavoriteVideoMemoTransactionInsertEntity } from "../../entity/FavoriteVideoMemoTransactionInsertEntity";
 import { FavoriteVideoMemoTransactionUpdateEntity } from "../../entity/FavoriteVideoMemoTransactionUpdateEntity";
 import { VideoIdModel } from "../../../favoritevideotransaction/properties/VideoIdModel";
+import { FavoriteVideoMemoTransactionSoftDeleteEntity } from "../../entity/FavoriteVideoMemoTransactionSoftDeleteEntity";
 
 
 
@@ -113,6 +114,35 @@ export class FavoriteVideoMemoTransactionRepositoryPostgres implements FavoriteV
             },
             data: {
                 deleteFlg: FLG.OFF,
+                updateDate: new Date(),
+            },
+        });
+
+        return favoriteVideoMemo;
+    }
+
+
+    /**
+     * お気に入り動画メモ情報を論理削除
+     */
+    async softDelete(favoriteVideoMemoTransactionSoftDeleteEntity: FavoriteVideoMemoTransactionSoftDeleteEntity,
+        tx: Prisma.TransactionClient
+    ) {
+
+        const userId = favoriteVideoMemoTransactionSoftDeleteEntity.frontUserId;
+        const videoId = favoriteVideoMemoTransactionSoftDeleteEntity.videoId;
+        const videoMemoSeq = favoriteVideoMemoTransactionSoftDeleteEntity.videoMemoSeq;
+
+        const favoriteVideoMemo = await tx.favoriteVideoMemoTransaction.update({
+            where: {
+                userId_videoId_videoMemoSeq: {
+                    userId,
+                    videoId,
+                    videoMemoSeq,
+                },
+            },
+            data: {
+                deleteFlg: FLG.ON,
                 updateDate: new Date(),
             },
         });

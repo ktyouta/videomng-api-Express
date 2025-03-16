@@ -114,6 +114,7 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
             },
             data: {
                 deleteFlg: FLG.ON,
+                updateDate: new Date(),
             },
         });
 

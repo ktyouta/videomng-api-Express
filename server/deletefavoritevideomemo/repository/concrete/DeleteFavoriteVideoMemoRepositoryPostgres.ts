@@ -1,0 +1,38 @@
+import { FavoriteVideoMemoTransaction } from "@prisma/client";
+import { JsonFileData } from "../../../util/service/JsonFileData";
+import { DeleteFavoriteVideoDetailSelectEntity } from "../../entity/DeleteFavoriteVideoDetailSelectEntity";
+import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { DeleteFavoriteVideoMemoRepositoryInterface } from "../interface/DeleteFavoriteVideoMemoRepositoryInterface";
+
+
+
+/**
+ * json形式の永続ロジック用クラス
+ */
+export class DeleteFavoriteVideoMemoRepositoryPostgres implements DeleteFavoriteVideoMemoRepositoryInterface {
+
+    constructor() {
+    }
+
+
+    /**
+     * お気に入り動画情報取得
+     * @param frontFavoriteVideoMemoInfoMasterModel 
+     * @returns 
+     */
+    public async select(deleteFavoriteVideoMemoSelectEntity: DeleteFavoriteVideoDetailSelectEntity): Promise<FavoriteVideoMemoTransaction[]> {
+
+        const userId = deleteFavoriteVideoMemoSelectEntity.frontUserId;
+        const videoId = deleteFavoriteVideoMemoSelectEntity.videoId;
+
+        const favoriteVideoMemoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoMemoTransaction[]>`
+            SELECT * 
+            FROM "favorite_video_transaction" 
+            WHERE user_id = CAST(${userId} AS INTEGER) AND
+            video_id = ${videoId}
+        `;
+
+        return favoriteVideoMemoList;
+    }
+
+}
