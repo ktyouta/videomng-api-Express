@@ -97,11 +97,11 @@ export class CreateFavoriteVideoMemoService {
         );
 
         // メモのシーケンス番号を取得
-        const seqList = await createFavoriteVideoMemoRepository.selectMemoSeq(
+        const seqObjList = await createFavoriteVideoMemoRepository.selectMemoSeq(
             createFavoriteVideoMemoSeqSelectEntity
         );
 
-        const nextSeq = seqList[0];
+        const nextSeq = seqObjList[0].nextSeq;
 
         const favoriteVideoMemoInsertEntity = new FavoriteVideoMemoTransactionInsertEntity(
             frontUserIdModel,
@@ -111,7 +111,9 @@ export class CreateFavoriteVideoMemoService {
         );
 
         // メモ登録
-        await favoriteVideoMemoRepository.insert(favoriteVideoMemoInsertEntity, tx);
+        const favoriteVideoMemo = await favoriteVideoMemoRepository.insert(favoriteVideoMemoInsertEntity, tx);
+
+        return favoriteVideoMemo;
     }
 
 }

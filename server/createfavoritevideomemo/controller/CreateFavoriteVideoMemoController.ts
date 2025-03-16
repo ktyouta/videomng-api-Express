@@ -12,8 +12,9 @@ import { CreateFavoriteVideoMemoRequestModel } from '../model/CreateFavoriteVide
 import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { CreateFavoriteVideoMemoService } from '../service/CreateFavoriteVideoMemoService';
-import { CreateFavoriteVideoMemoRequestType } from '../model/CreateFavoriteVideoMemoRequestType';
+import { CreateFavoriteVideoMemoRequestType } from '../Type/CreateFavoriteVideoMemoRequestType';
 import { CreateFavoriteVideoMemoRequestModelSchema } from '../model/CreateFavoriteVideoMemoRequestModelSchema';
+import { CreateFavoriteVideoMemoResponseModel } from '../model/CreateFavoriteVideoMemoResponseModel';
 
 
 export class CreateFavoriteVideoMemoController extends RouteController {
@@ -55,7 +56,7 @@ export class CreateFavoriteVideoMemoController extends RouteController {
         }
 
         // リクエストボディの型変換
-        const createFavoriteVideoMemoRequestModel: CreateFavoriteVideoMemoRequestModel = new CreateFavoriteVideoMemoRequestModel(requestBody);
+        const createFavoriteVideoMemoRequestModel = new CreateFavoriteVideoMemoRequestModel(requestBody);
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.createFavoriteVideoMemoService.checkJwtVerify(req);
@@ -80,14 +81,17 @@ export class CreateFavoriteVideoMemoController extends RouteController {
             }
 
             // お気に入り動画メモを追加
-            await this.createFavoriteVideoMemoService.insert(
+            const favoriteVideoMemo = await this.createFavoriteVideoMemoService.insert(
                 createFavoriteVideoMemoRepository,
                 favoriteVideoMemoRepository,
                 createFavoriteVideoMemoRequestModel,
                 frontUserIdModel,
                 tx);
 
-            return ApiResponse.create(res, HTTP_STATUS_OK, `動画メモを登録しました。`);
+            // レスポンス
+            const createFavoriteVideoMemoResponseModel = new CreateFavoriteVideoMemoResponseModel(favoriteVideoMemo);
+
+            return ApiResponse.create(res, HTTP_STATUS_OK, `動画メモを登録しました。`, createFavoriteVideoMemoResponseModel.data);
         }, next);
     }
 }

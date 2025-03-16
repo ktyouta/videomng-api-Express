@@ -4,6 +4,7 @@ import { CreateFavoriteVideoDetailSelectEntity } from "../../entity/CreateFavori
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { CreateFavoriteVideoMemoRepositoryInterface } from "../interface/CreateFavoriteVideoMemoRepositoryInterface";
 import { CreateFavoriteVideoMemoSeqSelectEntity } from "../../entity/CreateFavoriteVideoMemoSeqSelectEntity";
+import { CreateFavoriteVideoMemoNextSeqType } from "../../Type/CreateFavoriteVideoMemoNextSeqType";
 
 
 
@@ -42,14 +43,15 @@ export class CreateFavoriteVideoMemoRepositoryPostgres implements CreateFavorite
      * @param createFavoriteVideoMemoSelectEntity 
      * @returns 
      */
-    public async selectMemoSeq(createFavoriteVideoMemoSeqSelectEntity: CreateFavoriteVideoMemoSeqSelectEntity): Promise<number[]> {
+    public async selectMemoSeq(createFavoriteVideoMemoSeqSelectEntity: CreateFavoriteVideoMemoSeqSelectEntity)
+        : Promise<CreateFavoriteVideoMemoNextSeqType[]> {
 
         const userId = createFavoriteVideoMemoSeqSelectEntity.frontUserId;
         const videoId = createFavoriteVideoMemoSeqSelectEntity.videoId;
 
-        const seqList = await PrismaClientInstance.getInstance().$queryRaw<number[]>`
-            SELECT max(video_memo_seq) + 1 
-            FROM "favorite_video_transaction" 
+        const seqList = await PrismaClientInstance.getInstance().$queryRaw<CreateFavoriteVideoMemoNextSeqType[]>`
+            SELECT max(video_memo_seq) + 1 as "nextSeq"
+            FROM "favorite_video_memo_transaction" 
             WHERE user_id = CAST(${userId} AS INTEGER) AND
             video_id = ${videoId}
         `;

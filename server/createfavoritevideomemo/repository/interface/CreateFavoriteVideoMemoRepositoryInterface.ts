@@ -1,6 +1,7 @@
 import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
 import { CreateFavoriteVideoDetailSelectEntity } from "../../entity/CreateFavoriteVideoDetailSelectEntity";
 import { CreateFavoriteVideoMemoSeqSelectEntity } from "../../entity/CreateFavoriteVideoMemoSeqSelectEntity";
+import { CreateFavoriteVideoMemoNextSeqType } from "../../Type/CreateFavoriteVideoMemoNextSeqType";
 
 
 /**
@@ -17,5 +18,6 @@ export interface CreateFavoriteVideoMemoRepositoryInterface {
     /**
      * お気に入り動画メモのシーケンス番号取得
      */
-    selectMemoSeq(createFavoriteVideoMemoSeqSelectEntity: CreateFavoriteVideoMemoSeqSelectEntity): Promise<number[]>;
+    selectMemoSeq(createFavoriteVideoMemoSeqSelectEntity: CreateFavoriteVideoMemoSeqSelectEntity)
+        : Promise<CreateFavoriteVideoMemoNextSeqType[]>;
 }

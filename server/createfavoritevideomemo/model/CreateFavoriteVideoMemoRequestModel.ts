@@ -1,6 +1,6 @@
 import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
-import { CreateFavoriteVideoMemoRequestType } from "./CreateFavoriteVideoMemoRequestType";
+import { CreateFavoriteVideoMemoRequestType } from "../Type/CreateFavoriteVideoMemoRequestType";
 
 export class CreateFavoriteVideoMemoRequestModel {
 
