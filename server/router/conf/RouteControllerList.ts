@@ -12,6 +12,7 @@ import { GetFavoriteVideoMemoController } from "../../getfavoritevideomemo/contr
 import { GetVideoDetailController } from "../../getvideodetail/controller/GetVideoDetailController";
 import { GetVideoListController } from "../../getvideolist/controller/GetVideoListController";
 import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
+import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
 import { RouteController } from "../controller/RouteController";
 
 /**
@@ -46,4 +47,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new CreateFavoriteVideoMemoController(),
     // お気に入り動画メモ削除
     new DeleteFavoriteVideoMemoController(),
+    // お気に入り動画メモ更新
+    new UpdateFavoriteVideoMemoController(),
 ]
