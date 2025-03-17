@@ -12,6 +12,8 @@ import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { GetVideoListQueryParameterSchema } from '../model/GetVideoListQueryParameterSchema';
 import { GetVideoListResponseModel } from '../model/GetVideoListResponseModel';
 import { YouTubeDataApiKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiKeyword';
+import { VideoType, YouTubeDataApiVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoType';
+import { YouTubeDataApiVideoListRequestType } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListRequestType';
 
 
 export class GetVideoListController extends RouteController {
@@ -57,8 +59,15 @@ export class GetVideoListController extends RouteController {
         const keyword = query[`q`] as string;
         const youTubeDataApiKeyword = new YouTubeDataApiKeyword(keyword);
 
+        // 動画種別を取得
+        const videoType = query[`videotype`] as VideoType;
+        const youTubeDataApiVideoType = new YouTubeDataApiVideoType(videoType);
+
         // YouTube Data Apiから動画を取得する
-        const youTubeVideoListApi = await this.GetVideoListService.callYouTubeDataListApi(youTubeDataApiKeyword);
+        const youTubeVideoListApi = await this.GetVideoListService.callYouTubeDataListApi(
+            youTubeDataApiKeyword,
+            youTubeDataApiVideoType
+        );
 
         // レスポンスのYouTube動画
         const getVideoListResponseModel = new GetVideoListResponseModel(youTubeVideoListApi);

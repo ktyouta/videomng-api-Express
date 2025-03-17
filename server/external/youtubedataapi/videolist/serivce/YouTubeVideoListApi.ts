@@ -3,6 +3,7 @@ import { envConfig } from '../../../../util/const/EnvConfig';
 import { ApiClient } from '../../../../util/service/ApiClient';
 import { QueryBuilder } from '../../../../util/service/QueryBuilder';
 import { YouTubeDataApiBasePathModel } from '../../common/model/YouTubeDataApiBasePathModel';
+import { YouTubeDataApiVideoListRequestType } from '../model/YouTubeDataApiVideoListRequestType';
 import { YouTubeDataApiVideoListResponseType } from '../model/YouTubeDataApiVideoListResponseType';
 import { YouTubeDataApiKeyword } from '../properties/YouTubeDataApiKeyword';
 
@@ -29,6 +30,12 @@ export class YouTubeVideoListApi {
     private static readonly QUERYKEY_API_KEY: string = ENV.YOUTUBE_DATA_API.QUERYKEY_API_KEY;
     // YouTubeDataApi(動画一覧)のAPIキー
     private static readonly YOUTUBE_DATA_API_API_KEY = envConfig.youtubeApiKey;
+    // YouTubeDataApi(動画一覧)のクエリキー(動画種別)
+    private static readonly QUERYKEY_EVENT_TYPE_KEY: string = ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_EVENT_TYPE;
+    // YouTubeDataApi(動画一覧)のクエリキー(type)
+    private static readonly QUERYKEY_TYPE: string = ENV.YOUTUBE_DATA_API.LIST.QUERYKEY_TYPE;
+    // YouTubeDataApi(動画一覧)のtype
+    private static readonly YOUTUBE_DATA_API_TYPE: string = ENV.YOUTUBE_DATA_API.LIST.YOUTUBE_DATA_API_TYPE;
 
 
     private constructor(response: YouTubeDataApiVideoListResponseType) {
@@ -43,9 +50,9 @@ export class YouTubeVideoListApi {
     /**
      * YouTube Data Apiを呼び出す
      */
-    static async call(youtubeDataApiKeyword: YouTubeDataApiKeyword) {
+    static async call(youTubeDataApiVideoListRequest: YouTubeDataApiVideoListRequestType) {
 
-        const apiUrl = this.getUrl(youtubeDataApiKeyword);
+        const apiUrl = this.getUrl(youTubeDataApiVideoListRequest);
 
         try {
             // YouTube Data Apiを呼び出す
@@ -69,7 +76,7 @@ export class YouTubeVideoListApi {
      * @param youtubeDataApiKeyword 
      * @returns 
      */
-    private static getUrl(youtubeDataApiKeyword: YouTubeDataApiKeyword) {
+    private static getUrl(youTubeDataApiVideoListRequest: YouTubeDataApiVideoListRequestType) {
 
         const apiPathModel = new YouTubeDataApiBasePathModel();
 
@@ -105,10 +112,18 @@ export class YouTubeVideoListApi {
             throw Error(".envにYouTubeDataApiのAPIキーが存在しません。");
         }
 
+        if (!this.QUERYKEY_TYPE) {
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のクエリキー(type)が存在しません。");
+        }
+
+        if (!this.YOUTUBE_DATA_API_TYPE) {
+            throw Error("設定ファイルにYouTubeDataApi(動画一覧)のtypeが存在しません。");
+        }
+
         const apiBaseUrl = `${apiPathModel.basePath}${this.API_RESOURCE}`;
 
         // クエリパラメータを作成
-        const queryParam = this.createQuery(youtubeDataApiKeyword);
+        const queryParam = this.createQuery(youTubeDataApiVideoListRequest);
         return `${apiBaseUrl}${queryParam ? `?${queryParam}` : ``}`;
     }
 
@@ -117,10 +132,10 @@ export class YouTubeVideoListApi {
      * @param googleBookInfoApisKeyword 
      * @returns 
      */
-    private static createQuery(googleBookInfoApisKeyword: YouTubeDataApiKeyword) {
+    private static createQuery(youTubeDataApiVideoListRequest: YouTubeDataApiVideoListRequestType) {
 
         // 検索キーワード
-        const searchKeyWordValue = googleBookInfoApisKeyword.keywrod;
+        const searchKeyWordValue = youTubeDataApiVideoListRequest.youTubeDataApiKeyword;
 
         if (!this.YOUTUBE_DATA_API_API_KEY) {
             throw Error("設定ファイルにYouTubeDataApiのAPIキーが存在しません。");
@@ -131,6 +146,14 @@ export class YouTubeVideoListApi {
         queryBuilder.add(this.QUERYKEY_KEYWORD, searchKeyWordValue);
         queryBuilder.add(this.QUERYKEY_API_KEY, this.YOUTUBE_DATA_API_API_KEY);
         queryBuilder.add(this.QUERYKEY_PART, this.YOUTUBE_DATA_API_PART);
+        queryBuilder.add(this.QUERYKEY_TYPE, this.YOUTUBE_DATA_API_TYPE);
+
+        // 動画種別
+        const videoType = youTubeDataApiVideoListRequest.videoType;
+
+        if (videoType) {
+            queryBuilder.add(this.QUERYKEY_EVENT_TYPE_KEY, videoType);
+        }
 
         // クエリパラメータを作成
         return queryBuilder.createParam();
