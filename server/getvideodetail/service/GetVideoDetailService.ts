@@ -1,6 +1,4 @@
 import { YoutubeVideoDetailApi } from '../../external/youtubedataapi/videodetail/service/YoutubeVideoDetailApi';
-import { YouTubeDataApiKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiKeyword';
-import { YouTubeVideoListApi } from '../../external/youtubedataapi/videolist/serivce/YouTubeVideoListApi';
 import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 

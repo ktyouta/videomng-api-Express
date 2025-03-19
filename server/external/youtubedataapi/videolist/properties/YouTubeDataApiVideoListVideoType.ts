@@ -1,8 +1,10 @@
 export type VideoType = "all" | "live";
 
-export class YouTubeDataApiVideoType {
+export class YouTubeDataApiVideoListVideoType {
 
     private readonly _type: string;
+    // YouTubeDataApi(動画一覧)のクエリキー(動画種別)
+    static readonly QUERYKEY_EVENT_TYPE_KEY: string = `eventType`;
     // 種別(すべて)
     private static readonly TYPE_ALL: string = "";
     // 種別(アーカイブ)
@@ -15,13 +17,13 @@ export class YouTubeDataApiVideoType {
 
         switch (videoType) {
             case "all":
-                type = YouTubeDataApiVideoType.TYPE_ALL;
+                type = YouTubeDataApiVideoListVideoType.TYPE_ALL;
                 break;
             case "live":
-                type = YouTubeDataApiVideoType.TYPE_ARCHIVE;
+                type = YouTubeDataApiVideoListVideoType.TYPE_ARCHIVE;
                 break;
             default:
-                type = YouTubeDataApiVideoType.TYPE_ALL;
+                type = YouTubeDataApiVideoListVideoType.TYPE_ALL;
                 break;
         }
 

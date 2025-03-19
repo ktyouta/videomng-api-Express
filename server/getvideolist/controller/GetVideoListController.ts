@@ -11,9 +11,8 @@ import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSetti
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { GetVideoListQueryParameterSchema } from '../model/GetVideoListQueryParameterSchema';
 import { GetVideoListResponseModel } from '../model/GetVideoListResponseModel';
-import { YouTubeDataApiKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiKeyword';
-import { VideoType, YouTubeDataApiVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoType';
-import { YouTubeDataApiVideoListRequestType } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListRequestType';
+import { VideoType, YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
+import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 
 
 export class GetVideoListController extends RouteController {
@@ -57,16 +56,16 @@ export class GetVideoListController extends RouteController {
 
         // キーワードを取得
         const keyword = query[`q`] as string;
-        const youTubeDataApiKeyword = new YouTubeDataApiKeyword(keyword);
+        const youTubeDataApiVideoListKeyword = new YouTubeDataApiVideoListKeyword(keyword);
 
         // 動画種別を取得
         const videoType = query[`videotype`] as VideoType;
-        const youTubeDataApiVideoType = new YouTubeDataApiVideoType(videoType);
+        const youTubeDataApiVideoListVideoType = new YouTubeDataApiVideoListVideoType(videoType);
 
         // YouTube Data Apiから動画を取得する
         const youTubeVideoListApi = await this.GetVideoListService.callYouTubeDataListApi(
-            youTubeDataApiKeyword,
-            youTubeDataApiVideoType
+            youTubeDataApiVideoListKeyword,
+            youTubeDataApiVideoListVideoType
         );
 
         // レスポンスのYouTube動画

@@ -1,7 +1,8 @@
-import { YouTubeDataApiVideoListRequestType } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListRequestType';
-import { YouTubeDataApiKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiKeyword';
-import { YouTubeDataApiVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoType';
-import { YouTubeVideoListApi } from '../../external/youtubedataapi/videolist/serivce/YouTubeVideoListApi';
+import { YouTubeDataApiVideoListEndPointModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListEndPointModel';
+import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListModel';
+import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
+import { YouTubeDataApiVideoListMaxResult } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListMaxResult';
+import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 
 
@@ -12,20 +13,21 @@ export class GetVideoListService {
      * YouTube Data Apiを呼び出す
      * @param keyword 
      */
-    public async callYouTubeDataListApi(youTubeDataApiKeyword: YouTubeDataApiKeyword,
-        youTubeDataApiVideoType: YouTubeDataApiVideoType
+    public async callYouTubeDataListApi(youTubeDataApiVideoListKeyword: YouTubeDataApiVideoListKeyword,
+        youTubeDataApiVideoListVideoType: YouTubeDataApiVideoListVideoType
     ) {
 
         try {
 
-            // YouTube Data APIのリクエスト
-            const youTubeDataApiVideoListRequest = new YouTubeDataApiVideoListRequestType(
-                youTubeDataApiKeyword,
-                youTubeDataApiVideoType,
+            // YouTube Data APIのエンドポイント
+            const youTubeDataApiVideoListEndPointModel = new YouTubeDataApiVideoListEndPointModel(
+                youTubeDataApiVideoListKeyword,
+                youTubeDataApiVideoListVideoType,
+                new YouTubeDataApiVideoListMaxResult(),
             );
 
-            // YouTube Data Apiデータ取得
-            const youTubeVideoListApi = await YouTubeVideoListApi.call(youTubeDataApiVideoListRequest);
+            // YouTube Data APIデータ取得
+            const youTubeVideoListApi = await YouTubeDataApiVideoListModel.call(youTubeDataApiVideoListEndPointModel);
 
             return youTubeVideoListApi;
 
