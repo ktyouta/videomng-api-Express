@@ -1,13 +1,13 @@
-import { YouTubeDataApiVideoDetailResponseType } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailResponseType";
-import { YoutubeVideoDetailApi } from "../../external/youtubedataapi/videodetail/service/YoutubeVideoDetailApi";
+import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
+import { YouTubeDataApiVideoDetailResponseType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailResponseType";
 
 export class GetVideoDetailResponseModel {
 
     private readonly _data: YouTubeDataApiVideoDetailResponseType;
 
-    constructor(youTubeVideoDetailApi: YoutubeVideoDetailApi) {
+    constructor(youTubeDataApiVideoDetailModel: YouTubeDataApiVideoDetailModel) {
 
-        this._data = youTubeVideoDetailApi.response;
+        this._data = youTubeDataApiVideoDetailModel.response;
     }
 
     get data() {

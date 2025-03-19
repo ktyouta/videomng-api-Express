@@ -1,4 +1,5 @@
-import { YoutubeVideoDetailApi } from '../../external/youtubedataapi/videodetail/service/YoutubeVideoDetailApi';
+import { YouTubeDataApiVideoDetailEndPointModel } from '../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel';
+import { YouTubeDataApiVideoDetailModel } from '../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel';
 import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 
@@ -14,8 +15,13 @@ export class GetVideoDetailService {
 
         try {
 
+            // YouTube Data APIのエンドポイント
+            const youTubeDataApiVideoDetailEndPointModel = new YouTubeDataApiVideoDetailEndPointModel(
+                videoIdModel,
+            );
+
             // YouTube Data Apiデータ取得
-            const youtubeVideoDetailApi = await YoutubeVideoDetailApi.call(videoIdModel);
+            const youtubeVideoDetailApi = await YouTubeDataApiVideoDetailModel.call(youTubeDataApiVideoDetailEndPointModel);
 
             return youtubeVideoDetailApi;
 

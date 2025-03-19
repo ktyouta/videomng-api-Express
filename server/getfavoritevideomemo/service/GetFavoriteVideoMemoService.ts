@@ -17,7 +17,6 @@ import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUser
 import { GetFavoriteVideoMemoRepositoryInterface } from "../repository/interface/GetFavoriteVideoMemoRepositoryInterface";
 import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
-import { YoutubeVideoDetailApi } from "../../external/youtubedataapi/videodetail/service/YoutubeVideoDetailApi";
 import { Request } from 'express';
 import { CookieModel } from "../../cookie/model/CookieModel";
 

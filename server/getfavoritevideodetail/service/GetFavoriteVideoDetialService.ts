@@ -17,9 +17,10 @@ import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUser
 import { GetFavoriteVideoDetialRepositoryInterface } from "../repository/interface/GetFavoriteVideoDetialRepositoryInterface";
 import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
 import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
-import { YoutubeVideoDetailApi } from "../../external/youtubedataapi/videodetail/service/YoutubeVideoDetailApi";
 import { Request } from 'express';
 import { CookieModel } from "../../cookie/model/CookieModel";
+import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
+import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
 
 
 export class GetFavoriteVideoDetialService {
@@ -93,8 +94,13 @@ export class GetFavoriteVideoDetialService {
 
         try {
 
-            // YouTube Data Apiデータ取得
-            const youtubeVideoDetailApi = await YoutubeVideoDetailApi.call(videoIdModel);
+            // YouTube Data APIのエンドポイント
+            const youTubeDataApiVideoDetailEndPointModel = new YouTubeDataApiVideoDetailEndPointModel(
+                videoIdModel,
+            );
+
+            // YouTube Data APIデータ取得
+            const youtubeVideoDetailApi = await YouTubeDataApiVideoDetailModel.call(youTubeDataApiVideoDetailEndPointModel);
 
             return youtubeVideoDetailApi;
         } catch (err) {

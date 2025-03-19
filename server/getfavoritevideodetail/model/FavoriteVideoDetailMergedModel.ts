@@ -1,5 +1,5 @@
 import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
-import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailItemType";
+import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
 
 export class FavoriteVideoDetailMergedModel {
 
