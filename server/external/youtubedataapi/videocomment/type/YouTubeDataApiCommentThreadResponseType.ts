@@ -1,5 +1,6 @@
 import { YouTubeDataApiCommentThreadSnipetType } from "./YouTubeDataApiCommentThreadSnipetType";
 import { YouTubeDataApiCommentThreadReplyType } from "./YouTubeDataApiCommentThreadReplyType";
+import { YouTubeDataApiCommentThreadItemType } from "./YouTubeDataApiCommentThreadItemType";
 
 //YouTube Data Api(動画コメント)のレスポンス
 export type YouTubeDataApiCommentThreadResponseType = {
@@ -7,10 +8,11 @@ export type YouTubeDataApiCommentThreadResponseType = {
     readonly kind: string;
     // APIレスポンスのETag
     readonly etag: string;
-    // コメントスレッドの一意のID
-    readonly id: string;
-    // コメントスレッドの詳細情報
-    readonly snippet: YouTubeDataApiCommentThreadSnipetType;
-    // 返信コメントのリスト（返信がある場合のみ存在）
-    readonly replies?: YouTubeDataApiCommentThreadReplyType;
+    readonly nextPageToken: string;
+    readonly pageInfo: {
+        readonly totalResults: number,
+        readonly resultsPerPage: number
+    };
+    // コメント情報
+    readonly items: YouTubeDataApiCommentThreadItemType[];
 }

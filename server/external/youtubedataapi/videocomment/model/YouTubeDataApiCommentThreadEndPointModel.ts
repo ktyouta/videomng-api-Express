@@ -2,6 +2,7 @@ import { VideoIdModel } from "../../../../internaldata/favoritevideotransaction/
 import { QueryBuilder } from "../../../../util/service/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
+import { YouTubeDataApiCommentThreadMaxResult } from "../properties/YouTubeDataApiCommentThreadMaxResult";
 import { YouTubeDataApiCommentThreadPart } from "../properties/YouTubeDataApiCommentThreadPart";
 import { YouTubeDataApiCommentThreadResource } from "../properties/YouTubeDataApiCommentThreadResource";
 import { YouTubeDataApiCommentThreadVideoId } from "../properties/YouTubeDataApiCommentThreadVideoId";
@@ -17,12 +18,15 @@ export class YouTubeDataApiCommentThreadEndPointModel {
     private readonly youTubeDataApiApiKey: YouTubeDataApiApiKey = new YouTubeDataApiApiKey();
 
 
-    constructor(videoIdModel: VideoIdModel) {
+    constructor(videoIdModel: VideoIdModel,
+        youTubeDataApiCommentThreadMaxResult: YouTubeDataApiCommentThreadMaxResult,
+    ) {
 
         // クエリパラメータを作成
         const queryBuilder: QueryBuilder = new QueryBuilder(YouTubeDataApiCommentThreadVideoId.QUERYKEY_VIDEOID, videoIdModel.videoId);
         queryBuilder.add(YouTubeDataApiApiKey.QUERYKEY_API_KEY, this.youTubeDataApiApiKey.apiKey);
         queryBuilder.add(YouTubeDataApiCommentThreadPart.QUERYKEY_PART, YouTubeDataApiCommentThreadPart.YOUTUBE_DATA_API_PART);
+        queryBuilder.add(YouTubeDataApiCommentThreadMaxResult.QUERYKEY_MAXRESULTS, youTubeDataApiCommentThreadMaxResult.maxResult);
 
         const queryParam = queryBuilder.createParam();
 

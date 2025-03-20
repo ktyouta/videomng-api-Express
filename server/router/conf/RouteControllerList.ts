@@ -9,6 +9,7 @@ import { FrontUserLogoutController } from "../../frontuserlogout/controller/Fron
 import { GetFavoriteVideoDetialController } from "../../getfavoritevideodetail/controller/GetFavoriteVideoDetialController";
 import { GetFavoriteVideoListController } from "../../getfavoritevideolist/controller/GetFavoriteVideoListController";
 import { GetFavoriteVideoMemoController } from "../../getfavoritevideomemo/controller/GetFavoriteVideoMemoController";
+import { GetVideoCommentController } from "../../getvideocomment/controller/GetVideoCommentController";
 import { GetVideoDetailController } from "../../getvideodetail/controller/GetVideoDetailController";
 import { GetVideoListController } from "../../getvideolist/controller/GetVideoListController";
 import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
@@ -49,4 +50,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new DeleteFavoriteVideoMemoController(),
     // お気に入り動画メモ更新
     new UpdateFavoriteVideoMemoController(),
+    // 動画コメント取得
+    new GetVideoCommentController(),
 ]

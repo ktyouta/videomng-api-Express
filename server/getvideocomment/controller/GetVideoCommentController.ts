@@ -5,30 +5,30 @@ import { RouteController } from '../../router/controller/RouteController';
 import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
 import { ZodIssue } from 'zod';
 import { ApiResponse } from '../../util/service/ApiResponse';
-import { SUCCESS_MESSAGE } from '../const/GetVideoDetailConst';
+import { SUCCESS_MESSAGE } from '../const/GetVideoCommentConst';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { GetVideoDetailService } from '../service/GetVideoDetailService';
-import { GetVideoDetailResponseModel } from '../model/GetVideoDetailResponseModel';
 import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { GetVideoCommentService } from '../service/GetVideoCommentService';
+import { GetVideoCommentResponseModel } from '../model/GetVideoCommentResponseModel';
 
 
-export class GetVideoDetailController extends RouteController {
+export class GetVideoCommentController extends RouteController {
 
-    private getVideoDetailService = new GetVideoDetailService();
+    private getVideoCommentService = new GetVideoCommentService();
 
     protected getRouteSettingModel(): RouteSettingModel {
 
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.VIDEO_INFO_ID
+            ApiEndopoint.VIDEO_COMMENT_ID
         );
     }
 
 
     /**
-     * 動画詳細を取得する
+     * 動画コメントを取得する
      * @param req 
      * @param res 
      * @returns 
@@ -43,12 +43,12 @@ export class GetVideoDetailController extends RouteController {
 
         const videoIdModel = new VideoIdModel(id);
 
-        // YouTube Data Apiから動画詳細を取得する
-        const youTubeVideoDetailApi = await this.getVideoDetailService.callYouTubeDataDetailApi(videoIdModel);
+        // YouTube Data Apiから動画コメントを取得する
+        const youTubeVideoCommentApi = await this.getVideoCommentService.callYouTubeDataCommentApi(videoIdModel);
 
         // レスポンスのYouTube動画
-        const getVideoDetailResponseModel = new GetVideoDetailResponseModel(youTubeVideoDetailApi);
+        const videoCommentResponseModel = new GetVideoCommentResponseModel(youTubeVideoCommentApi);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, getVideoDetailResponseModel.data);
+        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, videoCommentResponseModel.data);
     }
 }
