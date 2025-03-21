@@ -84,6 +84,8 @@ export class SearchCommentByKeywordService {
     ) {
 
         const keywrod = searchCommentByKeywordKeywordModel.keywrod;
+        const escapedKeyword = this.escapeRegExp(keywrod);
+        const keywordRegex = new RegExp(escapedKeyword, "i");
         // フィルターしたコメントリスト
         let filterdCommentList: SearchCommentByKeywordResponseCommentType[] = [];
 
@@ -92,10 +94,9 @@ export class SearchCommentByKeywordService {
             const topLevelCommentSnippet = e.snippet.topLevelComment.snippet;
             // コメント
             const textOriginal = topLevelCommentSnippet.textOriginal;
-            const textOriginalRegex = new RegExp(textOriginal, "i");
 
             // キーワードにヒットした場合
-            if (textOriginalRegex.test(keywrod)) {
+            if (keywordRegex.test(textOriginal)) {
 
                 // コメントの投稿日時
                 const publishedAt = topLevelCommentSnippet.publishedAt;
@@ -120,10 +121,9 @@ export class SearchCommentByKeywordService {
                     const replySnipet = e1.snippet;
                     // コメント
                     const replyTextOriginal = replySnipet.textOriginal;
-                    const replyTextOriginalRegex = new RegExp(replyTextOriginal, "i");
 
                     // キーワードにヒットした場合
-                    if (replyTextOriginalRegex.test(keywrod)) {
+                    if (keywordRegex.test(replyTextOriginal)) {
 
                         // コメントの投稿日時
                         const replyPublishedAt = replySnipet.publishedAt;
@@ -131,7 +131,7 @@ export class SearchCommentByKeywordService {
                         const replyAuthorDisplayName = replySnipet.authorDisplayName;
 
                         filterdCommentList = [...filterdCommentList, {
-                            textOriginal: textOriginal,
+                            textOriginal: replyTextOriginal,
                             publishedAt: replyPublishedAt,
                             authorDisplayName: replyAuthorDisplayName
                         }];
@@ -141,5 +141,14 @@ export class SearchCommentByKeywordService {
         });
 
         return filterdCommentList;
+    }
+
+    /**
+     * コメントのエスケープ
+     * @param text 
+     * @returns 
+     */
+    private escapeRegExp(text: string) {
+        return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
     }
 }
