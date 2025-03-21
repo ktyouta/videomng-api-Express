@@ -44,6 +44,13 @@ export interface FavoriteVideoMemoTransactionRepositoryInterface {
         tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
 
     /**
+     * 対象ユーザーのお気に入り動画メモ情報を論理削除
+     */
+    softDeleteUserMemo(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
+
+    /**
      * お気に入り動画メモ情報を論理削除
      */
     softDelete(favoriteVideoMemoTransactionSoftDeleteEntity: FavoriteVideoMemoTransactionSoftDeleteEntity,

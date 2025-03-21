@@ -50,7 +50,7 @@ export class CreateFavoriteVideoMemoRepositoryPostgres implements CreateFavorite
         const videoId = createFavoriteVideoMemoSeqSelectEntity.videoId;
 
         const seqList = await PrismaClientInstance.getInstance().$queryRaw<CreateFavoriteVideoMemoNextSeqType[]>`
-            SELECT max(video_memo_seq) + 1 as "nextSeq"
+            SELECT COALESCE(MAX(video_memo_seq), 0) + 1 as "nextSeq"
             FROM "favorite_video_memo_transaction" 
             WHERE user_id = CAST(${userId} AS INTEGER) AND
             video_id = ${videoId}

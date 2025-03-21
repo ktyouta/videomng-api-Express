@@ -84,7 +84,7 @@ export class DeleteFavoriteVideoService {
         tx: Prisma.TransactionClient) {
 
         // 対象ユーザーのコメントを全て削除する
-        await favoriteVideoMemoRepository.delete(
+        await favoriteVideoMemoRepository.softDeleteUserMemo(
             frontUserIdModel,
             videoId,
             tx);

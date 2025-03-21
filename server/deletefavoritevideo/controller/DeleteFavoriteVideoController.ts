@@ -56,7 +56,7 @@ export class DeleteFavoriteVideoController extends RouteController {
             const favoriteVideoMemoRepository = this.deleteFavoriteVideoService.getFavoriteVideoMemoRepository();
 
             // お気に入り動画を削除
-            this.deleteFavoriteVideoService.deleteVideo(
+            await this.deleteFavoriteVideoService.deleteVideo(
                 favoriteVideoRepository,
                 videoId,
                 frontUserIdModel,
@@ -64,7 +64,7 @@ export class DeleteFavoriteVideoController extends RouteController {
             );
 
             // コメントを削除
-            this.deleteFavoriteVideoService.deleteMemo(
+            await this.deleteFavoriteVideoService.deleteMemo(
                 favoriteVideoMemoRepository,
                 videoId,
                 frontUserIdModel,
