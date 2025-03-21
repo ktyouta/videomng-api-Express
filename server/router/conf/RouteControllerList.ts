@@ -12,6 +12,7 @@ import { GetFavoriteVideoMemoController } from "../../getfavoritevideomemo/contr
 import { GetVideoCommentController } from "../../getvideocomment/controller/GetVideoCommentController";
 import { GetVideoDetailController } from "../../getvideodetail/controller/GetVideoDetailController";
 import { GetVideoListController } from "../../getvideolist/controller/GetVideoListController";
+import { SearchCommentByKeywordController } from "../../searchcommentbykeyword/controller/SearchCommentByKeywordController";
 import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
 import { RouteController } from "../controller/RouteController";
@@ -52,4 +53,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new UpdateFavoriteVideoMemoController(),
     // 動画コメント取得
     new GetVideoCommentController(),
+    // キーワード検索(コメント)
+    new SearchCommentByKeywordController(),
 ]

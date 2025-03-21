@@ -1,4 +1,3 @@
-import { YouTubeDataApiCommentThreadSnipetType } from "./YouTubeDataApiCommentThreadSnipetType";
 import { YouTubeDataApiCommentThreadReplyType } from "./YouTubeDataApiCommentThreadReplyType";
 import { YouTubeDataApiCommentThreadItemType } from "./YouTubeDataApiCommentThreadItemType";
 

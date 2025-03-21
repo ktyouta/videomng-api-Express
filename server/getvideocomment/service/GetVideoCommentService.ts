@@ -1,6 +1,7 @@
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
+import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 
@@ -19,7 +20,8 @@ export class GetVideoCommentService {
             // YouTube Data APIのエンドポイント
             const youTubeDataApiCommentThreadEndPointModel = new YouTubeDataApiCommentThreadEndPointModel(
                 videoIdModel,
-                new YouTubeDataApiCommentThreadMaxResult()
+                new YouTubeDataApiCommentThreadMaxResult(),
+                new YouTubeDataApiCommentThreadNextPageToken(),
             );
 
             // YouTube Data Apiデータ取得
