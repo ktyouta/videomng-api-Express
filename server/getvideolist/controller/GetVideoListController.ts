@@ -13,6 +13,7 @@ import { GetVideoListQueryParameterSchema } from '../model/GetVideoListQueryPara
 import { GetVideoListResponseModel } from '../model/GetVideoListResponseModel';
 import { VideoType, YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
+import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiCommentThreadNextPageToken';
 
 
 export class GetVideoListController extends RouteController {
@@ -62,10 +63,15 @@ export class GetVideoListController extends RouteController {
         const videoType = query[`videotype`] as VideoType;
         const youTubeDataApiVideoListVideoType = new YouTubeDataApiVideoListVideoType(videoType);
 
+        // 次データ取得用トークンを取得
+        const nextPageToken = query[`nextpagetoken`] as string;
+        const youTubeDataApiVideoListNextPageToken = new YouTubeDataApiVideoListNextPageToken(nextPageToken);
+
         // YouTube Data Apiから動画を取得する
         const youTubeVideoListApi = await this.GetVideoListService.callYouTubeDataListApi(
             youTubeDataApiVideoListKeyword,
-            youTubeDataApiVideoListVideoType
+            youTubeDataApiVideoListVideoType,
+            youTubeDataApiVideoListNextPageToken,
         );
 
         // レスポンスのYouTube動画

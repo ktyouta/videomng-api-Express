@@ -1,8 +1,8 @@
-export class YouTubeDataApiCommentThreadNextPageToken {
+export class YouTubeDataApiVideoListNextPageToken {
 
-    // YouTubeDataApi(動画コメント)のクエリキー(トークン)
+    // YouTubeDataApi(動画リスト)のクエリキー(トークン)
     static readonly QUERYKEY_NEXTPAGETOKEN: string = `pageToken`;
-    // YouTubeDataApi(動画コメント)の最大取得件数
+    // YouTubeDataApi(動画リスト)の最大取得件数
     private readonly _token: string;
 
     constructor(nextpageToken: string = ``) {

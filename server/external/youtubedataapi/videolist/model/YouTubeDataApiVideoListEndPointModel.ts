@@ -1,6 +1,7 @@
 import { QueryBuilder } from "../../../../util/service/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
+import { YouTubeDataApiVideoListNextPageToken } from "../properties/YouTubeDataApiCommentThreadNextPageToken";
 import { YouTubeDataApiVideoListKeyword } from "../properties/YouTubeDataApiVideoListKeyword";
 import { YouTubeDataApiVideoListMaxResult } from "../properties/YouTubeDataApiVideoListMaxResult";
 import { YouTubeDataApiVideoListPart } from "../properties/YouTubeDataApiVideoListPart";
@@ -22,6 +23,7 @@ export class YouTubeDataApiVideoListEndPointModel {
     constructor(youTubeDataApiVideoListKeyword: YouTubeDataApiVideoListKeyword,
         youTubeDataApiVideoListVideoType: YouTubeDataApiVideoListVideoType,
         youTubeDataApiVideoListMaxResult: YouTubeDataApiVideoListMaxResult,
+        youTubeDataApiVideoListNextPageToken: YouTubeDataApiVideoListNextPageToken,
     ) {
 
         // クエリパラメータを作成
@@ -37,6 +39,13 @@ export class YouTubeDataApiVideoListEndPointModel {
 
         if (videoType) {
             queryBuilder.add(YouTubeDataApiVideoListVideoType.QUERYKEY_EVENT_TYPE_KEY, videoType);
+        }
+
+        // 次データ取得用トークン
+        const nextPageToken = youTubeDataApiVideoListNextPageToken.token;
+
+        if (nextPageToken) {
+            queryBuilder.add(YouTubeDataApiVideoListNextPageToken.QUERYKEY_NEXTPAGETOKEN, nextPageToken);
         }
 
         const queryParam = queryBuilder.createParam();

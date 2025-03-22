@@ -30,7 +30,7 @@ export class YouTubeDataApiCommentThreadEndPointModel {
         queryBuilder.add(YouTubeDataApiCommentThreadPart.QUERYKEY_PART, YouTubeDataApiCommentThreadPart.YOUTUBE_DATA_API_PART);
         queryBuilder.add(YouTubeDataApiCommentThreadMaxResult.QUERYKEY_MAXRESULTS, youTubeDataApiCommentThreadMaxResult.maxResult);
 
-        const nextPageToken = youTubeDataApiCommentThreadNextPageToken.nextpageToken;
+        const nextPageToken = youTubeDataApiCommentThreadNextPageToken.token;
 
         if (nextPageToken) {
             queryBuilder.add(YouTubeDataApiCommentThreadNextPageToken.QUERYKEY_NEXTPAGETOKEN, nextPageToken);

@@ -1,5 +1,6 @@
 import { YouTubeDataApiVideoListEndPointModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListEndPointModel';
 import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListModel';
+import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListMaxResult } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListMaxResult';
 import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
@@ -14,7 +15,8 @@ export class GetVideoListService {
      * @param keyword 
      */
     public async callYouTubeDataListApi(youTubeDataApiVideoListKeyword: YouTubeDataApiVideoListKeyword,
-        youTubeDataApiVideoListVideoType: YouTubeDataApiVideoListVideoType
+        youTubeDataApiVideoListVideoType: YouTubeDataApiVideoListVideoType,
+        youTubeDataApiVideoListNextPageToken: YouTubeDataApiVideoListNextPageToken,
     ) {
 
         try {
@@ -24,6 +26,7 @@ export class GetVideoListService {
                 youTubeDataApiVideoListKeyword,
                 youTubeDataApiVideoListVideoType,
                 new YouTubeDataApiVideoListMaxResult(),
+                youTubeDataApiVideoListNextPageToken,
             );
 
             // YouTube Data APIデータ取得

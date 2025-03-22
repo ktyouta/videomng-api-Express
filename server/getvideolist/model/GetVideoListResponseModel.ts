@@ -15,6 +15,7 @@ export class GetVideoListResponseModel {
             kind: response.kind,
             etag: response.etag,
             pageInfo: response.pageInfo,
+            nextPageToken: response.nextPageToken,
             items: response.items.filter((e: YouTubeDataApiVideoListItemType) => {
                 return !!e.id.videoId;
             })
