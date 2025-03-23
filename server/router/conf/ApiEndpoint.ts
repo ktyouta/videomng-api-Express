@@ -11,4 +11,5 @@ export enum ApiEndopoint {
     FAVORITE_VIDEO_MEMO = "/favoritevideomemo/v1/volumes",
     FAVORITE_VIDEO_MEMO_ID = "/favoritevideomemo/v1/volumes/:id",
     SEARCH_COMMENT_BY_KEYWORD = "/searchcommentbykeyword/v1/volumes",
+    BLOCK_COMMENT = "/blockcomment/v1/volumes",
 }

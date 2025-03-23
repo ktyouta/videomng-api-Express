@@ -80,3 +80,15 @@ model SeqMaster {
 
   @@map("seq_master") 
 }
+
+
+// ブロックコメントリスト
+model BlockCommentTransaction {
+  userId      Int   @map("user_id")
+  commentId    String   @db.VarChar(255)  @map("comment_id")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@id([userId, commentId])
+  @@map("block_commnet_transaction")
+}

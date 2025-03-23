@@ -1,3 +1,4 @@
+import { CreateBlockCommentController } from "../../createblockcomment/controller/CreateBlockCommentController";
 import { CreateFavoriteVideoController } from "../../createfavoritevideo/controller/CreateFavoriteVideoController";
 import { CreateFavoriteVideoMemoController } from "../../createfavoritevideomemo/controller/CreateFavoriteVideoMemoController";
 import { CreateFrontUserInfoController } from "../../createfrontuserinfo/controller/CreateFrontUserInfoController";
@@ -55,4 +56,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetVideoCommentController(),
     // キーワード検索(コメント)
     new SearchCommentByKeywordController(),
+    // ブロックコメント登録処理
+    new CreateBlockCommentController(),
 ]
