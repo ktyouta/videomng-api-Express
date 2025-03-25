@@ -9,7 +9,7 @@ import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/propert
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { PrismaTransaction } from '../../util/service/PrismaTransaction';
-import { Prisma } from '@prisma/client';
+import { BlockCommentTransaction, Prisma } from '@prisma/client';
 import { CreateBlockCommentService } from '../service/CreateBlockCommentService';
 import { CreateBlockCommentRequestType } from '../model/CreateBlockCommentRequestType';
 import { CreateBlockCommentRequestModelSchema } from '../model/CreateBlockCommentRequestModelSchema';
@@ -70,11 +70,13 @@ export class CreateBlockCommentController extends RouteController {
             const isExistBlockComment = await this.createBlockCommentService.checkDupulicateBlockComment(
                 createBlockCommentRequestModel, frontUserIdModel);
 
+            let blockCommnet: BlockCommentTransaction;
+
             // 重複している場合はブロックコメントを復元する
             if (isExistBlockComment) {
 
                 // ブロックコメントを復元
-                await this.createBlockCommentService.recovery(
+                blockCommnet = await this.createBlockCommentService.recovery(
                     blockCommentRepository,
                     createBlockCommentRequestModel,
                     frontUserIdModel,
@@ -82,14 +84,14 @@ export class CreateBlockCommentController extends RouteController {
             }
             else {
                 // ブロックコメントを追加
-                await this.createBlockCommentService.insert(
+                blockCommnet = await this.createBlockCommentService.insert(
                     blockCommentRepository,
                     createBlockCommentRequestModel,
                     frontUserIdModel,
                     tx);
             }
 
-            return ApiResponse.create(res, HTTP_STATUS_OK, `ブロックリストに登録しました。`);
+            return ApiResponse.create(res, HTTP_STATUS_OK, `ブロックリストに登録しました。`, blockCommnet);
         }, next);
     }
 }

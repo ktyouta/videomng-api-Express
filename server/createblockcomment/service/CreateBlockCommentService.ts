@@ -83,7 +83,9 @@ export class CreateBlockCommentService {
             frontUserIdModel,
             createBlockCommentRequestModel.commentIdModel);
 
-        await blockCommentRepository.insert(blockCommentInsertEntity, tx);
+        const blockCommnet = await blockCommentRepository.insert(blockCommentInsertEntity, tx);
+
+        return blockCommnet;
     }
 
     /**
@@ -98,6 +100,8 @@ export class CreateBlockCommentService {
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        await blockCommentRepository.recovery(frontUserIdModel, createBlockCommentRequestModel.commentIdModel, tx);
+        const blockCommnet = await blockCommentRepository.recovery(frontUserIdModel, createBlockCommentRequestModel.commentIdModel, tx);
+
+        return blockCommnet;
     }
 }
