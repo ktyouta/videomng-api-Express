@@ -1,12 +1,17 @@
+import { BlockCommentTransaction } from '@prisma/client';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
 import { JsonWebTokenUserModel } from '../../jsonwebtoken/model/JsonWebTokenUserModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { Request } from 'express';
+import { GetFavoriteVideoCommentRepositorys } from '../repository/GetFavoriteVideoCommentRepositorys';
+import { RepositoryType } from '../../util/const/CommonConst';
+import { GetFavoriteVideoBlockCommentSelectEntity } from '../entity/GetFavoriteVideoBlockCommentSelectEntity';
 
 
 export class GetFavoriteVideoCommentService {
@@ -56,4 +61,23 @@ export class GetFavoriteVideoCommentService {
         }
     }
 
+
+    /**
+     * お気に入り動画ブロックコメント取得
+     * @param frontUserIdModel 
+     * @returns 
+     */
+    public async getFavoriteVideoComment(frontUserIdModel: FrontUserIdModel): Promise<BlockCommentTransaction[]> {
+
+        // 永続ロジック用オブジェクトを取得
+        const getGetFavoriteVideoCommentRepository = (new GetFavoriteVideoCommentRepositorys()).get(RepositoryType.POSTGRESQL);
+
+        // お気に入り動画ブロックコメント取得用Entity
+        const getFavoriteVideoBlockCommentSelectEntity = new GetFavoriteVideoBlockCommentSelectEntity(frontUserIdModel);
+
+        // お気に入り動画ブロックコメント取得
+        const favoriteVideoBlockComment = await getGetFavoriteVideoCommentRepository.selectBlockComment(getFavoriteVideoBlockCommentSelectEntity);
+
+        return favoriteVideoBlockComment;
+    }
 }

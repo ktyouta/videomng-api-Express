@@ -12,6 +12,7 @@ import { VideoIdModel } from '../../internaldata/favoritevideotransaction/proper
 import { GetFavoriteVideoCommentService } from '../service/GetFavoriteVideoCommentService';
 import { GetFavoriteVideoCommentResponseModel } from '../model/GetFavoriteVideoCommentResponseModel';
 import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FavoriteVideoCommentResponseDataModel } from '../model/FavoriteVideoCommentResponseDataModel';
 
 
 export class GetFavoriteVideoCommentController extends RouteController {
@@ -52,9 +53,16 @@ export class GetFavoriteVideoCommentController extends RouteController {
         const youTubeFavoriteVideoCommentApi = await this.getFavoriteVideoCommentService.callYouTubeDataCommentApi(videoIdModel);
 
         // ブロックコメントリストを取得する
+        const favoriteVideoBlockComment = await this.getFavoriteVideoCommentService.getFavoriteVideoComment(frontUserIdModel);
 
-        // レスポンスのYouTube動画
-        const favoriteVideoCommentResponseModel = new GetFavoriteVideoCommentResponseModel(youTubeFavoriteVideoCommentApi);
+        // ブロックコメントをフィルターする
+        const favoriteVideoCommentResponseDataModel = new FavoriteVideoCommentResponseDataModel(
+            youTubeFavoriteVideoCommentApi,
+            favoriteVideoBlockComment,
+        );
+
+        // レスポンス
+        const favoriteVideoCommentResponseModel = new GetFavoriteVideoCommentResponseModel(favoriteVideoCommentResponseDataModel);
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, favoriteVideoCommentResponseModel.data);
     }
