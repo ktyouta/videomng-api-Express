@@ -5,7 +5,6 @@ import { YouTubeDataApiVideoListNextPageToken } from "../properties/YouTubeDataA
 import { YouTubeDataApiVideoListKeyword } from "../properties/YouTubeDataApiVideoListKeyword";
 import { YouTubeDataApiVideoListMaxResult } from "../properties/YouTubeDataApiVideoListMaxResult";
 import { YouTubeDataApiVideoListPart } from "../properties/YouTubeDataApiVideoListPart";
-import { YouTubeDataApiVideoListResource } from "../properties/YouTubeDataApiVideoListResource";
 import { YouTubeDataApiVideoListType } from "../properties/YouTubeDataApiVideoListType";
 import { YouTubeDataApiVideoListVideoType } from "../properties/YouTubeDataApiVideoListVideoType";
 
@@ -16,6 +15,8 @@ import { YouTubeDataApiVideoListVideoType } from "../properties/YouTubeDataApiVi
 export class YouTubeDataApiVideoListEndPointModel {
 
     private readonly _endpoint: string;
+    // パス
+    private static readonly PATH: string = `${YouTubeDataApiBasePathModel.BASE_PATH}/search`;
     // APIキー
     private readonly youTubeDataApiApiKey: YouTubeDataApiApiKey = new YouTubeDataApiApiKey();
 
@@ -50,7 +51,7 @@ export class YouTubeDataApiVideoListEndPointModel {
 
         const queryParam = queryBuilder.createParam();
 
-        this._endpoint = `${YouTubeDataApiBasePathModel.BASE_PATH}${YouTubeDataApiVideoListResource.API_RESOURCE}${queryParam ? `?${queryParam}` : ``}`
+        this._endpoint = `${YouTubeDataApiVideoListEndPointModel.PATH}${queryParam ? `?${queryParam}` : ``}`
     }
 
     get endpoint() {

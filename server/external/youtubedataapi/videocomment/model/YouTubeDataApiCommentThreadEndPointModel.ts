@@ -5,7 +5,6 @@ import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiK
 import { YouTubeDataApiCommentThreadMaxResult } from "../properties/YouTubeDataApiCommentThreadMaxResult";
 import { YouTubeDataApiCommentThreadNextPageToken } from "../properties/YouTubeDataApiCommentThreadNextPageToken";
 import { YouTubeDataApiCommentThreadPart } from "../properties/YouTubeDataApiCommentThreadPart";
-import { YouTubeDataApiCommentThreadResource } from "../properties/YouTubeDataApiCommentThreadResource";
 import { YouTubeDataApiCommentThreadVideoId } from "../properties/YouTubeDataApiCommentThreadVideoId";
 
 
@@ -15,6 +14,8 @@ import { YouTubeDataApiCommentThreadVideoId } from "../properties/YouTubeDataApi
 export class YouTubeDataApiCommentThreadEndPointModel {
 
     private readonly _endpoint: string;
+    // パス
+    private static readonly PATH: string = `${YouTubeDataApiBasePathModel.BASE_PATH}/commentThreads`;
     // APIキー
     private readonly youTubeDataApiApiKey: YouTubeDataApiApiKey = new YouTubeDataApiApiKey();
 
@@ -38,7 +39,7 @@ export class YouTubeDataApiCommentThreadEndPointModel {
 
         const queryParam = queryBuilder.createParam();
 
-        this._endpoint = `${YouTubeDataApiBasePathModel.BASE_PATH}${YouTubeDataApiCommentThreadResource.API_RESOURCE}${queryParam ? `?${queryParam}` : ``}`
+        this._endpoint = `${YouTubeDataApiCommentThreadEndPointModel.PATH}${queryParam ? `?${queryParam}` : ``}`
     }
 
     get endpoint() {

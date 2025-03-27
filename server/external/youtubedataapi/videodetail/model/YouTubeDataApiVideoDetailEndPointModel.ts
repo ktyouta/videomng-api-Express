@@ -3,7 +3,6 @@ import { QueryBuilder } from "../../../../util/service/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
 import { YouTubeDataApiVideoDetailPart } from "../properties/YouTubeDataApiVideoDetailPart";
-import { YouTubeDataApiVideoDetailResource } from "../properties/YouTubeDataApiVideoDetailResource";
 import { YouTubeDataApiVideoDetailVideoId } from "../properties/YouTubeDataApiVideoDetailVideoId";
 
 
@@ -13,6 +12,8 @@ import { YouTubeDataApiVideoDetailVideoId } from "../properties/YouTubeDataApiVi
 export class YouTubeDataApiVideoDetailEndPointModel {
 
     private readonly _endpoint: string;
+    // パス
+    private static readonly PATH: string = `${YouTubeDataApiBasePathModel.BASE_PATH}/videos`;
     // APIキー
     private readonly youTubeDataApiApiKey: YouTubeDataApiApiKey = new YouTubeDataApiApiKey();
 
@@ -26,7 +27,7 @@ export class YouTubeDataApiVideoDetailEndPointModel {
 
         const queryParam = queryBuilder.createParam();
 
-        this._endpoint = `${YouTubeDataApiBasePathModel.BASE_PATH}${YouTubeDataApiVideoDetailResource.API_RESOURCE}${queryParam ? `?${queryParam}` : ``}`
+        this._endpoint = `${YouTubeDataApiVideoDetailEndPointModel.PATH}${queryParam ? `?${queryParam}` : ``}`
     }
 
     get endpoint() {
