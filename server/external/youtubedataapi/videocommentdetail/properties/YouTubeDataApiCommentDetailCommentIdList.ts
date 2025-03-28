@@ -17,6 +17,6 @@ export class YouTubeDataApiCommentDetailCommentIdList {
     }
 
     join() {
-        return this._commentIdModelList.join(`,`);
+        return this._commentIdModelList.map((e) => e.commentId).join(`,`);
     }
 }
