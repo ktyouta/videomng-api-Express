@@ -83,8 +83,7 @@ export class DeleteFavoriteVideoMemoService {
      * @param deleteFavoriteVideoMemoRequestModel 
      * @param frontUserIdModel 
      */
-    public async softDelete(deleteFavoriteVideoMemoRepository: DeleteFavoriteVideoMemoRepositoryInterface,
-        favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
+    public async softDelete(favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
         deleteFavoriteVideoMemoRequestModel: DeleteFavoriteVideoMemoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {

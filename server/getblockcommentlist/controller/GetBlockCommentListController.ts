@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
 import { Router, Request, Response, NextFunction } from 'express';
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
@@ -45,7 +45,7 @@ export class GetBlockCommentListController extends RouteController {
 
         // ユーザーのブロックコメントが存在しない
         if (blockCommentList.length === 0) {
-            return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `ブロックコメントが登録されていません。`)
+            return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `ブロックコメントが登録されていません。`);
         }
 
         // ブロックコメントリストからYouTube Data Apiの情報を取得してマージする
@@ -54,6 +54,6 @@ export class GetBlockCommentListController extends RouteController {
         // レスポンスを作成
         const getBlockCommentListResponse = new GetBlockCommentListResponseModel(youTubeDataApiCommentDetailModel);
 
-        return ApiResponse.create(res, HTTP_STATUS_CREATED, `ブロックコメントリストを取得しました。`, getBlockCommentListResponse.data);
+        return ApiResponse.create(res, HTTP_STATUS_OK, `ブロックコメントリストを取得しました。`, getBlockCommentListResponse.data);
     }
 }

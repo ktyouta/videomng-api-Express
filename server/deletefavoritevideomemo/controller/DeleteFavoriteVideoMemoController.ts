@@ -82,7 +82,6 @@ export class DeleteFavoriteVideoMemoController extends RouteController {
 
             // お気に入り動画メモを削除
             const favoriteVideoMemo = await this.deleteFavoriteVideoMemoService.softDelete(
-                deleteFavoriteVideoMemoRepository,
                 favoriteVideoMemoRepository,
                 deleteFavoriteVideoMemoRequestModel,
                 frontUserIdModel,
