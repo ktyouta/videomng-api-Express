@@ -1,4 +1,5 @@
 import { CreateBlockCommentController } from "../../createblockcomment/controller/CreateBlockCommentController";
+import { CreateFavoriteCommentController } from "../../createfavoritecomment/controller/CreateFavoriteCommentController";
 import { CreateFavoriteVideoController } from "../../createfavoritevideo/controller/CreateFavoriteVideoController";
 import { CreateFavoriteVideoMemoController } from "../../createfavoritevideomemo/controller/CreateFavoriteVideoMemoController";
 import { CreateFrontUserInfoController } from "../../createfrontuserinfo/controller/CreateFrontUserInfoController";
@@ -9,6 +10,7 @@ import { FrontUserCheckAuthController } from "../../frontusercheckauth/controlle
 import { FrontUserLoginController } from "../../frontuserlogin/controller/FrontUserLoginController";
 import { FrontUserLogoutController } from "../../frontuserlogout/controller/FrontUserLogoutController";
 import { GetBlockCommentListController } from "../../getblockcommentlist/controller/GetBlockCommentListController";
+import { GetFavoriteCommentListController } from "../../getfavoritecommentlist/controller/GetFavoriteCommentListController";
 import { GetFavoriteVideoCommentController } from "../../getfavoritevideocomment/controller/GetFavoriteVideoCommentController";
 import { GetFavoriteVideoDetialController } from "../../getfavoritevideodetail/controller/GetFavoriteVideoDetialController";
 import { GetFavoriteVideoListController } from "../../getfavoritevideolist/controller/GetFavoriteVideoListController";
@@ -67,4 +69,8 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetBlockCommentListController(),
     // ブロックコメント削除
     new DeleteBlockCommentController(),
+    // お気に入りコメント登録処理
+    new CreateFavoriteCommentController(),
+    // お気に入りコメントリスト取得
+    new GetFavoriteCommentListController(),
 ]
