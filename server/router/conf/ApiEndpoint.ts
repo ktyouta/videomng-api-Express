@@ -14,4 +14,6 @@ export enum ApiEndopoint {
     SEARCH_COMMENT_BY_KEYWORD = "/searchcommentbykeyword/v1/volumes",
     BLOCK_COMMENT = "/blockcomment/v1/volumes",
     BLOCK_COMMENT_ID = "/blockcomment/v1/volumes/:id",
+    FAVORITE_COMMENT = "/favoritecomment/v1/volumes",
+    FAVORITE_COMMENT_ID = "/favoritecomment/v1/volumes/:id",
 }

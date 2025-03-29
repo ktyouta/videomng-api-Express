@@ -1,4 +1,4 @@
-import { CommentIdModel } from "../../../../internaldata/blockcommenttransaction/properties/CommentIdModel";
+import { CommentIdModel } from "../../../../internaldata/common/properties/CommentIdModel";
 import { VideoIdModel } from "../../../../internaldata/favoritevideotransaction/properties/VideoIdModel";
 
 export class YouTubeDataApiCommentDetailCommentIdList {

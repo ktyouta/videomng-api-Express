@@ -2,7 +2,7 @@ import { BlockCommentTransactionUpdateEntity } from "../../entity/BlockCommentTr
 import { BlockCommentTransactionInsertEntity } from "../../entity/BlockCommentTransactionInsertEntity";
 import { BlockCommentTransaction, Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
-import { CommentIdModel } from "../../properties/CommentIdModel";
+import { CommentIdModel } from "../../../common/properties/CommentIdModel";
 
 
 /**

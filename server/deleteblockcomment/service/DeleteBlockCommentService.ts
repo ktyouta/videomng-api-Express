@@ -5,8 +5,8 @@ import { RepositoryType } from "../../util/const/CommonConst";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
 import { BlockCommentTransactionRepositoryInterface } from "../../internaldata/blockcommenttransaction/repository/interface/BlockCommentTransactionRepositoryInterface";
-import { CommentIdModel } from "../../internaldata/blockcommenttransaction/properties/CommentIdModel";
 import { BlockCommentTransactionRepositorys } from "../../internaldata/blockcommenttransaction/repository/BlockCommentTransactionRepositorys";
+import { CommentIdModel } from "../../internaldata/common/properties/CommentIdModel";
 
 
 export class DeleteBlockCommentService {

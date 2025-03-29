@@ -12,7 +12,7 @@ import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { DeleteBlockCommentService } from '../service/DeleteBlockCommentService';
 import { DeleteBlockCommentResponseModel } from '../model/DeleteBlockCommentResponseModel';
-import { CommentIdModel } from '../../internaldata/blockcommenttransaction/properties/CommentIdModel';
+import { CommentIdModel } from '../../internaldata/common/properties/CommentIdModel';
 
 
 export class DeleteBlockCommentController extends RouteController {

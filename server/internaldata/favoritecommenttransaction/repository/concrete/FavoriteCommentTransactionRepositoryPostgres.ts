@@ -1,18 +1,18 @@
 import { Prisma } from "@prisma/client";
 import { FLG } from "../../../../util/const/CommonConst";
 import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
-import { BlockCommentTransactionInsertEntity } from "../../entity/BlockCommentTransactionInsertEntity";
-import { BlockCommentTransactionUpdateEntity } from "../../entity/BlockCommentTransactionUpdateEntity";
+import { FavoriteCommentTransactionInsertEntity } from "../../entity/FavoriteCommentTransactionInsertEntity";
+import { FavoriteCommentTransactionUpdateEntity } from "../../entity/FavoriteCommentTransactionUpdateEntity";
 import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
-import { BlockCommentTransactionRepositoryInterface } from "../interface/BlockCommentTransactionRepositoryInterface";
 import { CommentIdModel } from "../../../common/properties/CommentIdModel";
+import { FavoriteCommentTransactionRepositoryInterface } from "../interface/FavoriteCommentTransactionRepositoryInterface";
 
 
 
 /**
  * json形式の永続ロジック用クラス
  */
-export class BlockCommentTransactionRepositoryPostgres implements BlockCommentTransactionRepositoryInterface {
+export class FavoriteCommentTransactionRepositoryPostgres implements FavoriteCommentTransactionRepositoryInterface {
 
 
     constructor() {
@@ -20,16 +20,16 @@ export class BlockCommentTransactionRepositoryPostgres implements BlockCommentTr
     }
 
     /**
-     * ブロックコメント情報を作成
+     * お気に入りコメント情報を作成
      */
-    async insert(blockCommentTransactionInsertEntity: BlockCommentTransactionInsertEntity,
+    async insert(favoriteCommentTransactionInsertEntity: FavoriteCommentTransactionInsertEntity,
         tx: Prisma.TransactionClient
     ) {
 
-        const userId = blockCommentTransactionInsertEntity.frontUserId;
-        const commentId = blockCommentTransactionInsertEntity.commentId;
+        const userId = favoriteCommentTransactionInsertEntity.frontUserId;
+        const commentId = favoriteCommentTransactionInsertEntity.commentId;
 
-        const blockComment = await tx.blockCommentTransaction.create({
+        const favoriteComment = await tx.favoriteCommentTransaction.create({
             data: {
                 userId,
                 commentId,
@@ -39,12 +39,12 @@ export class BlockCommentTransactionRepositoryPostgres implements BlockCommentTr
             },
         });
 
-        return blockComment;
+        return favoriteComment;
     }
 
 
     /**
-     * 削除ブロックコメントの復元
+     * 削除お気に入りコメントの復元
      */
     async recovery(userIdModel: FrontUserIdModel,
         commentIdModel: CommentIdModel,
@@ -53,7 +53,7 @@ export class BlockCommentTransactionRepositoryPostgres implements BlockCommentTr
         const userId = userIdModel.frontUserId;
         const commentId = commentIdModel.commentId;
 
-        const blockComment = await tx.blockCommentTransaction.update({
+        const favoriteComment = await tx.favoriteCommentTransaction.update({
             where: {
                 userId_commentId: {
                     userId,
@@ -66,12 +66,12 @@ export class BlockCommentTransactionRepositoryPostgres implements BlockCommentTr
             },
         });
 
-        return blockComment;
+        return favoriteComment;
     }
 
 
     /**
-     * ブロックコメントを論理削除
+     * お気に入りコメントを論理削除
      */
     async softDelete(userIdModel: FrontUserIdModel,
         commentIdModel: CommentIdModel,
@@ -80,7 +80,7 @@ export class BlockCommentTransactionRepositoryPostgres implements BlockCommentTr
         const userId = userIdModel.frontUserId;
         const commentId = commentIdModel.commentId;
 
-        const blockComment = await tx.blockCommentTransaction.update({
+        const favoriteComment = await tx.favoriteCommentTransaction.update({
             where: {
                 userId_commentId: {
                     userId,
@@ -93,6 +93,6 @@ export class BlockCommentTransactionRepositoryPostgres implements BlockCommentTr
             },
         });
 
-        return blockComment;
+        return favoriteComment;
     }
 }

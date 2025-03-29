@@ -1,8 +1,8 @@
-import { CommentIdModel } from "../../common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../frontuserinfomaster/properties/FrontUserIdModel";
+import { CommentIdModel } from "../../common/properties/CommentIdModel";
 
 
-export class BlockCommentTransactionUpdateEntity {
+export class FavoriteCommentTransactionInsertEntity {
 
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
@@ -22,7 +22,7 @@ export class BlockCommentTransactionUpdateEntity {
         return this._frontUserIdModel;
     }
 
-    public get videoIdModel() {
+    public get commentIdModel() {
         return this._commentIdModel;
     }
 

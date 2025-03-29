@@ -1,5 +1,5 @@
+import { CommentIdModel } from "../../common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../frontuserinfomaster/properties/FrontUserIdModel";
-import { CommentIdModel } from "../properties/CommentIdModel";
 
 
 export class BlockCommentTransactionInsertEntity {

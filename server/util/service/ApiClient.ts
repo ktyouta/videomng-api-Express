@@ -1,11 +1,13 @@
 import axios, { AxiosInstance } from 'axios';
+import ENV from "../../env.json";
 
 export class ApiClient {
     private client: AxiosInstance;
 
     constructor() {
         this.client = axios.create({
-            timeout: 5000, // タイムアウト設定
+            // タイムアウト設定
+            timeout: ENV.TIMEOUT,
             headers: { 'Content-Type': 'application/json' },
         });
     }

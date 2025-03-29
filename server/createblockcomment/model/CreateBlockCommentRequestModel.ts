@@ -1,5 +1,4 @@
-import { CommentIdModel } from "../../internaldata/blockcommenttransaction/properties/CommentIdModel";
-import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
+import { CommentIdModel } from "../../internaldata/common/properties/CommentIdModel";
 import { CreateBlockCommentRequestType } from "./CreateBlockCommentRequestType";
 
 export class CreateBlockCommentRequestModel {

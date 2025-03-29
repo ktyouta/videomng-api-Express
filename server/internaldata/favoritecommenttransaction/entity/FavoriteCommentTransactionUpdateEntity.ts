@@ -1,8 +1,8 @@
-import { CommentIdModel } from "../../common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../frontuserinfomaster/properties/FrontUserIdModel";
+import { CommentIdModel } from "../../common/properties/CommentIdModel";
 
 
-export class BlockCommentTransactionUpdateEntity {
+export class FavoriteCommentTransactionUpdateEntity {
 
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;

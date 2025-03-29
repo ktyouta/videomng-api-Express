@@ -7,7 +7,7 @@ import { FLG } from "../../util/const/CommonConst";
 
 
 
-export class CreateBlockCommentSelectEntity {
+export class CreateFavoriteCommentSelectEntity {
 
     // コメントID
     private readonly _commentIdModel: CommentIdModel;

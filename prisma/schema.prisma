@@ -92,3 +92,15 @@ model BlockCommentTransaction {
   @@id([userId, commentId])
   @@map("block_commnet_transaction")
 }
+
+
+// お気に入りコメントリスト
+model FavoriteCommentTransaction {
+  userId      Int   @map("user_id")
+  commentId    String   @db.VarChar(255)  @map("comment_id")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@id([userId, commentId])
+  @@map("favorite_commnet_transaction")
+}
