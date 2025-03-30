@@ -12,7 +12,8 @@ import { VideoIdModel } from '../../internaldata/favoritevideotransaction/proper
 import { GetFavoriteVideoCommentService } from '../service/GetFavoriteVideoCommentService';
 import { GetFavoriteVideoCommentResponseModel } from '../model/GetFavoriteVideoCommentResponseModel';
 import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
-import { FavoriteVideoCommentResponseDataModel } from '../model/FavoriteVideoCommentResponseDataModel';
+import { FilterdBlockCommentModel } from '../model/FilterdBlockCommentModel';
+import { FavoriteVideoCommentResponseDataModel } from '../model/FavoriteVideoCommentResponseDataModel2';
 
 
 export class GetFavoriteVideoCommentController extends RouteController {
@@ -52,13 +53,31 @@ export class GetFavoriteVideoCommentController extends RouteController {
         // YouTube Data Apiから動画コメントを取得する
         const youTubeFavoriteVideoCommentApi = await this.getFavoriteVideoCommentService.callYouTubeDataCommentApi(videoIdModel);
 
+        // 永続ロジック用オブジェクトを取得
+        const getFavoriteVideoCommentRepository = this.getFavoriteVideoCommentService.getGetFavoriteVideoCommentRepository();
+
         // ブロックコメントリストを取得する
-        const favoriteVideoBlockComment = await this.getFavoriteVideoCommentService.getFavoriteVideoComment(frontUserIdModel);
+        const blockComment = await this.getFavoriteVideoCommentService.getBlockComment(
+            getFavoriteVideoCommentRepository,
+            frontUserIdModel
+        );
 
         // ブロックコメントをフィルターする
-        const favoriteVideoCommentResponseDataModel = new FavoriteVideoCommentResponseDataModel(
+        const filterdBlockCommentModel = new FilterdBlockCommentModel(
             youTubeFavoriteVideoCommentApi,
-            favoriteVideoBlockComment,
+            blockComment,
+        );
+
+        // お気に入りコメントを取得する
+        const favoriteComment = await this.getFavoriteVideoCommentService.getFavoriteComment(
+            getFavoriteVideoCommentRepository,
+            frontUserIdModel
+        );
+
+        // お気に入りステータスをチェックする
+        const favoriteVideoCommentResponseDataModel = new FavoriteVideoCommentResponseDataModel(
+            filterdBlockCommentModel,
+            favoriteComment,
         );
 
         // レスポンス

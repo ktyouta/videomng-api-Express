@@ -5,7 +5,7 @@ import { YouTubeDataApiCommentThreadItemType } from "../../external/youtubedataa
 import { YouTubeDataApiCommentThreadReplyCommentType } from "../../external/youtubedataapi/videocomment/type/YouTubeDataApiCommentThreadReplyCommentType";
 import { YouTubeDataApiCommentThreadReplyType } from "../../external/youtubedataapi/videocomment/type/YouTubeDataApiCommentThreadReplyType";
 
-export class FavoriteVideoCommentResponseDataModel {
+export class FilterdBlockCommentModel {
 
     private readonly _data: YouTubeDataApiCommentThreadResponseType;
 
@@ -34,7 +34,7 @@ export class FavoriteVideoCommentResponseDataModel {
 
                 // ブロックリストに存在する返信コメントを除外する
                 const matchBlockCommentReplys: YouTubeDataApiCommentThreadReplyCommentType[] = !!commentReplys ?
-                    e.replies?.comments?.filter((e1) => {
+                    commentReplys.filter((e1) => {
 
                         const replyCommentId = e1.id;
 
@@ -42,7 +42,7 @@ export class FavoriteVideoCommentResponseDataModel {
                             return e2.commentId === replyCommentId;
                         });
 
-                        return !!matchBlockCommentReply;
+                        return !matchBlockCommentReply;
                     })
                     :
                     [];

@@ -12,6 +12,8 @@ import { Request } from 'express';
 import { GetFavoriteVideoCommentRepositorys } from '../repository/GetFavoriteVideoCommentRepositorys';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { GetFavoriteVideoBlockCommentSelectEntity } from '../entity/GetFavoriteVideoBlockCommentSelectEntity';
+import { GetFavoriteVideoCommentRepositoryInterface } from '../repository/interface/GetFavoriteVideoCommentRepositoryInterface';
+import { GetFavoriteVideoFavoriteCommentSelectEntity } from '../entity/GetFavoriteVideoFavoriteCommentSelectEntity';
 
 
 export class GetFavoriteVideoCommentService {
@@ -63,21 +65,45 @@ export class GetFavoriteVideoCommentService {
 
 
     /**
+     * 永続ロジック用オブジェクトを取得
+     * @returns 
+     */
+    public getGetFavoriteVideoCommentRepository() {
+        return (new GetFavoriteVideoCommentRepositorys()).get(RepositoryType.POSTGRESQL);
+    }
+
+    /**
      * お気に入り動画ブロックコメント取得
      * @param frontUserIdModel 
      * @returns 
      */
-    public async getFavoriteVideoComment(frontUserIdModel: FrontUserIdModel): Promise<BlockCommentTransaction[]> {
-
-        // 永続ロジック用オブジェクトを取得
-        const getGetFavoriteVideoCommentRepository = (new GetFavoriteVideoCommentRepositorys()).get(RepositoryType.POSTGRESQL);
+    public async getBlockComment(getFavoriteVideoCommentRepository: GetFavoriteVideoCommentRepositoryInterface,
+        frontUserIdModel: FrontUserIdModel): Promise<BlockCommentTransaction[]> {
 
         // お気に入り動画ブロックコメント取得用Entity
         const getFavoriteVideoBlockCommentSelectEntity = new GetFavoriteVideoBlockCommentSelectEntity(frontUserIdModel);
 
         // お気に入り動画ブロックコメント取得
-        const favoriteVideoBlockComment = await getGetFavoriteVideoCommentRepository.selectBlockComment(getFavoriteVideoBlockCommentSelectEntity);
+        const blockComment = await getFavoriteVideoCommentRepository.selectBlockComment(getFavoriteVideoBlockCommentSelectEntity);
 
-        return favoriteVideoBlockComment;
+        return blockComment;
+    }
+
+
+    /**
+     * お気に入りコメント取得
+     * @param frontUserIdModel 
+     * @returns 
+     */
+    public async getFavoriteComment(getFavoriteVideoCommentRepository: GetFavoriteVideoCommentRepositoryInterface,
+        frontUserIdModel: FrontUserIdModel): Promise<BlockCommentTransaction[]> {
+
+        // お気に入りコメント取得用Entity
+        const getFavoriteVideoFavoriteCommentSelectEntity = new GetFavoriteVideoFavoriteCommentSelectEntity(frontUserIdModel);
+
+        // お気に入りコメント取得
+        const favoriteComment = await getFavoriteVideoCommentRepository.selectFavoriteComment(getFavoriteVideoFavoriteCommentSelectEntity);
+
+        return favoriteComment;
     }
 }
