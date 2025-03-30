@@ -4,6 +4,7 @@ import { CreateFavoriteVideoController } from "../../createfavoritevideo/control
 import { CreateFavoriteVideoMemoController } from "../../createfavoritevideomemo/controller/CreateFavoriteVideoMemoController";
 import { CreateFrontUserInfoController } from "../../createfrontuserinfo/controller/CreateFrontUserInfoController";
 import { DeleteBlockCommentController } from "../../deleteblockcomment/controller/DeleteBlockCommentController";
+import { DeleteFavoriteCommentController } from "../../deletefavoritecomment/controller/DeleteFavoriteCommentController";
 import { DeleteFavoriteVideoController } from "../../deletefavoritevideo/controller/DeleteFavoriteVideoController";
 import { DeleteFavoriteVideoMemoController } from "../../deletefavoritevideomemo/controller/DeleteFavoriteVideoMemoController";
 import { FrontUserCheckAuthController } from "../../frontusercheckauth/controller/FrontUserCheckAuthController";
@@ -73,4 +74,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new CreateFavoriteCommentController(),
     // お気に入りコメントリスト取得
     new GetFavoriteCommentListController(),
+    // お気に入りコメント削除処理
+    new DeleteFavoriteCommentController(),
 ]

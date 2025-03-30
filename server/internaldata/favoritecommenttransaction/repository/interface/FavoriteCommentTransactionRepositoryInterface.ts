@@ -17,7 +17,7 @@ export interface FavoriteCommentTransactionRepositoryInterface {
         tx: Prisma.TransactionClient): Promise<FavoriteCommentTransaction>;
 
     /**
-     * 削除動画の復元
+     * 削除お気に入りコメントの復元
      */
     recovery(userId: FrontUserIdModel,
         commentIdModel: CommentIdModel,
