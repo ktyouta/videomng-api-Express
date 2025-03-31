@@ -1,3 +1,4 @@
+import { YouTubeDataApiVideoCategoryItemType } from "./YouTubeDataApiVideoCategoryItemType";
 import { YouTubeDataApiVideoCategorySnippetType } from "./YouTubeDataApiVideoCategorySnippetType";
 
 export type YouTubeDataApiVideoCategoryResponseType = {
@@ -5,8 +6,6 @@ export type YouTubeDataApiVideoCategoryResponseType = {
     readonly kind: string;
     // APIレスポンスのETag
     readonly etag: string;
-    // カテゴリの一意のID
-    readonly id: string;
-    // カテゴリの詳細情報
-    readonly snippet: YouTubeDataApiVideoCategorySnippetType;
+    // カテゴリ情報
+    readonly items: YouTubeDataApiVideoCategoryItemType[],
 };
