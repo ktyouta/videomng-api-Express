@@ -2,6 +2,7 @@ import { VideoIdModel } from "../../../../internaldata/favoritevideotransaction/
 import { QueryBuilder } from "../../../../util/service/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
+import { YouTubeDataApiVideoCategoryHostLanguage } from "../properties/YouTubeDataApiVideoCategoryHostLanguage";
 import { YouTubeDataApiVideoCategoryPart } from "../properties/YouTubeDataApiVideoCategoryPart";
 import { YouTubeDataApiVideoCategoryRegionCode } from "../properties/YouTubeDataApiVideoCategoryRegionCode";
 
@@ -24,6 +25,7 @@ export class YouTubeDataApiVideoCategoryEndPointModel {
         const queryBuilder: QueryBuilder = new QueryBuilder(YouTubeDataApiVideoCategoryPart.QUERYKEY, YouTubeDataApiVideoCategoryPart.VALUE);
         queryBuilder.add(YouTubeDataApiApiKey.QUERYKEY_API_KEY, this.youTubeDataApiApiKey.apiKey);
         queryBuilder.add(YouTubeDataApiVideoCategoryRegionCode.QUERYKEY, YouTubeDataApiVideoCategoryRegionCode.VALUE);
+        queryBuilder.add(YouTubeDataApiVideoCategoryHostLanguage.QUERYKEY, YouTubeDataApiVideoCategoryHostLanguage.VALUE);
 
         const queryParam = queryBuilder.createParam();
 
