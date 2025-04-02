@@ -1,10 +1,11 @@
 import { YouTubeDataApiVideoListEndPointModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListEndPointModel';
 import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListModel';
-import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiCommentThreadNextPageToken';
+import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListMaxResult } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListMaxResult';
 import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { YouTubeDataApiVideoListVideoCategoryId } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId';
 
 
 export class GetVideoListService {
@@ -17,6 +18,7 @@ export class GetVideoListService {
     public async callYouTubeDataListApi(youTubeDataApiVideoListKeyword: YouTubeDataApiVideoListKeyword,
         youTubeDataApiVideoListVideoType: YouTubeDataApiVideoListVideoType,
         youTubeDataApiVideoListNextPageToken: YouTubeDataApiVideoListNextPageToken,
+        youTubeDataApiVideoListVideoCategoryId: YouTubeDataApiVideoListVideoCategoryId,
     ) {
 
         try {
@@ -27,6 +29,7 @@ export class GetVideoListService {
                 youTubeDataApiVideoListVideoType,
                 new YouTubeDataApiVideoListMaxResult(),
                 youTubeDataApiVideoListNextPageToken,
+                youTubeDataApiVideoListVideoCategoryId,
             );
 
             // YouTube Data APIデータ取得

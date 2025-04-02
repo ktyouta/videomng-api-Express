@@ -1,12 +1,13 @@
 import { QueryBuilder } from "../../../../util/service/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
-import { YouTubeDataApiVideoListNextPageToken } from "../properties/YouTubeDataApiCommentThreadNextPageToken";
+import { YouTubeDataApiVideoListNextPageToken } from "../properties/YouTubeDataApiVideoListNextPageToken";
 import { YouTubeDataApiVideoListKeyword } from "../properties/YouTubeDataApiVideoListKeyword";
 import { YouTubeDataApiVideoListMaxResult } from "../properties/YouTubeDataApiVideoListMaxResult";
 import { YouTubeDataApiVideoListPart } from "../properties/YouTubeDataApiVideoListPart";
 import { YouTubeDataApiVideoListType } from "../properties/YouTubeDataApiVideoListType";
 import { YouTubeDataApiVideoListVideoType } from "../properties/YouTubeDataApiVideoListVideoType";
+import { YouTubeDataApiVideoListVideoCategoryId } from "../properties/YouTubeDataApiVideoListVideoCategoryId";
 
 
 /**
@@ -25,6 +26,7 @@ export class YouTubeDataApiVideoListEndPointModel {
         youTubeDataApiVideoListVideoType: YouTubeDataApiVideoListVideoType,
         youTubeDataApiVideoListMaxResult: YouTubeDataApiVideoListMaxResult,
         youTubeDataApiVideoListNextPageToken: YouTubeDataApiVideoListNextPageToken,
+        youTubeDataApiVideoListVideoCategoryId: YouTubeDataApiVideoListVideoCategoryId,
     ) {
 
         // クエリパラメータを作成
@@ -47,6 +49,13 @@ export class YouTubeDataApiVideoListEndPointModel {
 
         if (nextPageToken) {
             queryBuilder.add(YouTubeDataApiVideoListNextPageToken.QUERYKEY_NEXTPAGETOKEN, nextPageToken);
+        }
+
+        // 動画カテゴリ
+        const videoCategory = youTubeDataApiVideoListVideoCategoryId.value;
+
+        if (videoCategory) {
+            queryBuilder.add(YouTubeDataApiVideoListVideoCategoryId.QUERYKEY, videoCategory);
         }
 
         const queryParam = queryBuilder.createParam();
