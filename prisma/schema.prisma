@@ -49,6 +49,8 @@ model FrontUserInfoMaster {
 model FavoriteVideoTransaction {
   userId      Int   @map("user_id")
   videoId    String   @db.VarChar(255)  @map("video_id")
+  summary    String?   @db.VarChar(500)  @map("summary")
+  viewStatus    String?   @db.VarChar(2)  @map("view_status")
   createDate  DateTime  @map("create_date")
   updateDate  DateTime  @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")

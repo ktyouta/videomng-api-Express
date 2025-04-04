@@ -13,6 +13,10 @@ import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/
 import { VideoMemoSeqModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
+import { FavoriteVideoCategoryTransactionRepositorys } from "../../internaldata/favoritevideocateorytransaction/repository/FavoriteVideoCategoryTransactionRepositorys";
+import { FavoriteVideoCategoryTransactionRepositoryInterface } from "../../internaldata/favoritevideocateorytransaction/repository/interface/FavoriteVideoCategoryTransactionRepositoryInterface";
+import { FavoriteVideoCategoryTransactionInsertEntity } from "../../internaldata/favoritevideocateorytransaction/entity/FavoriteVideoCategoryTransactionInsertEntity";
+import { FavoriteVideoTransactionUpdateEntity } from "../../internaldata/favoritevideotransaction/entity/FavoriteVideoTransactionUpdateEntity";
 
 
 export class UpdateFavoriteVideoService {
@@ -36,11 +40,20 @@ export class UpdateFavoriteVideoService {
 
 
     /**
-     * お気に入り動画コメントの永続ロジックを取得
+     * お気に入り動画カテゴリの永続ロジックを取得
      * @returns 
      */
-    public getFavoriteVideoMemoRepository(): FavoriteVideoMemoTransactionRepositoryInterface {
-        return (new FavoriteVideoMemoTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
+    public getFavoriteVideoCategoryRepository(): FavoriteVideoCategoryTransactionRepositoryInterface {
+        return (new FavoriteVideoCategoryTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
+    }
+
+
+    /**
+     * お気に入り動画の永続ロジックを取得
+     * @returns 
+     */
+    public getFavoriteVideoRepository(): FavoriteVideoTransactionRepositoryInterface {
+        return (new FavoriteVideoTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
     }
 
 
@@ -51,39 +64,61 @@ export class UpdateFavoriteVideoService {
      * @param frontUserIdModel 
      * @param tx 
      */
-    public async deleteMemo(favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
+    public async deleteCategory(favoriteVideoCategoryRepository: FavoriteVideoCategoryTransactionRepositoryInterface,
         updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
         // 対象ユーザーのコメントを全て削除する
-        await favoriteVideoMemoRepository.delete(
+        await favoriteVideoCategoryRepository.delete(
             frontUserIdModel,
             updateFavoriteVideoRequestModel.videoIdModel,
             tx);
     }
 
     /**
-     * お気に入り動画コメントに動画を追加する
+     * お気に入り動画カテゴリにデータを追加する
      * @param favoriteVideoRepository 
      * @param updateFavoriteVideoRequestModel 
      * @param frontUserIdModel 
      */
-    public async insertMemo(favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
+    public async insertCategory(favoriteVideoCategoryRepository: FavoriteVideoCategoryTransactionRepositoryInterface,
         updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        await Promise.all(updateFavoriteVideoRequestModel.videoMemoModel.map((e, index) => {
+        await Promise.all(updateFavoriteVideoRequestModel.categoryIdModelList.map((e, index) => {
 
-            return favoriteVideoMemoRepository.insert(
-                new FavoriteVideoMemoTransactionInsertEntity(
+            return favoriteVideoCategoryRepository.insert(
+                new FavoriteVideoCategoryTransactionInsertEntity(
                     frontUserIdModel,
                     updateFavoriteVideoRequestModel.videoIdModel,
-                    new VideoMemoSeqModel(index + 1),
                     e
                 ), tx);
         }));
     }
 
+
+    /**
+     * お気に入り動画を更新する
+     * @param favoriteVideoRepository 
+     * @param updateFavoriteVideoRequestModel 
+     * @param frontUserIdModel 
+     */
+    public async updateFavoriteVideo(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
+        updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
+        frontUserIdModel: FrontUserIdModel,
+        tx: Prisma.TransactionClient) {
+
+        await Promise.all(updateFavoriteVideoRequestModel.categoryIdModelList.map((e, index) => {
+
+            return favoriteVideoRepository.update(
+                new FavoriteVideoTransactionUpdateEntity(
+                    frontUserIdModel,
+                    updateFavoriteVideoRequestModel.videoIdModel,
+                    updateFavoriteVideoRequestModel.summaryModel,
+                    updateFavoriteVideoRequestModel.viewStatusModel,
+                ), tx);
+        }));
+    }
 }

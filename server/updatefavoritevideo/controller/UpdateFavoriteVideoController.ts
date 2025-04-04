@@ -74,20 +74,30 @@ export class UpdateFavoriteVideoController extends RouteController {
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
-            // お気に入り動画コメントの永続ロジックを取得
-            const favoriteVideoMemoRepository = this.updateFavoriteVideoService.getFavoriteVideoMemoRepository();
+            // お気に入り動画カテゴリの永続ロジックを取得
+            const favoriteVideoCategoryRepository = this.updateFavoriteVideoService.getFavoriteVideoCategoryRepository();
+            // お気に入り動画の永続ロジックを取得
+            const favoriteVideoRepository = this.updateFavoriteVideoService.getFavoriteVideoRepository();
 
-            // コメントを削除
-            this.updateFavoriteVideoService.deleteMemo(
-                favoriteVideoMemoRepository,
+            // カテゴリを削除
+            await this.updateFavoriteVideoService.deleteCategory(
+                favoriteVideoCategoryRepository,
                 updateFavoriteVideoRequestModel,
                 frontUserIdModel,
                 tx
             );
 
-            // コメントを登録
-            this.updateFavoriteVideoService.insertMemo(
-                favoriteVideoMemoRepository,
+            // カテゴリを登録
+            await this.updateFavoriteVideoService.insertCategory(
+                favoriteVideoCategoryRepository,
+                updateFavoriteVideoRequestModel,
+                frontUserIdModel,
+                tx
+            );
+
+            // お気に入り動画情報を更新
+            await this.updateFavoriteVideoService.updateFavoriteVideo(
+                favoriteVideoRepository,
                 updateFavoriteVideoRequestModel,
                 frontUserIdModel,
                 tx

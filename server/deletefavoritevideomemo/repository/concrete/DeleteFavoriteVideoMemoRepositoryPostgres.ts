@@ -1,4 +1,4 @@
-import { FavoriteVideoMemoTransaction } from "@prisma/client";
+import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
 import { JsonFileData } from "../../../util/service/JsonFileData";
 import { DeleteFavoriteVideoDetailSelectEntity } from "../../entity/DeleteFavoriteVideoDetailSelectEntity";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
@@ -20,19 +20,19 @@ export class DeleteFavoriteVideoMemoRepositoryPostgres implements DeleteFavorite
      * @param frontFavoriteVideoMemoInfoMasterModel 
      * @returns 
      */
-    public async select(deleteFavoriteVideoMemoSelectEntity: DeleteFavoriteVideoDetailSelectEntity): Promise<FavoriteVideoMemoTransaction[]> {
+    public async select(deleteFavoriteVideoMemoSelectEntity: DeleteFavoriteVideoDetailSelectEntity): Promise<FavoriteVideoTransaction[]> {
 
         const userId = deleteFavoriteVideoMemoSelectEntity.frontUserId;
         const videoId = deleteFavoriteVideoMemoSelectEntity.videoId;
 
-        const favoriteVideoMemoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoMemoTransaction[]>`
+        const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoTransaction[]>`
             SELECT * 
             FROM "favorite_video_transaction" 
             WHERE user_id = CAST(${userId} AS INTEGER) AND
             video_id = ${videoId}
         `;
 
-        return favoriteVideoMemoList;
+        return favoriteVideoList;
     }
 
 }

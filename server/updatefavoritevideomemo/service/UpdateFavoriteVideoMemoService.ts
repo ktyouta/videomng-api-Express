@@ -55,9 +55,9 @@ export class UpdateFavoriteVideoMemoService {
             frontUserIdModel, updateFavoriteVideoMemoRequestModel.videoIdModel);
 
         // お気に入り動画を取得
-        const favoriteVideoMemoList = await updateFavoriteVideoMemoRepository.select(updateFavoriteVideoMemoSelectEntity);
+        const favoriteVideoList = await updateFavoriteVideoMemoRepository.select(updateFavoriteVideoMemoSelectEntity);
 
-        return favoriteVideoMemoList.length > 0;
+        return favoriteVideoList.length > 0;
     }
 
 

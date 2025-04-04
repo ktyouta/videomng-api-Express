@@ -1,30 +1,45 @@
 import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { UpdateFavoriteVideoRequestType } from "./UpdateFavoriteVideoRequestType";
+import { SummaryModel } from "../../internaldata/favoritevideotransaction/properties/SummaryModel";
+import { ViewStatusModel } from "../../internaldata/favoritevideotransaction/properties/ViewStatusModel";
+import { CategoryIdModel } from "../../internaldata/favoritevideocateorytransaction/properties/CategoryIdModel";
 
 export class UpdateFavoriteVideoRequestModel {
 
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
-    // コメント
-    private readonly _videoMemoModel: VideoMemoModel[];
+    // 要約
+    private readonly _summaryModel: SummaryModel;
+    // 視聴状況
+    private readonly _viewStatusModel: ViewStatusModel;
+    // カテゴリ
+    private readonly _categoryIdModelList: CategoryIdModel[];
 
     constructor(videoIdModel: VideoIdModel,
-        updateFavoriteVideoRequestType: UpdateFavoriteVideoRequestType) {
-
-        const comments = updateFavoriteVideoRequestType.comments.map((e: string) => {
-            return new VideoMemoModel(e);
-        });
+        updateFavoriteVideoRequest: UpdateFavoriteVideoRequestType) {
 
         this._videoIdModel = videoIdModel;
-        this._videoMemoModel = comments;
+        this._summaryModel = new SummaryModel(updateFavoriteVideoRequest.summary);
+        this._viewStatusModel = new ViewStatusModel(updateFavoriteVideoRequest.viewStatus);
+        this._categoryIdModelList = updateFavoriteVideoRequest.category.map((e: string) => {
+            return new CategoryIdModel(e);
+        });
     }
 
     public get videoIdModel() {
         return this._videoIdModel;
     }
 
-    public get videoMemoModel() {
-        return this._videoMemoModel;
+    public get summaryModel() {
+        return this._summaryModel;
+    }
+
+    public get viewStatusModel() {
+        return this._viewStatusModel;
+    }
+
+    public get categoryIdModelList() {
+        return this._categoryIdModelList;
     }
 }

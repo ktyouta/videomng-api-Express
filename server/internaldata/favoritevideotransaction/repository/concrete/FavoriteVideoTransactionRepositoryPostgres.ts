@@ -52,15 +52,19 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
 
         const userId = favoriteVideoTransactionUpdateEntity.frontUserId;
         const videoId = favoriteVideoTransactionUpdateEntity.videoId;
+        const summary = favoriteVideoTransactionUpdateEntity.summary;
+        const viewStatus = favoriteVideoTransactionUpdateEntity.viewStatus;
 
         const favoriteVideo = await tx.favoriteVideoTransaction.update({
             where: {
                 userId_videoId: {
                     userId,
-                    videoId
+                    videoId,
                 }
             },
             data: {
+                summary,
+                viewStatus,
                 updateDate: new Date(),
             },
         });

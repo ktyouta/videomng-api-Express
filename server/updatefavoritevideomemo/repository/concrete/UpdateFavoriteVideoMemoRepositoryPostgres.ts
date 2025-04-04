@@ -1,4 +1,4 @@
-import { FavoriteVideoMemoTransaction } from "@prisma/client";
+import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
 import { JsonFileData } from "../../../util/service/JsonFileData";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { UpdateFavoriteVideoMemoRepositoryInterface } from "../interface/UpdateFavoriteVideoMemoRepositoryInterface";
@@ -20,19 +20,19 @@ export class UpdateFavoriteVideoMemoRepositoryPostgres implements UpdateFavorite
      * @param frontFavoriteVideoMemoInfoMasterModel 
      * @returns 
      */
-    public async select(updateFavoriteVideoMemoSelectEntity: UpdateFavoriteVideoDetailSelectEntity): Promise<FavoriteVideoMemoTransaction[]> {
+    public async select(updateFavoriteVideoMemoSelectEntity: UpdateFavoriteVideoDetailSelectEntity): Promise<FavoriteVideoTransaction[]> {
 
         const userId = updateFavoriteVideoMemoSelectEntity.frontUserId;
         const videoId = updateFavoriteVideoMemoSelectEntity.videoId;
 
-        const favoriteVideoMemoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoMemoTransaction[]>`
+        const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoTransaction[]>`
             SELECT * 
             FROM "favorite_video_transaction" 
             WHERE user_id = CAST(${userId} AS INTEGER) AND
             video_id = ${videoId}
         `;
 
-        return favoriteVideoMemoList;
+        return favoriteVideoList;
     }
 
 }

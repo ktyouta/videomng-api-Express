@@ -50,13 +50,13 @@ export class CreateFavoriteVideoMemoService {
     ) {
 
         // お気に入り動画取得Entity
-        const createFavoriteVideoMemoSelectEntity = new CreateFavoriteVideoDetailSelectEntity(
+        const createFavoriteVideoDetailSelectEntity = new CreateFavoriteVideoDetailSelectEntity(
             frontUserIdModel, createFavoriteVideoMemoRequestModel.videoIdModel);
 
         // お気に入り動画を取得
-        const favoriteVideoMemoList = await createFavoriteVideoMemoRepository.select(createFavoriteVideoMemoSelectEntity);
+        const favoriteVideoList = await createFavoriteVideoMemoRepository.select(createFavoriteVideoDetailSelectEntity);
 
-        return favoriteVideoMemoList.length > 0;
+        return favoriteVideoList.length > 0;
     }
 
 

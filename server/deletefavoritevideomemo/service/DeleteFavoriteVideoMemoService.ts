@@ -54,9 +54,9 @@ export class DeleteFavoriteVideoMemoService {
             frontUserIdModel, deleteFavoriteVideoMemoRequestModel.videoIdModel);
 
         // お気に入り動画を取得
-        const favoriteVideoMemoList = await deleteFavoriteVideoMemoRepository.select(deleteFavoriteVideoMemoSelectEntity);
+        const favoriteVideoList = await deleteFavoriteVideoMemoRepository.select(deleteFavoriteVideoMemoSelectEntity);
 
-        return favoriteVideoMemoList.length > 0;
+        return favoriteVideoList.length > 0;
     }
 
 
