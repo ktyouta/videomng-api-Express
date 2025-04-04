@@ -2,7 +2,7 @@ import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtube
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 
 

@@ -1,5 +1,5 @@
 import { CommentIdModel } from "../../internaldata/common/properties/CommentIdModel";
-import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { CreateFavoriteCommentRequestType } from "./CreateFavoriteCommentRequestType";
 
 export class CreateFavoriteCommentRequestModel {

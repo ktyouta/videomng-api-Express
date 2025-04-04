@@ -1,4 +1,4 @@
-import { FrontUserIdModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserIdModel";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import ENV from '../../env.json';
 import { FLG, RepositoryType } from "../../util/const/CommonConst";
@@ -16,7 +16,7 @@ import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoList
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { GetFavoriteVideoListRepositoryInterface } from "../repository/interface/GetFavoriteVideoListRepositoryInterface";
 import { FavoriteVideoTransaction } from "@prisma/client";
-import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';

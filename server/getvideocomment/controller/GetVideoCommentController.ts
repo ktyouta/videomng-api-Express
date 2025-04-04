@@ -8,7 +8,7 @@ import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetVideoCommentConst';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { GetVideoCommentService } from '../service/GetVideoCommentService';
 import { GetVideoCommentResponseModel } from '../model/GetVideoCommentResponseModel';
 

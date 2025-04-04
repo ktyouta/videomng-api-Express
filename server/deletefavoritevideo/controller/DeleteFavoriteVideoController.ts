@@ -5,13 +5,13 @@ import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
 import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { DeleteFavoriteVideoService } from '../service/DeleteFavoriteVideoService';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 
 
 export class DeleteFavoriteVideoController extends RouteController {

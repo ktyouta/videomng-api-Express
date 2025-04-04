@@ -1,4 +1,4 @@
-import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';

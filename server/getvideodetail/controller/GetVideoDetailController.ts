@@ -10,7 +10,7 @@ import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSetti
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { GetVideoDetailService } from '../service/GetVideoDetailService';
 import { GetVideoDetailResponseModel } from '../model/GetVideoDetailResponseModel';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 
 
 export class GetVideoDetailController extends RouteController {

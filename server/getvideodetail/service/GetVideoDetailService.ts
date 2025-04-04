@@ -1,6 +1,6 @@
 import { YouTubeDataApiVideoDetailEndPointModel } from '../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel';
 import { YouTubeDataApiVideoDetailModel } from '../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 
 

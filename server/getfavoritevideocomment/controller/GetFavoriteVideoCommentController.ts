@@ -8,10 +8,10 @@ import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetFavoriteVideoCommentConst';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { GetFavoriteVideoCommentService } from '../service/GetFavoriteVideoCommentService';
 import { GetFavoriteVideoCommentResponseModel } from '../model/GetFavoriteVideoCommentResponseModel';
-import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FilterdBlockCommentModel } from '../model/FilterdBlockCommentModel';
 import { FavoriteVideoCommentResponseDataModel } from '../model/FavoriteVideoCommentResponseDataModel2';
 

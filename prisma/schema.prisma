@@ -104,3 +104,16 @@ model FavoriteCommentTransaction {
   @@id([userId, commentId])
   @@map("favorite_commnet_transaction")
 }
+
+
+// お気に入り動画カテゴリ
+model FavoriteVideoCategoryTransaction {
+  userId      Int   @map("user_id")
+  videoId    String   @db.VarChar(255)  @map("video_id")
+  categoryId    String   @db.VarChar(2)  @map("category_id")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@id([userId, videoId, categoryId])
+  @@map("favorite_video_category_transaction")
+}

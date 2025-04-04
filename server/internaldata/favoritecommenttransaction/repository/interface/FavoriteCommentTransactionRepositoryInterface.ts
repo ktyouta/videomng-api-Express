@@ -1,7 +1,7 @@
 import { FavoriteCommentTransactionUpdateEntity } from "../../entity/FavoriteCommentTransactionUpdateEntity";
 import { FavoriteCommentTransactionInsertEntity } from "../../entity/FavoriteCommentTransactionInsertEntity";
 import { FavoriteCommentTransaction, Prisma } from "@prisma/client";
-import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { CommentIdModel } from "../../../common/properties/CommentIdModel";
 
 

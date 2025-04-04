@@ -4,8 +4,8 @@ import { PrismaClientInstance } from "../../../../util/service/PrismaClientInsta
 import { FavoriteVideoTransactionInsertEntity } from "../../entity/FavoriteVideoTransactionInsertEntity";
 import { FavoriteVideoTransactionUpdateEntity } from "../../entity/FavoriteVideoTransactionUpdateEntity";
 import { FavoriteVideoTransactionRepositoryInterface } from "../interface/FavoriteVideoTransactionRepositoryInterface";
-import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
-import { VideoIdModel } from "../../properties/VideoIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../../common/properties/VideoIdModel";
 
 
 

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { FrontUserIdModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserIdModel";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { RepositoryType } from "../../util/const/CommonConst";
 import { UpdateFavoriteVideoMemoRequestModel } from "../model/UpdateFavoriteVideoMemoRequestModel";

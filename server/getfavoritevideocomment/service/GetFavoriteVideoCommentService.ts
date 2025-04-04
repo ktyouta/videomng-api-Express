@@ -4,8 +4,8 @@ import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtube
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
-import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { JsonWebTokenUserModel } from '../../jsonwebtoken/model/JsonWebTokenUserModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { Request } from 'express';

@@ -3,7 +3,7 @@ import { FLG } from "../../../../util/const/CommonConst";
 import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
 import { FavoriteCommentTransactionInsertEntity } from "../../entity/FavoriteCommentTransactionInsertEntity";
 import { FavoriteCommentTransactionUpdateEntity } from "../../entity/FavoriteCommentTransactionUpdateEntity";
-import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { CommentIdModel } from "../../../common/properties/CommentIdModel";
 import { FavoriteCommentTransactionRepositoryInterface } from "../interface/FavoriteCommentTransactionRepositoryInterface";
 

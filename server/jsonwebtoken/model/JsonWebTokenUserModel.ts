@@ -1,6 +1,6 @@
 import { CookieModel } from '../../cookie/model/CookieModel';
 import ENV from '../../env.json';
-import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { envConfig } from '../../util/const/EnvConfig';

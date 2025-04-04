@@ -13,7 +13,7 @@ import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/vi
 import { SearchCommentByKeywordService } from '../service/SearchCommentByKeywordService';
 import { SearchCommentByKeywordQueryParameterSchema } from '../model/SearchCommentByKeywordQueryParameterSchema';
 import { SearchCommentByKeywordResponseModel } from '../model/SearchCommentByKeywordResponseModel';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';
 
 

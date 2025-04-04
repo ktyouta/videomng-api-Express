@@ -1,5 +1,5 @@
-import { FrontUserIdModel } from "../../frontuserinfomaster/properties/FrontUserIdModel";
-import { VideoIdModel } from "../properties/VideoIdModel";
+import { FrontUserIdModel } from "../../common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../common/properties/VideoIdModel";
 
 
 export class FavoriteVideoTransactionInsertEntity {

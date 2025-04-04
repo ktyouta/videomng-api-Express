@@ -1,5 +1,5 @@
 import { FrontUserInfoMaster, Prisma, SeqMaster } from "@prisma/client";
-import { FrontUserIdModel } from "../../properties/FrontUserIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterUpdateEntity } from "../../entity/FrontUserInfoMasterUpdateEntity";
 import { FrontUserInfoMasterInsertEntity } from "../../entity/FrontUserInfoMasterInsertEntity";
 

@@ -1,5 +1,5 @@
-import { VideoIdModel } from "../../favoritevideotransaction/properties/VideoIdModel";
-import { FrontUserIdModel } from "../../frontuserinfomaster/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../common/properties/VideoIdModel";
+import { FrontUserIdModel } from "../../common/properties/FrontUserIdModel";
 import { VideoMemoModel } from "../properties/VideoMemoModel";
 import { VideoMemoSeqModel } from "../properties/VideoMemoSeqModel";
 

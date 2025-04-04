@@ -1,4 +1,4 @@
-import { VideoIdModel } from "../../../../internaldata/favoritevideotransaction/properties/VideoIdModel";
+import { VideoIdModel } from "../../../../internaldata/common/properties/VideoIdModel";
 
 export class YouTubeDataApiCommentThreadVideoId {
 

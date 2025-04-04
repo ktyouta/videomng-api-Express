@@ -11,7 +11,7 @@ import { FrontUserLoginRequestType } from '../model/FrontUserLoginRequestType';
 import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { FrontUserSaltValueModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel';
 import { FrontUserLoginCreateResponseModel } from '../model/FrontUserLoginResponseModel';

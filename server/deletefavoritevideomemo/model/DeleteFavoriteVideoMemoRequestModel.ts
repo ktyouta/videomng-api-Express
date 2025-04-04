@@ -1,6 +1,6 @@
 import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
 import { VideoMemoSeqModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel";
-import { VideoIdModel } from "../../internaldata/favoritevideotransaction/properties/VideoIdModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { DeleteFavoriteVideoMemoRequestType } from "../Type/DeleteFavoriteVideoMemoRequestType";
 
 export class DeleteFavoriteVideoMemoRequestModel {

@@ -1,4 +1,4 @@
-import { VideoIdModel } from "../../../../internaldata/favoritevideotransaction/properties/VideoIdModel";
+import { VideoIdModel } from "../../../../internaldata/common/properties/VideoIdModel";
 import { QueryBuilder } from "../../../../util/service/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";

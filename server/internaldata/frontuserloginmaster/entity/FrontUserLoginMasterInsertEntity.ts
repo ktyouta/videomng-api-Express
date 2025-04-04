@@ -1,4 +1,4 @@
-import { FrontUserIdModel } from "../../frontuserinfomaster/properties/FrontUserIdModel";
+import { FrontUserIdModel } from "../../common/properties/FrontUserIdModel";
 import { FrontUserPasswordModel } from "../properties/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "../properties/FrontUserSaltValueModel";
 

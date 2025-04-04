@@ -6,7 +6,7 @@ import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
 import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserIdModel";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { GetFavoriteVideoListResponseModel } from "../model/GetFavoriteVideoListResponseModel";
 import { RouteController } from "../../router/controller/RouteController";

@@ -1,8 +1,8 @@
 import { FavoriteVideoMemoTransaction, Prisma } from "@prisma/client";
 import { FavoriteVideoMemoTransactionInsertEntity } from "../../entity/FavoriteVideoMemoTransactionInsertEntity";
 import { FavoriteVideoMemoTransactionUpdateEntity } from "../../entity/FavoriteVideoMemoTransactionUpdateEntity";
-import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
-import { VideoIdModel } from "../../../favoritevideotransaction/properties/VideoIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../../common/properties/VideoIdModel";
 import { FavoriteVideoMemoTransactionSoftDeleteEntity } from "../../entity/FavoriteVideoMemoTransactionSoftDeleteEntity";
 
 

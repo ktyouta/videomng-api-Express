@@ -1,11 +1,11 @@
 import { Prisma } from "@prisma/client";
 import { FLG } from "../../../../util/const/CommonConst";
 import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
-import { FrontUserIdModel } from "../../../frontuserinfomaster/properties/FrontUserIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { FavoriteVideoMemoTransactionRepositoryInterface } from "../interface/FavoriteVideoMemoTransactionRepositoryInterface";
 import { FavoriteVideoMemoTransactionInsertEntity } from "../../entity/FavoriteVideoMemoTransactionInsertEntity";
 import { FavoriteVideoMemoTransactionUpdateEntity } from "../../entity/FavoriteVideoMemoTransactionUpdateEntity";
-import { VideoIdModel } from "../../../favoritevideotransaction/properties/VideoIdModel";
+import { VideoIdModel } from "../../../common/properties/VideoIdModel";
 import { FavoriteVideoMemoTransactionSoftDeleteEntity } from "../../entity/FavoriteVideoMemoTransactionSoftDeleteEntity";
 
 

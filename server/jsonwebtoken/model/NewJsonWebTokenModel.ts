@@ -1,6 +1,6 @@
 import { CookieOptions } from 'express';
 import ENV from '../../env.json';
-import { FrontUserIdModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserIdModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { envConfig } from '../../util/const/EnvConfig';
 

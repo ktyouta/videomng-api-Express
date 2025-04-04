@@ -8,7 +8,7 @@ import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/vide
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListMaxResult } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListMaxResult';
 import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
-import { VideoIdModel } from '../../internaldata/favoritevideotransaction/properties/VideoIdModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';
 import { SearchCommentByKeywordResponseCommentType } from '../type/SearchCommentByKeywordResponseCommentType';
