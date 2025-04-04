@@ -1,7 +1,7 @@
 import { FrontUserIdModel } from "../../common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../common/properties/VideoIdModel";
 import { SummaryModel } from "../properties/SummaryModel";
-import { ViewStatusModel } from "../properties/ViewStatusModel";
+import { ViewStatusModel } from "../../common/properties/ViewStatusModel";
 
 
 export class FavoriteVideoTransactionUpdateEntity {

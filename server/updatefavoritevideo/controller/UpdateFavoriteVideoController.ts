@@ -64,8 +64,7 @@ export class UpdateFavoriteVideoController extends RouteController {
         }
 
         // リクエストボディの型変換
-        const updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel =
-            new UpdateFavoriteVideoRequestModel(videoId, requestBody);
+        const updateFavoriteVideoRequestModel = await UpdateFavoriteVideoRequestModel.set(videoId, requestBody);
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.updateFavoriteVideoService.checkJwtVerify(req);

@@ -119,3 +119,13 @@ model FavoriteVideoCategoryTransaction {
   @@id([userId, videoId, categoryId])
   @@map("favorite_video_category_transaction")
 }
+
+
+// 視聴状況マスタ
+model ViewStatusMaster { 
+  id         String @id @db.VarChar(2)
+  label      String   @db.VarChar(255)
+  createDate  DateTime @map("create_date")
+  updateDate  DateTime @map("update_date")
+  @@map("view_status_master") 
+}
