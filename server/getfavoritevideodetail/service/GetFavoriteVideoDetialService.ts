@@ -12,7 +12,7 @@ import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserlog
 import { FrontUserInfoMasterRepositorys } from "../../internaldata/frontuserinfomaster/repository/FrontUserInfoMasterRepositorys";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 import { GetFavoriteVideoDetialRepositorys } from "../repository/GetFavoriteVideoDetialRepositorys";
-import { GetFavoriteVideoDetialSelectEntity } from "../entity/GetFavoriteVideoDetialSelectEntity";
+import { GetFavoriteVideoDetialMemoSelectEntity } from "../entity/GetFavoriteVideoDetialMemoSelectEntity";
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { GetFavoriteVideoDetialRepositoryInterface } from "../repository/interface/GetFavoriteVideoDetialRepositoryInterface";
 import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
@@ -21,6 +21,8 @@ import { Request } from 'express';
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
 import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
+import { GetFavoriteVideoDetialSelectEntity } from "../entity/GetFavoriteVideoDetialSelectEntity";
+import { GetFavoriteVideoDetialCategorySelectEntity } from "../entity/GetFavoriteVideoDetialCategorySelectEntity";
 
 
 export class GetFavoriteVideoDetialService {
@@ -69,20 +71,37 @@ export class GetFavoriteVideoDetialService {
 
 
     /**
-     * お気に入り動画コメント取得
+     * お気に入り動画メモ取得
      * @param userNameModel 
      */
     public async getFavoriteVideoMemo(getGetFavoriteVideoDetialRepository: GetFavoriteVideoDetialRepositoryInterface,
         frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel) {
 
-        // お気に入り動画取得用Entity
-        const getFavoriteVideoDetialSelectEntity = new GetFavoriteVideoDetialSelectEntity(frontUserIdModel, videoIdModel);
+        // お気に入り動画メモ取得用Entity
+        const getFavoriteVideoDetialSelectEntity = new GetFavoriteVideoDetialMemoSelectEntity(frontUserIdModel, videoIdModel);
 
-        // お気に入り動画取得
+        // お気に入り動画メモ取得
         const favoriteVideoMemo = await getGetFavoriteVideoDetialRepository.selectVideoMemo(getFavoriteVideoDetialSelectEntity);
 
         return favoriteVideoMemo;
+    }
+
+    /**
+     * お気に入り動画カテゴリ取得
+     * @param userNameModel 
+     */
+    public async getFavoriteVideoCategory(getGetFavoriteVideoDetialRepository: GetFavoriteVideoDetialRepositoryInterface,
+        frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel) {
+
+        // お気に入り動画カテゴリ取得用Entity
+        const getFavoriteVideoDetialCategorySelectEntity = new GetFavoriteVideoDetialCategorySelectEntity(frontUserIdModel, videoIdModel);
+
+        // お気に入り動画カテゴリ取得
+        const favoriteVideoCategory = await getGetFavoriteVideoDetialRepository.selectVideoCategory(getFavoriteVideoDetialCategorySelectEntity);
+
+        return favoriteVideoCategory;
     }
 
     /**

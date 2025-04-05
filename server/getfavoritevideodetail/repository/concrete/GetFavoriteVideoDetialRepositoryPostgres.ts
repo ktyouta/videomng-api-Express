@@ -1,7 +1,10 @@
-import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteVideoCategoryTransaction, FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
 import { GetFavoriteVideoDetialRepositoryInterface } from "../interface/GetFavoriteVideoDetialRepositoryInterface";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { GetFavoriteVideoDetialMemoSelectEntity } from "../../entity/GetFavoriteVideoDetialMemoSelectEntity";
 import { GetFavoriteVideoDetialSelectEntity } from "../../entity/GetFavoriteVideoDetialSelectEntity";
+import { GetFavoriteVideoDetialCategorySelectEntity } from "../../entity/GetFavoriteVideoDetialCategorySelectEntity";
+import { FavoriteVideoDetailCategoryType } from "../../type/FavoriteVideoDetailCategoryType";
 
 
 
@@ -39,10 +42,10 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
      * お気に入り動画コメント取得
      * @returns 
      */
-    async selectVideoMemo(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialSelectEntity): Promise<FavoriteVideoMemoTransaction[]> {
+    async selectVideoMemo(getFavoriteVideoDetialMemoSelectEntity: GetFavoriteVideoDetialMemoSelectEntity): Promise<FavoriteVideoMemoTransaction[]> {
 
-        const frontUserId = getFavoriteVideoDetialSelectEntity.frontUserId;
-        const videoId = getFavoriteVideoDetialSelectEntity.videoId;
+        const frontUserId = getFavoriteVideoDetialMemoSelectEntity.frontUserId;
+        const videoId = getFavoriteVideoDetialMemoSelectEntity.videoId;
 
         const favoriteVideoMemo = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoMemoTransaction[]>`
             SELECT 
@@ -59,5 +62,33 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
             `;
 
         return favoriteVideoMemo;
+    }
+
+    /**
+     * お気に入り動画カテゴリ取得
+     * @returns 
+     */
+    async selectVideoCategory(getFavoriteVideoDetialCategorySelectEntity: GetFavoriteVideoDetialCategorySelectEntity): Promise<FavoriteVideoDetailCategoryType[]> {
+
+        const frontUserId = getFavoriteVideoDetialCategorySelectEntity.frontUserId;
+        const videoId = getFavoriteVideoDetialCategorySelectEntity.videoId;
+
+        const favoriteVideoCategory = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoDetailCategoryType[]>`
+            SELECT 
+                a.user_id as "userId",
+                a.video_id as "videoId",
+                a.category_id as "categoryId",
+                a.create_date as "createDate",
+                a.update_date as "updateDate",
+                b.label as "categoryName"
+            FROM "favorite_video_category_transaction" a
+            LEFT JOIN "view_status_master" b
+            ON a.category_id = b.id
+            WHERE a.user_id = ${frontUserId} AND
+            a.video_id = ${videoId} AND
+            a.delete_flg = '0'
+            `;
+
+        return favoriteVideoCategory;
     }
 }

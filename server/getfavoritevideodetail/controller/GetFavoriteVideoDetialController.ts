@@ -64,12 +64,6 @@ export class GetFavoriteVideoDetialController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `お気に入り動画が登録されていません。`)
         }
 
-        // お気に入り動画コメントを取得する
-        const favoriteVideoMemoList = await this.getFavoriteVideoDetialService.getFavoriteVideoMemo(
-            getGetFavoriteVideoDetialRepository,
-            frontUserIdModel,
-            videoIdModel);
-
         // YouTube Data Apiから動画詳細を取得する
         const youTubeVideoDetailApi = await this.getFavoriteVideoDetialService.callYouTubeDataDetailApi(videoIdModel);
 
@@ -80,11 +74,24 @@ export class GetFavoriteVideoDetialController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `YouTube上から動画が削除された可能性があります。`)
         }
 
+        // お気に入り動画メモを取得する
+        const favoriteVideoMemoList = await this.getFavoriteVideoDetialService.getFavoriteVideoMemo(
+            getGetFavoriteVideoDetialRepository,
+            frontUserIdModel,
+            videoIdModel);
+
+        // お気に入り動画カテゴリを取得する
+        const favoriteVideoCategoryList = await this.getFavoriteVideoDetialService.getFavoriteVideoCategory(
+            getGetFavoriteVideoDetialRepository,
+            frontUserIdModel,
+            videoIdModel);
+
         // 取得したデータをマージ
         const favoriteVideoDetailMergedModel = new FavoriteVideoDetailMergedModel(
             favoriteVideoList,
             favoriteVideoMemoList,
             youtubeVideoItemList,
+            favoriteVideoCategoryList,
         );
 
         // レスポンスを作成

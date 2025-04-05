@@ -1,5 +1,8 @@
-import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteVideoCategoryTransaction, FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { GetFavoriteVideoDetialMemoSelectEntity } from "../../entity/GetFavoriteVideoDetialMemoSelectEntity";
 import { GetFavoriteVideoDetialSelectEntity } from "../../entity/GetFavoriteVideoDetialSelectEntity";
+import { GetFavoriteVideoDetialCategorySelectEntity } from "../../entity/GetFavoriteVideoDetialCategorySelectEntity";
+import { FavoriteVideoDetailCategoryType } from "../../type/FavoriteVideoDetailCategoryType";
 
 
 /**
@@ -16,6 +19,12 @@ export interface GetFavoriteVideoDetialRepositoryInterface {
      * お気に入り動画コメント取得
      * @param getFavoriteVideoDetialSelectEntity 
      */
-    selectVideoMemo(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialSelectEntity): Promise<FavoriteVideoMemoTransaction[]>;
+    selectVideoMemo(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialMemoSelectEntity): Promise<FavoriteVideoMemoTransaction[]>;
+
+    /**
+     * お気に入り動画カテゴリ取得
+     * @param getFavoriteVideoDetialCategorySelectEntity 
+     */
+    selectVideoCategory(getFavoriteVideoDetialCategorySelectEntity: GetFavoriteVideoDetialCategorySelectEntity): Promise<FavoriteVideoDetailCategoryType[]>;
 
 }
