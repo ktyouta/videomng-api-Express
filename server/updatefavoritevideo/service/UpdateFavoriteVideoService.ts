@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { FavoriteVideoCategoryTransaction, Prisma } from "@prisma/client";
 import { FavoriteVideoTransactionInsertEntity } from "../../internaldata/favoritevideotransaction/entity/FavoriteVideoTransactionInsertEntity";
 import { FavoriteVideoTransactionRepositorys } from "../../internaldata/favoritevideotransaction/repository/FavoriteVideoTransactionRepositorys";
 import { FavoriteVideoTransactionRepositoryInterface } from "../../internaldata/favoritevideotransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
@@ -17,6 +17,9 @@ import { FavoriteVideoCategoryTransactionRepositorys } from "../../internaldata/
 import { FavoriteVideoCategoryTransactionRepositoryInterface } from "../../internaldata/favoritevideocateorytransaction/repository/interface/FavoriteVideoCategoryTransactionRepositoryInterface";
 import { FavoriteVideoCategoryTransactionInsertEntity } from "../../internaldata/favoritevideocateorytransaction/entity/FavoriteVideoCategoryTransactionInsertEntity";
 import { FavoriteVideoTransactionUpdateEntity } from "../../internaldata/favoritevideotransaction/entity/FavoriteVideoTransactionUpdateEntity";
+import { UpdateFavoriteVideoRepositorys } from "../repository/UpdateFavoriteVideoRepositorys";
+import { UpdateFavoriteVideoRepositoryInterface } from "../repository/interface/UpdateFavoriteVideoRepositoryInterface";
+import { UpdateFavoriteVideoSelectEntity } from "../entity/UpdateFavoriteVideoSelectEntity";
 
 
 export class UpdateFavoriteVideoService {
@@ -36,6 +39,15 @@ export class UpdateFavoriteVideoService {
         } catch (err) {
             throw Error(`お気に入り動画更新時の認証エラー ERROR:${err}`);
         }
+    }
+
+
+    /**
+     * お気に入り動画更新の永続ロジックを取得
+     * @returns 
+     */
+    public getUpdateFavoriteVideoRepository(): UpdateFavoriteVideoRepositoryInterface {
+        return (new UpdateFavoriteVideoRepositorys()).get(RepositoryType.POSTGRESQL);
     }
 
 
@@ -87,7 +99,7 @@ export class UpdateFavoriteVideoService {
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        await Promise.all(updateFavoriteVideoRequestModel.categoryIdModelList.map((e, index) => {
+        const categoryList: FavoriteVideoCategoryTransaction[] = await Promise.all(updateFavoriteVideoRequestModel.categoryIdModelList.map((e) => {
 
             return favoriteVideoCategoryRepository.insert(
                 new FavoriteVideoCategoryTransactionInsertEntity(
@@ -96,6 +108,8 @@ export class UpdateFavoriteVideoService {
                     e
                 ), tx);
         }));
+
+        return categoryList;
     }
 
 
@@ -110,15 +124,39 @@ export class UpdateFavoriteVideoService {
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        await Promise.all(updateFavoriteVideoRequestModel.categoryIdModelList.map((e, index) => {
+        const favoriteVideo = favoriteVideoRepository.update(
+            new FavoriteVideoTransactionUpdateEntity(
+                frontUserIdModel,
+                updateFavoriteVideoRequestModel.videoIdModel,
+                updateFavoriteVideoRequestModel.summaryModel,
+                updateFavoriteVideoRequestModel.viewStatusModel,
+            ), tx);
 
-            return favoriteVideoRepository.update(
-                new FavoriteVideoTransactionUpdateEntity(
-                    frontUserIdModel,
-                    updateFavoriteVideoRequestModel.videoIdModel,
-                    updateFavoriteVideoRequestModel.summaryModel,
-                    updateFavoriteVideoRequestModel.viewStatusModel,
-                ), tx);
-        }));
+        return favoriteVideo;
+    }
+
+
+    /**
+     * お気に入り動画の存在チェック
+     * @param getUpdateFavoriteVideoRepository 
+     * @param updateFavoriteVideoRequestModel 
+     * @param frontUserIdModel 
+     * @returns 
+     */
+    public async checkExistFavoriteVideo(getUpdateFavoriteVideoRepository: UpdateFavoriteVideoRepositoryInterface,
+        updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
+        frontUserIdModel: FrontUserIdModel
+    ) {
+
+        // お気に入り動画取得Entity
+        const updateFavoriteVideoSelectEntity = new UpdateFavoriteVideoSelectEntity(
+            frontUserIdModel,
+            updateFavoriteVideoRequestModel.videoIdModel
+        );
+
+        // お気に入り動画を取得
+        const favoriteVideoList = await getUpdateFavoriteVideoRepository.select(updateFavoriteVideoSelectEntity);
+
+        return favoriteVideoList.length > 0;
     }
 }
