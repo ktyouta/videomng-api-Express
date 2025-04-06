@@ -1,0 +1,18 @@
+サーバーを起動して以下のリクエストを送信する
+
+
+【エンドポイント】
+http://localhost:3001/frontuserinfo/v1/volumes
+
+
+【httpメソッド】
+POST
+
+
+【リクエストボディ】
+{
+      "userName": "testuser",
+      "password":"f",
+      "userBirthday": "20250101"
+}
+※同名のuserNameが存在する場合は登録できないため注意

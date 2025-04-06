@@ -20,6 +20,7 @@ import { GetVideoCategoryController } from "../../getvideocategory/controller/Ge
 import { GetVideoCommentController } from "../../getvideocomment/controller/GetVideoCommentController";
 import { GetVideoDetailController } from "../../getvideodetail/controller/GetVideoDetailController";
 import { GetVideoListController } from "../../getvideolist/controller/GetVideoListController";
+import { GetViewStatusListController } from "../../getviewstatuslist/controller/GetViewStatusListController";
 import { SearchCommentByKeywordController } from "../../searchcommentbykeyword/controller/SearchCommentByKeywordController";
 import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
@@ -79,4 +80,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new DeleteFavoriteCommentController(),
     // 動画カテゴリ取得
     new GetVideoCategoryController(),
+    // 視聴状況リスト取得
+    new GetViewStatusListController(),
 ]
