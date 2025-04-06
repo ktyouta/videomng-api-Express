@@ -81,7 +81,8 @@ export class CreateFavoriteCommentService {
 
         const favoriteCommentInsertEntity = new FavoriteCommentTransactionInsertEntity(
             frontUserIdModel,
-            createFavoriteCommentRequestModel.commentIdModel);
+            createFavoriteCommentRequestModel.commentIdModel,
+            createFavoriteCommentRequestModel.videoIdModel);
 
         const favoriteComment = await favoriteCommentRepository.insert(favoriteCommentInsertEntity, tx);
 

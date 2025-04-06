@@ -88,6 +88,7 @@ model SeqMaster {
 model BlockCommentTransaction {
   userId      Int   @map("user_id")
   commentId    String   @db.VarChar(255)  @map("comment_id")
+  videoId    String   @db.VarChar(255)  @map("video_id")
   createDate  DateTime  @map("create_date")
   updateDate  DateTime  @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")
@@ -100,6 +101,7 @@ model BlockCommentTransaction {
 model FavoriteCommentTransaction {
   userId      Int   @map("user_id")
   commentId    String   @db.VarChar(255)  @map("comment_id")
+  videoId    String   @db.VarChar(255)  @map("video_id")
   createDate  DateTime  @map("create_date")
   updateDate  DateTime  @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")

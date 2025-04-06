@@ -81,7 +81,8 @@ export class CreateBlockCommentService {
 
         const blockCommentInsertEntity = new BlockCommentTransactionInsertEntity(
             frontUserIdModel,
-            createBlockCommentRequestModel.commentIdModel);
+            createBlockCommentRequestModel.commentIdModel,
+            createBlockCommentRequestModel.videoIdModel);
 
         const blockCommnet = await blockCommentRepository.insert(blockCommentInsertEntity, tx);
 

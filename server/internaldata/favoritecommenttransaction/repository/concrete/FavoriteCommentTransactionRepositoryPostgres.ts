@@ -28,11 +28,13 @@ export class FavoriteCommentTransactionRepositoryPostgres implements FavoriteCom
 
         const userId = favoriteCommentTransactionInsertEntity.frontUserId;
         const commentId = favoriteCommentTransactionInsertEntity.commentId;
+        const videoId = favoriteCommentTransactionInsertEntity.videoId;
 
         const favoriteComment = await tx.favoriteCommentTransaction.create({
             data: {
                 userId,
                 commentId,
+                videoId,
                 createDate: new Date(),
                 updateDate: new Date(),
                 deleteFlg: FLG.OFF,

@@ -28,11 +28,13 @@ export class BlockCommentTransactionRepositoryPostgres implements BlockCommentTr
 
         const userId = blockCommentTransactionInsertEntity.frontUserId;
         const commentId = blockCommentTransactionInsertEntity.commentId;
+        const videoId = blockCommentTransactionInsertEntity.videoId;
 
         const blockComment = await tx.blockCommentTransaction.create({
             data: {
                 userId,
                 commentId,
+                videoId,
                 createDate: new Date(),
                 updateDate: new Date(),
                 deleteFlg: FLG.OFF,

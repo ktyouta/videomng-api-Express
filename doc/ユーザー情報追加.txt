@@ -16,3 +16,6 @@ POST
       "userBirthday": "20250101"
 }
 ※同名のuserNameが存在する場合は登録できないため注意
+
+
+ログイン時は、front_user_info_masterのuser_idと登録したパスワードでログインする
