@@ -13,6 +13,7 @@ import { Prisma } from "@prisma/client";
 import { PrismaTransaction } from "../../util/service/PrismaTransaction";
 import { GetBlockCommentListService } from "../service/GetBlockCommentListService";
 import { GetBlockCommentListResponseModel } from "../model/GetBlockCommentListResponseModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 
 
 export class GetBlockCommentListController extends RouteController {
@@ -24,7 +25,7 @@ export class GetBlockCommentListController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.BLOCK_COMMENT
+            ApiEndopoint.BLOCK_COMMENT_ID
         );
     }
 
@@ -36,12 +37,20 @@ export class GetBlockCommentListController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
+        const id = req.params.id;
+
+        if (!id) {
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.BLOCK_COMMENT_ID} | method:${HttpMethodType.GET}`);
+        }
+
+        const videoIdModel = new VideoIdModel(id);
+
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.getBlockCommentListService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // ブロックコメントリストを取得
-        const blockCommentList = await this.getBlockCommentListService.getBlockCommentList(frontUserIdModel);
+        const blockCommentList = await this.getBlockCommentListService.getBlockCommentList(frontUserIdModel, videoIdModel);
 
         // ユーザーのブロックコメントが存在しない
         if (blockCommentList.length === 0) {

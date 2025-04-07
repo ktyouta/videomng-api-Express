@@ -20,6 +20,7 @@ export class GetBlockCommentListRepositoryPostgres implements GetBlockCommentLis
     async select(getBlockCommentListSelectEntity: GetBlockCommentListSelectEntity): Promise<BlockCommentTransaction[]> {
 
         const frontUserId = getBlockCommentListSelectEntity.frontUserId;
+        const videoId = getBlockCommentListSelectEntity.videoId;
 
         const favoriteVideoBlockComment = await PrismaClientInstance.getInstance().$queryRaw<BlockCommentTransaction[]>`
             SELECT
@@ -27,6 +28,7 @@ export class GetBlockCommentListRepositoryPostgres implements GetBlockCommentLis
                 comment_id as "commentId" 
             FROM "block_commnet_transaction" 
             WHERE "user_id" = ${frontUserId} AND
+            "video_id" = ${videoId} AND
             "delete_flg" = '0'
             `;
 

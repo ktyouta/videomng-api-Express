@@ -58,13 +58,14 @@ export class GetFavoriteCommentListService {
      * お気に入りコメント取得
      * @param userNameModel 
      */
-    public async getFavoriteCommentList(frontUserIdModel: FrontUserIdModel): Promise<FavoriteCommentTransaction[]> {
+    public async getFavoriteCommentList(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,): Promise<FavoriteCommentTransaction[]> {
 
         // 永続ロジック用オブジェクトを取得
         const getGetFavoriteCommentListRepository = this.getGetFavoriteCommentListRepository();
 
         // お気に入りコメント取得用Entity
-        const getFavoriteCommentListSelectEntity = new GetFavoriteCommentListSelectEntity(frontUserIdModel);
+        const getFavoriteCommentListSelectEntity = new GetFavoriteCommentListSelectEntity(frontUserIdModel, videoIdModel);
 
         // お気に入りコメント取得
         const favoriteCommentList = await getGetFavoriteCommentListRepository.select(getFavoriteCommentListSelectEntity);

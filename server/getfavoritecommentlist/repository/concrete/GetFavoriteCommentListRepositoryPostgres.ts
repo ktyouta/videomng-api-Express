@@ -20,6 +20,7 @@ export class GetFavoriteCommentListRepositoryPostgres implements GetFavoriteComm
     async select(getFavoriteCommentListSelectEntity: GetFavoriteCommentListSelectEntity): Promise<FavoriteCommentTransaction[]> {
 
         const frontUserId = getFavoriteCommentListSelectEntity.frontUserId;
+        const videoId = getFavoriteCommentListSelectEntity.videoId;
 
         const favoriteVideoFavoriteComment = await PrismaClientInstance.getInstance().$queryRaw<FavoriteCommentTransaction[]>`
             SELECT
@@ -27,6 +28,7 @@ export class GetFavoriteCommentListRepositoryPostgres implements GetFavoriteComm
                 comment_id as "commentId" 
             FROM "favorite_commnet_transaction" 
             WHERE "user_id" = ${frontUserId} AND
+            "video_id" = ${videoId} AND
             "delete_flg" = '0'
             `;
 

@@ -58,13 +58,14 @@ export class GetBlockCommentListService {
      * ブロックコメント取得
      * @param userNameModel 
      */
-    public async getBlockCommentList(frontUserIdModel: FrontUserIdModel): Promise<BlockCommentTransaction[]> {
+    public async getBlockCommentList(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel): Promise<BlockCommentTransaction[]> {
 
         // 永続ロジック用オブジェクトを取得
         const getGetBlockCommentListRepository = this.getGetBlockCommentListRepository();
 
         // ブロックコメント取得用Entity
-        const getBlockCommentListSelectEntity = new GetBlockCommentListSelectEntity(frontUserIdModel);
+        const getBlockCommentListSelectEntity = new GetBlockCommentListSelectEntity(frontUserIdModel, videoIdModel);
 
         // ブロックコメント取得
         const blockCommentList = await getGetBlockCommentListRepository.select(getBlockCommentListSelectEntity);

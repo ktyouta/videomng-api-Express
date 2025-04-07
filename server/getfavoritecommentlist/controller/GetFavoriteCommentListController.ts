@@ -13,6 +13,7 @@ import { Prisma } from "@prisma/client";
 import { PrismaTransaction } from "../../util/service/PrismaTransaction";
 import { GetFavoriteCommentListService } from "../service/GetFavoriteCommentListService";
 import { GetFavoriteCommentListResponseModel } from "../model/GetFavoriteCommentListResponseModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 
 
 export class GetFavoriteCommentListController extends RouteController {
@@ -24,7 +25,7 @@ export class GetFavoriteCommentListController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_COMMENT
+            ApiEndopoint.FAVORITE_COMMENT_ID
         );
     }
 
@@ -36,12 +37,20 @@ export class GetFavoriteCommentListController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
+        const id = req.params.id;
+
+        if (!id) {
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_COMMENT_ID} | method:${HttpMethodType.GET}`);
+        }
+
+        const videoIdModel = new VideoIdModel(id);
+
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.getFavoriteCommentListService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // お気に入りコメントリストを取得
-        const favoriteCommentList = await this.getFavoriteCommentListService.getFavoriteCommentList(frontUserIdModel);
+        const favoriteCommentList = await this.getFavoriteCommentListService.getFavoriteCommentList(frontUserIdModel, videoIdModel);
 
         // ユーザーのお気に入りコメントが存在しない
         if (favoriteCommentList.length === 0) {
