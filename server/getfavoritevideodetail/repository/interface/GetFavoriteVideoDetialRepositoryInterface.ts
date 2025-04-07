@@ -3,6 +3,7 @@ import { GetFavoriteVideoDetialMemoSelectEntity } from "../../entity/GetFavorite
 import { GetFavoriteVideoDetialSelectEntity } from "../../entity/GetFavoriteVideoDetialSelectEntity";
 import { GetFavoriteVideoDetialCategorySelectEntity } from "../../entity/GetFavoriteVideoDetialCategorySelectEntity";
 import { FavoriteVideoDetailCategoryType } from "../../type/FavoriteVideoDetailCategoryType";
+import { FavoriteVideoDetailType } from "../../type/FavoriteVideoDetailType";
 
 
 /**
@@ -13,7 +14,7 @@ export interface GetFavoriteVideoDetialRepositoryInterface {
     /**
      * お気に入り動画取得
      */
-    selectVideo(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialSelectEntity): Promise<FavoriteVideoTransaction[]>;
+    selectVideo(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialSelectEntity): Promise<FavoriteVideoDetailType[]>;
 
     /**
      * お気に入り動画コメント取得

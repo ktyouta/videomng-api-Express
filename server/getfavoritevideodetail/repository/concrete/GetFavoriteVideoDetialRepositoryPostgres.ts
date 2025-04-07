@@ -5,6 +5,7 @@ import { GetFavoriteVideoDetialMemoSelectEntity } from "../../entity/GetFavorite
 import { GetFavoriteVideoDetialSelectEntity } from "../../entity/GetFavoriteVideoDetialSelectEntity";
 import { GetFavoriteVideoDetialCategorySelectEntity } from "../../entity/GetFavoriteVideoDetialCategorySelectEntity";
 import { FavoriteVideoDetailCategoryType } from "../../type/FavoriteVideoDetailCategoryType";
+import { FavoriteVideoDetailType } from "../../type/FavoriteVideoDetailType";
 
 
 
@@ -20,19 +21,24 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
      * お気に入り動画取得
      * @returns 
      */
-    async selectVideo(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialSelectEntity): Promise<FavoriteVideoTransaction[]> {
+    async selectVideo(getFavoriteVideoDetialSelectEntity: GetFavoriteVideoDetialSelectEntity): Promise<FavoriteVideoDetailType[]> {
 
         const frontUserId = getFavoriteVideoDetialSelectEntity.frontUserId;
         const videoId = getFavoriteVideoDetialSelectEntity.videoId;
 
-        const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoTransaction[]>`
+        const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoDetailType[]>`
             SELECT 
-                user_id as "userId",
-                video_id as "videoId"  
-            FROM "favorite_video_transaction" 
-            WHERE user_id = ${frontUserId} AND
-            video_id = ${videoId} AND
-            delete_flg = '0'
+                a.user_id as "userId",
+                a.video_id as "videoId",
+                a.summary,
+                a.view_status as "viewStatus",
+                b.label as "viewStatusName"
+            FROM "favorite_video_transaction" a
+            LEFT JOIN "view_status_master" b
+            ON a.view_status = b.id 
+            WHERE a.user_id = ${frontUserId} AND
+            a.video_id = ${videoId} AND
+            a.delete_flg = '0'
             `;
 
         return favoriteVideoList;
@@ -75,18 +81,15 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
 
         const favoriteVideoCategory = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoDetailCategoryType[]>`
             SELECT 
-                a.user_id as "userId",
-                a.video_id as "videoId",
-                a.category_id as "categoryId",
-                a.create_date as "createDate",
-                a.update_date as "updateDate",
-                b.label as "categoryName"
-            FROM "favorite_video_category_transaction" a
-            LEFT JOIN "view_status_master" b
-            ON a.category_id = b.id
-            WHERE a.user_id = ${frontUserId} AND
-            a.video_id = ${videoId} AND
-            a.delete_flg = '0'
+                user_id as "userId",
+                video_id as "videoId",
+                category_id as "categoryId",
+                create_date as "createDate",
+                update_date as "updateDate"
+            FROM "favorite_video_category_transaction"
+            WHERE user_id = ${frontUserId} AND
+            video_id = ${videoId} AND
+            delete_flg = '0'
             `;
 
         return favoriteVideoCategory;
