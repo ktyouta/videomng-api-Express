@@ -13,6 +13,8 @@ import { RouteController } from "../../router/controller/RouteController";
 import { Prisma } from "@prisma/client";
 import { PrismaTransaction } from "../../util/service/PrismaTransaction";
 import { GetFavoriteVideoListService } from "../service/GetFavoriteVideoListService";
+import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
+import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId";
 
 
 export class GetFavoriteVideoListController extends RouteController {
@@ -40,8 +42,23 @@ export class GetFavoriteVideoListController extends RouteController {
         const jsonWebTokenVerifyModel = await this.getFavoriteVideoListService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
+        // クエリパラメータを取得
+        const query = req.query;
+
+        // 視聴状況を取得
+        const viewStatus = query[`viewstatus`] as string;
+        const viewStatusModel = await GetFavoriteVideoListViewStatusModel.set(viewStatus);
+
+        // 動画カテゴリを取得
+        const videoCategory = query[`videocategory`] as string;
+        const videoCategoryId = new YouTubeDataApiVideoListVideoCategoryId(videoCategory);
+
         // お気に入り動画リストを取得
-        const favoriteVideoList = await this.getFavoriteVideoListService.getFavoriteVideoList(frontUserIdModel);
+        const favoriteVideoList = await this.getFavoriteVideoListService.getFavoriteVideoList(
+            frontUserIdModel,
+            viewStatusModel,
+            videoCategoryId
+        );
 
         // ユーザーのお気に入り動画が存在しない
         if (favoriteVideoList.length === 0) {

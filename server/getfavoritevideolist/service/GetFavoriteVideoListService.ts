@@ -22,6 +22,8 @@ import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
 import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
 import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
+import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
+import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId";
 
 
 export class GetFavoriteVideoListService {
@@ -55,13 +57,19 @@ export class GetFavoriteVideoListService {
      * お気に入り動画取得
      * @param userNameModel 
      */
-    public async getFavoriteVideoList(frontUserIdModel: FrontUserIdModel): Promise<FavoriteVideoTransaction[]> {
+    public async getFavoriteVideoList(frontUserIdModel: FrontUserIdModel,
+        viewStatusModel: GetFavoriteVideoListViewStatusModel,
+        videoCategoryId: YouTubeDataApiVideoListVideoCategoryId): Promise<FavoriteVideoTransaction[]> {
 
         // 永続ロジック用オブジェクトを取得
         const getGetFavoriteVideoListRepository = this.getGetFavoriteVideoListRepository();
 
         // お気に入り動画取得用Entity
-        const getFavoriteVideoListSelectEntity = new GetFavoriteVideoListSelectEntity(frontUserIdModel);
+        const getFavoriteVideoListSelectEntity = new GetFavoriteVideoListSelectEntity(
+            frontUserIdModel,
+            viewStatusModel,
+            videoCategoryId
+        );
 
         // お気に入り動画取得
         const favoriteVideos = await getGetFavoriteVideoListRepository.select(getFavoriteVideoListSelectEntity);
