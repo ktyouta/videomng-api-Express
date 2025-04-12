@@ -4,7 +4,7 @@ export class SummaryModel {
 
     constructor(summary: string) {
 
-        if (summary.length > 500) {
+        if (summary && summary.length > 500) {
             throw Error(`要約が501文字以上入力されています。`);
         }
 

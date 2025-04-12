@@ -16,10 +16,13 @@ export class ViewStatusModel {
 
     static async reConstruct(viewStatus: string) {
 
-        const viewStatusList = await this._viewStatusMasterRepositoryInterface.getSequenceByKey(viewStatus);
+        if (viewStatus) {
 
-        if (!viewStatusList) {
-            throw Error(`視聴状況に不正値が指定されています。status:${viewStatus}`);
+            const viewStatusList = await this._viewStatusMasterRepositoryInterface.getSequenceByKey(viewStatus);
+
+            if (!viewStatusList) {
+                throw Error(`視聴状況に不正値が指定されています。status:${viewStatus}`);
+            }
         }
 
         return new ViewStatusModel(viewStatus);

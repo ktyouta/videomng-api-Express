@@ -30,7 +30,7 @@ export class UpdateFavoriteVideoRequestModel {
     static async set(videoIdModel: VideoIdModel,
         updateFavoriteVideoRequest: UpdateFavoriteVideoRequestType) {
 
-        const _categoryIdModelList = updateFavoriteVideoRequest.category.map((e: string) => {
+        const _categoryIdModelList = updateFavoriteVideoRequest.category?.map((e: string) => {
             return new CategoryIdModel(e);
         });
 

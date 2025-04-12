@@ -12,7 +12,6 @@ import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { UpdateFavoriteVideoService } from '../service/UpdateFavoriteVideoService';
 import { UpdateFavoriteVideoRequestType } from '../model/UpdateFavoriteVideoRequestType';
-import { UpdateFavoriteVideoRequestModelSchema } from '../model/UpdateFavoriteVideoRequestModelSchema';
 import { UpdateFavoriteVideoRequestModel } from '../model/UpdateFavoriteVideoRequestModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { UpdateFavoriteVideoResponseModel } from '../model/UpdateFavoriteVideoResponseModel';
@@ -49,20 +48,6 @@ export class UpdateFavoriteVideoController extends RouteController {
 
         // リクエストボディ
         const requestBody: UpdateFavoriteVideoRequestType = req.body;
-
-        // リクエストのバリデーションチェック
-        const validateResult = UpdateFavoriteVideoRequestModelSchema.safeParse(requestBody);
-
-        // バリデーションエラー
-        if (!validateResult.success) {
-
-            // エラーメッセージを取得
-            const validatErrMessage = validateResult.error.errors.map((e: ZodIssue) => {
-                return e.message;
-            }).join(`,`);
-
-            return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
-        }
 
         // リクエストボディの型変換
         const updateFavoriteVideoRequestModel = await UpdateFavoriteVideoRequestModel.set(videoId, requestBody);
