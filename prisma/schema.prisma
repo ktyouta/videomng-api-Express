@@ -132,3 +132,16 @@ model ViewStatusMaster {
   deleteFlg   String   @db.Char(1) @default("0") @map("delete_flg")
   @@map("view_status_master") 
 }
+
+
+// タグマスタ
+model TagMaster {
+  userId      Int   @map("user_id")
+  tagId    Int   @map("tag_id")
+  tagName    String  @db.Text  @map("tag_name")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@id([userId, tagId])
+  @@map("tag_master")
+}

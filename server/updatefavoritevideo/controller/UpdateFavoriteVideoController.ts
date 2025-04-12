@@ -67,13 +67,13 @@ export class UpdateFavoriteVideoController extends RouteController {
             const favoriteVideoRepository = this.updateFavoriteVideoService.getFavoriteVideoRepository();
 
             // 動画の存在チェック
-            const isExistFavoriteVideoMemo = await this.updateFavoriteVideoService.checkExistFavoriteVideo(
+            const isExistFavoriteVideo = await this.updateFavoriteVideoService.checkExistFavoriteVideo(
                 getUpdateFavoriteVideoRepository,
                 updateFavoriteVideoRequestModel,
                 frontUserIdModel);
 
             // お気に入り動画が存在しない
-            if (!isExistFavoriteVideoMemo) {
+            if (!isExistFavoriteVideo) {
                 return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `お気に入り動画情報が存在しません。`)
             }
 
