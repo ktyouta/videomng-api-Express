@@ -1,6 +1,6 @@
 import { VideoIdModel } from "../../common/properties/VideoIdModel";
 import { FrontUserIdModel } from "../../common/properties/FrontUserIdModel";
-import { TagIdModel, } from "../properties/TagIdModel";
+import { TagIdModel, } from "../../common/properties/TagIdModel";
 import { TagNameModel } from "../properties/TagNameModel";
 
 

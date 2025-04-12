@@ -1,48 +1,47 @@
 import { VideoIdModel } from "../../common/properties/VideoIdModel";
 import { FrontUserIdModel } from "../../common/properties/FrontUserIdModel";
 import { TagIdModel } from "../../common/properties/TagIdModel";
-import { TagNameModel } from "../properties/TagNameModel";
 
 
-export class TagMasterUpdateEntity {
+export class FavoriteVideoTagTransactionSoftDeleteEntity {
 
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
-    // タグID
+    // 動画ID
+    private readonly _videoIdModel: VideoIdModel;
+    // カテゴリ
     private readonly _tagIdModel: TagIdModel;
-    // タグ名
-    private readonly _tagNameModel: TagNameModel;
 
     constructor(userId: FrontUserIdModel,
-        tagIdModel: TagIdModel,
-        tagNameModel: TagNameModel) {
+        videoIdModel: VideoIdModel,
+        tagIdModel: TagIdModel,) {
 
         this._frontUserIdModel = userId;
+        this._videoIdModel = videoIdModel;
         this._tagIdModel = tagIdModel;
-        this._tagNameModel = tagNameModel;
     }
 
     public get frontUserIdModel() {
         return this._frontUserIdModel;
     }
 
-    public get tagIdModel() {
-        return this._tagIdModel;
+    public get videoIdModel() {
+        return this._videoIdModel;
     }
 
-    public get tagNameModel() {
-        return this._tagNameModel;
+    public get tagIdModel() {
+        return this._tagIdModel;
     }
 
     public get frontUserId() {
         return this._frontUserIdModel.frontUserId;
     }
 
-    public get tagId() {
-        return this._tagIdModel.tagId;
+    public get videoId() {
+        return this._videoIdModel.videoId;
     }
 
-    public get tagName() {
-        return this._tagNameModel.tagName;
+    public get tagId() {
+        return this._tagIdModel.tagId;
     }
 }

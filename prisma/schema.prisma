@@ -145,3 +145,16 @@ model TagMaster {
   @@id([userId, tagId])
   @@map("tag_master")
 }
+
+
+// お気に入り動画タグ
+model FavoriteVideoTagTransaction {
+  userId      Int   @map("user_id")
+  videoId    String   @db.VarChar(255)  @map("video_id")
+  tagId    Int   @map("tag_id")
+  createDate  DateTime  @map("create_date")
+  updateDate  DateTime  @map("update_date")
+  deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  @@id([userId, videoId, tagId])
+  @@map("favorite_video_tag_transaction")
+}
