@@ -33,22 +33,24 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
           `;
 
         const params = [];
-
         params.push(frontUserId);
+        let paramIndex = 2;
 
         if (viewStatus) {
-            sql += ` AND view_status = $2`;
+            sql += ` AND view_status = $${paramIndex}`;
+            paramIndex++;
             params.push(viewStatus);
         }
 
         if (videoCategory) {
-            sql += ` AND EXIST(
+            sql += ` AND EXISTS(
                 SELECT 1
                 FROM favorite_video_category_transaction b
                 WHERE b.user_id = $1
                 AND b.video_id = a.video_id
-                AND b.category_id = $3
+                AND b.category_id = $${paramIndex}
             )`;
+            paramIndex++;
             params.push(videoCategory);
         }
 
