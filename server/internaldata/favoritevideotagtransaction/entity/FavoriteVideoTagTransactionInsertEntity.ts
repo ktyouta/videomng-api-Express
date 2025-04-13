@@ -9,7 +9,7 @@ export class FavoriteVideoTagTransactionInsertEntity {
     private readonly _frontUserIdModel: FrontUserIdModel;
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
-    // カテゴリ
+    // タグID
     private readonly _tagIdModel: TagIdModel;
 
     constructor(userId: FrontUserIdModel,
