@@ -17,5 +17,6 @@ export enum ApiEndopoint {
     FAVORITE_COMMENT = "/favoritecomment/v1/volumes",
     FAVORITE_COMMENT_ID = "/favoritecomment/v1/volumes/:id",
     VIDEO_CATEGORY = "/videocategory/v1/volumes",
-    VIEW_STATUS = "/viewstatus/v1/volumes"
+    VIEW_STATUS = "/viewstatus/v1/volumes",
+    TAG_INFO = "/taginfo/v1/volumes/"
 }
