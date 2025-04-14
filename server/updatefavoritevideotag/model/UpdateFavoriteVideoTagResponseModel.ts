@@ -1,11 +1,11 @@
 import { FavoriteVideoTagTransaction } from "@prisma/client";
-import { FavoriteVideoTagType } from "../type/UpdateFavoriteVideoTagResponseDataType";
+import { UpdateFavoriteVideoTagResponseDataType } from "../type/UpdateFavoriteVideoTagResponseDataType";
 
 export class UpdateFavoriteVideoTagResponseModel {
 
-    private readonly _data: FavoriteVideoTagType[];
+    private readonly _data: UpdateFavoriteVideoTagResponseDataType[];
 
-    constructor(tagList: FavoriteVideoTagType[]) {
+    constructor(tagList: UpdateFavoriteVideoTagResponseDataType[]) {
 
         this._data = tagList;
     }

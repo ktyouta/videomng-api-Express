@@ -8,16 +8,20 @@ import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
 import { UpdateFavoriteVideoTagRepositorys } from "../repository/UpdateFavoriteVideoTagRepositorys";
 import { UpdateFavoriteVideoTagRepositoryInterface } from "../repository/interface/UpdateFavoriteVideoTagRepositoryInterface";
-import { UpdateFavoriteVideoTagSelectEntity } from "../entity/UpdateFavoriteVideoTagSelectEntity";
+import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
 import { TagMasterRepositorys } from "../../internaldata/tagmaster/repository/TagMasterRepositorys";
 import { TagMasterRepositoryInterface } from "../../internaldata/tagmaster/repository/interface/TagMasterRepositoryInterface";
 import { FavoriteVideoTagTransactionRepositoryInterface } from "../../internaldata/favoritevideotagtransaction/repository/interface/FavoriteVideoTagTransactionRepositoryInterface";
 import { FavoriteVideoTagTransactionRepositorys } from "../../internaldata/favoritevideotagtransaction/repository/FavoriteVideoTagTransactionRepositorys";
 import { FavoriteVideoTagTransaction, Prisma } from "@prisma/client";
 import { FavoriteVideoTagTransactionInsertEntity } from "../../internaldata/favoritevideotagtransaction/entity/FavoriteVideoTagTransactionInsertEntity";
-import { FavoriteVideoTagType } from "../type/UpdateFavoriteVideoTagResponseDataType";
+import { UpdateFavoriteVideoTagResponseDataType } from "../type/UpdateFavoriteVideoTagResponseDataType";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { TagIdModel } from "../../internaldata/common/properties/TagIdModel";
+import { UpdateFavoriteVideoTagType } from "../type/UpdateFavoriteVideoTagType";
+import { UpdateFavoriteVideoTagModel } from "../type/UpdateFavoriteVideoTagModel";
+import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
+import { TagMasterInsertEntity } from "../../internaldata/tagmaster/entity/TagMasterInsertEntity";
 
 
 export class UpdateFavoriteVideoTagService {
@@ -35,7 +39,7 @@ export class UpdateFavoriteVideoTagService {
 
             return jsonWebTokenUserModel;
         } catch (err) {
-            throw Error(`お気に入り動画更新時の認証エラー ERROR:${err}`);
+            throw Error(`お気に入り動画タグ更新時の認証エラー ERROR:${err}`);
         }
     }
 
@@ -76,12 +80,11 @@ export class UpdateFavoriteVideoTagService {
      */
     public async deleteFavoriteVideoTag(favoriteVideoTagCategoryRepository: FavoriteVideoTagTransactionRepositoryInterface,
         updateFavoriteVideoTagRequestModel: UpdateFavoriteVideoTagRequestModel,
-        frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
         // 対象ユーザーのコメントを全て削除する
         await favoriteVideoTagCategoryRepository.delete(
-            frontUserIdModel,
+            updateFavoriteVideoTagRequestModel.frontUserIdModel,
             updateFavoriteVideoTagRequestModel.videoIdModel,
             tx);
     }
@@ -93,19 +96,20 @@ export class UpdateFavoriteVideoTagService {
      * @param frontUserIdModel 
      */
     public async insertFavoriteVideoTag(favoriteVideoTagCategoryRepository: FavoriteVideoTagTransactionRepositoryInterface,
-        updateTagMasterList: FavoriteVideoTagType[],
-        frontUserIdModel: FrontUserIdModel,
-        videoId: VideoIdModel,
+        updateTagMasterList: UpdateFavoriteVideoTagModel[],
+        updateFavoriteVideoTagRequestModel: UpdateFavoriteVideoTagRequestModel,
         tx: Prisma.TransactionClient) {
 
-        const categoryList: FavoriteVideoTagTransaction[] = await Promise.all(updateTagMasterList.map((e) => {
+        const categoryList: UpdateFavoriteVideoTagResponseDataType[] = await Promise.all(updateTagMasterList.map(async (e) => {
 
-            return favoriteVideoTagCategoryRepository.insert(
+            const insertTag = await favoriteVideoTagCategoryRepository.insert(
                 new FavoriteVideoTagTransactionInsertEntity(
-                    frontUserIdModel,
-                    videoId,
-                    new TagIdModel(e.tagId),
+                    updateFavoriteVideoTagRequestModel.frontUserIdModel,
+                    updateFavoriteVideoTagRequestModel.videoIdModel,
+                    e.tagIdModel,
                 ), tx);
+
+            return { ...insertTag, tagName: e.tagNameModel.tagName }
         }));
 
         return categoryList;
@@ -120,18 +124,16 @@ export class UpdateFavoriteVideoTagService {
      * @returns 
      */
     public async checkExistFavoriteVideoTag(getUpdateFavoriteVideoTagRepository: UpdateFavoriteVideoTagRepositoryInterface,
-        updateFavoriteVideoTagRequestModel: UpdateFavoriteVideoTagRequestModel,
-        frontUserIdModel: FrontUserIdModel
-    ) {
+        updateFavoriteVideoTagRequestModel: UpdateFavoriteVideoTagRequestModel,) {
 
         // お気に入り動画取得Entity
-        const updateFavoriteVideoTagSelectEntity = new UpdateFavoriteVideoTagSelectEntity(
-            frontUserIdModel,
+        const updateFavoriteVideoTagSelectEntity = new UpdateFavoriteVideoTagFavoriteVideoSelectEntity(
+            updateFavoriteVideoTagRequestModel.frontUserIdModel,
             updateFavoriteVideoTagRequestModel.videoIdModel
         );
 
         // お気に入り動画を取得
-        const favoriteVideoTagList = await getUpdateFavoriteVideoTagRepository.select(updateFavoriteVideoTagSelectEntity);
+        const favoriteVideoTagList = await getUpdateFavoriteVideoTagRepository.selectFavoriteVideo(updateFavoriteVideoTagSelectEntity);
 
         return favoriteVideoTagList.length > 0;
     }
@@ -141,9 +143,43 @@ export class UpdateFavoriteVideoTagService {
      * タグマスタにタグを追加する
      * @returns 
      */
-    public async addTagMaster() {
+    public async addTagMaster(tagMasterRepository: TagMasterRepositoryInterface,
+        getUpdateFavoriteVideoTagRepository: UpdateFavoriteVideoTagRepositoryInterface,
+        updateFavoriteVideoTagRequestModel: UpdateFavoriteVideoTagRequestModel,
+        tx: Prisma.TransactionClient) {
 
-        const updateTagList: FavoriteVideoTagType[] = [];
+        const updateTagList: UpdateFavoriteVideoTagModel[] = [];
+        const tagList = updateFavoriteVideoTagRequestModel.tagList;
+        const userIdModel = updateFavoriteVideoTagRequestModel.frontUserIdModel;
+
+        for (const tag of tagList) {
+
+            const tagId = tag.id;
+
+            if (tagId) {
+                const tagIdModel = new TagIdModel(tagId);
+                const tagNameModel = new TagNameModel(tag.name);
+                const tagModel = new UpdateFavoriteVideoTagModel(tagIdModel, tagNameModel);
+
+                updateTagList.push(tagModel);
+                continue;
+            }
+
+            /** タグIDが存在しない場合はマスタに登録する */
+            // 行番号を取得
+            const nextTagIdList = await getUpdateFavoriteVideoTagRepository.selectTagSeq(userIdModel);
+            const nextTagId = nextTagIdList[0].nextSeq;
+            const tagIdModel = new TagIdModel(nextTagId);
+            const tagNameModel = new TagNameModel(tag.name);
+
+            // 登録
+            const tagMasterInsertEntity = new TagMasterInsertEntity(userIdModel, tagIdModel, tagNameModel);
+            await tagMasterRepository.insert(tagMasterInsertEntity, tx);
+
+            const tagModel = new UpdateFavoriteVideoTagModel(tagIdModel, tagNameModel);
+            updateTagList.push(tagModel);
+        }
+
         return updateTagList;
     }
 }

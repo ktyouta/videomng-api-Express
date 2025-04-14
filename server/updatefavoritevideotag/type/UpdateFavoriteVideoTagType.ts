@@ -1,4 +1,5 @@
+// タグ更新リクエスト時のタグ情報の型
 export type UpdateFavoriteVideoTagType = {
-    readonly id: string,
+    readonly id?: number,
     readonly name: string,
 }

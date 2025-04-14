@@ -26,6 +26,7 @@ import { GetViewStatusListController } from "../../getviewstatuslist/controller/
 import { SearchCommentByKeywordController } from "../../searchcommentbykeyword/controller/SearchCommentByKeywordController";
 import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
+import { UpdateFavoriteVideoTagController } from "../../updatefavoritevideotag/controller/UpdateFavoriteVideoTagController";
 import { RouteController } from "../controller/RouteController";
 
 /**
@@ -88,4 +89,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetTagListController(),
     // お気に入り動画タグ取得
     new GetFavoriteVideoTagListController(),
+    // お気に入り動画タグ更新
+    new UpdateFavoriteVideoTagController(),
 ]

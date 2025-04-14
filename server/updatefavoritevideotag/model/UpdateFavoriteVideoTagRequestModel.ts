@@ -4,57 +4,40 @@ import { UpdateFavoriteVideoTagRequestType } from "../type/UpdateFavoriteVideoTa
 import { SummaryModel } from "../../internaldata/favoritevideotransaction/properties/SummaryModel";
 import { ViewStatusModel } from "../../internaldata/common/properties/ViewStatusModel";
 import { CategoryIdModel } from "../../internaldata/favoritevideocateorytransaction/properties/CategoryIdModel";
+import { UpdateFavoriteVideoTagType } from "../type/UpdateFavoriteVideoTagType";
+import { TagIdModel } from "../../internaldata/common/properties/TagIdModel";
+import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 
 export class UpdateFavoriteVideoTagRequestModel {
 
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
-    // 要約
-    private readonly _summaryModel: SummaryModel;
-    // 視聴状況
-    private readonly _viewStatusModel: ViewStatusModel;
-    // カテゴリ
-    private readonly _categoryIdModelList: CategoryIdModel[];
+    // タグ
+    private readonly _tagList: UpdateFavoriteVideoTagType[];
+    // ユーザーID
+    private readonly _frontUserIdModel: FrontUserIdModel;
+
 
     constructor(videoIdModel: VideoIdModel,
-        summaryModel: SummaryModel,
-        viewStatusModel: ViewStatusModel,
-        categoryIdModelList: CategoryIdModel[]) {
+        requestBody: UpdateFavoriteVideoTagRequestType,
+        frontUserIdModel: FrontUserIdModel) {
 
         this._videoIdModel = videoIdModel;
-        this._summaryModel = summaryModel;
-        this._viewStatusModel = viewStatusModel;
-        this._categoryIdModelList = categoryIdModelList;
+        this._tagList = requestBody.tag;
+        this._frontUserIdModel = frontUserIdModel;
     }
 
-    static async set(videoIdModel: VideoIdModel,
-        updateFavoriteVideoTagRequest: UpdateFavoriteVideoTagRequestType) {
-
-        const _categoryIdModelList = updateFavoriteVideoTagRequest.category?.map((e: string) => {
-            return new CategoryIdModel(e);
-        });
-
-        return new UpdateFavoriteVideoTagRequestModel(
-            videoIdModel,
-            new SummaryModel(updateFavoriteVideoTagRequest.summary),
-            await ViewStatusModel.reConstruct(updateFavoriteVideoTagRequest.viewStatus),
-            _categoryIdModelList
-        );
-    }
 
     public get videoIdModel() {
         return this._videoIdModel;
     }
 
-    public get summaryModel() {
-        return this._summaryModel;
+    public get tagList() {
+        return this._tagList;
     }
 
-    public get viewStatusModel() {
-        return this._viewStatusModel;
-    }
-
-    public get categoryIdModelList() {
-        return this._categoryIdModelList;
+    public get frontUserIdModel() {
+        return this._frontUserIdModel;
     }
 }

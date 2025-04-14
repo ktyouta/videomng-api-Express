@@ -26,7 +26,7 @@ export class UpdateFavoriteVideoTagController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.PUT,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_TAG
+            ApiEndopoint.FAVORITE_VIDEO_TAG_ID
         );
     }
 
@@ -41,7 +41,7 @@ export class UpdateFavoriteVideoTagController extends RouteController {
         const id = req.params.id;
 
         if (!id) {
-            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_TAG}`);
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_TAG_ID}`);
         }
 
         const videoId = new VideoIdModel(id);
@@ -49,12 +49,12 @@ export class UpdateFavoriteVideoTagController extends RouteController {
         // リクエストボディ
         const requestBody: UpdateFavoriteVideoTagRequestType = req.body;
 
-        // リクエストボディの型変換
-        const updateFavoriteVideoTagRequestModel = await UpdateFavoriteVideoTagRequestModel.set(videoId, requestBody);
-
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.updateFavoriteVideoTagService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
+
+        // リクエストボディの型変換
+        const updateFavoriteVideoTagRequestModel = new UpdateFavoriteVideoTagRequestModel(videoId, requestBody, frontUserIdModel);
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
@@ -69,8 +69,7 @@ export class UpdateFavoriteVideoTagController extends RouteController {
             // 動画の存在チェック
             const isExistFavoriteVideo = await this.updateFavoriteVideoTagService.checkExistFavoriteVideoTag(
                 getUpdateFavoriteVideoTagRepository,
-                updateFavoriteVideoTagRequestModel,
-                frontUserIdModel);
+                updateFavoriteVideoTagRequestModel,);
 
             // お気に入り動画が存在しない
             if (!isExistFavoriteVideo) {
@@ -78,13 +77,16 @@ export class UpdateFavoriteVideoTagController extends RouteController {
             }
 
             // タグマスタに登録
-            const updateTagMasterList = await this.updateFavoriteVideoTagService.addTagMaster();
+            const updateTagMasterList = await this.updateFavoriteVideoTagService.addTagMaster(
+                tagMasterRepository,
+                getUpdateFavoriteVideoTagRepository,
+                updateFavoriteVideoTagRequestModel,
+                tx);
 
             // お気に入り動画タグを削除
             await this.updateFavoriteVideoTagService.deleteFavoriteVideoTag(
                 favoriteVideoTagRepository,
                 updateFavoriteVideoTagRequestModel,
-                frontUserIdModel,
                 tx
             );
 
@@ -92,13 +94,12 @@ export class UpdateFavoriteVideoTagController extends RouteController {
             const favoriteCategoryList = await this.updateFavoriteVideoTagService.insertFavoriteVideoTag(
                 favoriteVideoTagRepository,
                 updateTagMasterList,
-                frontUserIdModel,
-                videoId,
+                updateFavoriteVideoTagRequestModel,
                 tx
             );
 
             // レスポンス
-            const updateFavoriteVideoTagResponseModel = new UpdateFavoriteVideoTagResponseModel([]);
+            const updateFavoriteVideoTagResponseModel = new UpdateFavoriteVideoTagResponseModel(favoriteCategoryList);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `タグ情報の更新が完了しました。`, updateFavoriteVideoTagResponseModel.data);
         }, next);

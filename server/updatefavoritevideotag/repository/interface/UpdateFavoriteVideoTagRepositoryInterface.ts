@@ -1,5 +1,7 @@
 import { FavoriteVideoTagTransaction } from "@prisma/client";
-import { UpdateFavoriteVideoTagSelectEntity } from "../../entity/UpdateFavoriteVideoTagSelectEntity";
+import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
+import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
+import { UpdateFavoriteVideoTagNextSeqType } from "../../type/UpdateFavoriteVideoTagNextSeqType";
 
 
 /**
@@ -11,6 +13,11 @@ export interface UpdateFavoriteVideoTagRepositoryInterface {
      * 動画情報取得
      * @param favoriteVideoTagInsertEntity 
      */
-    select(updateFavoriteVideoTagSelectEntity: UpdateFavoriteVideoTagSelectEntity): Promise<FavoriteVideoTagTransaction[]>;
+    selectFavoriteVideo(updateFavoriteVideoTagSelectEntity: UpdateFavoriteVideoTagFavoriteVideoSelectEntity): Promise<FavoriteVideoTagTransaction[]>;
 
+    /**
+     * タグマスタのシーケンス番号取得
+     * @param frontUserIdModel 
+     */
+    selectTagSeq(frontUserIdModel: FrontUserIdModel): Promise<UpdateFavoriteVideoTagNextSeqType[]>;
 }

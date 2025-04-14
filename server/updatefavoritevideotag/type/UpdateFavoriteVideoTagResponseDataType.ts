@@ -1,5 +1,5 @@
 import { FavoriteVideoTagTransaction } from "@prisma/client";
 
-export type FavoriteVideoTagType = FavoriteVideoTagTransaction & {
+export type UpdateFavoriteVideoTagResponseDataType = FavoriteVideoTagTransaction & {
     tagName: string,
 }

@@ -1,8 +1,10 @@
-import { FavoriteVideoTagTransaction } from "@prisma/client";
+import { FavoriteVideoTagTransaction, TagMaster } from "@prisma/client";
 import { JsonFileData } from "../../../util/service/JsonFileData";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { UpdateFavoriteVideoTagSelectEntity } from "../../entity/UpdateFavoriteVideoTagSelectEntity";
+import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
 import { UpdateFavoriteVideoTagRepositoryInterface } from "../interface/UpdateFavoriteVideoTagRepositoryInterface";
+import { UpdateFavoriteVideoTagNextSeqType } from "../../type/UpdateFavoriteVideoTagNextSeqType";
+import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
 
 
 
@@ -20,7 +22,7 @@ export class UpdateFavoriteVideoTagRepositoryPostgres implements UpdateFavoriteV
      * @param frontFavoriteVideoTagInfoMasterModel 
      * @returns 
      */
-    public async select(updateFavoriteVideoTagSelectEntity: UpdateFavoriteVideoTagSelectEntity): Promise<FavoriteVideoTagTransaction[]> {
+    public async selectFavoriteVideo(updateFavoriteVideoTagSelectEntity: UpdateFavoriteVideoTagFavoriteVideoSelectEntity): Promise<FavoriteVideoTagTransaction[]> {
 
         const userId = updateFavoriteVideoTagSelectEntity.frontUserId;
         const videoId = updateFavoriteVideoTagSelectEntity.videoId;
@@ -35,4 +37,23 @@ export class UpdateFavoriteVideoTagRepositoryPostgres implements UpdateFavoriteV
         return favoriteVideoTagList;
     }
 
+
+    /**
+     * タグマスタのシーケンス番号取得
+     * @param createFavoriteVideoMemoSeqSelectEntity 
+     * @returns 
+     */
+    public async selectTagSeq(frontUserIdModel: FrontUserIdModel)
+        : Promise<UpdateFavoriteVideoTagNextSeqType[]> {
+
+        const userId = frontUserIdModel.frontUserId;
+
+        const seqList = await PrismaClientInstance.getInstance().$queryRaw<UpdateFavoriteVideoTagNextSeqType[]>`
+                SELECT COALESCE(MAX(tag_id), 0) + 1 as "nextSeq"
+                FROM "tag_master" 
+                WHERE user_id = CAST(${userId} AS INTEGER)
+            `;
+
+        return seqList;
+    }
 }
