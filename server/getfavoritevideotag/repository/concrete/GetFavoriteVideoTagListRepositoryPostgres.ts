@@ -28,14 +28,14 @@ export class GetFavoriteVideoTagListRepositoryPostgres implements GetFavoriteVid
                 a.user_id as "userId",
                 a.video_id as "videoId",
                 a.tag_id as "tagId",
-                b.tag_name as "tagName",
+                b.tag_name as "tagName"
             FROM "favorite_video_tag_transaction" a
             INNER JOIN "tag_master" b 
             ON a.user_id = b.user_id AND
             a.tag_id = b.tag_id
             WHERE a.user_id = ${frontUserId} AND
             a.video_id = ${videoId} AND
-            "delete_flg" = '0'
+            a.delete_flg = '0'
             `;
 
         return favoriteVideoTag;
