@@ -152,6 +152,10 @@ export class UpdateFavoriteVideoTagService {
         const tagList = updateFavoriteVideoTagRequestModel.tagList;
         const userIdModel = updateFavoriteVideoTagRequestModel.frontUserIdModel;
 
+        // 行番号を取得
+        const nextTagIdList = await getUpdateFavoriteVideoTagRepository.selectTagSeq(userIdModel);
+        let nextTagId = nextTagIdList[0].nextSeq;
+
         for (const tag of tagList) {
 
             const tagId = tag.id;
@@ -166,9 +170,6 @@ export class UpdateFavoriteVideoTagService {
             }
 
             /** タグIDが存在しない場合はマスタに登録する */
-            // 行番号を取得
-            const nextTagIdList = await getUpdateFavoriteVideoTagRepository.selectTagSeq(userIdModel);
-            const nextTagId = nextTagIdList[0].nextSeq;
             const tagIdModel = new TagIdModel(nextTagId);
             const tagNameModel = new TagNameModel(tag.name);
 
@@ -178,6 +179,7 @@ export class UpdateFavoriteVideoTagService {
 
             const tagModel = new UpdateFavoriteVideoTagModel(tagIdModel, tagNameModel);
             updateTagList.push(tagModel);
+            nextTagId++;
         }
 
         return updateTagList;
