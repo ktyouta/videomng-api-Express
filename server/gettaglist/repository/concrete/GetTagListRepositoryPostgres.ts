@@ -29,7 +29,7 @@ export class GetTagListRepositoryPostgres implements GetTagListRepositoryInterfa
                 create_date as "createDate",
                 update_date as "updateDate"
             FROM "tag_master" 
-            WHERE user_id = ${frontUserId}
+            WHERE user_id = ${frontUserId} AND
             delete_flg = '0'
             `;
 
