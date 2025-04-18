@@ -5,6 +5,7 @@ import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../../entity/Up
 import { UpdateFavoriteVideoTagRepositoryInterface } from "../interface/UpdateFavoriteVideoTagRepositoryInterface";
 import { UpdateFavoriteVideoTagNextSeqType } from "../../type/UpdateFavoriteVideoTagNextSeqType";
 import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
+import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
 
 
 
@@ -55,5 +56,26 @@ export class UpdateFavoriteVideoTagRepositoryPostgres implements UpdateFavoriteV
             `;
 
         return seqList;
+    }
+
+
+    /**
+     * タグマスタ取得
+     * @param createFavoriteVideoMemoSeqSelectEntity 
+     * @returns 
+     */
+    public async selectTagMaster(tagNameModel: TagNameModel)
+        : Promise<TagMaster[]> {
+
+        const tagName = tagNameModel.tagName;
+
+        const tagList = await PrismaClientInstance.getInstance().$queryRaw<TagMaster[]>`
+                SELECT tag_name as "tagName",
+                tag_id as "tagId"
+                FROM "tag_master" 
+                WHERE tag_name = ${tagName}
+            `;
+
+        return tagList;
     }
 }

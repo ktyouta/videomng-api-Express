@@ -158,20 +158,20 @@ export class UpdateFavoriteVideoTagService {
 
         for (const tag of tagList) {
 
-            const tagId = tag.id;
+            const tagNameModel = new TagNameModel(tag.name);
+            const tagList = await getUpdateFavoriteVideoTagRepository.selectTagMaster(tagNameModel);
 
-            if (tagId) {
-                const tagIdModel = new TagIdModel(tagId);
-                const tagNameModel = new TagNameModel(tag.name);
+            if (tagList && tagList.length > 0) {
+                const tagInfo = tagList[0];
+                const tagIdModel = new TagIdModel(tagInfo.tagId);
                 const tagModel = new UpdateFavoriteVideoTagModel(tagIdModel, tagNameModel);
 
                 updateTagList.push(tagModel);
                 continue;
             }
 
-            /** タグIDが存在しない場合はマスタに登録する */
+            /** タグマスタに存在しない場合はマスタに登録する */
             const tagIdModel = new TagIdModel(nextTagId);
-            const tagNameModel = new TagNameModel(tag.name);
 
             // 登録
             const tagMasterInsertEntity = new TagMasterInsertEntity(userIdModel, tagIdModel, tagNameModel);
