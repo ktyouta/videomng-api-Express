@@ -1,4 +1,4 @@
-import { FavoriteVideoTagTransaction, TagMaster } from "@prisma/client";
+import { FavoriteVideoTagTransaction, Prisma, TagMaster } from "@prisma/client";
 import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
 import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
 import { UpdateFavoriteVideoTagNextSeqType } from "../../type/UpdateFavoriteVideoTagNextSeqType";
@@ -27,4 +27,10 @@ export interface UpdateFavoriteVideoTagRepositoryInterface {
      * @param updateFavoriteVideoTagTagMasterSelectEntity 
      */
     selectTagMaster(tagNameModel: TagNameModel): Promise<TagMaster[]>;
+
+    /**
+     * タグマスタ削除
+     * @param updateFavoriteVideoTagTagMasterSelectEntity 
+     */
+    deleteTagMaster(frontUserIdModel: FrontUserIdModel, tx: Prisma.TransactionClient): Promise<void>;
 }

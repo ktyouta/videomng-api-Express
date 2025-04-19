@@ -81,7 +81,8 @@ export class UpdateFavoriteVideoTagController extends RouteController {
                 tagMasterRepository,
                 getUpdateFavoriteVideoTagRepository,
                 updateFavoriteVideoTagRequestModel,
-                tx);
+                tx
+            );
 
             // お気に入り動画タグを削除
             await this.updateFavoriteVideoTagService.deleteFavoriteVideoTag(
@@ -95,6 +96,13 @@ export class UpdateFavoriteVideoTagController extends RouteController {
                 favoriteVideoTagRepository,
                 updateTagMasterList,
                 updateFavoriteVideoTagRequestModel,
+                tx
+            );
+
+            // 未使用のタグをマスタから削除
+            await this.updateFavoriteVideoTagService.deleteTagMaster(
+                getUpdateFavoriteVideoTagRepository,
+                frontUserIdModel,
                 tx
             );
 

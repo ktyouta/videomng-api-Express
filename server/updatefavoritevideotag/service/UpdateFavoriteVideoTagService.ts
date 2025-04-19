@@ -184,4 +184,22 @@ export class UpdateFavoriteVideoTagService {
 
         return updateTagList;
     }
+
+
+    /**
+     * 未使用のタグをマスタから削除
+     * @param favoriteVideoTagRepository 
+     * @param updateFavoriteVideoTagRequestModel 
+     * @param frontUserIdModel 
+     * @param tx 
+     */
+    public async deleteTagMaster(getUpdateFavoriteVideoTagRepository: UpdateFavoriteVideoTagRepositoryInterface,
+        frontUserIdModel: FrontUserIdModel,
+        tx: Prisma.TransactionClient) {
+
+        // 対象ユーザーのコメントを全て削除する
+        await getUpdateFavoriteVideoTagRepository.deleteTagMaster(
+            frontUserIdModel,
+            tx);
+    }
 }

@@ -1,4 +1,4 @@
-import { FavoriteVideoTagTransaction, TagMaster } from "@prisma/client";
+import { FavoriteVideoTagTransaction, Prisma, TagMaster } from "@prisma/client";
 import { JsonFileData } from "../../../util/service/JsonFileData";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
@@ -77,5 +77,34 @@ export class UpdateFavoriteVideoTagRepositoryPostgres implements UpdateFavoriteV
             `;
 
         return tagList;
+    }
+
+
+    /**
+     * タグマスタ削除
+     * @param createFavoriteVideoMemoSeqSelectEntity 
+     * @returns 
+     */
+    public async deleteTagMaster(frontUserIdModel: FrontUserIdModel,
+        tx: Prisma.TransactionClient)
+        : Promise<void> {
+
+        const frontUserId = frontUserIdModel.frontUserId;
+
+        await tx.$queryRaw`
+                DELETE FROM 
+                    tag_master a
+                WHERE 
+                    user_id = ${frontUserId} AND
+                NOT EXISTS(
+                    SELECT 
+                        1
+                    FROM
+                        favorite_video_tag_transaction b
+                    WHERE
+                        b.user_id = ${frontUserId} AND
+                        b.tag_id = a.tag_id
+                )
+            `;
     }
 }
