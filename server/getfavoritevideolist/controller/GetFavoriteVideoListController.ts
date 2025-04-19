@@ -15,6 +15,8 @@ import { PrismaTransaction } from "../../util/service/PrismaTransaction";
 import { GetFavoriteVideoListService } from "../service/GetFavoriteVideoListService";
 import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
 import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId";
+import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
+import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
 
 
 export class GetFavoriteVideoListController extends RouteController {
@@ -53,11 +55,16 @@ export class GetFavoriteVideoListController extends RouteController {
         const videoCategory = query[`videocategory`] as string;
         const videoCategoryId = new YouTubeDataApiVideoListVideoCategoryId(videoCategory);
 
+        // タグを取得
+        const videoTag = query[`videotag`] as string;
+        const tagNameModel = new GetFavoriteVideoListTagNameModel(videoTag);
+
         // お気に入り動画リストを取得
         const favoriteVideoList = await this.getFavoriteVideoListService.getFavoriteVideoList(
             frontUserIdModel,
             viewStatusModel,
-            videoCategoryId
+            videoCategoryId,
+            tagNameModel,
         );
 
         // ユーザーのお気に入り動画が存在しない

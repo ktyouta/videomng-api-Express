@@ -10,6 +10,6 @@ export interface GetFavoriteVideoListRepositoryInterface {
     /**
      * お気に入り動画取得
      */
-    select(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity): Promise<FavoriteVideoTransaction[]>;
+    selectFavoriteVideoList(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity): Promise<FavoriteVideoTransaction[]>;
 
 }

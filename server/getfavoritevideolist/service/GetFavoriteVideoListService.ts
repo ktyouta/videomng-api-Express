@@ -24,6 +24,8 @@ import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubeda
 import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
 import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
 import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId";
+import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
+import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
 
 
 export class GetFavoriteVideoListService {
@@ -59,7 +61,8 @@ export class GetFavoriteVideoListService {
      */
     public async getFavoriteVideoList(frontUserIdModel: FrontUserIdModel,
         viewStatusModel: GetFavoriteVideoListViewStatusModel,
-        videoCategoryId: YouTubeDataApiVideoListVideoCategoryId): Promise<FavoriteVideoTransaction[]> {
+        videoCategoryId: YouTubeDataApiVideoListVideoCategoryId,
+        tagNameModel: GetFavoriteVideoListTagNameModel,): Promise<FavoriteVideoTransaction[]> {
 
         // 永続ロジック用オブジェクトを取得
         const getGetFavoriteVideoListRepository = this.getGetFavoriteVideoListRepository();
@@ -68,11 +71,12 @@ export class GetFavoriteVideoListService {
         const getFavoriteVideoListSelectEntity = new GetFavoriteVideoListSelectEntity(
             frontUserIdModel,
             viewStatusModel,
-            videoCategoryId
+            videoCategoryId,
+            tagNameModel,
         );
 
         // お気に入り動画取得
-        const favoriteVideos = await getGetFavoriteVideoListRepository.select(getFavoriteVideoListSelectEntity);
+        const favoriteVideos = await getGetFavoriteVideoListRepository.selectFavoriteVideoList(getFavoriteVideoListSelectEntity);
 
         return favoriteVideos;
     }

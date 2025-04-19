@@ -17,11 +17,12 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
      * お気に入り動画取得
      * @returns 
      */
-    async select(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity): Promise<FavoriteVideoTransaction[]> {
+    async selectFavoriteVideoList(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity): Promise<FavoriteVideoTransaction[]> {
 
         const frontUserId = getFavoriteVideoListSelectEntity.frontUserId;
         const viewStatus = getFavoriteVideoListSelectEntity.viewStatus;
         const videoCategory = getFavoriteVideoListSelectEntity.videoCategoryId;
+        const videoTag = getFavoriteVideoListSelectEntity.tagName;
 
         let sql = `
             SELECT
@@ -36,12 +37,14 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         params.push(frontUserId);
         let paramIndex = 2;
 
+        // 視聴状況
         if (viewStatus) {
             sql += ` AND view_status = $${paramIndex}`;
             paramIndex++;
             params.push(viewStatus);
         }
 
+        // カテゴリ
         if (videoCategory) {
             sql += ` AND EXISTS(
                 SELECT 1
@@ -52,6 +55,23 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
             )`;
             paramIndex++;
             params.push(videoCategory);
+        }
+
+        // タグ
+        if (videoTag) {
+            sql += ` AND EXISTS(
+                SELECT 1
+                FROM favorite_video_tag_transaction c
+                WHERE c.user_id = $1
+                AND c.video_id = a.video_id
+                AND c.tag_id = (
+                    SELECT max(tag_id)
+                    FROM tag_master d
+                    WHERE d.tag_name = $${paramIndex}
+                )
+            )`;
+            paramIndex++;
+            params.push(videoTag);
         }
 
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
