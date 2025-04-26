@@ -89,7 +89,7 @@ export class CreateFavoriteVideoService {
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        const favoriteVideoInsertEntity = new FavoriteVideoTransactionInsertEntity(
+        const favoriteVideoInsertEntity = await FavoriteVideoTransactionInsertEntity.create(
             frontUserIdModel,
             createFavoriteVideoRequestModel.videoIdModel);
 

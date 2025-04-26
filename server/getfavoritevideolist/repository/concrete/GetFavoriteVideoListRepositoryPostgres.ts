@@ -74,7 +74,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
             params.push(videoTag);
         }
 
-        sql += `ORDER BY a.update_date desc`;
+        sql += ` ORDER BY a.update_date desc`;
 
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
 

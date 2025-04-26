@@ -28,6 +28,7 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
 
         const userId = favoriteVideoTransactionInsertEntity.frontUserId;
         const videoId = favoriteVideoTransactionInsertEntity.videoId;
+        const viewStatus = favoriteVideoTransactionInsertEntity.viewStatus;
 
         const favoriteVideo = await tx.favoriteVideoTransaction.create({
             data: {
@@ -36,6 +37,7 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
                 createDate: new Date(),
                 updateDate: new Date(),
                 deleteFlg: FLG.OFF,
+                viewStatus: viewStatus,
             },
         });
 
