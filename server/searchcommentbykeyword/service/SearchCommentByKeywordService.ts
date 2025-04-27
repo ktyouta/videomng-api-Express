@@ -3,6 +3,7 @@ import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { YouTubeDataApiCommentThreadItemType } from '../../external/youtubedataapi/videocomment/type/YouTubeDataApiCommentThreadItemType';
+import { YouTubeDataApiCommentThreadReplyCommentType } from '../../external/youtubedataapi/videocomment/type/YouTubeDataApiCommentThreadReplyCommentType';
 import { YouTubeDataApiVideoListEndPointModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListEndPointModel';
 import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListModel';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
@@ -106,7 +107,8 @@ export class SearchCommentByKeywordService {
                 filterdCommentList = [...filterdCommentList, {
                     textOriginal: textOriginal,
                     publishedAt: publishedAt,
-                    authorDisplayName: authorDisplayName
+                    authorDisplayName: authorDisplayName,
+                    commentId: e.snippet.topLevelComment.id,
                 }];
             }
 
@@ -116,7 +118,7 @@ export class SearchCommentByKeywordService {
             // 返信リストチェック
             if (replyComments && replyComments.length > 0) {
 
-                replyComments.forEach((e1) => {
+                replyComments.forEach((e1: YouTubeDataApiCommentThreadReplyCommentType) => {
 
                     const replySnipet = e1.snippet;
                     // コメント
@@ -133,7 +135,8 @@ export class SearchCommentByKeywordService {
                         filterdCommentList = [...filterdCommentList, {
                             textOriginal: replyTextOriginal,
                             publishedAt: replyPublishedAt,
-                            authorDisplayName: replyAuthorDisplayName
+                            authorDisplayName: replyAuthorDisplayName,
+                            commentId: e1.id,
                         }];
                     }
                 });
