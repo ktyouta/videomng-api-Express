@@ -1,4 +1,5 @@
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { FLG } from "../../util/const/CommonConst";
 
@@ -7,19 +8,19 @@ import { FLG } from "../../util/const/CommonConst";
 export class FrontUserLoginSelectEntity {
 
     // ユーザーID
-    private readonly _frontUserIdModel: FrontUserIdModel;
+    private readonly _userNameModel: FrontUserNameModel;
 
-    constructor(frontUserIdModel: FrontUserIdModel,) {
+    constructor(userNameModel: FrontUserNameModel,) {
 
-        this._frontUserIdModel = frontUserIdModel;
+        this._userNameModel = userNameModel;
     }
 
-    public get frontUserIdModel() {
-        return this._frontUserIdModel;
+    public get userNameModel() {
+        return this._userNameModel;
     }
 
-    public get frontUserId() {
-        return this._frontUserIdModel.frontUserId;
+    public get frontUserName() {
+        return this._userNameModel.frontUserName;
     }
 
 }

@@ -1,5 +1,5 @@
 // ログイン時のリクエストの型
 export type FrontUserLoginRequestType = {
-    userId: number,
+    userName: string,
     password: string,
 }

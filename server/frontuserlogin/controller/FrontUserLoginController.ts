@@ -17,6 +17,7 @@ import { FrontUserSaltValueModel } from '../../internaldata/frontuserloginmaster
 import { FrontUserLoginCreateResponseModel } from '../model/FrontUserLoginResponseModel';
 import { LOGIN_ERR_MESSAGE } from '../const/FrontUserLoginConst';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 
 
 export class FrontUserLoginController extends RouteController {
@@ -57,14 +58,14 @@ export class FrontUserLoginController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        const inputFrontUserId = FrontUserIdModel.reConstruct(requestBody.userId);
+        const userNameModel = new FrontUserNameModel(requestBody.userName);
 
         // 永続ロジックを取得する
         const frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface =
             this.frontUserLoginService.getFrontUserLoginMasterRepository();
 
         // ログインユーザーを取得
-        const frontUserLoginList = await this.frontUserLoginService.getLoginUser(frontUserLoginMasterRepository, inputFrontUserId);
+        const frontUserLoginList = await this.frontUserLoginService.getLoginUser(frontUserLoginMasterRepository, userNameModel);
 
         // ユーザーの取得に失敗
         if (frontUserLoginList.length === 0) {
@@ -73,9 +74,10 @@ export class FrontUserLoginController extends RouteController {
 
         const frontUserLogin = frontUserLoginList[0];
         const salt = frontUserLogin.salt;
+        const frontUserIdModel = FrontUserIdModel.reConstruct(frontUserLogin.userId);
 
         if (!salt) {
-            throw Error(`ソルト値を取得できませんでした。ユーザーID:${inputFrontUserId.frontUserId}`);
+            throw Error(`ソルト値を取得できませんでした。ユーザーID:${frontUserLogin.userId}`);
         }
 
         // テーブルから取得したソルト値をもとに入力されたパスワードをハッシュ化する
@@ -87,7 +89,7 @@ export class FrontUserLoginController extends RouteController {
         }
 
         // ユーザー情報を取得
-        const frontUserList = await this.frontUserLoginService.getUserInfo(frontUserLoginMasterRepository, inputFrontUserId);
+        const frontUserList = await this.frontUserLoginService.getUserInfo(frontUserLoginMasterRepository, frontUserIdModel);
 
         // ユーザーの取得に失敗
         if (frontUserList.length === 0) {
@@ -98,7 +100,7 @@ export class FrontUserLoginController extends RouteController {
 
         // jwtを作成
         const newJsonWebTokenModel =
-            await this.frontUserLoginService.createJsonWebToken(inputFrontUserId, inputPasswordModel);
+            await this.frontUserLoginService.createJsonWebToken(frontUserIdModel, inputPasswordModel);
 
         // レスポンスを作成
         const frontUserLoginCreateResponseModel =

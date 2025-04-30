@@ -21,12 +21,15 @@ export class FrontUserLoginRepositoryPostgres implements FrontUserLoginRepositor
      */
     public async selectLoginUser(frontUserLoginSelectEntity: FrontUserLoginSelectEntity) {
 
-        const userId = frontUserLoginSelectEntity.frontUserId;
+        const frontUserName = frontUserLoginSelectEntity.frontUserName;
 
         const frontUserList = await PrismaClientInstance.getInstance().$queryRaw<FrontUserLoginMaster[]>`
-                    SELECT * 
+                    SELECT 
+                        user_id as "userId",
+                        salt,
+                        password
                     FROM "front_user_login_master" 
-                    WHERE "user_id" = CAST(${userId} AS INTEGER) AND
+                    WHERE "user_name" = ${frontUserName} AND
                     "delete_flg" = '0'
                     `;
 

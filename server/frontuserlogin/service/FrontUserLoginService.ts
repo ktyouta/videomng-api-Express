@@ -1,4 +1,5 @@
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
+import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
@@ -27,10 +28,10 @@ export class FrontUserLoginService {
      * @param frontUserLoginRequestBody 
      */
     public async getLoginUser(frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface,
-        inputFrontUserId: FrontUserIdModel) {
+        userNameModel: FrontUserNameModel) {
 
         const frontUserLoginSelectEntity = new FrontUserLoginSelectEntity(
-            inputFrontUserId
+            userNameModel
         );
 
         const frontUserLoginList = frontUserLoginMasterRepository.selectLoginUser(frontUserLoginSelectEntity);
