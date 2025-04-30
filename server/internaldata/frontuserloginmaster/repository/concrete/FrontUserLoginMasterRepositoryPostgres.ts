@@ -27,6 +27,7 @@ export class FrontUserLoginMasterRepositoryPostgres implements FrontUserLoginMas
         const userId = frontUserLoginMasterInsertEntity.frontUserId;
         const password = frontUserLoginMasterInsertEntity.frontUserPassword;
         const salt = frontUserLoginMasterInsertEntity.salt;
+        const userName = frontUserLoginMasterInsertEntity.frontUserName;
 
         const newUserInfo = tx.frontUserLoginMaster.create({
             data: {
@@ -36,6 +37,7 @@ export class FrontUserLoginMasterRepositoryPostgres implements FrontUserLoginMas
                 createDate: new Date(),
                 updateDate: new Date(),
                 deleteFlg: FLG.OFF,
+                userName,
             },
         });
 

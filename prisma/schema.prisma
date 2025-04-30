@@ -24,6 +24,7 @@ model TestConnection {
 // ログインマスタ
 model FrontUserLoginMaster {
   userId      Int   @id @map("user_id")
+  userName    String  @unique @db.VarChar(255) @map("user_name") 
   password    String   @db.VarChar(255)  @map("password")
   salt    String   @db.VarChar(32)  @map("salt")
   createDate  DateTime  @map("create_date")
@@ -36,7 +37,7 @@ model FrontUserLoginMaster {
 // フロントユーザーマスタ
 model FrontUserInfoMaster {
   userId      Int   @id @map("user_id")
-  userName    String   @db.VarChar(255)  @map("user_name")
+  userName    String   @unique @db.VarChar(255)  @map("user_name")
   userBirthday    String   @db.Char(8)  @map("user_birthday")
   createDate  DateTime  @map("create_date")
   updateDate  DateTime  @map("update_date")

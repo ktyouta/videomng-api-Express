@@ -136,6 +136,7 @@ export class CreateFrontUserInfoService {
             userId,
             parsedRequestBody.frontUserPasswordModel,
             parsedRequestBody.frontUserSaltModel,
+            parsedRequestBody.frontUserNameModel,
         );
     }
 }
