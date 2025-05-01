@@ -53,7 +53,7 @@ export class CreateFrontUserInfoController extends RouteController {
             // エラーメッセージを取得
             const validatErrMessage = validateResult.error.errors.map((e: ZodIssue) => {
                 return e.message;
-            }).join(`,`);
+            }).join(`\r\n`);
 
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
