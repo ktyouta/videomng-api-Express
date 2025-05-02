@@ -12,6 +12,7 @@ import { FrontUserCheckAuthService } from '../service/FrontUserCheckAuthService'
 import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { FrontUserCheckAuthResponseModel } from '../model/FrontUserCheckAuthResponseModel';
 
 
 export class FrontUserCheckAuthController extends RouteController {
@@ -49,7 +50,10 @@ export class FrontUserCheckAuthController extends RouteController {
             // cookieを返却
             res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
-            return ApiResponse.create(res, HTTP_STATUS_OK, `認証成功`);
+            // レスポンス
+            const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(jsonWebTokenVerifyModel);
+
+            return ApiResponse.create(res, HTTP_STATUS_OK, `認証成功`, frontUserCheckAuthResponseModel.data);
         } catch (e) {
 
             // エラー発生時はクッキーを削除する

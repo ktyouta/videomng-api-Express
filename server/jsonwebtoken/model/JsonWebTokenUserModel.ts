@@ -1,6 +1,7 @@
 import { CookieModel } from '../../cookie/model/CookieModel';
 import ENV from '../../env.json';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
+import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { envConfig } from '../../util/const/EnvConfig';
@@ -17,14 +18,18 @@ export class JsonWebTokenUserModel {
     private readonly _frontUserIdModel: FrontUserIdModel;
     // パスワード
     private readonly _frontUserPasswordModel: FrontUserPasswordModel;
+    // ユーザー名
+    private readonly _frontUserNameModel: FrontUserNameModel;
 
 
     private constructor(frontUserIdModel: FrontUserIdModel,
-        frontUserPassword: FrontUserPasswordModel
+        frontUserPassword: FrontUserPasswordModel,
+        frontUserNameModel: FrontUserNameModel
     ) {
 
         this._frontUserIdModel = frontUserIdModel;
         this._frontUserPasswordModel = frontUserPassword;
+        this._frontUserNameModel = frontUserNameModel;
     }
 
 
@@ -79,7 +84,9 @@ export class JsonWebTokenUserModel {
                 throw Error(`jwtのユーザー情報がユーザーログインマスタに存在しません。`);
             }
 
-            return new JsonWebTokenUserModel(frontUserIdModel, frontUserPassword);
+            const frontUserNameModel = new FrontUserNameModel(userInfoMaster.userName);
+
+            return new JsonWebTokenUserModel(frontUserIdModel, frontUserPassword, frontUserNameModel);
         } catch (err) {
             throw Error(`jwt認証中にエラーが発生しました。ERROR:${err}`);
         }
@@ -94,6 +101,9 @@ export class JsonWebTokenUserModel {
         return this._frontUserPasswordModel;
     }
 
+    get frontUserName() {
+        return this._frontUserNameModel.frontUserName;
+    }
 
     /**
      * jwt認証用のユーザー情報を取得
