@@ -5,11 +5,14 @@ import { FrontUserLoginResponseUserModel } from "./FrontUserLoginResponseUserMod
 
 export class FrontUserLoginCreateResponseModel {
 
-    private readonly userName: string;
+    private readonly _data: FrontUserInfoMaster;
 
     constructor(frontUserInfoMaster: FrontUserInfoMaster) {
 
-        this.userName = frontUserInfoMaster.userName;
+        this._data = frontUserInfoMaster;
     }
 
+    get data() {
+        return this._data;
+    }
 }

@@ -109,6 +109,6 @@ export class FrontUserLoginController extends RouteController {
         // cookieを返却
         res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`, frontUserLoginCreateResponseModel);
+        return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`, frontUserLoginCreateResponseModel.data);
     }
 }

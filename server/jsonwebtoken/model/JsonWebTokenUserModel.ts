@@ -71,7 +71,7 @@ export class JsonWebTokenUserModel {
             const frontUserIdModel: FrontUserIdModel = FrontUserIdModel.reConstruct(userId);
             const frontUserPassword: FrontUserPasswordModel = FrontUserPasswordModel.reConstruct(verifyArray[1]);
 
-            // ユーザーマスタファイルからデータを取得
+            // ユーザーマスタからデータを取得
             const userInfoMaster = await this.getFrontUser(frontUserIdModel, frontUserPassword);
 
             // jwtのユーザー情報がユーザーマスタに存在しない
