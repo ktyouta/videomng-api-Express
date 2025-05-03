@@ -3,16 +3,20 @@ import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/prope
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { FrontUserCheckAuthUserType } from "../type/FrontUserCheckAuthUserType";
+import { AuthUserInfoType } from "../../common/type/AuthUserInfoType";
 
 export class FrontUserCheckAuthResponseModel {
 
-    private readonly _data: FrontUserCheckAuthUserType;
+    private readonly _data: AuthUserInfoType;
 
     constructor(jsonWebTokenVerifyModel: JsonWebTokenUserModel) {
 
+        const userInfo = jsonWebTokenVerifyModel.frontUserInfo;
+
         this._data = {
             userId: jsonWebTokenVerifyModel.frontUserId,
-            userName: jsonWebTokenVerifyModel.frontUserName
+            userName: userInfo.userName,
+            birthday: userInfo.birthday,
         };
     }
 

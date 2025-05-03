@@ -28,4 +28,8 @@ export class FrontUserInfoUpdateRequestModel {
     public get frontUserName() {
         return this._frontUserNameModel.frontUserName;
     }
+
+    public get frontUserBirthDay() {
+        return this._frontUserBidthdayModel.frontUserBirthDay;
+    }
 }

@@ -117,7 +117,7 @@ export class UpdateFrontUserInfoController extends RouteController {
             const frontUserInfoUpdateResponse: FrontUserInfoUpdateResponseModel =
                 new FrontUserInfoUpdateResponseModel(frontUserInfoUpdateRequestBody, userIdModel);
 
-            return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の更新が完了しました。`, frontUserInfoUpdateResponse);
+            return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の更新が完了しました。`, frontUserInfoUpdateResponse.data);
         }, next);
     }
 }

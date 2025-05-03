@@ -1,6 +1,7 @@
 import { CookieModel } from '../../cookie/model/CookieModel';
 import ENV from '../../env.json';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
+import { FrontUserBirthdayModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserBirthdayModel';
 import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { RepositoryType } from '../../util/const/CommonConst';
@@ -8,6 +9,7 @@ import { envConfig } from '../../util/const/EnvConfig';
 import { JsonFileData } from '../../util/service/JsonFileData';
 import { JsonWebTokenUserInfoSelectEntity } from '../entity/JsonWebTokenUserInfoSelectEntity';
 import { JsonWebTokenUserInfoRepositorys } from '../repository/JsonWebTokenUserInfoRepositorys';
+import { FrontUserInfoType } from '../type/FrontUserInfoType';
 import { NewJsonWebTokenModel } from './NewJsonWebTokenModel';
 
 
@@ -18,18 +20,18 @@ export class JsonWebTokenUserModel {
     private readonly _frontUserIdModel: FrontUserIdModel;
     // パスワード
     private readonly _frontUserPasswordModel: FrontUserPasswordModel;
-    // ユーザー名
-    private readonly _frontUserNameModel: FrontUserNameModel;
+    // フロントユーザー情報
+    private readonly _frontUserInfo: FrontUserInfoType;
 
 
     private constructor(frontUserIdModel: FrontUserIdModel,
         frontUserPassword: FrontUserPasswordModel,
-        frontUserNameModel: FrontUserNameModel
+        frontUserInfo: FrontUserInfoType
     ) {
 
         this._frontUserIdModel = frontUserIdModel;
         this._frontUserPasswordModel = frontUserPassword;
-        this._frontUserNameModel = frontUserNameModel;
+        this._frontUserInfo = frontUserInfo;
     }
 
 
@@ -77,16 +79,18 @@ export class JsonWebTokenUserModel {
             const frontUserPassword: FrontUserPasswordModel = FrontUserPasswordModel.reConstruct(verifyArray[1]);
 
             // ユーザーマスタからデータを取得
-            const userInfoMaster = await this.getFrontUser(frontUserIdModel, frontUserPassword);
+            const frontUserList = await this.getFrontUser(frontUserIdModel, frontUserPassword);
 
             // jwtのユーザー情報がユーザーマスタに存在しない
-            if (!userInfoMaster) {
+            if (!frontUserList || frontUserList.length === 0) {
                 throw Error(`jwtのユーザー情報がユーザーログインマスタに存在しません。`);
             }
 
-            const frontUserNameModel = new FrontUserNameModel(userInfoMaster.userName);
-
-            return new JsonWebTokenUserModel(frontUserIdModel, frontUserPassword, frontUserNameModel);
+            return new JsonWebTokenUserModel(
+                frontUserIdModel,
+                frontUserPassword,
+                frontUserList[0],
+            );
         } catch (err) {
             throw Error(`jwt認証中にエラーが発生しました。ERROR:${err}`);
         }
@@ -105,8 +109,8 @@ export class JsonWebTokenUserModel {
         return this._frontUserIdModel.frontUserId;
     }
 
-    get frontUserName() {
-        return this._frontUserNameModel.frontUserName;
+    get frontUserInfo() {
+        return this._frontUserInfo;
     }
 
     /**
@@ -125,9 +129,9 @@ export class JsonWebTokenUserModel {
         const frontUserInfoCreateSelectEntity = new JsonWebTokenUserInfoSelectEntity(frontUserIdModel, frontUserPassword);
 
         // ユーザーログイン情報を取得
-        const userInfoMasterList = frontUserInfoCreateRepository.select(frontUserInfoCreateSelectEntity);
+        const frontUserList = frontUserInfoCreateRepository.select(frontUserInfoCreateSelectEntity);
 
-        return userInfoMasterList;
+        return frontUserList;
     }
 
 }

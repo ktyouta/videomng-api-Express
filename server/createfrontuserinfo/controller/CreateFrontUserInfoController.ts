@@ -108,7 +108,7 @@ export class CreateFrontUserInfoController extends RouteController {
             // cookieを返却
             res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
-            return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の登録が完了しました。`, frontUserInfoCreateResponse);
+            return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の登録が完了しました。`, frontUserInfoCreateResponse.data);
         }, next);
     }
 }
