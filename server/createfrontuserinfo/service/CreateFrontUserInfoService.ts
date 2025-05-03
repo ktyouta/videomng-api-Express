@@ -103,12 +103,10 @@ export class CreateFrontUserInfoService {
      * @param frontUserInfoCreateRequestBody 
      * @param newJsonWebTokenModel 
      */
-    public createResponse(frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel)
+    public createResponse(frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel, userIdModel: FrontUserIdModel)
         : FrontUserInfoCreateResponseModel {
 
-        const userNameModel = frontUserInfoCreateRequestBody.frontUserNameModel;
-
-        return new FrontUserInfoCreateResponseModel(userNameModel);
+        return new FrontUserInfoCreateResponseModel(frontUserInfoCreateRequestBody, userIdModel);
     }
 
 

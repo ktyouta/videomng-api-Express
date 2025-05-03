@@ -101,6 +101,10 @@ export class JsonWebTokenUserModel {
         return this._frontUserPasswordModel;
     }
 
+    get frontUserId() {
+        return this._frontUserIdModel.frontUserId;
+    }
+
     get frontUserName() {
         return this._frontUserNameModel.frontUserName;
     }

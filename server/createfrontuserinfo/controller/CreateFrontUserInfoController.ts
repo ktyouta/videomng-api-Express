@@ -103,7 +103,7 @@ export class CreateFrontUserInfoController extends RouteController {
 
             // レスポンスを作成
             const frontUserInfoCreateResponse: FrontUserInfoCreateResponseModel =
-                this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody);
+                this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody, userIdModel);
 
             // cookieを返却
             res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);

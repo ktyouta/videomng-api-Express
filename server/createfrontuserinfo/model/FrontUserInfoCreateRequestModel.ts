@@ -39,4 +39,8 @@ export class FrontUserInfoCreateRequestModel {
     public get frontUserSaltModel() {
         return this._frontUserSaltModel;
     }
+
+    public get frontUserName() {
+        return this._frontUserNameModel.frontUserName;
+    }
 }

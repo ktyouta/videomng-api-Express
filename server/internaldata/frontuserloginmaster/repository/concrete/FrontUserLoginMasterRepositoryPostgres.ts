@@ -4,6 +4,7 @@ import { PrismaClientInstance } from "../../../../util/service/PrismaClientInsta
 import { FrontUserLoginMasterInsertEntity } from "../../entity/FrontUserLoginMasterInsertEntity";
 import { FrontUserLoginMasterUpdateEntity } from "../../entity/FrontUserLoginMasterUpdateEntity";
 import { FrontUserLoginMasterRepositoryInterface } from "../interface/FrontUserLoginMasterRepositoryInterface";
+import { FrontUserLoginMasterUpdateUserInfoEntity } from "../../entity/FrontUserLoginMasterUpdateUserInfoEntity";
 
 
 
@@ -54,7 +55,7 @@ export class FrontUserLoginMasterRepositoryPostgres implements FrontUserLoginMas
         const userId = frontUserLoginMasterUpdateEntity.frontUserId;
         const password = frontUserLoginMasterUpdateEntity.frontUserPassword;
 
-        const seqData = tx.frontUserLoginMaster.update({
+        const userInfo = tx.frontUserLoginMaster.update({
             where: { userId },
             data: {
                 password,
@@ -62,6 +63,26 @@ export class FrontUserLoginMasterRepositoryPostgres implements FrontUserLoginMas
             },
         });
 
-        return seqData;
+        return userInfo;
+    }
+
+    /**
+     * フロントのユーザー情報を更新
+     */
+    async updateUserInfo(frontUserLoginMasterUpdateUserInfoEntity: FrontUserLoginMasterUpdateUserInfoEntity,
+        tx: Prisma.TransactionClient) {
+
+        const userId = frontUserLoginMasterUpdateUserInfoEntity.frontUserId;
+        const userName = frontUserLoginMasterUpdateUserInfoEntity.frontUserName;
+
+        const userInfo = tx.frontUserLoginMaster.update({
+            where: { userId },
+            data: {
+                userName,
+                updateDate: new Date(),
+            },
+        });
+
+        return userInfo;
     }
 }

@@ -103,8 +103,7 @@ export class FrontUserLoginController extends RouteController {
             await this.frontUserLoginService.createJsonWebToken(frontUserIdModel, inputPasswordModel);
 
         // レスポンスを作成
-        const frontUserLoginCreateResponseModel =
-            new FrontUserLoginCreateResponseModel(frontUser);
+        const frontUserLoginCreateResponseModel = new FrontUserLoginCreateResponseModel(frontUser);
 
         // cookieを返却
         res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);

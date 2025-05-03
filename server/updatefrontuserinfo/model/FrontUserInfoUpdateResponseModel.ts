@@ -1,18 +1,18 @@
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { FrontUserInfoCreateRequestModel } from "./FrontUserInfoCreateRequestModel";
+import { FrontUserInfoUpdateRequestModel } from "./FrontUserInfoUpdateRequestModel";
 
-export class FrontUserInfoCreateResponseModel {
+export class FrontUserInfoUpdateResponseModel {
 
     // ユーザー名
     private readonly userName: string;
     // ユーザーID
     private readonly userId: number;
 
-    constructor(frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel, userIdModel: FrontUserIdModel) {
+    constructor(frontUserInfoUpdateRequestBody: FrontUserInfoUpdateRequestModel, userIdModel: FrontUserIdModel) {
 
-        this.userName = frontUserInfoCreateRequestBody.frontUserName;
+        this.userName = frontUserInfoUpdateRequestBody.frontUserName;
         this.userId = userIdModel.frontUserId;
     }
 

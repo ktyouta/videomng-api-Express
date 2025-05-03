@@ -47,6 +47,7 @@ export class FrontUserLoginRepositoryPostgres implements FrontUserLoginRepositor
 
         const frontUserList = await PrismaClientInstance.getInstance().$queryRaw<FrontUserInfoMaster[]>`
                     SELECT 
+                        user_id as "userId",
                         user_name as "userName"
                     FROM "front_user_info_master" 
                     WHERE "user_id" = CAST(${userId} AS INTEGER) AND

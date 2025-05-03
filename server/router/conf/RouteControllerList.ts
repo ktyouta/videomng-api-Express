@@ -27,6 +27,7 @@ import { SearchCommentByKeywordController } from "../../searchcommentbykeyword/c
 import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
 import { UpdateFavoriteVideoTagController } from "../../updatefavoritevideotag/controller/UpdateFavoriteVideoTagController";
+import { UpdateFrontUserInfoController } from "../../updatefrontuserinfo/controller/UpdateFrontUserInfoController";
 import { RouteController } from "../controller/RouteController";
 
 /**
@@ -35,6 +36,8 @@ import { RouteController } from "../controller/RouteController";
 export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     // フロントユーザー作成
     new CreateFrontUserInfoController(),
+    // フロントユーザー更新
+    new UpdateFrontUserInfoController(),
     // 動画一覧取得
     new GetVideoListController(),
     // 動画詳細取得

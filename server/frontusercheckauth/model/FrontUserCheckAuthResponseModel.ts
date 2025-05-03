@@ -11,6 +11,7 @@ export class FrontUserCheckAuthResponseModel {
     constructor(jsonWebTokenVerifyModel: JsonWebTokenUserModel) {
 
         this._data = {
+            userId: jsonWebTokenVerifyModel.frontUserId,
             userName: jsonWebTokenVerifyModel.frontUserName
         };
     }

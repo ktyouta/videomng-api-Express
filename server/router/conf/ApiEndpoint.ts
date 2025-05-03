@@ -1,5 +1,6 @@
 export enum ApiEndopoint {
     FRONT_USER_INFO = "/videomng/v1/volumes/frontuserinfo",
+    FRONT_USER_INFO_ID = "/videomng/v1/volumes/frontuserinfo/:id",
     FRONT_USER_LOGIN = "/videomng/v1/volumes/frontuserlogin",
     FRONT_USER_LOGOUT = "/videomng/v1/volumes/frontuserlogout",
     FRONT_USER_CHECK_AUTH = "/videomng/v1/volumes/frontusercheckauth",
