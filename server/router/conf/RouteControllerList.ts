@@ -28,6 +28,7 @@ import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/control
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
 import { UpdateFavoriteVideoTagController } from "../../updatefavoritevideotag/controller/UpdateFavoriteVideoTagController";
 import { UpdateFrontUserInfoController } from "../../updatefrontuserinfo/controller/UpdateFrontUserInfoController";
+import { UpdateFrontUserPasswordController } from "../../updatefrontuserpassword/controller/UpdateFrontUserPasswordController";
 import { RouteController } from "../controller/RouteController";
 
 /**
@@ -38,6 +39,8 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new CreateFrontUserInfoController(),
     // フロントユーザー更新
     new UpdateFrontUserInfoController(),
+    // フロントユーザーパスワード更新
+    new UpdateFrontUserPasswordController(),
     // 動画一覧取得
     new GetVideoListController(),
     // 動画詳細取得

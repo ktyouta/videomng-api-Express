@@ -22,4 +22,5 @@ export enum ApiEndopoint {
     TAG_INFO = "/videomng/v1/volumes/taginfo",
     FAVORITE_VIDEO_TAG = "/videomng/v1/volumes/favoritevideotag",
     FAVORITE_VIDEO_TAG_ID = "/videomng/v1/volumes/favoritevideotag/:id",
+    FRONT_USER_PASSWORD_ID = "/videomng/v1/volumes/frontuserpassword/:id",
 }
