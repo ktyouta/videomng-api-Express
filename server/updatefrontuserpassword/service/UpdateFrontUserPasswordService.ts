@@ -15,6 +15,7 @@ import { UpdateFrontUserPasswordSelectEntity } from "../entity/UpdateFrontUserPa
 import { UpdateFrontUserPasswordRequestModel } from "../model/UpdateFrontUserPasswordRequestModel";
 import { FrontUserInfoMaster, FrontUserLoginMaster } from "@prisma/client";
 import { FrontUserLoginMasterUpdateEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateEntity";
+import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 
 
 export class UpdateFrontUserPasswordService {
@@ -92,5 +93,27 @@ export class UpdateFrontUserPasswordService {
             parsedRequestBody.newPasswordModel,
             parsedRequestBody.frontUserSaltValueModel,
         );
+    }
+
+
+    /**
+     * jwtを作成する
+     * @param userIdModel 
+     * @param frontUserInfoCreateRequestBody 
+     * @returns 
+     */
+    public createJsonWebToken(userIdModel: FrontUserIdModel,
+        updateFrontUserPasswordRequestBody: UpdateFrontUserPasswordRequestModel
+    ) {
+
+        const frontUserPassword = updateFrontUserPasswordRequestBody.newPasswordModel;
+
+        try {
+            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel, frontUserPassword);
+
+            return newJsonWebTokenModel;
+        } catch (err) {
+            throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_PASSWORD_ID}`);
+        }
     }
 }

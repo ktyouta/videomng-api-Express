@@ -120,6 +120,13 @@ export class UpdateFrontUserPasswordController extends RouteController {
             // パスワードを更新する
             await frontUserLoginMasterRepository.update(frontUserLoginMasterUpdateEntity, tx);
 
+            // jwtを作成
+            const newJsonWebTokenModel =
+                await this.updateFrontUserPasswordService.createJsonWebToken(userIdModel, updateFrontUserPasswordRequestBody);
+
+            // cookieを返却
+            res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `パスワードの更新が完了しました。`);
         }, next);
     }
