@@ -64,7 +64,8 @@ export class UpdateFrontUserInfoService {
      * ユーザー重複チェック
      * @param userNameModel 
      */
-    public async checkUserNameExists(frontUserInfoUpdateRequestBody: FrontUserInfoUpdateRequestModel): Promise<boolean> {
+    public async checkUserNameExists(frontUserIdModel: FrontUserIdModel,
+        frontUserInfoUpdateRequestBody: FrontUserInfoUpdateRequestModel): Promise<boolean> {
 
         const userNameModel: FrontUserNameModel = frontUserInfoUpdateRequestBody.frontUserNameModel;
 
@@ -73,7 +74,10 @@ export class UpdateFrontUserInfoService {
         const frontUserInfoUpdateRepository = frontUserInfoUpdateRepositorys.get(RepositoryType.POSTGRESQL);
 
         // ユーザー情報取得用Entity
-        const frontUserInfoUpdateSelectEntity = new FrontUserInfoUpdateSelectEntity(userNameModel);
+        const frontUserInfoUpdateSelectEntity = new FrontUserInfoUpdateSelectEntity(
+            frontUserIdModel,
+            userNameModel
+        );
 
         // ユーザー情報を取得
         const activeUserInfoMasterList = await frontUserInfoUpdateRepository.select(frontUserInfoUpdateSelectEntity);

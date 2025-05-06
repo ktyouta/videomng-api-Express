@@ -85,7 +85,10 @@ export class UpdateFrontUserInfoController extends RouteController {
                 this.updateFrontUserInfoService.parseRequestBody(requestBody);
 
             // ユーザーの存在チェック
-            const isExistUser = await this.updateFrontUserInfoService.checkUserNameExists(frontUserInfoUpdateRequestBody);
+            const isExistUser = await this.updateFrontUserInfoService.checkUserNameExists(
+                frontUserIdModel,
+                frontUserInfoUpdateRequestBody
+            );
 
             if (isExistUser) {
                 return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, `既にユーザーが存在しています。`);

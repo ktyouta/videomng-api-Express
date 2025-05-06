@@ -20,10 +20,18 @@ export class FrontUserInfoUpdateRepositoryPostgres implements FrontUserInfoUpdat
     async select(frontUserInfoUpdateSelectEntity: FrontUserInfoUpdateSelectEntity): Promise<FrontUserInfoMaster[]> {
 
         const userName = frontUserInfoUpdateSelectEntity.frontUserName;
+        const userId = frontUserInfoUpdateSelectEntity.frontUserId;
 
         const users = await PrismaClientInstance.getInstance().$queryRaw<FrontUserInfoMaster[]>`
-            SELECT * FROM "front_user_info_master" WHERE user_name = ${userName} AND delete_flg = '0'
-            `;
+            SELECT 
+                * 
+            FROM 
+                "front_user_info_master"
+            WHERE 
+                user_name = ${userName} AND
+                user_id <> CAST(${userId} AS INTEGER) AND
+                delete_flg = '0'
+        `;
 
         return users;
     }
