@@ -10,6 +10,7 @@ import { JsonFileData } from '../../util/service/JsonFileData';
 import { JsonWebTokenUserInfoSelectEntity } from '../entity/JsonWebTokenUserInfoSelectEntity';
 import { JsonWebTokenUserInfoRepositorys } from '../repository/JsonWebTokenUserInfoRepositorys';
 import { FrontUserInfoType } from '../type/FrontUserInfoType';
+import { JsonWebTokenModel } from './JsonWebTokenModel';
 import { NewJsonWebTokenModel } from './NewJsonWebTokenModel';
 
 
@@ -42,11 +43,9 @@ export class JsonWebTokenUserModel {
      */
     static async get(cookieModel: CookieModel) {
 
-        if (!NewJsonWebTokenModel.COOKIE_KEY) {
-            throw Error(`設定ファイルにcookie(jwt)のキーが設定されていません。`);
-        }
-
-        const token = cookieModel.cookie[NewJsonWebTokenModel.COOKIE_KEY];
+        // jwt
+        const jsonWebTokenModel = new JsonWebTokenModel(cookieModel);
+        const token = jsonWebTokenModel.token;
 
         if (!token) {
             throw Error(`トークンが存在しません。`);

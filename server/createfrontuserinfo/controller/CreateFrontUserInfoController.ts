@@ -18,6 +18,7 @@ import { RouteController } from "../../router/controller/RouteController";
 import { Prisma } from "@prisma/client";
 import { PrismaTransaction } from "../../util/service/PrismaTransaction";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
 
 
 export class CreateFrontUserInfoController extends RouteController {
@@ -106,7 +107,7 @@ export class CreateFrontUserInfoController extends RouteController {
                 this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody, userIdModel);
 
             // cookieを返却
-            res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の登録が完了しました。`, frontUserInfoCreateResponse.data);
         }, next);

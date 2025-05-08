@@ -13,6 +13,7 @@ import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 import { FrontUserCheckAuthResponseModel } from '../model/FrontUserCheckAuthResponseModel';
+import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
 
 
 export class FrontUserCheckAuthController extends RouteController {
@@ -48,7 +49,7 @@ export class FrontUserCheckAuthController extends RouteController {
                 await this.frontUserCheckAuthService.createJsonWebToken(frontUserIdModel, frontUserPasswordModel);
 
             // cookieを返却
-            res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
             // レスポンス
             const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(jsonWebTokenVerifyModel);
@@ -57,7 +58,7 @@ export class FrontUserCheckAuthController extends RouteController {
         } catch (e) {
 
             // エラー発生時はクッキーを削除する
-            res.clearCookie(NewJsonWebTokenModel.COOKIE_KEY, { httpOnly: true });
+            res.clearCookie(JsonWebTokenModel.KEY, { httpOnly: true });
 
             return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証失敗`);
         }

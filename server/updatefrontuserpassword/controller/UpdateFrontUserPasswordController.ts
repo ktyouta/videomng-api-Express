@@ -17,6 +17,7 @@ import { UpdateFrontUserPasswordRequestModelSchema } from "../model/UpdateFrontU
 import { UpdateFrontUserPasswordRequestModel } from "../model/UpdateFrontUserPasswordRequestModel";
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel";
+import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
 
 
 export class UpdateFrontUserPasswordController extends RouteController {
@@ -125,7 +126,7 @@ export class UpdateFrontUserPasswordController extends RouteController {
                 await this.updateFrontUserPasswordService.createJsonWebToken(userIdModel, updateFrontUserPasswordRequestBody);
 
             // cookieを返却
-            res.cookie(NewJsonWebTokenModel.COOKIE_KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `パスワードの更新が完了しました。`);
         }, next);

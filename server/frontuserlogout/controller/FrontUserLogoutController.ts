@@ -8,6 +8,7 @@ import { ApiResponse } from '../../util/service/ApiResponse';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
 
 
 export class FrontUserLogoutController extends RouteController {
@@ -30,7 +31,7 @@ export class FrontUserLogoutController extends RouteController {
     public async doExecute(req: Request, res: Response) {
 
         // cookieを削除
-        res.clearCookie(NewJsonWebTokenModel.COOKIE_KEY, { httpOnly: true });
+        res.clearCookie(JsonWebTokenModel.KEY, { httpOnly: true });
 
         return ApiResponse.create(res, HTTP_STATUS_OK, `ログアウトしました。`);
     }
