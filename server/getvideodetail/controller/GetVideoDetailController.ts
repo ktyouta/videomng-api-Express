@@ -9,7 +9,6 @@ import { SUCCESS_MESSAGE } from '../const/GetVideoDetailConst';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { GetVideoDetailService } from '../service/GetVideoDetailService';
-import { GetVideoDetailResponseModel } from '../model/GetVideoDetailResponseModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 
 
@@ -46,9 +45,20 @@ export class GetVideoDetailController extends RouteController {
         // YouTube Data Apiから動画詳細を取得する
         const youTubeVideoDetailApi = await this.getVideoDetailService.callYouTubeDataDetailApi(videoIdModel);
 
-        // レスポンスのYouTube動画
-        const getVideoDetailResponseModel = new GetVideoDetailResponseModel(youTubeVideoDetailApi);
+        // レスポンス用に型を変換する
+        let convertedVideoDetail = this.getVideoDetailService.convertVideoDetail(youTubeVideoDetailApi);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, getVideoDetailResponseModel.data);
+        // jwt取得
+        const token = this.getVideoDetailService.getToken(req);
+
+        // ログインしている場合はお気に入りチェックを実施
+        if (token) {
+            const jsonWebTokenUserModel = await this.getVideoDetailService.checkJwtVerify(req);
+
+            // お気に入り登録チェック
+            convertedVideoDetail = await this.getVideoDetailService.checkFavorite(convertedVideoDetail, jsonWebTokenUserModel);
+        }
+
+        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, convertedVideoDetail);
     }
 }
