@@ -10,7 +10,6 @@ import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { GetVideoListQueryParameterSchema } from '../model/GetVideoListQueryParameterSchema';
-import { GetVideoListResponseModel } from '../model/GetVideoListResponseModel';
 import { VideoType, YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
@@ -19,7 +18,7 @@ import { YouTubeDataApiVideoListVideoCategoryId } from '../../external/youtubeda
 
 export class GetVideoListController extends RouteController {
 
-    private GetVideoListService = new GetVideoListService();
+    private getVideoListService = new GetVideoListService();
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -73,16 +72,30 @@ export class GetVideoListController extends RouteController {
         const youTubeDataApiVideoListVideoCategoryId = new YouTubeDataApiVideoListVideoCategoryId(videoCategory);
 
         // YouTube Data Apiから動画を取得する
-        const youTubeVideoListApi = await this.GetVideoListService.callYouTubeDataListApi(
+        const youTubeVideoListApi = await this.getVideoListService.callYouTubeDataListApi(
             youTubeDataApiVideoListKeyword,
             youTubeDataApiVideoListVideoType,
             youTubeDataApiVideoListNextPageToken,
             youTubeDataApiVideoListVideoCategoryId,
         );
 
-        // レスポンスのYouTube動画
-        const getVideoListResponseModel = new GetVideoListResponseModel(youTubeVideoListApi);
+        // 動画IDの存在しない動画をフィルターする
+        const filterdYouTubeVideoList = this.getVideoListService.filterVideoList(youTubeVideoListApi);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, getVideoListResponseModel.data);
+        // レスポンス用に型を変換する
+        let convertedVideoList = this.getVideoListService.convertVideoList(filterdYouTubeVideoList);
+
+        // jwt取得
+        const token = this.getVideoListService.getToken(req);
+
+        // ログインしている場合はお気に入りチェックを実施
+        if (token) {
+            const jsonWebTokenUserModel = await this.getVideoListService.checkJwtVerify(req);
+
+            // お気に入り登録チェック
+            convertedVideoList = await this.getVideoListService.checkFavorite(convertedVideoList, jsonWebTokenUserModel);
+        }
+
+        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, convertedVideoList);
     }
 }
