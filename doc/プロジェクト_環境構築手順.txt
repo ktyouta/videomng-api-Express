@@ -1,4 +1,4 @@
-■Express環境構築手順
+■プロジェクト環境構築手順
 
 
 ①ディレクトリ作成
@@ -127,8 +127,11 @@ YOUTUBE_API_KEY=YouTube Data APIのキー
 VIDEOMNG_JWT_KEY=jwtのキー
 
 
-
-
+⑪sqlフォルダ内のクエリを実行する
+※create_function_update_favorite_video_transaction_update_date.sqlとcreate_triggers_for_update_favorite_video_transaction_update_date.sqlについては、
+以下の順で実行すること
+1. create_function_update_favorite_video_transaction_update_date.sql
+2. create_triggers_for_update_favorite_video_transaction_update_date.sql
 
 
 

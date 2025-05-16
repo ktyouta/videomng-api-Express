@@ -1,0 +1,9 @@
+CREATE TRIGGER trg_update_x_on_favorite_video_memo_transaction
+AFTER INSERT OR UPDATE ON favorite_video_memo_transaction
+FOR EACH ROW
+EXECUTE FUNCTION update_favorite_video_transaction_update_date();
+
+CREATE TRIGGER trg_update_x_on_favorite_video_tag_transaction
+AFTER INSERT OR UPDATE ON favorite_video_tag_transaction
+FOR EACH ROW
+EXECUTE FUNCTION update_favorite_video_transaction_update_date();
