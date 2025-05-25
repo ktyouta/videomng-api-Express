@@ -2,6 +2,7 @@ import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubeda
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
+import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
 import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
 import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
 
@@ -17,16 +18,20 @@ export class GetFavoriteVideoListSelectEntity {
     private readonly _videoCategoryId: YouTubeDataApiVideoListVideoCategoryId;
     // タグ名称
     private readonly _tagNameModel: GetFavoriteVideoListTagNameModel;
+    // タグ名称
+    private readonly _sortKeyModel: GetFavoriteVideoListSortIdModel;
 
     constructor(frontUserIdModel: FrontUserIdModel,
         viewStatusModel: GetFavoriteVideoListViewStatusModel,
         videoCategoryId: YouTubeDataApiVideoListVideoCategoryId,
-        tagNameModel: GetFavoriteVideoListTagNameModel,) {
+        tagNameModel: GetFavoriteVideoListTagNameModel,
+        sortKeyModel: GetFavoriteVideoListSortIdModel) {
 
         this._frontUserIdModel = frontUserIdModel;
         this._viewStatusModel = viewStatusModel;
         this._videoCategoryId = videoCategoryId;
         this._tagNameModel = tagNameModel;
+        this._sortKeyModel = sortKeyModel;
     }
 
     public get frontUserIdModel() {
@@ -51,5 +56,9 @@ export class GetFavoriteVideoListSelectEntity {
 
     public get tagName() {
         return this._tagNameModel.tagName;
+    }
+
+    public get sortId() {
+        return this._sortKeyModel.sortId;
     }
 }

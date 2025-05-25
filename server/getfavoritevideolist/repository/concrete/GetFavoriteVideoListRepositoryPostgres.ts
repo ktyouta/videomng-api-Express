@@ -23,6 +23,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         const viewStatus = getFavoriteVideoListSelectEntity.viewStatus;
         const videoCategory = getFavoriteVideoListSelectEntity.videoCategoryId;
         const videoTag = getFavoriteVideoListSelectEntity.tagName;
+        const sortId = getFavoriteVideoListSelectEntity.sortId;
 
         let sql = `
             SELECT
@@ -75,12 +76,23 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         }
 
         // ソート
-        // if () {
-        //     sql += ` ORDER BY a.update_date desc`;
-        // }
-        // else {
-        //     sql += ` ORDER BY a.update_date desc`;
-        // }
+        switch (sortId) {
+            case `0`:
+                sql += ` ORDER BY a.update_date desc`;
+                break;
+            case `1`:
+                sql += ` ORDER BY a.update_date`;
+                break;
+            case `2`:
+                sql += ` ORDER BY a.create_date desc`;
+                break;
+            case `3`:
+                sql += ` ORDER BY a.create_date`;
+                break;
+            default:
+                sql += ` ORDER BY a.update_date desc`;
+                break;
+        }
 
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
 
