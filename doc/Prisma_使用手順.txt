@@ -67,6 +67,6 @@ model TestConnection {
 
 
 
-※テーブルの追加/定義変更時はschema.prismaを修正して以下のコマンドを実行する
+※テーブルの追加/定義変更時はschema.prismaを修正して以下の順でコマンドを実行する
 コマンド：npx prisma migrate dev --name マイグレーション名
 コマンド：npx prisma generate

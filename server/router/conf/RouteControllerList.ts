@@ -16,6 +16,7 @@ import { GetFavoriteVideoCommentController } from "../../getfavoritevideocomment
 import { GetFavoriteVideoDetialController } from "../../getfavoritevideodetail/controller/GetFavoriteVideoDetialController";
 import { GetFavoriteVideoListController } from "../../getfavoritevideolist/controller/GetFavoriteVideoListController";
 import { GetFavoriteVideoMemoController } from "../../getfavoritevideomemo/controller/GetFavoriteVideoMemoController";
+import { GetFavoriteVideoSortListController } from "../../getfavoritevideosortlist/controller/GetFavoriteVideoSortListController";
 import { GetFavoriteVideoTagListController } from "../../getfavoritevideotag/controller/GetFavoriteVideoTagListController";
 import { GetTagListController } from "../../gettaglist/controller/GetTagListController";
 import { GetVideoCategoryController } from "../../getvideocategory/controller/GetVideoCategoryController";
@@ -97,4 +98,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetFavoriteVideoTagListController(),
     // お気に入り動画タグ更新
     new UpdateFavoriteVideoTagController(),
+    // お気に入り動画ソートリスト取得
+    new GetFavoriteVideoSortListController(),
 ]
