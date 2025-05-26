@@ -24,6 +24,7 @@ export class GetFavoriteVideoSortListRepositoryPostgres implements GetFavoriteVi
                 label 
             FROM "favorite_video_sort_master" 
             WHERE "delete_flg" = '0'
+            ORDER BY id
             `;
 
         return viewStatus;

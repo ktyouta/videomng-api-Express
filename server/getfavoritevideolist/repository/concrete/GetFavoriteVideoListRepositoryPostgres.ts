@@ -89,6 +89,28 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
             case `3`:
                 sql += ` ORDER BY a.create_date`;
                 break;
+            case `4`:
+                sql += ` ORDER BY (
+                    SELECT
+                        count(*)
+                    FROM
+                        favorite_video_memo_transaction d
+                    WHERE
+                        d.user_id = $1 AND
+                        d.video_id = a.video_id
+                ) desc`;
+                break;
+            case `5`:
+                sql += ` ORDER BY (
+                    SELECT
+                        count(*)
+                    FROM
+                        favorite_video_memo_transaction d
+                    WHERE
+                        d.user_id = $1 AND
+                        d.video_id = a.video_id
+                )`;
+                break;
             default:
                 sql += ` ORDER BY a.update_date desc`;
                 break;
