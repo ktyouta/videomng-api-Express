@@ -97,8 +97,9 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                         favorite_video_memo_transaction d
                     WHERE
                         d.user_id = $1 AND
-                        d.video_id = a.video_id
-                ) desc`;
+                        d.video_id = a.video_id AND
+                        d.delete_flg = '0'
+                ) desc, a.update_date desc`;
                 break;
             case `5`:
                 sql += ` ORDER BY (
@@ -108,8 +109,33 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                         favorite_video_memo_transaction d
                     WHERE
                         d.user_id = $1 AND
-                        d.video_id = a.video_id
-                )`;
+                        d.video_id = a.video_id AND
+                        d.delete_flg = '0'
+                ), a.update_date desc`;
+                break;
+            case `6`:
+                sql += ` ORDER BY (
+                    SELECT
+                        count(*)
+                    FROM
+                        favorite_commnet_transaction d
+                    WHERE
+                        d.user_id = $1 AND
+                        d.video_id = a.video_id AND
+                        d.delete_flg = '0'
+                ) desc, a.update_date desc`;
+                break;
+            case `7`:
+                sql += ` ORDER BY (
+                    SELECT
+                        count(*)
+                    FROM
+                        favorite_commnet_transaction d
+                    WHERE
+                        d.user_id = $1 AND
+                        d.video_id = a.video_id AND
+                        d.delete_flg = '0'
+                ), a.update_date desc`;
                 break;
             default:
                 sql += ` ORDER BY a.update_date desc`;

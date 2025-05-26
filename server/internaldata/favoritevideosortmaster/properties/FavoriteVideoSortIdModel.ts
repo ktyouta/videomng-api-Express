@@ -10,6 +10,7 @@ export class FavoriteVideoSortIdModel {
     private readonly _sortId: string;
     private static readonly _favoriteVideoSortMasterRepositoryInterface: FavoriteVideoSortMasterRepositoryInterface =
         (new FavoriteVideoSortMasterRepositorys()).get(RepositoryType.POSTGRESQL);
+    private static DEFAULT = `0`;
 
     private constructor(viewStatus: string) {
 
@@ -23,7 +24,7 @@ export class FavoriteVideoSortIdModel {
             const viewStatusList = await this._favoriteVideoSortMasterRepositoryInterface.getListByKey(sortId);
 
             if (!viewStatusList) {
-                throw Error(`ソートIDに不正値が指定されています。status:${sortId}`);
+                sortId = FavoriteVideoSortIdModel.DEFAULT;
             }
         }
 
