@@ -102,12 +102,10 @@ export class GetFavoriteVideoListService {
      */
     public async mergeYouTubeDataList(favoriteVideoList: FavoriteVideoTransaction[]) {
 
-        // お気に入り動画リストとYouTube Data Apiの動画詳細のマージ結果リスト
-        const favoriteVideoListMergedList: FavoriteVideoListMergedType[] = [];
+        // お気に入り動画リストとYouTube Data Apiの動画詳細のマージ
+        const favoriteVideoListMergedList = await Promise.all(favoriteVideoList.map(async (e: FavoriteVideoTransaction) => {
 
-        for (const faviriteVideo of favoriteVideoList) {
-
-            const videoIdModel = new VideoIdModel(faviriteVideo.videoId);
+            const videoIdModel = new VideoIdModel(e.videoId);
             // YouTube Data Apiから動画詳細を取得
             const youtubeVideoDetailApi = await this.callYouTubeDataDetailApi(videoIdModel);
 
@@ -115,14 +113,13 @@ export class GetFavoriteVideoListService {
 
             // YouTube Data APIからのデータ取得に失敗
             if (youtubeVideoItems.length === 0) {
-                continue;
+                return;
             }
 
-            const favoriteVideoListMergedInfo = { ...faviriteVideo, ...youtubeVideoItems[0] };
-            favoriteVideoListMergedList.push(favoriteVideoListMergedInfo);
-        }
+            return { ...e, ...youtubeVideoItems[0] };
+        }));
 
-        return favoriteVideoListMergedList;
+        return favoriteVideoListMergedList.filter((e) => e !== undefined);
     }
 
 
