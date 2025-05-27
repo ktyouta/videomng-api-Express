@@ -130,6 +130,7 @@ export class UpdateFavoriteVideoService {
                 updateFavoriteVideoRequestModel.videoIdModel,
                 updateFavoriteVideoRequestModel.summaryModel,
                 updateFavoriteVideoRequestModel.viewStatusModel,
+                updateFavoriteVideoRequestModel.favoriteLevelModel,
             ), tx);
 
         return favoriteVideo;

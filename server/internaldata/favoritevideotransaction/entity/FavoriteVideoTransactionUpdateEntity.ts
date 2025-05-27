@@ -2,6 +2,7 @@ import { FrontUserIdModel } from "../../common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../common/properties/VideoIdModel";
 import { SummaryModel } from "../properties/SummaryModel";
 import { ViewStatusModel } from "../../common/properties/ViewStatusModel";
+import { FavoriteLevelModel } from "../properties/FavoriteLevelModel";
 
 
 export class FavoriteVideoTransactionUpdateEntity {
@@ -14,17 +15,21 @@ export class FavoriteVideoTransactionUpdateEntity {
     private readonly _summaryModel: SummaryModel;
     // 視聴状況
     private readonly _viewStatusModel: ViewStatusModel;
+    // お気に入り度
+    private readonly _favoriteLevelModel: FavoriteLevelModel;
 
 
     constructor(userId: FrontUserIdModel,
         videoIdModel: VideoIdModel,
         summaryModel: SummaryModel,
-        viewStatusModel: ViewStatusModel,) {
+        viewStatusModel: ViewStatusModel,
+        favoriteLevelModel: FavoriteLevelModel,) {
 
         this._frontUserIdModel = userId;
         this._videoIdModel = videoIdModel;
         this._summaryModel = summaryModel;
         this._viewStatusModel = viewStatusModel;
+        this._favoriteLevelModel = favoriteLevelModel;
     }
 
     public get frontUserIdModel() {
@@ -49,5 +54,9 @@ export class FavoriteVideoTransactionUpdateEntity {
 
     public get viewStatus() {
         return this._viewStatusModel.viewStatus;
+    }
+
+    public get favoriteLevel() {
+        return this._favoriteLevelModel.favoriteLevel;
     }
 }

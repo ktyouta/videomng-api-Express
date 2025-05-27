@@ -32,7 +32,8 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
                 a.video_id as "videoId",
                 a.summary,
                 a.view_status as "viewStatus",
-                b.label as "viewStatusName"
+                b.label as "viewStatusName",
+                a.favorite_level as "favoriteLevel"
             FROM "favorite_video_transaction" a
             LEFT JOIN "view_status_master" b
             ON a.view_status = b.id 
