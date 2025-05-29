@@ -6,6 +6,7 @@ import { FavoriteVideoTransactionUpdateEntity } from "../../entity/FavoriteVideo
 import { FavoriteVideoTransactionRepositoryInterface } from "../interface/FavoriteVideoTransactionRepositoryInterface";
 import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../../common/properties/VideoIdModel";
+import { FavoriteLevelModel } from "../../properties/FavoriteLevelModel";
 
 
 
@@ -38,6 +39,7 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
                 updateDate: new Date(),
                 deleteFlg: FLG.OFF,
                 viewStatus: viewStatus,
+                favoriteLevel: FavoriteLevelModel.MIN,
             },
         });
 

@@ -6,3 +6,5 @@ insert into favorite_video_sort_master values('4','メモ登録数-降順',curre
 insert into favorite_video_sort_master values('5','メモ登録数-昇順',current_timestamp,current_timestamp);
 insert into favorite_video_sort_master values('6','お気に入りコメント登録数-降順',current_timestamp,current_timestamp);
 insert into favorite_video_sort_master values('7','お気に入りコメント登録数-昇順',current_timestamp,current_timestamp);
+insert into favorite_video_sort_master values('8','お気に入り度-降順',current_timestamp,current_timestamp);
+insert into favorite_video_sort_master values('9','お気に入り度-昇順',current_timestamp,current_timestamp);

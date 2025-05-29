@@ -1,8 +1,7 @@
 export class FavoriteLevelModel {
 
     private readonly _favoriteLevel: number;
-    private static readonly MAX = 5;
-    private static readonly MIN = 0;
+    public static readonly MIN = 0;
 
 
     constructor(favoriteLevel: number) {
@@ -11,7 +10,7 @@ export class FavoriteLevelModel {
             favoriteLevel = FavoriteLevelModel.MIN;
         }
 
-        if (favoriteLevel < FavoriteLevelModel.MIN || favoriteLevel > FavoriteLevelModel.MAX) {
+        if (favoriteLevel < FavoriteLevelModel.MIN) {
             favoriteLevel = FavoriteLevelModel.MIN;
         }
 
