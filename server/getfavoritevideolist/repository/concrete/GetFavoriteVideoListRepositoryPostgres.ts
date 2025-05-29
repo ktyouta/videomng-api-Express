@@ -50,6 +50,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         const videoCategory = getFavoriteVideoListSelectEntity.videoCategoryId;
         const videoTag = getFavoriteVideoListSelectEntity.tagName;
         const sortId = getFavoriteVideoListSelectEntity.sortId;
+        const favoriteLevel = getFavoriteVideoListSelectEntity.favoriteLevel;
 
         let sql = `
             SELECT
@@ -99,6 +100,13 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
             )`;
             paramIndex++;
             params.push(videoTag);
+        }
+
+        // お気に入り度
+        if (favoriteLevel) {
+            sql += ` AND favorite_level = $${paramIndex}`;
+            paramIndex++;
+            params.push(parseInt(favoriteLevel));
         }
 
         // ソート
