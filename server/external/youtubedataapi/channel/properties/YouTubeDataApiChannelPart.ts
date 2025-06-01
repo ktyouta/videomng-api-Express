@@ -1,4 +1,4 @@
-export class YouTubeDataApiVideoListPart {
+export class YouTubeDataApiChannelPart {
 
     // YouTubeDataApi(チャンネル)のクエリキー(part)
     static readonly QUERYKEY: string = `part`;
