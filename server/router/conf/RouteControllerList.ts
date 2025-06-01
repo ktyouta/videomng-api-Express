@@ -11,6 +11,7 @@ import { FrontUserCheckAuthController } from "../../frontusercheckauth/controlle
 import { FrontUserLoginController } from "../../frontuserlogin/controller/FrontUserLoginController";
 import { FrontUserLogoutController } from "../../frontuserlogout/controller/FrontUserLogoutController";
 import { GetBlockCommentListController } from "../../getblockcommentlist/controller/GetBlockCommentListController";
+import { GetChannelVideoListController } from "../../getchannelvideolist/controller/GetChannelVideoListController";
 import { GetFavoriteCommentListController } from "../../getfavoritecommentlist/controller/GetFavoriteCommentListController";
 import { GetFavoriteVideoCommentController } from "../../getfavoritevideocomment/controller/GetFavoriteVideoCommentController";
 import { GetFavoriteVideoDetialController } from "../../getfavoritevideodetail/controller/GetFavoriteVideoDetialController";
@@ -100,4 +101,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new UpdateFavoriteVideoTagController(),
     // お気に入り動画ソートリスト取得
     new GetFavoriteVideoSortListController(),
+    // チャンネルの動画一覧取得
+    new GetChannelVideoListController(),
 ]

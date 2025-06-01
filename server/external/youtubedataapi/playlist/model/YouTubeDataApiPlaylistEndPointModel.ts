@@ -29,7 +29,13 @@ export class YouTubeDataApiPlaylistEndPointModel {
         queryBuilder.add(YouTubeDataApiPlaylistPart.QUERYKEY, YouTubeDataApiPlaylistPart.VALUE);
         queryBuilder.add(YouTubeDataApiApiKey.QUERYKEY_API_KEY, this.youTubeDataApiApiKey.apiKey);
         queryBuilder.add(YouTubeDataApiPlaylistMaxResult.QUERYKEY, youTubeDataApiPlaylistMaxResult.maxResult);
-        queryBuilder.add(YouTubeDataApiPlaylistNextPageToken.QUERYKEY, youTubeDataApiPlaylistNextPageToken.token);
+
+        // 次データ取得用トークン
+        const nextPageToken = youTubeDataApiPlaylistNextPageToken.token;
+
+        if (nextPageToken) {
+            queryBuilder.add(YouTubeDataApiPlaylistNextPageToken.QUERYKEY, nextPageToken);
+        }
 
         const queryParam = queryBuilder.createParam();
 

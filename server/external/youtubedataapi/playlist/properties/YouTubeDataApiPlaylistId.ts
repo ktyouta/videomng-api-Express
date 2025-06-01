@@ -2,7 +2,7 @@ export class YouTubeDataApiPlaylistId {
 
     private readonly _playlistId: string;
     // YouTubeDataApi(プレイリスト)のクエリキー(キーワード)
-    static readonly QUERYKEY: string = `id`;
+    static readonly QUERYKEY: string = `playlistId`;
 
     constructor(keyword: string) {
 

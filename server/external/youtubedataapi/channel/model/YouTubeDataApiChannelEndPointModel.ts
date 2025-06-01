@@ -2,7 +2,7 @@ import { QueryBuilder } from "../../../../util/service/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
 import { YouTubeDataApiChannelId } from "../properties/YouTubeDataApiChannelId";
-import { YouTubeDataApiVideoListPart } from "../properties/YouTubeDataApiChannelPart";
+import { YouTubeDataApiChannelPart } from "../properties/YouTubeDataApiChannelPart";
 
 
 /**
@@ -22,7 +22,7 @@ export class YouTubeDataApiChannelEndPointModel {
         // クエリパラメータを作成
         const queryBuilder: QueryBuilder = new QueryBuilder(
             YouTubeDataApiChannelId.QUERYKEY, youTubeDataApiChannelId.channelId);
-        queryBuilder.add(YouTubeDataApiVideoListPart.QUERYKEY, YouTubeDataApiVideoListPart.VALUE);
+        queryBuilder.add(YouTubeDataApiChannelPart.QUERYKEY, YouTubeDataApiChannelPart.VALUE);
         queryBuilder.add(YouTubeDataApiApiKey.QUERYKEY_API_KEY, this.youTubeDataApiApiKey.apiKey);
 
         const queryParam = queryBuilder.createParam();
