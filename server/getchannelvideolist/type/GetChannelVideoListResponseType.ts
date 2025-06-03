@@ -1,3 +1,4 @@
+import { GetChannelVideoChannelInfoType } from "./GetChannelVideoChannelInfoType";
 import { GetChannelVideoListItemType } from "./GetChannelVideoListItemType";
 
 export type GetChannelVideoListResponseType = {
@@ -9,5 +10,6 @@ export type GetChannelVideoListResponseType = {
         totalResults: number;
         resultsPerPage: number;
     };
+    readonly channelInfo: GetChannelVideoChannelInfoType,
     readonly items: GetChannelVideoListItemType[];
 }

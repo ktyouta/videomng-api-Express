@@ -21,6 +21,8 @@ import { GetChannelVideoListItemType } from '../type/GetChannelVideoListItemType
 import { YouTubeDataApiVideoListItemType } from '../../external/youtubedataapi/videolist/type/YouTubeDataApiVideoListItemType';
 import { GetChannelVideoListRepositorys } from '../repository/GetChannelVideoListRepositorys';
 import { GetChannelVideoListSelectEntity } from '../entity/GetChannelVideoListSelectEntity';
+import { YouTubeDataApiChannelResponseType } from '../../external/youtubedataapi/channel/type/YouTubeDataApiChannelResponseType';
+import { YouTubeDataApiChannelItemType } from '../../external/youtubedataapi/channel/type/YouTubeDataApiChannelItemType';
 
 
 export class GetChannelVideoListService {
@@ -97,14 +99,22 @@ export class GetChannelVideoListService {
      * @param youTubeVideoDetailApi 
      * @returns 
      */
-    public convertChannelVideoList(filterdVideoListResponse: YouTubeDataApiPlaylistResponseType) {
+    public convertChannelVideoList(filterdVideoListResponse: YouTubeDataApiPlaylistResponseType,
+        channelItem: YouTubeDataApiChannelItemType
+    ) {
+
+        const channelSnipet = channelItem.snippet;
 
         const convertedChannelVideoList: GetChannelVideoListResponseType = {
             ...filterdVideoListResponse,
+            channelInfo: {
+                channelTitle: channelSnipet.title,
+                channelIcons: channelSnipet.thumbnails,
+            },
             items: filterdVideoListResponse.items.map((e: YouTubeDataApiPlaylistItemType) => {
 
-                const snipet = e.snippet;
-                const thumbnails = snipet.thumbnails;
+                const snippet = e.snippet;
+                const thumbnails = snippet.thumbnails;
 
                 const youTubeDataApiPlaylistItem: YouTubeDataApiVideoListItemType = {
                     kind: e.kind,
@@ -114,10 +124,10 @@ export class GetChannelVideoListService {
                         videoId: e.snippet.resourceId.videoId
                     },
                     snippet: {
-                        publishedAt: '',
+                        publishedAt: snippet.publishedAt,
                         channelId: '',
-                        title: snipet.title,
-                        description: snipet.description,
+                        title: snippet.title,
+                        description: snippet.description,
                         thumbnails: {
                             default: {
                                 url: thumbnails.default?.url ?? ``,
@@ -135,7 +145,7 @@ export class GetChannelVideoListService {
                                 height: thumbnails.high?.height ?? 0,
                             }
                         },
-                        channelTitle: snipet.channelTitle,
+                        channelTitle: snippet.channelTitle,
                         liveBroadcastContent: ''
                     }
                 }

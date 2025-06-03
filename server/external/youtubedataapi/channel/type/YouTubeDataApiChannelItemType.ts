@@ -21,4 +21,13 @@ export type YouTubeDataApiChannelItemType = {
             readonly watchLater?: string;
         };
     };
+    // チャンネル情報
+    readonly snippet: {
+        readonly title: string,
+        readonly thumbnails: {
+            readonly high: {
+                readonly url: string,
+            }
+        }
+    }
 };

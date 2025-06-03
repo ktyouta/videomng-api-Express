@@ -16,6 +16,7 @@ import { YouTubeDataApiPlaylistNextPageToken } from '../../external/youtubedataa
 import { YouTubeDataApiPlaylistItemType } from '../../external/youtubedataapi/playlist/type/YouTubeDataApiPlaylistItemType';
 import { YouTubeDataApiPlaylistModel } from '../../external/youtubedataapi/playlist/model/YouTubeDataApiPlaylistModel';
 import { YouTubeDataApiPlaylistResponseType } from '../../external/youtubedataapi/playlist/type/YouTubeDataApiPlaylistResponseType';
+import { GetChannelVideoListResponseType } from '../type/GetChannelVideoListResponseType';
 
 
 export class GetChannelVideoListController extends RouteController {
@@ -64,13 +65,14 @@ export class GetChannelVideoListController extends RouteController {
         }
 
         const channelResponse = channelVideoList.response;
+        const channelItems = channelResponse.items;
 
         // チャンネル情報が存在しない
-        if (!channelResponse.items || channelResponse.items.length === 0) {
+        if (!channelItems || channelItems.length === 0) {
             return ApiResponse.create(res, HTTP_STATUS_OK, `チャンネル情報が存在しません。`)
         }
 
-        const playlistId = channelResponse.items[0].contentDetails.relatedPlaylists.uploads;
+        const playlistId = channelItems[0].contentDetails.relatedPlaylists.uploads;
         const playlistIdModel = new YouTubeDataApiPlaylistId(playlistId);
 
         // YouTube Data Apiからプレイリストを取得する
@@ -95,7 +97,10 @@ export class GetChannelVideoListController extends RouteController {
         const filterdVideoListResponse = this.getChannelVideoListService.filterVideoList(playlistReponse);
 
         // レスポンス用に型を変換する
-        let convertedChannelVideoList = this.getChannelVideoListService.convertChannelVideoList(filterdVideoListResponse);
+        let convertedChannelVideoList: GetChannelVideoListResponseType = this.getChannelVideoListService.convertChannelVideoList(
+            filterdVideoListResponse,
+            channelResponse.items[0]
+        );
 
         // jwt取得
         const token = this.getChannelVideoListService.getToken(req);
