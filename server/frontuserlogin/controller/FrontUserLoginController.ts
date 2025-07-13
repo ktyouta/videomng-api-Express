@@ -1,5 +1,4 @@
 import { Router, Request, Response } from 'express';
-import ENV from '../../env.json';
 import { RouteController } from '../../router/controller/RouteController';
 import { FrontUserLoginService } from '../service/FrontUserLoginService';
 import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';

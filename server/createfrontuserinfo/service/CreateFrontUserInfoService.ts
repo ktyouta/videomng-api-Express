@@ -1,6 +1,5 @@
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import ENV from '../../env.json';
 import { FrontUserInfoCreateRequestModel } from "../model/FrontUserInfoCreateRequestModel";
 import { FrontUserInfoCreateRequestType } from "../model/FrontUserInfoCreateRequestType";
 import { FLG, RepositoryType } from "../../util/const/CommonConst";

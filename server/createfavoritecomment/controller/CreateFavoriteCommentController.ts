@@ -1,5 +1,4 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import ENV from '../../env.json';
 import { RouteController } from '../../router/controller/RouteController';
 import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
 import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';

@@ -1,5 +1,4 @@
 import { CookieModel } from '../../cookie/model/CookieModel';
-import ENV from '../../env.json';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserBirthdayModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserBirthdayModel';
 import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';

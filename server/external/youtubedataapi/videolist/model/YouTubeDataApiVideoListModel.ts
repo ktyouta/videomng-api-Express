@@ -1,4 +1,3 @@
-import ENV from '../../../../env.json';
 import { envConfig } from '../../../../util/const/EnvConfig';
 import { ApiClient } from '../../../../util/service/ApiClient';
 import { QueryBuilder } from '../../../../util/service/QueryBuilder';

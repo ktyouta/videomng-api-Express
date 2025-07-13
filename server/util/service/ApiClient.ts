@@ -1,13 +1,24 @@
 import axios, { AxiosInstance } from 'axios';
-import ENV from "../../env.json";
+import { envConfig } from '../const/EnvConfig';
 
 export class ApiClient {
     private client: AxiosInstance;
 
     constructor() {
+
+        const timeout = envConfig.timeout;
+
+        if (!timeout) {
+            throw Error(`設定ファイルにタイムアウト時間が設定されていません。`);
+        }
+
+        if (isNaN(Number.parseInt(timeout))) {
+            throw Error(`設定ファイルのタイムアウト時間が不正です。`);
+        }
+
         this.client = axios.create({
             // タイムアウト設定
-            timeout: ENV.TIMEOUT,
+            timeout: Number.parseInt(timeout),
             headers: { 'Content-Type': 'application/json' },
         });
     }

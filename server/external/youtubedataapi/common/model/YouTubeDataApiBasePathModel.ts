@@ -1,4 +1,3 @@
-import ENV from '../../../../env.json';
 
 export class YouTubeDataApiBasePathModel {
 

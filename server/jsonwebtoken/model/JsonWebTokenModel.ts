@@ -1,5 +1,5 @@
 import { CookieModel } from "../../cookie/model/CookieModel";
-import ENV from "../../env.json";
+import { envConfig } from "../../util/const/EnvConfig";
 
 
 export class JsonWebTokenModel {
@@ -7,7 +7,7 @@ export class JsonWebTokenModel {
     // トークン
     private readonly _token: string;
     // cookieのキー
-    static readonly KEY: string = ENV.COOKIE_KEY_JWT;
+    static readonly KEY: string = envConfig.cookieKeyJwt ?? ``;
 
     constructor(cookieModel: CookieModel) {
 

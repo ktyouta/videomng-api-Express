@@ -125,7 +125,14 @@ yarn-error.log*
 DATABASE_URL=データベースのURL
 YOUTUBE_API_KEY=YouTube Data APIのキー
 VIDEOMNG_JWT_KEY=jwtのキー
+PORT=3001
+CORS_PROTOCOL=http://
+CORS_DOMAIN=localhost:
+CORS_PORT=5173
+COOKIE_KEY_JWT=jwt
+TIMEOUT=10000
 
+※CORS_PORTはフロントのポート番号を指定
 
 ⑪sqlフォルダ内のクエリを実行する
 ※create_function_update_favorite_video_transaction_update_date.sqlとcreate_triggers_for_update_favorite_video_transaction_update_date.sqlについては、

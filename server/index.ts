@@ -1,9 +1,9 @@
-import ENV from './env.json';
 import { NextFunction, Request, Response } from 'express';
 import { Logger } from './util/service/Logger';
 import bodyParser from 'body-parser';
 import { ROUTE_CONTROLLER_LIST } from './router/conf/RouteControllerList';
 import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './util/const/HttpStatusConst';
+import { envConfig } from './util/const/EnvConfig';
 
 
 const express = require('express');
@@ -20,7 +20,7 @@ app.use(cookieParser());
 // cors設定
 app.use(cors({
     credentials: true,
-    origin: `${ENV.CORS.PROTOCOL}${ENV.CORS.DOMAIN}${ENV.CORS.PORT}`
+    origin: `${envConfig.corsProtocol}${envConfig.corsDomain}${envConfig.corsPort}`
 }));
 
 
@@ -87,6 +87,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 
 // サーバーを起動
-app.listen(ENV.PORT, () => {
-    console.log(`Youtube Manage API Server listening on port ${ENV.PORT}`);
+app.listen(envConfig.port, () => {
+    console.log(`Youtube Manage API Server listening on port ${envConfig.port}`);
 });
