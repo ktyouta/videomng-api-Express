@@ -27,3 +27,5 @@ yarn-error.log*
 /public/log/info.log
 /public/log/warn.log
 /public/log/error.log
+
+dist
