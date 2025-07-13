@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
 import { Router, Request, Response, NextFunction } from 'express';
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
@@ -20,6 +20,8 @@ import { FrontUserInfoUpdateRequestModel } from "../model/FrontUserInfoUpdateReq
 import { FrontUserInfoUpdateResponseModel } from "../model/FrontUserInfoUpdateResponseModel";
 import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
 import { FrontUserLoginMasterUpdateUserInfoEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateUserInfoEntity";
+import { envConfig } from "../../util/const/EnvConfig";
+import { IS_ALLOW_USER_OPERATION } from "../../util/const/AllowUserOperationConst";
 
 
 export class UpdateFrontUserInfoController extends RouteController {
@@ -42,6 +44,10 @@ export class UpdateFrontUserInfoController extends RouteController {
      * @returns 
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
+
+        if (!IS_ALLOW_USER_OPERATION) {
+            return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `この機能は現在の環境では無効化されています。`);
+        }
 
         const id = req.params.id;
 

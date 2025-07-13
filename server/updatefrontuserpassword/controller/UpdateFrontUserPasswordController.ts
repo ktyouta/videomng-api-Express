@@ -1,4 +1,4 @@
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
+import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
 import { Router, Request, Response, NextFunction } from 'express';
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
@@ -18,6 +18,7 @@ import { UpdateFrontUserPasswordRequestModel } from "../model/UpdateFrontUserPas
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel";
 import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
+import { IS_ALLOW_USER_OPERATION } from "../../util/const/AllowUserOperationConst";
 
 
 export class UpdateFrontUserPasswordController extends RouteController {
@@ -40,6 +41,10 @@ export class UpdateFrontUserPasswordController extends RouteController {
      * @returns 
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
+
+        if (!IS_ALLOW_USER_OPERATION) {
+            return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `この機能は現在の環境では無効化されています。`);
+        }
 
         const id = req.params.id;
 

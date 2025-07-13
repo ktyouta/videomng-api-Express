@@ -12,4 +12,5 @@ export const envConfig = {
     corsPort: process.env.CORS_PORT,
     cookieKeyJwt: process.env.COOKIE_KEY_JWT,
     timeout: process.env.TIMEOUT,
+    allowUserOperation: process.env.ALLOW_USER_OPERATION,
 };

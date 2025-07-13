@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
 import { Router, Request, Response, NextFunction } from 'express';
 import { CreateFrontUserInfoService } from "../service/CreateFrontUserInfoService";
@@ -19,6 +19,7 @@ import { Prisma } from "@prisma/client";
 import { PrismaTransaction } from "../../util/service/PrismaTransaction";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
+import { IS_ALLOW_USER_OPERATION } from "../../util/const/AllowUserOperationConst";
 
 
 export class CreateFrontUserInfoController extends RouteController {
@@ -41,6 +42,10 @@ export class CreateFrontUserInfoController extends RouteController {
      * @returns 
      */
     public doExecute(req: Request, res: Response, next: NextFunction) {
+
+        if (!IS_ALLOW_USER_OPERATION) {
+            return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `この機能は現在の環境では無効化されています。`);
+        }
 
         // リクエストボディ
         const requestBody: FrontUserInfoCreateRequestType = req.body;
