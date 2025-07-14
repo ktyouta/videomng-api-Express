@@ -1,3 +1,5 @@
+import path from "path";
+
 export class FileData {
 
     private static readonly fs = require('fs');
@@ -65,6 +67,13 @@ export class FileData {
     public static overWrite(filePath: string, data: string) {
 
         try {
+
+            const dir = path.dirname(filePath);
+
+            if (!this.fs.existsSync(dir)) {
+                this.fs.mkdirSync(dir, { recursive: true });
+            }
+
             this.fs.writeFileSync(filePath, data, { encoding: 'utf8' });
         } catch (err) {
             throw Error(`ファイルの書き込みに失敗しました。filepath:${filePath} ERROR:${err}`);
@@ -85,6 +94,17 @@ export class FileData {
         }
 
         try {
+
+            const dir = path.dirname(filePath);
+
+            if (!this.fs.existsSync(dir)) {
+                this.fs.mkdirSync(dir, { recursive: true });
+            }
+
+            if (!this.fs.existsSync(filePath)) {
+                this.fs.writeFileSync(filePath, '');
+            }
+
             this.fs.appendFileSync(filePath, data, { encoding: 'utf8' });
         } catch (err) {
             throw Error(`ファイルの追記に失敗しました。 filePath:${filePath} ERROR:${err}`);

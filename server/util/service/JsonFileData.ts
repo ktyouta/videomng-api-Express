@@ -1,3 +1,4 @@
+import path from "path";
 import { FileData } from "./FileData";
 import * as fs from 'fs';
 
@@ -16,6 +17,13 @@ export class JsonFileData {
         try {
             //json文字列に変換
             const stream: string = JSON.stringify(data, null, '\t');
+
+            const dir = path.dirname(filePath);
+
+            if (!this.fs.existsSync(dir)) {
+                this.fs.mkdirSync(dir, { recursive: true });
+            }
+
             this.fs.writeFileSync(filePath, stream);
         } catch (err) {
             throw Error(`jsonファイルの書き込みに失敗しました。 filePath:${filePath} ERROR:${err}`);
