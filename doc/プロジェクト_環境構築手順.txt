@@ -132,9 +132,11 @@ CORS_PORT=5173
 COOKIE_KEY_JWT=jwt
 TIMEOUT=10000
 ALLOW_USER_OPERATION=true
+ENV_PRODUCTION=false
 
 ※CORS_PORTはフロントのポート番号を指定
 ※ALLOW_USER_OPERATION：デモ環境ではfalseを設定
+※ENV_PRODUCTION：デモ環境ではtrueを設定
 
 ⑪sqlフォルダ内のクエリを実行する
 ※create_function_update_favorite_video_transaction_update_date.sqlとcreate_triggers_for_update_favorite_video_transaction_update_date.sqlについては、

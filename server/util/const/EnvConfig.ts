@@ -13,4 +13,5 @@ export const envConfig = {
     cookieKeyJwt: process.env.COOKIE_KEY_JWT,
     timeout: process.env.TIMEOUT,
     allowUserOperation: process.env.ALLOW_USER_OPERATION,
+    envProduction: process.env.ENV_PRODUCTION,
 };

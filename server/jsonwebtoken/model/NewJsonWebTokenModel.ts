@@ -2,6 +2,7 @@ import { CookieOptions } from 'express';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { envConfig } from '../../util/const/EnvConfig';
+import { IS_ENV_PRODUCTION } from '../../util/const/EnvProductionConst';
 
 
 export class NewJsonWebTokenModel {
@@ -12,6 +13,8 @@ export class NewJsonWebTokenModel {
     // cookieオプション
     static readonly COOKIE_OPTION: CookieOptions = {
         httpOnly: true,
+        secure: IS_ENV_PRODUCTION,
+        sameSite: IS_ENV_PRODUCTION ? 'none' : 'lax',
     };
 
     constructor(frontUserIdModel: FrontUserIdModel, frontUserPasswordModel: FrontUserPasswordModel) {
