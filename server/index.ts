@@ -16,11 +16,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
+const corsProtocol = envConfig.corsProtocol ?? ``;
+const corsDomain = envConfig.corsDomain ?? ``;
+const corsPort = envConfig.corsPort ?? ``;
 
 // cors設定
 app.use(cors({
     credentials: true,
-    origin: `${envConfig.corsProtocol}${envConfig.corsDomain}${envConfig.corsPort}`
+    origin: `${corsProtocol}${corsDomain}${corsPort}`
 }));
 
 
