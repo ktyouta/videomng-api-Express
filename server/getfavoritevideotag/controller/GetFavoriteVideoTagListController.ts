@@ -40,7 +40,7 @@ export class GetFavoriteVideoTagListController extends RouteController {
         const id = req.params.id;
 
         if (!id) {
-            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_COMMENT_ID} | method:${HttpMethodType.GET}`);
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_TAG_ID} | method:${HttpMethodType.GET}`);
         }
 
         const videoIdModel = new VideoIdModel(id);

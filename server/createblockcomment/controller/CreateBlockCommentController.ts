@@ -13,6 +13,7 @@ import { CreateBlockCommentService } from '../service/CreateBlockCommentService'
 import { CreateBlockCommentRequestType } from '../model/CreateBlockCommentRequestType';
 import { CreateBlockCommentRequestModelSchema } from '../model/CreateBlockCommentRequestModelSchema';
 import { CreateBlockCommentRequestModel } from '../model/CreateBlockCommentRequestModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 
 
 export class CreateBlockCommentController extends RouteController {
@@ -36,6 +37,14 @@ export class CreateBlockCommentController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
+        const id = req.params.videoId;
+
+        if (!id) {
+            throw Error(`動画IDが指定されていません。`);
+        }
+
+        const videoIdModel = new VideoIdModel(id);
+
         // リクエストボディ
         const requestBody: CreateBlockCommentRequestType = req.body;
 
@@ -54,7 +63,7 @@ export class CreateBlockCommentController extends RouteController {
         }
 
         // リクエストボディの型変換
-        const createBlockCommentRequestModel: CreateBlockCommentRequestModel = new CreateBlockCommentRequestModel(requestBody);
+        const createBlockCommentRequestModel: CreateBlockCommentRequestModel = new CreateBlockCommentRequestModel(requestBody, videoIdModel);
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.createBlockCommentService.checkJwtVerify(req);

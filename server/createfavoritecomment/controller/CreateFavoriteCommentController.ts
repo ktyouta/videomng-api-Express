@@ -13,6 +13,7 @@ import { CreateFavoriteCommentService } from '../service/CreateFavoriteCommentSe
 import { CreateFavoriteCommentRequestType } from '../model/CreateFavoriteCommentRequestType';
 import { CreateFavoriteCommentRequestModelSchema } from '../model/CreateFavoriteCommentRequestModelSchema';
 import { CreateFavoriteCommentRequestModel } from '../model/CreateFavoriteCommentRequestModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 
 
 export class CreateFavoriteCommentController extends RouteController {
@@ -36,6 +37,14 @@ export class CreateFavoriteCommentController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
+        const id = req.params.videoId;
+
+        if (!id) {
+            throw Error(`動画IDが指定されていません。`);
+        }
+
+        const videoIdModel = new VideoIdModel(id);
+
         // リクエストボディ
         const requestBody: CreateFavoriteCommentRequestType = req.body;
 
@@ -54,7 +63,10 @@ export class CreateFavoriteCommentController extends RouteController {
         }
 
         // リクエストボディの型変換
-        const createFavoriteCommentRequestModel: CreateFavoriteCommentRequestModel = new CreateFavoriteCommentRequestModel(requestBody);
+        const createFavoriteCommentRequestModel: CreateFavoriteCommentRequestModel = new CreateFavoriteCommentRequestModel(
+            requestBody,
+            videoIdModel
+        );
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.createFavoriteCommentService.checkJwtVerify(req);

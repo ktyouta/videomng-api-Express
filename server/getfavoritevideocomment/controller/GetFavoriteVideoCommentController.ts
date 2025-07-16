@@ -24,7 +24,7 @@ export class GetFavoriteVideoCommentController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_COMMENT_ID
+            ApiEndopoint.FAVORITE_VIDEO_COMMENT
         );
     }
 
@@ -37,7 +37,7 @@ export class GetFavoriteVideoCommentController extends RouteController {
      */
     public async doExecute(req: Request, res: Response) {
 
-        const id = req.params.id;
+        const id = req.params.videoId;
 
         if (!id) {
             throw Error(`動画IDが指定されていません。`);

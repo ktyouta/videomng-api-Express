@@ -9,10 +9,12 @@ export class CreateFavoriteCommentRequestModel {
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
 
-    constructor(createFavoriteCommentRequestType: CreateFavoriteCommentRequestType) {
+    constructor(createFavoriteCommentRequestType: CreateFavoriteCommentRequestType,
+        videoIdModel: VideoIdModel
+    ) {
 
         this._commentIdModel = new CommentIdModel(createFavoriteCommentRequestType.commentId);
-        this._videoIdModel = new VideoIdModel(createFavoriteCommentRequestType.videoId);
+        this._videoIdModel = videoIdModel;
     }
 
     get commentIdModel() {

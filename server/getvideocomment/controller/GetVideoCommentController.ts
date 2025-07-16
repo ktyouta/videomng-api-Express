@@ -34,7 +34,7 @@ export class GetVideoCommentController extends RouteController {
      */
     public async doExecute(req: Request, res: Response) {
 
-        const id = req.params.id;
+        const id = req.params.videoId;
 
         if (!id) {
             throw Error(`動画IDが指定されていません。`);

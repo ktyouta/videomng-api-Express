@@ -9,10 +9,12 @@ export class CreateBlockCommentRequestModel {
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
 
-    constructor(createBlockCommentRequestType: CreateBlockCommentRequestType) {
+    constructor(createBlockCommentRequestType: CreateBlockCommentRequestType,
+        videoIdModel: VideoIdModel
+    ) {
 
         this._commentIdModel = new CommentIdModel(createBlockCommentRequestType.commentId);
-        this._videoIdModel = new VideoIdModel(createBlockCommentRequestType.videoId);
+        this._videoIdModel = videoIdModel;
     }
 
     get commentIdModel() {

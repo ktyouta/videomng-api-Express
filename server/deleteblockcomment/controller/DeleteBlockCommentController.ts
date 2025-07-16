@@ -35,13 +35,19 @@ export class DeleteBlockCommentController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
-        const id = req.params.id;
+        const videoId = req.params.videoId;
 
-        if (!id) {
+        if (!videoId) {
+            throw Error(`動画IDが指定されていません。`);
+        }
+
+        const commentId = req.params.commentId;
+
+        if (!commentId) {
             throw Error(`コメントIDが指定されていません。 endpoint:${ApiEndopoint.BLOCK_COMMENT_ID}`);
         }
 
-        const commentId = new CommentIdModel(id);
+        const commentIdModel = new CommentIdModel(commentId);
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.deleteBlockCommentService.checkJwtVerify(req);
@@ -56,7 +62,7 @@ export class DeleteBlockCommentController extends RouteController {
             // ブロックコメントを削除
             const blockComment = await this.deleteBlockCommentService.softDelete(
                 blockCommentRepository,
-                commentId,
+                commentIdModel,
                 frontUserIdModel,
                 tx);
 

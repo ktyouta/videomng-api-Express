@@ -25,7 +25,7 @@ export class GetBlockCommentListController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.BLOCK_COMMENT_ID
+            ApiEndopoint.BLOCK_COMMENT
         );
     }
 
@@ -37,10 +37,10 @@ export class GetBlockCommentListController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
-        const id = req.params.id;
+        const id = req.params.videoId;
 
         if (!id) {
-            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.BLOCK_COMMENT_ID} | method:${HttpMethodType.GET}`);
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.BLOCK_COMMENT} | method:${HttpMethodType.GET}`);
         }
 
         const videoIdModel = new VideoIdModel(id);
