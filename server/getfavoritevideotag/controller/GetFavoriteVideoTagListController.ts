@@ -37,7 +37,7 @@ export class GetFavoriteVideoTagListController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
-        const id = req.params.id;
+        const id = req.params.videoId;
 
         if (!id) {
             throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_TAG_ID} | method:${HttpMethodType.GET}`);
