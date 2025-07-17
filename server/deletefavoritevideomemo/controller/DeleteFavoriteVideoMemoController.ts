@@ -10,10 +10,11 @@ import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { DeleteFavoriteVideoMemoRequestType } from '../Type/DeleteFavoriteVideoMemoRequestType';
-import { DeleteFavoriteVideoMemoRequestModelSchema } from '../model/DeleteFavoriteVideoMemoRequestModelSchema';
 import { DeleteFavoriteVideoMemoResponseModel } from '../model/DeleteFavoriteVideoMemoResponseModel';
 import { DeleteFavoriteVideoMemoService } from '../service/DeleteFavoriteVideoMemoService';
 import { DeleteFavoriteVideoMemoRequestModel } from '../model/DeleteFavoriteVideoMemoRequestModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { VideoMemoSeqModel } from '../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel';
 
 
 export class DeleteFavoriteVideoMemoController extends RouteController {
@@ -25,7 +26,7 @@ export class DeleteFavoriteVideoMemoController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.DELETE,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_MEMO
+            ApiEndopoint.FAVORITE_VIDEO_MEMO_ID
         );
     }
 
@@ -37,25 +38,24 @@ export class DeleteFavoriteVideoMemoController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
-        // リクエストボディ
-        const requestBody: DeleteFavoriteVideoMemoRequestType = req.body;
+        const videoId = req.params.videoId;
 
-        // リクエストのバリデーションチェック
-        const validateResult = DeleteFavoriteVideoMemoRequestModelSchema.safeParse(requestBody);
-
-        // バリデーションエラー
-        if (!validateResult.success) {
-
-            // エラーメッセージを取得
-            const validatErrMessage = validateResult.error.errors.map((e: ZodIssue) => {
-                return e.message;
-            }).join(`,`);
-
-            return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
+        if (!videoId) {
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_ID} | method:${HttpMethodType.GET}`);
         }
 
+        const videoIdModel = new VideoIdModel(videoId);
+
+        const memoId = req.params.memoId;
+
+        if (!memoId) {
+            throw Error(`メモIDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_ID} | method:${HttpMethodType.GET}`);
+        }
+
+        const videoMemoSeqModel = new VideoMemoSeqModel(parseInt(memoId));
+
         // リクエストボディの型変換
-        const deleteFavoriteVideoMemoRequestModel = new DeleteFavoriteVideoMemoRequestModel(requestBody);
+        const deleteFavoriteVideoMemoRequestModel = new DeleteFavoriteVideoMemoRequestModel(videoIdModel, videoMemoSeqModel);
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.deleteFavoriteVideoMemoService.checkJwtVerify(req);

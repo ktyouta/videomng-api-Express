@@ -13,10 +13,13 @@ export class UpdateFavoriteVideoMemoRequestModel {
     private readonly _memoModel: VideoMemoModel;
 
 
-    constructor(updateFavoriteVideoMemoRequestType: UpdateFavoriteVideoMemoRequestType) {
+    constructor(updateFavoriteVideoMemoRequestType: UpdateFavoriteVideoMemoRequestType,
+        videoIdModel: VideoIdModel,
+        videoMemoSeqModel: VideoMemoSeqModel
+    ) {
 
-        this._videoIdModel = new VideoIdModel(updateFavoriteVideoMemoRequestType.videoId);
-        this._videoMemoSeqModel = new VideoMemoSeqModel(updateFavoriteVideoMemoRequestType.videoMemoSeq);
+        this._videoIdModel = videoIdModel;
+        this._videoMemoSeqModel = videoMemoSeqModel;
         this._memoModel = new VideoMemoModel(updateFavoriteVideoMemoRequestType.memo);
     }
 

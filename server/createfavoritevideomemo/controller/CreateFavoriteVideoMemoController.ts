@@ -14,6 +14,7 @@ import { CreateFavoriteVideoMemoService } from '../service/CreateFavoriteVideoMe
 import { CreateFavoriteVideoMemoRequestType } from '../Type/CreateFavoriteVideoMemoRequestType';
 import { CreateFavoriteVideoMemoRequestModelSchema } from '../model/CreateFavoriteVideoMemoRequestModelSchema';
 import { CreateFavoriteVideoMemoResponseModel } from '../model/CreateFavoriteVideoMemoResponseModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 
 
 export class CreateFavoriteVideoMemoController extends RouteController {
@@ -37,6 +38,14 @@ export class CreateFavoriteVideoMemoController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
+        const id = req.params.videoId;
+
+        if (!id) {
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_ID} | method:${HttpMethodType.GET}`);
+        }
+
+        const videoIdModel = new VideoIdModel(id);
+
         // リクエストボディ
         const requestBody: CreateFavoriteVideoMemoRequestType = req.body;
 
@@ -55,7 +64,7 @@ export class CreateFavoriteVideoMemoController extends RouteController {
         }
 
         // リクエストボディの型変換
-        const createFavoriteVideoMemoRequestModel = new CreateFavoriteVideoMemoRequestModel(requestBody);
+        const createFavoriteVideoMemoRequestModel = new CreateFavoriteVideoMemoRequestModel(requestBody, videoIdModel);
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.createFavoriteVideoMemoService.checkJwtVerify(req);

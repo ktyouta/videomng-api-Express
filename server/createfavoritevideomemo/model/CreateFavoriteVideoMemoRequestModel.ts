@@ -9,9 +9,11 @@ export class CreateFavoriteVideoMemoRequestModel {
     // メモ
     private readonly _memoModel: VideoMemoModel;
 
-    constructor(createFavoriteVideoMemoRequestType: CreateFavoriteVideoMemoRequestType) {
+    constructor(createFavoriteVideoMemoRequestType: CreateFavoriteVideoMemoRequestType,
+        videoIdModel: VideoIdModel
+    ) {
 
-        this._videoIdModel = new VideoIdModel(createFavoriteVideoMemoRequestType.videoId);
+        this._videoIdModel = videoIdModel;
         this._memoModel = new VideoMemoModel(createFavoriteVideoMemoRequestType.memo);
     }
 

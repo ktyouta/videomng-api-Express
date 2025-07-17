@@ -14,6 +14,8 @@ import { UpdateFavoriteVideoMemoRequestType } from '../Type/UpdateFavoriteVideoM
 import { UpdateFavoriteVideoMemoRequestModelSchema } from '../model/UpdateFavoriteVideoMemoRequestModelSchema';
 import { UpdateFavoriteVideoMemoRequestModel } from '../model/UpdateFavoriteVideoMemoRequestModel';
 import { UpdateFavoriteVideoMemoResponseModel } from '../model/UpdateFavoriteVideoMemoResponseModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { VideoMemoSeqModel } from '../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel';
 
 
 export class UpdateFavoriteVideoMemoController extends RouteController {
@@ -25,7 +27,7 @@ export class UpdateFavoriteVideoMemoController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.PUT,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_MEMO
+            ApiEndopoint.FAVORITE_VIDEO_MEMO_ID
         );
     }
 
@@ -36,6 +38,22 @@ export class UpdateFavoriteVideoMemoController extends RouteController {
      * @returns 
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
+
+        const videoId = req.params.videoId;
+
+        if (!videoId) {
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_ID} | method:${HttpMethodType.GET}`);
+        }
+
+        const videoIdModel = new VideoIdModel(videoId);
+
+        const memoId = req.params.memoId;
+
+        if (!memoId) {
+            throw Error(`メモIDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_ID} | method:${HttpMethodType.GET}`);
+        }
+
+        const videoMemoSeqModel = new VideoMemoSeqModel(parseInt(memoId));
 
         // リクエストボディ
         const requestBody: UpdateFavoriteVideoMemoRequestType = req.body;
@@ -55,7 +73,11 @@ export class UpdateFavoriteVideoMemoController extends RouteController {
         }
 
         // リクエストボディの型変換
-        const updateFavoriteVideoMemoRequestModel = new UpdateFavoriteVideoMemoRequestModel(requestBody);
+        const updateFavoriteVideoMemoRequestModel = new UpdateFavoriteVideoMemoRequestModel(
+            requestBody,
+            videoIdModel,
+            videoMemoSeqModel
+        );
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.updateFavoriteVideoMemoService.checkJwtVerify(req);

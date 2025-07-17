@@ -10,10 +10,12 @@ export class DeleteFavoriteVideoMemoRequestModel {
     // メモ
     private readonly _videoMemoSeqModel: VideoMemoSeqModel;
 
-    constructor(deleteFavoriteVideoMemoRequestType: DeleteFavoriteVideoMemoRequestType) {
+    constructor(videoIdModel: VideoIdModel,
+        videoMemoSeqModel: VideoMemoSeqModel
+    ) {
 
-        this._videoIdModel = new VideoIdModel(deleteFavoriteVideoMemoRequestType.videoId);
-        this._videoMemoSeqModel = new VideoMemoSeqModel(deleteFavoriteVideoMemoRequestType.videoMemoSeq);
+        this._videoIdModel = videoIdModel;
+        this._videoMemoSeqModel = videoMemoSeqModel;
     }
 
     public get videoIdModel() {
