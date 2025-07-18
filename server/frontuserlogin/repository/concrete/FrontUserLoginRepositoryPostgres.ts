@@ -1,8 +1,9 @@
 import { FrontUserLoginRepositoryInterface } from "../interface/FrontUserLoginRepositoryInterface";
 import { FrontUserLoginSelectEntity } from "../../entity/FrontUserLoginSelectEntity";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { FrontUserInfoMaster, FrontUserLoginMaster } from "@prisma/client";
+import { FrontUserInfoMaster, FrontUserLoginMaster, Prisma } from "@prisma/client";
 import { FrontUserInfoSelectEntity } from "../../entity/FrontUserInfoSelectEntity";
+import { FrontUserInfoUpdateLastLoginDateEntity } from "../../entity/FrontUserInfoUpdateLastLoginDateEntity";
 
 
 
@@ -56,5 +57,28 @@ export class FrontUserLoginRepositoryPostgres implements FrontUserLoginRepositor
                     `;
 
         return frontUserList;
+    }
+
+
+    /**
+     * ユーザーの最終ログイン日時を更新
+     * @param frontUserInfoUpdateLastLoginDateEntity 
+     * @param tx 
+     * @returns 
+     */
+    async updateLastLoginDate(frontUserInfoUpdateLastLoginDateEntity: FrontUserInfoUpdateLastLoginDateEntity,
+        tx: Prisma.TransactionClient) {
+
+        const userId = frontUserInfoUpdateLastLoginDateEntity.frontUserId;
+
+        const userInfo = tx.frontUserInfoMaster.update({
+            where: { userId },
+            data: {
+                updateDate: new Date(),
+                lastLoginDate: new Date(),
+            },
+        });
+
+        return userInfo;
     }
 }

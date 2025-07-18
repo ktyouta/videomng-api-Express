@@ -42,6 +42,7 @@ model FrontUserInfoMaster {
   createDate  DateTime @db.Timestamptz @map("create_date")
   updateDate  DateTime @db.Timestamptz @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")
+  lastLoginDate  DateTime? @db.Timestamptz @map("last_login_date")
   @@map("front_user_info_master")
 }
 

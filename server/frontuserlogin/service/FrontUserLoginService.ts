@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
@@ -9,6 +10,7 @@ import { FrontUserLoginSelectEntity } from '../entity/FrontUserLoginSelectEntity
 import { FrontUserLoginRequestType } from '../model/FrontUserLoginRequestType';
 import { FrontUserLoginRepositorys } from '../repository/FrontUserLoginRepositorys';
 import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
+import { FrontUserInfoUpdateLastLoginDateEntity } from '../entity/FrontUserInfoUpdateLastLoginDateEntity';
 
 
 export class FrontUserLoginService {
@@ -34,7 +36,7 @@ export class FrontUserLoginService {
             userNameModel
         );
 
-        const frontUserLoginList = frontUserLoginMasterRepository.selectLoginUser(frontUserLoginSelectEntity);
+        const frontUserLoginList = await frontUserLoginMasterRepository.selectLoginUser(frontUserLoginSelectEntity);
 
         return frontUserLoginList;
     }
@@ -51,7 +53,7 @@ export class FrontUserLoginService {
             inputFrontUserId
         );
 
-        const frontUserList = frontUserLoginMasterRepository.selectUserInfo(rontUserInfoSelectEntity);
+        const frontUserList = await frontUserLoginMasterRepository.selectUserInfo(rontUserInfoSelectEntity);
 
         return frontUserList;
     }
@@ -74,5 +76,23 @@ export class FrontUserLoginService {
         } catch (err) {
             throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_INFO}`);
         }
+    }
+
+
+    /**
+     * ユーザーの最終ログイン日時を更新する
+     * @param frontUserIdModel 
+     * @param tx 
+     */
+    public async updateLastLoginDate(frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface,
+        frontUserIdModel: FrontUserIdModel,
+        tx: Prisma.TransactionClient
+    ) {
+
+        const frontUserInfoUpdateLastLoginDateEntity = new FrontUserInfoUpdateLastLoginDateEntity(frontUserIdModel);
+
+        const frontUser = await frontUserLoginMasterRepository.updateLastLoginDate(frontUserInfoUpdateLastLoginDateEntity, tx);
+
+        return frontUser;
     }
 }

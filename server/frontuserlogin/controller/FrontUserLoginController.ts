@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { RouteController } from '../../router/controller/RouteController';
 import { FrontUserLoginService } from '../service/FrontUserLoginService';
 import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
@@ -18,6 +18,8 @@ import { LOGIN_ERR_MESSAGE } from '../const/FrontUserLoginConst';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
+import { Prisma } from '@prisma/client';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 
 
 export class FrontUserLoginController extends RouteController {
@@ -39,7 +41,7 @@ export class FrontUserLoginController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response) {
+    public async doExecute(req: Request, res: Response, next: NextFunction) {
 
         // リクエストボディ
         const requestBody: FrontUserLoginRequestType = req.body;
@@ -60,54 +62,61 @@ export class FrontUserLoginController extends RouteController {
 
         const userNameModel = new FrontUserNameModel(requestBody.userName);
 
-        // 永続ロジックを取得する
-        const frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface =
-            this.frontUserLoginService.getFrontUserLoginMasterRepository();
+        // トランザクション開始
+        PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
-        // ログインユーザーを取得
-        const frontUserLoginList = await this.frontUserLoginService.getLoginUser(frontUserLoginMasterRepository, userNameModel);
+            // 永続ロジックを取得する
+            const frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface =
+                this.frontUserLoginService.getFrontUserLoginMasterRepository();
 
-        // ユーザーの取得に失敗
-        if (frontUserLoginList.length === 0) {
-            return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
-        }
+            // ログインユーザーを取得
+            const frontUserLoginList = await this.frontUserLoginService.getLoginUser(frontUserLoginMasterRepository, userNameModel);
 
-        const frontUserLogin = frontUserLoginList[0];
-        const salt = frontUserLogin.salt;
-        const frontUserIdModel = FrontUserIdModel.reConstruct(frontUserLogin.userId);
+            // ユーザーの取得に失敗
+            if (frontUserLoginList.length === 0) {
+                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
+            }
 
-        if (!salt) {
-            throw Error(`ソルト値を取得できませんでした。ユーザーID:${frontUserLogin.userId}`);
-        }
+            const frontUserLogin = frontUserLoginList[0];
+            const salt = frontUserLogin.salt;
+            const frontUserIdModel = FrontUserIdModel.reConstruct(frontUserLogin.userId);
 
-        // テーブルから取得したソルト値をもとに入力されたパスワードをハッシュ化する
-        const saltModel = FrontUserSaltValueModel.reConstruct(salt);
-        const inputPasswordModel = FrontUserPasswordModel.hash(requestBody.password, saltModel);
+            if (!salt) {
+                throw Error(`ソルト値を取得できませんでした。ユーザーID:${frontUserLogin.userId}`);
+            }
 
-        if (inputPasswordModel.frontUserPassword !== frontUserLogin.password) {
-            return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
-        }
+            // テーブルから取得したソルト値をもとに入力されたパスワードをハッシュ化する
+            const saltModel = FrontUserSaltValueModel.reConstruct(salt);
+            const inputPasswordModel = FrontUserPasswordModel.hash(requestBody.password, saltModel);
 
-        // ユーザー情報を取得
-        const frontUserList = await this.frontUserLoginService.getUserInfo(frontUserLoginMasterRepository, frontUserIdModel);
+            if (inputPasswordModel.frontUserPassword !== frontUserLogin.password) {
+                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
+            }
 
-        // ユーザーの取得に失敗
-        if (frontUserList.length === 0) {
-            return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
-        }
+            // ユーザー情報を取得
+            const frontUserList = await this.frontUserLoginService.getUserInfo(frontUserLoginMasterRepository, frontUserIdModel);
 
-        const frontUser = frontUserList[0];
+            // ユーザーの取得に失敗
+            if (frontUserList.length === 0) {
+                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
+            }
 
-        // jwtを作成
-        const newJsonWebTokenModel =
-            await this.frontUserLoginService.createJsonWebToken(frontUserIdModel, inputPasswordModel);
+            const frontUser = frontUserList[0];
 
-        // レスポンスを作成
-        const frontUserLoginCreateResponseModel = new FrontUserLoginCreateResponseModel(frontUser);
+            // jwtを作成
+            const newJsonWebTokenModel =
+                await this.frontUserLoginService.createJsonWebToken(frontUserIdModel, inputPasswordModel);
 
-        // cookieを返却
-        res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+            // レスポンスを作成
+            const frontUserLoginCreateResponseModel = new FrontUserLoginCreateResponseModel(frontUser);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`, frontUserLoginCreateResponseModel.data);
+            // 最終ログイン日時を更新する
+            await this.frontUserLoginService.updateLastLoginDate(frontUserLoginMasterRepository, frontUserIdModel, tx);
+
+            // cookieを返却
+            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+
+            return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`, frontUserLoginCreateResponseModel.data);
+        }, next);
     }
 }
