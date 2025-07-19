@@ -57,6 +57,16 @@ function errorLogMiddleware(err: Error, req: Request) {
 };
 
 
+// エラーハンドリング
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+});
+
+process.on('uncaughtException', (error) => {
+    console.error('Uncaught Exception:', error);
+});
+
+
 //コントローラーアクセス時のログ出力
 app.use((req: Request, res: Response, next: NextFunction) => {
 
