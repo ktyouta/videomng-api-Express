@@ -38,6 +38,14 @@ export class SearchCommentByKeywordController extends RouteController {
      */
     public async doExecute(req: Request, res: Response) {
 
+        const id = req.params.videoId;
+
+        if (!id) {
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.SEARCH_COMMENT_BY_KEYWORD} | method:${HttpMethodType.GET}`);
+        }
+
+        const videoIdModel = new VideoIdModel(id);
+
         // クエリパラメータを取得
         const query = req.query;
 
@@ -58,10 +66,6 @@ export class SearchCommentByKeywordController extends RouteController {
         // キーワードを取得
         const keyword = query[`q`] as string;
         const searchCommentByKeywordKeywordModel = new SearchCommentByKeywordKeywordModel(keyword);
-
-        // 動画IDを取得
-        const videoId = query[`videoId`] as string;
-        const videoIdModel = new VideoIdModel(videoId);
 
         // 動画コメントを取得
         const commentList = await this.searchCommentByKeywordService.getCommentList(
