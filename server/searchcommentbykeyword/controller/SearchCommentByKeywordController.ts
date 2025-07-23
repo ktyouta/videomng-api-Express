@@ -11,7 +11,6 @@ import { VideoType, YouTubeDataApiVideoListVideoType } from '../../external/yout
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { SearchCommentByKeywordService } from '../service/SearchCommentByKeywordService';
 import { SearchCommentByKeywordQueryParameterSchema } from '../model/SearchCommentByKeywordQueryParameterSchema';
-import { SearchCommentByKeywordResponseModel } from '../model/SearchCommentByKeywordResponseModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';
 
@@ -72,12 +71,37 @@ export class SearchCommentByKeywordController extends RouteController {
             videoIdModel
         );
 
-        // 取得したコメントをフィルター
-        const filterdCommentList = this.searchCommentByKeywordService.filterComment(commentList, searchCommentByKeywordKeywordModel);
+        // 取得したコメントをキーワードでフィルター
+        let filterdCommentList = this.searchCommentByKeywordService.filterComment(commentList, searchCommentByKeywordKeywordModel);
 
-        // レスポンスのYouTube動画
-        const searchCommentByKeywordResponseModel = new SearchCommentByKeywordResponseModel(filterdCommentList);
+        // jwt取得
+        const token = this.searchCommentByKeywordService.getToken(req);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, searchCommentByKeywordResponseModel.data);
+        // ログインしている場合はお気に入りコメントと非表示コメントをチェック
+        if (token) {
+
+            const jsonWebTokenUserModel = await this.searchCommentByKeywordService.checkJwtVerify(req);
+            const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
+
+            // 非表示コメント取得
+            const blockCommentList = await this.searchCommentByKeywordService.getBlockComment(frontUserIdModel, videoIdModel);
+
+            // 非表示コメントでフィルター
+            const filterdCommentListByBlock = this.searchCommentByKeywordService.filterCommentByBlock(
+                filterdCommentList,
+                blockCommentList
+            );
+
+            // お気に入りコメント取得
+            const favoriteCommentList = await this.searchCommentByKeywordService.getFavoriteComment(frontUserIdModel, videoIdModel);
+
+            // お気に入りステータスチェック
+            filterdCommentList = this.searchCommentByKeywordService.favoriteStatusCheck(
+                filterdCommentListByBlock,
+                favoriteCommentList,
+            );
+        }
+
+        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, filterdCommentList);
     }
 }

@@ -1,3 +1,5 @@
+import { BlockCommentTransaction, FavoriteCommentTransaction } from '@prisma/client';
+import { CookieModel } from '../../cookie/model/CookieModel';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
@@ -9,14 +11,23 @@ import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/vide
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListMaxResult } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListMaxResult';
 import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
+import { JsonWebTokenUserModel } from '../../jsonwebtoken/model/JsonWebTokenUserModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { SearchCommentByKeywordFavoriteCommentSelectEntity } from '../entity/SearchCommentByKeywordFavoriteCommentSelectEntity';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';
 import { SearchCommentByKeywordResponseCommentType } from '../type/SearchCommentByKeywordResponseCommentType';
+import { Router, Request, Response, NextFunction } from 'express';
+import { SearchCommentByKeywordBlockCommentSelectEntity } from '../entity/SearchCommentByKeywordBlockCommentSelectEntity';
+import { SearchCommentByKeywordRepositorys } from '../repository/SearchCommentByKeywordRepositorys';
+import { FLG, RepositoryType } from '../../util/const/CommonConst';
 
 
 export class SearchCommentByKeywordService {
 
+    private searchCommentByKeywordRepositorys = (new SearchCommentByKeywordRepositorys()).get(RepositoryType.POSTGRESQL);
 
     /**
      * 動画コメントを取得する
@@ -109,6 +120,7 @@ export class SearchCommentByKeywordService {
                     publishedAt: publishedAt,
                     authorDisplayName: authorDisplayName,
                     commentId: e.snippet.topLevelComment.id,
+                    favoriteStatus: FLG.OFF,
                 }];
             }
 
@@ -137,6 +149,7 @@ export class SearchCommentByKeywordService {
                             publishedAt: replyPublishedAt,
                             authorDisplayName: replyAuthorDisplayName,
                             commentId: e1.id,
+                            favoriteStatus: FLG.OFF,
                         }];
                     }
                 });
@@ -153,5 +166,128 @@ export class SearchCommentByKeywordService {
      */
     private escapeRegExp(text: string) {
         return text.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+
+    /**
+     * jwtを取得
+     */
+    public getToken(req: Request) {
+
+        const cookieModel = new CookieModel(req);
+        const jsonWebTokenModel = new JsonWebTokenModel(cookieModel);
+
+        return jsonWebTokenModel.token;
+    }
+
+
+    /**
+     * jwtからユーザー情報を取得
+     * @param req 
+     * @returns 
+     */
+    public checkJwtVerify(req: Request) {
+
+        try {
+
+            const cookieModel = new CookieModel(req);
+            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
+
+            return jsonWebTokenUserModel;
+        } catch (err) {
+            throw Error(`キーワード検索(コメント)処理中の認証エラー ERROR:${err}`);
+        }
+    }
+
+    /**
+     * お気に入り動画ブロックコメント取得
+     * @param getFavoriteVideoCommentRepository 
+     * @param frontUserIdModel 
+     * @returns 
+     */
+    public async getBlockComment(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel
+    ): Promise<BlockCommentTransaction[]> {
+
+        // お気に入り動画ブロックコメント取得用Entity
+        const searchCommentByKeywordBlockCommentSelectEntity = new SearchCommentByKeywordBlockCommentSelectEntity(
+            frontUserIdModel,
+            videoIdModel
+        );
+
+        // お気に入り動画ブロックコメント取得
+        const blockComment = await this.searchCommentByKeywordRepositorys.selectBlockComment(searchCommentByKeywordBlockCommentSelectEntity);
+
+        return blockComment;
+    }
+
+
+    /**
+     * お気に入りコメント取得
+     * @param frontUserIdModel 
+     * @returns 
+     */
+    public async getFavoriteComment(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel
+    ): Promise<BlockCommentTransaction[]> {
+
+        // お気に入りコメント取得用Entity
+        const searchCommentByKeywordFavoriteCommentSelectEntity = new SearchCommentByKeywordFavoriteCommentSelectEntity(
+            frontUserIdModel,
+            videoIdModel
+        );
+
+        // お気に入りコメント取得
+        const favoriteComment = await this.searchCommentByKeywordRepositorys.selectFavoriteComment(searchCommentByKeywordFavoriteCommentSelectEntity);
+
+        return favoriteComment;
+    }
+
+    /**
+     * 非表示コメントでフィルター
+     * @param filterdCommentList 
+     * @param blockCommentList 
+     */
+    public filterCommentByBlock(commentList: SearchCommentByKeywordResponseCommentType[],
+        blockCommentList: BlockCommentTransaction[]
+    ) {
+
+        const filterdCommentList = commentList.filter((e) => {
+
+            // 非表示コメントリストに対して該当IDをチェック
+            const blockComment = blockCommentList.find((e1) => {
+                return e1.commentId === e.commentId;
+            });
+
+            return !blockComment;
+        });
+
+        return filterdCommentList;
+    }
+
+
+    /**
+     * お気に入りステータスチェック
+     * @param filterdCommentList 
+     * @param blockCommentList 
+     */
+    public favoriteStatusCheck(commentList: SearchCommentByKeywordResponseCommentType[],
+        favoriteCommentList: FavoriteCommentTransaction[]
+    ) {
+
+        const checkedCommentList = commentList.map((e) => {
+
+            // お気に入りコメントリストに対して該当IDをチェック
+            const favoriteComment = favoriteCommentList.find((e1) => {
+                return e1.commentId === e.commentId;
+            });
+
+
+            return {
+                ...e,
+                favoriteStatus: !!favoriteComment ? FLG.ON : FLG.OFF
+            }
+        });
+
+        return checkedCommentList;
     }
 }

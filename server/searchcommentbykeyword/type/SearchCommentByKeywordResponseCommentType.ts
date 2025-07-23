@@ -8,4 +8,6 @@ export type SearchCommentByKeywordResponseCommentType = {
     readonly authorDisplayName: string;
     // コメントID
     readonly commentId: string;
+    // お気に入りステータス
+    favoriteStatus: string,
 }
