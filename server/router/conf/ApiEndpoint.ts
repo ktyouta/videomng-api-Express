@@ -12,7 +12,7 @@ export enum ApiEndopoint {
     FAVORITE_VIDEO_ID = "/videomng/v1/favoritevideo/:id",
     FAVORITE_VIDEO_MEMO = "/videomng/v1/favoritevideo/:videoId/memo",
     FAVORITE_VIDEO_MEMO_ID = "/videomng/v1/favoritevideo/:videoId/memo/:memoId",
-    SEARCH_COMMENT_BY_KEYWORD = "/videomng/v1/favoritevideo/:videoId/searchcommentbykeyword",
+    SEARCH_COMMENT_BY_KEYWORD = "/videomng/v1/video/:videoId/searchcommentbykeyword",
     BLOCK_COMMENT = "/videomng/v1/favoritevideo/:videoId/blockcomment",
     BLOCK_COMMENT_ID = "/videomng/v1/favoritevideo/:videoId/blockcomment/:commentId",
     FAVORITE_COMMENT = "/videomng/v1/favoritevideo/:videoId/favoritecomment",
