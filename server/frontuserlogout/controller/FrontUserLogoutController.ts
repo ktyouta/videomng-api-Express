@@ -30,7 +30,7 @@ export class FrontUserLogoutController extends RouteController {
     public async doExecute(req: Request, res: Response) {
 
         // cookieを削除
-        res.clearCookie(JsonWebTokenModel.KEY, { httpOnly: true });
+        res.clearCookie(JsonWebTokenModel.KEY, NewJsonWebTokenModel.COOKIE_OPTION);
 
         return ApiResponse.create(res, HTTP_STATUS_OK, `ログアウトしました。`);
     }
