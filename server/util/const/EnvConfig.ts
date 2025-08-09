@@ -10,8 +10,8 @@ export const envConfig = {
     corsProtocol: process.env.CORS_PROTOCOL,
     corsDomain: process.env.CORS_DOMAIN,
     corsPort: process.env.CORS_PORT,
-    cookieKeyJwt: process.env.COOKIE_KEY_JWT,
     timeout: process.env.TIMEOUT,
     allowUserOperation: process.env.ALLOW_USER_OPERATION,
     envProduction: process.env.ENV_PRODUCTION,
+    accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES,
 };

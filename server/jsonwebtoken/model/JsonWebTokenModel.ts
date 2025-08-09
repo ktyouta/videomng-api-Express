@@ -7,7 +7,7 @@ export class JsonWebTokenModel {
     // トークン
     private readonly _token: string;
     // cookieのキー
-    static readonly KEY: string = envConfig.cookieKeyJwt ?? ``;
+    static readonly KEY: string = `access_token`;
 
     constructor(cookieModel: CookieModel) {
 

@@ -20,9 +20,14 @@ export class NewJsonWebTokenModel {
     constructor(frontUserIdModel: FrontUserIdModel, frontUserPasswordModel: FrontUserPasswordModel) {
 
         const jwtSecretKey = envConfig.jwtKey;
+        const accessTokenExpires = envConfig.accessTokenExpires;
 
         if (!jwtSecretKey) {
             throw Error(`設定ファイルにjwtの秘密鍵が設定されていません。`);
+        }
+
+        if (!accessTokenExpires) {
+            throw Error(`設定ファイルにアクセストークンの有効期限が設定されていません。`);
         }
 
         const frontUserId = frontUserIdModel.frontUserId;
@@ -38,7 +43,7 @@ export class NewJsonWebTokenModel {
         }
 
         const jwtStr = `${frontUserId},${frontUserPassword}`;
-        this._token = this.jwt.sign({ ID: jwtStr }, jwtSecretKey);
+        this._token = this.jwt.sign({ ID: jwtStr }, jwtSecretKey, { expiresIn: accessTokenExpires });
     }
 
     get token() {
