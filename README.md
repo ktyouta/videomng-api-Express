@@ -18,6 +18,7 @@ YouTubeを日常的に利用する中で、「この動画、また見返した�
 | トップページ |
 | ---- |
 | <img src="doc/screenshots/top.png" width="200" height="110"/>  |
+| <img src="doc/screenshots/top-sp.png" width="60" height="120" /><br> スマホ表示  |
 | 登録済み動画の一覧を表示します。キーワードや種別での検索が可能です。  |
 
 | 　検索結果 |
@@ -28,6 +29,7 @@ YouTubeを日常的に利用する中で、「この動画、また見返した�
 | 動画詳細(未ログイン) |
 | ---- |
 | <img src="doc/screenshots/video-detail-not-logged.png" width="200" height="110" />   |
+| <img src="doc/screenshots/video-detail-sp.png" width="60" height="150" /><br> スマホ表示  |
 | 動画の検索結果で気になる動画をクリックすると詳細画面に遷移します。ログイン時に動画のお気に入り登録が可能となっています。<br>また以下のメニューを選択できます。<br>・動画情報：選択した動画の基本情報を表示します。<br>・公開コメント：動画に投稿されたコメントを閲覧できます。<br>・キーワード検索(コメント)：投稿されたコメント内をキーワードで検索できます。  |
 
 | 動画詳細(ログイン済) |
