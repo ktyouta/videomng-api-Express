@@ -1,0 +1,32 @@
+★Renderメモ
+
+API側をホスティング
+
+
+■ドメイン
+https://videomng-api.onrender.com
+
+■ポート
+3001
+
+
+■デプロイ
+①ホーム画面からアプリ名をクリック
+②Eventタブの「Manual Deploy」の「Deploy latest commit」を選択
+※マイグレーションを実行する際は、「clear build cache & deploy」を実行した後に、「Deploy latest commit」を実行する
+
+
+■CORSエラー発生時
+デプロイの手順を実施
+
+
+
+
+
+
+
+
+
+
+
+

@@ -77,18 +77,16 @@ export class GetVideoDetailService {
      * Youtube Data APIから取得した動画詳細の型を変換する
      * @param youTubeVideoDetailApi 
      */
-    public convertVideoDetail(youTubeVideoDetailApi: YouTubeDataApiVideoDetailModel) {
+    public convertVideoDetail(youTubeVideoDetailApi: YouTubeDataApiVideoDetailModel): GetVideoDetailResponseType {
 
         const apiResponse = youTubeVideoDetailApi.response;
 
         const convertedVideoDetail: GetVideoDetailResponseType = {
             ...apiResponse,
-            items: apiResponse.items.map((e: YouTubeDataApiVideoDetailItemType) => {
-                return {
-                    ...e,
-                    favoriteFlg: FLG.OFF
-                }
-            })
+            items: {
+                ...apiResponse.items[0],
+                favoriteFlg: FLG.OFF
+            }
         }
 
         return convertedVideoDetail;
@@ -108,30 +106,23 @@ export class GetVideoDetailService {
 
         // ユーザーID
         const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
-        // 動画詳細リスト
-        let videoDetailItems: GetVideoDetailItemType[] = [];
+
+        // 動画ID
+        const videoIdModel = new VideoIdModel(convertedVideoDetail.items.id);
+
+        // お気に入り動画取得用Entity
+        const getVideoDetialSelectEntity = new GetVideoDetialSelectEntity(frontUserIdModel, videoIdModel);
+
+        // お気に入り動画取得
+        const favoriteVideoList = await getVideoDetialRepositorys.selectVideo(getVideoDetialSelectEntity);
 
         // お気に入り動画登録チェック
-        for (const item of convertedVideoDetail.items) {
-
-            // 動画ID
-            const videoIdModel = new VideoIdModel(item.id);
-
-            // お気に入り動画取得用Entity
-            const getVideoDetialSelectEntity = new GetVideoDetialSelectEntity(frontUserIdModel, videoIdModel);
-
-            // お気に入り動画取得
-            const favoriteVideoList = await getVideoDetialRepositorys.selectVideo(getVideoDetialSelectEntity);
-
-            videoDetailItems = [...videoDetailItems, {
-                ...item,
-                favoriteFlg: favoriteVideoList && favoriteVideoList.length > 0 ? FLG.ON : FLG.OFF
-            }]
-        }
-
         const videoDetail: GetVideoDetailResponseType = {
             ...convertedVideoDetail,
-            items: videoDetailItems
+            items: {
+                ...convertedVideoDetail.items,
+                favoriteFlg: favoriteVideoList && favoriteVideoList.length > 0 ? FLG.ON : FLG.OFF
+            }
         }
 
         return videoDetail;

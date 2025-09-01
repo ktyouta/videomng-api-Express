@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { RouteController } from '../../router/controller/RouteController';
 import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
 import { ZodIssue } from 'zod';
@@ -43,6 +43,12 @@ export class GetVideoDetailController extends RouteController {
 
         // YouTube Data Apiから動画詳細を取得する
         const youTubeVideoDetailApi = await this.getVideoDetailService.callYouTubeDataDetailApi(videoIdModel);
+
+        const response = youTubeVideoDetailApi.response;
+
+        if (response.items.length === 0) {
+            return ApiResponse.create(res, HTTP_STATUS_NOT_FOUND, `動画情報が取得できませんでした。`);
+        }
 
         // レスポンス用に型を変換する
         let convertedVideoDetail = this.getVideoDetailService.convertVideoDetail(youTubeVideoDetailApi);

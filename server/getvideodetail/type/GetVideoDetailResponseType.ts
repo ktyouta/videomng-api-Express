@@ -4,5 +4,5 @@ import { GetVideoDetailItemType } from "./GetVideoDetailItemType";
 export type GetVideoDetailResponseType = {
     readonly kind: string;
     readonly etag: string;
-    readonly items: GetVideoDetailItemType[];
+    readonly items: GetVideoDetailItemType;
 }
