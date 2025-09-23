@@ -24,4 +24,5 @@ export enum ApiEndopoint {
     FRONT_USER_PASSWORD_ID = "/videomng/v1/frontuserpassword/:id",
     FAVORITE_VIDEO_SORT = "/videomng/v1/favoritevideosort",
     CHANNEL_VIDEO_INFO_ID = "/videomng/v1/channelvideo/:id",
+    FAVORITE_VIDEO_CSV = "/videomng/v1/favoritevideo-download-csv",
 }
