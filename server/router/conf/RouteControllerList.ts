@@ -26,6 +26,7 @@ import { GetVideoCommentController } from "../../getvideocomment/controller/GetV
 import { GetVideoDetailController } from "../../getvideodetail/controller/GetVideoDetailController";
 import { GetVideoListController } from "../../getvideolist/controller/GetVideoListController";
 import { GetViewStatusListController } from "../../getviewstatuslist/controller/GetViewStatusListController";
+import { HealthController } from "../../health/controller/HealthController";
 import { SearchCommentByKeywordController } from "../../searchcommentbykeyword/controller/SearchCommentByKeywordController";
 import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
@@ -106,4 +107,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetChannelVideoListController(),
     // お気に入り動画CSV取得
     new DownloadFavoriteVideoListCsvController(),
+    // ヘルスチェック
+    new HealthController(),
 ]

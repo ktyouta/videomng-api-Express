@@ -25,4 +25,5 @@ export enum ApiEndopoint {
     FAVORITE_VIDEO_SORT = "/videomng/v1/favoritevideosort",
     CHANNEL_VIDEO_INFO_ID = "/videomng/v1/channelvideo/:id",
     FAVORITE_VIDEO_CSV = "/videomng/v1/favoritevideo-download-csv",
+    HEALTH = "/videomng/v1/health",
 }
