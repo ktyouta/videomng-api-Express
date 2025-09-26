@@ -22,7 +22,7 @@ export class DownloadFavoriteVideoListCsvController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_CSV
+            ApiEndopoint.FAVORITE_VIDEO_CSV_DOWNLOAD
         );
     }
 

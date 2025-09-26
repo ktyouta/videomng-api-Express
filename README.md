@@ -35,7 +35,7 @@ YouTubeを日常的に利用する中で、「この動画、また見返した�
 | 動画詳細(ログイン済) |
 | ---- |
 | <img src="doc/screenshots/video-detail.png" width="200" height="110" />   |
-| ログインすると動画をお気に入りに追加できるようになりす。   |
+| ログインすると動画をお気に入りに追加できるようになります。   |
 
 | 動画詳細（動画情報メニュー選択時） |
 | ---- |
@@ -126,6 +126,7 @@ YouTubeを日常的に利用する中で、「この動画、また見返した�
 | バックエンド           | TypeScript, Express, Prisma                           |
 | インフラ    | Cloudflare, Render                          |
 | データベース          | PostgreSQL                                           |
+| モニタリング          | UptimeRobot                                           |
 
 ## 注意事項
 - 本アプリは **YouTube Data API** を利用しており、表示されるコンテンツは YouTube が提供するデータに基づいています。  
