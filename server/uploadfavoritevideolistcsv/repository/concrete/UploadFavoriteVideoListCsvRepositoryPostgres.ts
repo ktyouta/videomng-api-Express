@@ -51,16 +51,19 @@ export class UploadFavoriteVideoListCsvRepositoryPostgres implements UploadFavor
         const userId = registeredVideoListEntity.frontUserId;
         const registerVideoIdList = registeredVideoListEntity.registerVideoIdList;
 
+        const registData = registerVideoIdList.map((e) => {
+
+            return {
+                videoId: e,
+                userId,
+                deleteFlg: FLG.OFF,
+                createDate: new Date(),
+                updateDate: new Date(),
+            }
+        })
+
         const favoriteVideoList = await tx.favoriteVideoTransaction.createMany({
-            data: registerVideoIdList.map((e) => {
-                return {
-                    videoId: e,
-                    userId,
-                    deleteFlg: FLG.OFF,
-                    createDate: new Date(),
-                    updateDate: new Date(),
-                }
-            }),
+            data: registData,
             skipDuplicates: true,
         });
 

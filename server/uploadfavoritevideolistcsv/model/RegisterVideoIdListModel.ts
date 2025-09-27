@@ -8,7 +8,7 @@ export class RegisterVideoIdListModel {
     constructor(csvListModel: CsvListModel) {
 
         const videoIdListModel = csvListModel.csvList.map((e) => {
-            return new VideoIdModel(e[`動画ID`]);
+            return new VideoIdModel(e[0]);
         });
 
         this._videoIdListModel = videoIdListModel;

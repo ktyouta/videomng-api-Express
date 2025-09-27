@@ -1,12 +1,10 @@
 import { parse } from "csv-parse/sync";
 import { object } from "zod";
 
-type CSV_COLUMN = `動画ID`;
-type csvType = { [k in CSV_COLUMN]: string };
 
 export class CsvListModel {
 
-    private readonly _csvList: csvType[];
+    private readonly _csvList: string[][];
 
     constructor(file: Express.Multer.File) {
 
@@ -17,14 +15,14 @@ export class CsvListModel {
         const csvString = file.buffer.toString("utf-8");
 
         // CSVをリストに変換
-        const csvList: csvType[] = parse(csvString, {
-            columns: true,
+        const csvList: string[][] = parse(csvString, {
+            columns: false,
             skip_empty_lines: true,
             trim: true,
         });
 
-        const filterdCsvList = csvList.filter((e: csvType) => {
-            return !!e[`動画ID`];
+        const filterdCsvList = csvList.filter((e: string[]) => {
+            return !!e[0];
         });
 
         this._csvList = filterdCsvList;
