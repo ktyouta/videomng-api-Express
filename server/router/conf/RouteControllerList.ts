@@ -33,6 +33,7 @@ import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo
 import { UpdateFavoriteVideoTagController } from "../../updatefavoritevideotag/controller/UpdateFavoriteVideoTagController";
 import { UpdateFrontUserInfoController } from "../../updatefrontuserinfo/controller/UpdateFrontUserInfoController";
 import { UpdateFrontUserPasswordController } from "../../updatefrontuserpassword/controller/UpdateFrontUserPasswordController";
+import { UploadFavoriteVideoListCsvController } from "../../uploadfavoritevideolistcsv/controller/UploadFavoriteVideoListCsvController";
 import { RouteController } from "../controller/RouteController";
 
 /**
@@ -107,6 +108,8 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetChannelVideoListController(),
     // お気に入り動画CSV取得
     new DownloadFavoriteVideoListCsvController(),
+    // お気に入り動画CSV取込
+    new UploadFavoriteVideoListCsvController(),
     // ヘルスチェック
     new HealthController(),
 ]

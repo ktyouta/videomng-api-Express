@@ -12,7 +12,7 @@ import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { FavoriteVideoTransaction, Prisma, PrismaClient } from '@prisma/client';
 import multer from "multer";
 import { parse } from "csv-parse/sync";
-import { VideoIdListModel } from '../model/VideoIdListModel';
+import { RegisterVideoIdListModel } from '../model/RegisterVideoIdListModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { CsvListModel } from '../model/CsvListModel';
 
@@ -26,7 +26,8 @@ export class UploadFavoriteVideoListCsvController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.POST,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_CSV_UPLOAD
+            ApiEndopoint.FAVORITE_VIDEO_CSV_UPLOAD,
+            [multer().single("file")]
         );
     }
 
@@ -52,20 +53,24 @@ export class UploadFavoriteVideoListCsvController extends RouteController {
         const csvListModel = new CsvListModel(file);
 
         // 動画IDリスト
-        const videoIdListModel = new VideoIdListModel(csvListModel);
+        const registerVideoIdListModel = new RegisterVideoIdListModel(csvListModel);
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
-            // 既存の動画リストを取得
-            const nowFavoriteVideoList: FavoriteVideoTransaction[] = await this.uploadFavoriteVideoListCsvService.selectRegisteredVideoList(
+            // 削除済み動画の削除フラグを元に戻す
+            await this.uploadFavoriteVideoListCsvService.updateDeleteFlg(
                 frontUserIdModel,
-                videoIdListModel,
+                registerVideoIdListModel,
                 tx,
             );
 
-            // 更新対象動画リスト
-            const updateVideoList = this.uploadFavoriteVideoListCsvService.getUpdateVideoList(nowFavoriteVideoList);
+            // 動画を登録
+            await this.uploadFavoriteVideoListCsvService.register(
+                frontUserIdModel,
+                registerVideoIdListModel,
+                tx,
+            );
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画に登録しました。`);
         }, next);

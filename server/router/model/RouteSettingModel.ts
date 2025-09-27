@@ -1,4 +1,4 @@
-import { IRouterMatcher, Router, Request, Response, NextFunction } from "express";
+import { IRouterMatcher, Router, Request, Response, NextFunction, RequestHandler } from "express";
 import { ApiEndopoint } from "../conf/ApiEndpoint";
 
 /**
@@ -20,11 +20,14 @@ export class RouteSettingModel {
     private readonly _executeFunction: Function;
     // エンドポイント
     private readonly _endPoint: ApiEndopoint;
+    // ミドルウェア
+    private readonly _middlewares: RequestHandler[];
 
 
     constructor(httpMthodType: HttpMethodType,
         executeFunction: Function,
         endPoint: ApiEndopoint,
+        middlewares: RequestHandler[] = []
     ) {
 
         if (!endPoint) {
@@ -34,6 +37,7 @@ export class RouteSettingModel {
         this._httpMethodType = httpMthodType;
         this._executeFunction = executeFunction;
         this._endPoint = endPoint;
+        this._middlewares = middlewares;
     }
 
     get httpMethodType() {
@@ -46,5 +50,9 @@ export class RouteSettingModel {
 
     get endPoint() {
         return this._endPoint;
+    }
+
+    get middlewares() {
+        return this._middlewares;
     }
 }

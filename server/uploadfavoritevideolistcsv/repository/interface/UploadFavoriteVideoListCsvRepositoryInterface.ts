@@ -1,5 +1,6 @@
 import { FavoriteVideoTransaction, Prisma } from "@prisma/client";
 import { RegisteredVideoListEntity } from "../../entity/RegisteredVideoListEntity";
+import { UpdateVideoListEntity } from "../../entity/UpdateVideoListEntity";
 
 
 /**
@@ -8,8 +9,16 @@ import { RegisteredVideoListEntity } from "../../entity/RegisteredVideoListEntit
 export interface UploadFavoriteVideoListCsvRepositoryInterface {
 
     /**
-     * 動画情報取得
-     * @param favoriteVideoInsertEntity 
+     * 削除フラグを元に戻す
+     * @param updateVideoListEntity 
+     * @param tx 
      */
-    select(registeredVideoListEntity: RegisteredVideoListEntity, tx: Prisma.TransactionClient): Promise<FavoriteVideoTransaction[]>;
+    updateDeleteFlg(updateVideoListEntity: UpdateVideoListEntity, tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
+
+    /**
+     * お気に入りに登録する
+     * @param registeredVideoListEntity 
+     * @param tx 
+     */
+    register(registeredVideoListEntity: RegisteredVideoListEntity, tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
 }

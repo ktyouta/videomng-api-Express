@@ -1,14 +1,14 @@
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { CsvListModel } from "./CsvListModel";
 
-export class VideoIdListModel {
+export class RegisterVideoIdListModel {
 
     private readonly _videoIdListModel: VideoIdModel[];
 
     constructor(csvListModel: CsvListModel) {
 
         const videoIdListModel = csvListModel.csvList.map((e) => {
-            return new VideoIdModel(e[0]);
+            return new VideoIdModel(e[`動画ID`]);
         });
 
         this._videoIdListModel = videoIdListModel;

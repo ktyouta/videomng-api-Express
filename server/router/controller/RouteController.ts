@@ -20,9 +20,10 @@ export abstract class RouteController {
         const httpMethodType = routeSettingModel.httpMethodType;
         const endPoint = routeSettingModel.endPoint;
         const executeFunction = routeSettingModel.executeFunction;
+        const middlewares = routeSettingModel.middlewares;
         const httpMethod = methods[httpMethodType];
 
-        httpMethod(endPoint, AsyncErrorHandler.asyncHandler(executeFunction.bind(this)));
+        httpMethod(endPoint, ...middlewares, AsyncErrorHandler.asyncHandler(executeFunction.bind(this)));
     }
 
     protected abstract getRouteSettingModel(): RouteSettingModel;

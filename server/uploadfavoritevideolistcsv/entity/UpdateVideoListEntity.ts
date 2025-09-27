@@ -7,7 +7,7 @@ import { RegisterVideoIdListModel } from "../model/RegisterVideoIdListModel";
 
 
 
-export class RegisteredVideoListEntity {
+export class UpdateVideoListEntity {
 
     // 動画IDリスト
     private readonly _registerVideoIdListModel: RegisterVideoIdListModel;

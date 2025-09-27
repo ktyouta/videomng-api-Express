@@ -9,9 +9,10 @@ import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internald
 import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
-import { VideoIdListModel } from "../model/VideoIdListModel";
+import { RegisterVideoIdListModel } from "../model/RegisterVideoIdListModel";
 import { UploadFavoriteVideoListCsvRepositorys } from "../repository/UploadFavoriteVideoListCsvRepositorys";
 import { RegisteredVideoListEntity } from "../entity/RegisteredVideoListEntity";
+import { UpdateVideoListEntity } from "../entity/UpdateVideoListEntity";
 
 
 export class UploadFavoriteVideoListCsvService {
@@ -37,31 +38,38 @@ export class UploadFavoriteVideoListCsvService {
     }
 
     /**
-     * 登録済みの動画リストを取得
+     * 削除フラグをオフに戻す
      * @param frontUserIdModel 
-     * @param videoIdListModel 
+     * @param registerVideoIdListModel 
      */
-    async selectRegisteredVideoList(
+    async updateDeleteFlg(
         frontUserIdModel: FrontUserIdModel,
-        videoIdListModel: VideoIdListModel,
-        tx: Prisma.TransactionClient): Promise<FavoriteVideoTransaction[]> {
+        registerVideoIdListModel: RegisterVideoIdListModel,
+        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload> {
 
-        const registeredVideoListEntity = new RegisteredVideoListEntity(frontUserIdModel, videoIdListModel);
+        const updateVideoListEntity = new UpdateVideoListEntity(frontUserIdModel, registerVideoIdListModel);
 
         const uploadFavoriteVideoListCsvRepositorys = this._uploadFavoriteVideoListCsvRepositorys.get(RepositoryType.POSTGRESQL);
 
-        return await uploadFavoriteVideoListCsvRepositorys.select(registeredVideoListEntity, tx);
+        return await uploadFavoriteVideoListCsvRepositorys.updateDeleteFlg(updateVideoListEntity, tx);
     }
 
     /**
-     * 削除済み(更新対象)の動画リストを取得
-     * @param favoriteVideoTransaction 
+     * 動画を登録する
+     * @param frontUserIdModel 
+     * @param registerVideoIdListModel 
+     * @param tx 
      * @returns 
      */
-    getUpdateVideoList(favoriteVideoTransaction: FavoriteVideoTransaction[]) {
+    async register(
+        frontUserIdModel: FrontUserIdModel,
+        registerVideoIdListModel: RegisterVideoIdListModel,
+        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload> {
 
-        return favoriteVideoTransaction.filter((e) => {
-            return e.deleteFlg === FLG.ON;
-        })
+        const registeredVideoListEntity = new RegisteredVideoListEntity(frontUserIdModel, registerVideoIdListModel);
+
+        const uploadFavoriteVideoListCsvRepositorys = this._uploadFavoriteVideoListCsvRepositorys.get(RepositoryType.POSTGRESQL);
+
+        return await uploadFavoriteVideoListCsvRepositorys.register(registeredVideoListEntity, tx);
     }
 }

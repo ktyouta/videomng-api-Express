@@ -87,7 +87,7 @@ ROUTE_CONTROLLER_LIST.forEach((e) => {
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
     // コンソールログ出力
-    console.error(`Error occurred in Youtube Manage API : ${err.message}`);
+    console.error(`Error occurred in Video Manage API : ${err.message}`);
 
     // エラーログ出力
     errorLogMiddleware(err, req);
