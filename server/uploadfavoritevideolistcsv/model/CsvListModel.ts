@@ -19,6 +19,7 @@ export class CsvListModel {
             columns: false,
             skip_empty_lines: true,
             trim: true,
+            from_line: 2,
         });
 
         const filterdCsvList = csvList.filter((e: string[]) => {
