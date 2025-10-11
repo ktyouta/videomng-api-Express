@@ -30,7 +30,7 @@ export class GetFavoriteVideoDetialRepositoryPostgres implements GetFavoriteVide
             SELECT 
                 a.user_id as "userId",
                 a.video_id as "videoId",
-                a.summary,
+                COALESCE(a.summary, '') AS "summary",
                 a.view_status as "viewStatus",
                 b.label as "viewStatusName",
                 a.favorite_level as "favoriteLevel"
