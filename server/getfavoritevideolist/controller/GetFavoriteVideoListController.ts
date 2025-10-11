@@ -21,6 +21,7 @@ import { FavoriteVideoSortIdModel } from "../../internaldata/favoritevideosortma
 import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
 import { FavoriteLevelModel } from "../../internaldata/favoritevideotransaction/properties/FavoriteLevelModel";
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
+import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
 
 
 export class GetFavoriteVideoListController extends RouteController {
@@ -68,8 +69,12 @@ export class GetFavoriteVideoListController extends RouteController {
         const sortIdModel = await GetFavoriteVideoListSortIdModel.set(sortId);
 
         // お気に入り度
-        let favoriteLevel = query[`favoritelevel`] as string;
+        const favoriteLevel = query[`favoritelevel`] as string;
         const favoriteLevelModel = new GetFavoriteVideoListFavoriteLevelModel(favoriteLevel);
+
+        // ページ
+        const page = query[`page`] as string;
+        const pageModel = new GetFavoriteVideoListPageModel(favoriteLevel);
 
         // お気に入り動画リストを取得
         const favoriteVideoList = await this.getFavoriteVideoListService.getFavoriteVideoList(
@@ -79,6 +84,7 @@ export class GetFavoriteVideoListController extends RouteController {
             tagNameModel,
             sortIdModel,
             favoriteLevelModel,
+            pageModel,
         );
 
         // ユーザーのお気に入り動画が存在しない

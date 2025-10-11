@@ -1,8 +1,0 @@
-■transaction
-
-・favarite_movie_transaction
-　・userId
-　・movieId
-
-
-

@@ -27,6 +27,7 @@ import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameMod
 import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
 import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
+import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
 
 
 export class GetFavoriteVideoListService {
@@ -65,7 +66,8 @@ export class GetFavoriteVideoListService {
         videoCategoryId: YouTubeDataApiVideoListVideoCategoryId,
         tagNameModel: GetFavoriteVideoListTagNameModel,
         sortIdModel: GetFavoriteVideoListSortIdModel,
-        favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel): Promise<FavoriteVideoTransaction[]> {
+        favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel,
+        page: GetFavoriteVideoListPageModel): Promise<FavoriteVideoTransaction[]> {
 
         // 永続ロジック用オブジェクトを取得
         const getGetFavoriteVideoListRepository = this.getGetFavoriteVideoListRepository();
@@ -78,6 +80,7 @@ export class GetFavoriteVideoListService {
             tagNameModel,
             sortIdModel,
             favoriteLevelModel,
+            page,
         );
 
         // お気に入り動画取得

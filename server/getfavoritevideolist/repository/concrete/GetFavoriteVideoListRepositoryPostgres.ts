@@ -51,6 +51,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         const videoTag = getFavoriteVideoListSelectEntity.tagName;
         const sortId = getFavoriteVideoListSelectEntity.sortId;
         const favoriteLevel = getFavoriteVideoListSelectEntity.favoriteLevel;
+        const page = getFavoriteVideoListSelectEntity.page;
 
         let sql = `
             SELECT
@@ -157,9 +158,11 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                 break;
         }
 
+        sql += ` OFFSET ${(page - 1) * 10} ROWS`;
+        sql += ` FETCH NEXT 30 ROWS ONLY`;
+
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
 
         return favoriteVideoList;
     }
-
 }

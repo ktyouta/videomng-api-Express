@@ -3,6 +3,7 @@ import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUser
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
+import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
 import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
 import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
 import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
@@ -23,6 +24,8 @@ export class GetFavoriteVideoListSelectEntity {
     private readonly _sortKeyModel: GetFavoriteVideoListSortIdModel;
     // お気に入り度
     private readonly _favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel;
+    // ページ
+    private readonly _pageModel: GetFavoriteVideoListPageModel;
 
 
     constructor(frontUserIdModel: FrontUserIdModel,
@@ -30,7 +33,8 @@ export class GetFavoriteVideoListSelectEntity {
         videoCategoryId: YouTubeDataApiVideoListVideoCategoryId,
         tagNameModel: GetFavoriteVideoListTagNameModel,
         sortKeyModel: GetFavoriteVideoListSortIdModel,
-        favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel,) {
+        favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel,
+        pageModel: GetFavoriteVideoListPageModel) {
 
         this._frontUserIdModel = frontUserIdModel;
         this._viewStatusModel = viewStatusModel;
@@ -38,6 +42,7 @@ export class GetFavoriteVideoListSelectEntity {
         this._tagNameModel = tagNameModel;
         this._sortKeyModel = sortKeyModel;
         this._favoriteLevelModel = favoriteLevelModel;
+        this._pageModel = pageModel;
     }
 
     public get frontUserIdModel() {
@@ -70,5 +75,9 @@ export class GetFavoriteVideoListSelectEntity {
 
     public get favoriteLevel() {
         return this._favoriteLevelModel.favoriteLevel;
+    }
+
+    public get page() {
+        return this._pageModel.page;
     }
 }
