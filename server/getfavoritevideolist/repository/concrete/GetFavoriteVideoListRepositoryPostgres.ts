@@ -184,7 +184,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         let sql = GetFavoriteVideoListRepositoryPostgres.SELECT_LIST;
 
         sql += query;
-        sql += ` OFFSET ${(page - 1) * 10} ROWS`;
+        sql += ` OFFSET ${(page - 1) * defaultListLimit} ROWS`;
         sql += ` FETCH NEXT ${defaultListLimit} ROWS ONLY`;
 
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
