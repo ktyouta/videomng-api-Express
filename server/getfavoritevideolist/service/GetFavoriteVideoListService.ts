@@ -61,32 +61,36 @@ export class GetFavoriteVideoListService {
      * お気に入り動画取得
      * @param userNameModel 
      */
-    public async getFavoriteVideoList(frontUserIdModel: FrontUserIdModel,
-        viewStatusModel: GetFavoriteVideoListViewStatusModel,
-        videoCategoryId: YouTubeDataApiVideoListVideoCategoryId,
-        tagNameModel: GetFavoriteVideoListTagNameModel,
-        sortIdModel: GetFavoriteVideoListSortIdModel,
-        favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel,
-        page: GetFavoriteVideoListPageModel): Promise<FavoriteVideoTransaction[]> {
+    public async getFavoriteVideoList(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity,
+        defaultListLimit: number,
+    ): Promise<FavoriteVideoTransaction[]> {
 
         // 永続ロジック用オブジェクトを取得
         const getGetFavoriteVideoListRepository = this.getGetFavoriteVideoListRepository();
 
-        // お気に入り動画取得用Entity
-        const getFavoriteVideoListSelectEntity = new GetFavoriteVideoListSelectEntity(
-            frontUserIdModel,
-            viewStatusModel,
-            videoCategoryId,
-            tagNameModel,
-            sortIdModel,
-            favoriteLevelModel,
-            page,
+        // お気に入り動画取得
+        const favoriteVideos = await getGetFavoriteVideoListRepository.selectFavoriteVideoList(
+            getFavoriteVideoListSelectEntity,
+            defaultListLimit
         );
 
-        // お気に入り動画取得
-        const favoriteVideos = await getGetFavoriteVideoListRepository.selectFavoriteVideoList(getFavoriteVideoListSelectEntity);
-
         return favoriteVideos;
+    }
+
+
+    /**
+     * お気に入り動画件数取得
+     * @param userNameModel 
+     */
+    public async getFavoriteVideoListCount(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity) {
+
+        // 永続ロジック用オブジェクトを取得
+        const getGetFavoriteVideoListRepository = this.getGetFavoriteVideoListRepository();
+
+        // お気に入り動画取得
+        const countResult = await getGetFavoriteVideoListRepository.selectFavoriteVideoListCount(getFavoriteVideoListSelectEntity);
+
+        return countResult?.length ?? 0;
     }
 
 
@@ -95,8 +99,10 @@ export class GetFavoriteVideoListService {
      * @param frontUserInfoCreateRequestBody 
      * @param newJsonWebTokenModel 
      */
-    public createResponse(favoriteVideoListMergedList: FavoriteVideoListMergedType[]): GetFavoriteVideoListResponseModel {
-        return new GetFavoriteVideoListResponseModel(favoriteVideoListMergedList);
+    public createResponse(favoriteVideoListMergedList: FavoriteVideoListMergedType[],
+        total: number,
+        defaultListLimit: number): GetFavoriteVideoListResponseModel {
+        return new GetFavoriteVideoListResponseModel(favoriteVideoListMergedList, total, defaultListLimit);
     }
 
 

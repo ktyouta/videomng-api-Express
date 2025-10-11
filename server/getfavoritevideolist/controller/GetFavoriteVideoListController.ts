@@ -22,11 +22,14 @@ import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSo
 import { FavoriteLevelModel } from "../../internaldata/favoritevideotransaction/properties/FavoriteLevelModel";
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
 import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
+import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
 
 
 export class GetFavoriteVideoListController extends RouteController {
 
     private readonly getFavoriteVideoListService = new GetFavoriteVideoListService();
+    // 動画取得件条件
+    private static readonly DEFAULT_LIST_LIMIT = 30;
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -74,10 +77,10 @@ export class GetFavoriteVideoListController extends RouteController {
 
         // ページ
         const page = query[`page`] as string;
-        const pageModel = new GetFavoriteVideoListPageModel(favoriteLevel);
+        const pageModel = new GetFavoriteVideoListPageModel(page);
 
-        // お気に入り動画リストを取得
-        const favoriteVideoList = await this.getFavoriteVideoListService.getFavoriteVideoList(
+        // お気に入り動画取得用Entity
+        const getFavoriteVideoListSelectEntity = new GetFavoriteVideoListSelectEntity(
             frontUserIdModel,
             viewStatusModel,
             videoCategoryId,
@@ -87,17 +90,29 @@ export class GetFavoriteVideoListController extends RouteController {
             pageModel,
         );
 
+        // お気に入り動画リストを取得
+        const favoriteVideoList = await this.getFavoriteVideoListService.getFavoriteVideoList(
+            getFavoriteVideoListSelectEntity,
+            GetFavoriteVideoListController.DEFAULT_LIST_LIMIT
+        );
+
         // ユーザーのお気に入り動画が存在しない
         if (favoriteVideoList.length === 0) {
-            return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `お気に入り動画が登録されていません。`)
+            return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `お気に入り動画が存在しません。`)
         }
+
+        // お気に入り動画件数を取得
+        const total = await this.getFavoriteVideoListService.getFavoriteVideoListCount(getFavoriteVideoListSelectEntity);
 
         // お気に入り動画リストからYouTube Data Apiの情報を取得してマージする
         const favoriteVideoListMergedList = await this.getFavoriteVideoListService.mergeYouTubeDataList(favoriteVideoList);
 
         // レスポンスを作成
-        const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel =
-            this.getFavoriteVideoListService.createResponse(favoriteVideoListMergedList);
+        const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel = this.getFavoriteVideoListService.createResponse(
+            favoriteVideoListMergedList,
+            total,
+            GetFavoriteVideoListController.DEFAULT_LIST_LIMIT
+        );
 
         return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoListResponse.data);
     }

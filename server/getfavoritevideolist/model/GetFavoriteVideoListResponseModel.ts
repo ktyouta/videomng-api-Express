@@ -6,12 +6,15 @@ export class GetFavoriteVideoListResponseModel {
 
     private readonly _data: GetFavoriteVideoListResponseDataType;
 
-    constructor(favoriteVideoListMergedList: FavoriteVideoListMergedType[]) {
+    constructor(favoriteVideoListMergedList: FavoriteVideoListMergedType[],
+        total: number,
+        defaultListLimit: number
+    ) {
 
         this._data = {
+            total,
+            page: Math.ceil(total / defaultListLimit),
             item: favoriteVideoListMergedList,
-            total: 1,
-            page: 1
         };
     }
 

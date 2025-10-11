@@ -2,8 +2,12 @@ import { FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
 import { GetFavoriteVideoListSelectEntity } from "../../entity/GetFavoriteVideoListSelectEntity";
 import { GetFavoriteVideoListRepositoryInterface } from "../interface/GetFavoriteVideoListRepositoryInterface";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
 
-
+type queryType = {
+    query: string,
+    params: unknown[]
+}
 
 /**
  * 永続ロジック用クラス
@@ -34,16 +38,20 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                         d.delete_flg = '0'
                 )`;
 
+    private static readonly SELECT_LIST = `
+              SELECT
+                user_id as "userId",
+                video_id as "videoId" 
+    `;
 
+    private static readonly SELECT_LIST_COUNT = `
+              SELECT count(*) 
+    `;
 
     constructor() {
     }
 
-    /**
-     * お気に入り動画取得
-     * @returns 
-     */
-    async selectFavoriteVideoList(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity): Promise<FavoriteVideoTransaction[]> {
+    private getQuery(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity): queryType {
 
         const frontUserId = getFavoriteVideoListSelectEntity.frontUserId;
         const viewStatus = getFavoriteVideoListSelectEntity.viewStatus;
@@ -54,9 +62,6 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         const page = getFavoriteVideoListSelectEntity.page;
 
         let sql = `
-            SELECT
-              user_id as "userId",
-              video_id as "videoId"
             FROM favorite_video_transaction a
             WHERE user_id = $1
               AND delete_flg = '0'
@@ -158,11 +163,49 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                 break;
         }
 
+        return {
+            query: sql,
+            params
+        }
+    }
+
+    /**
+     * お気に入り動画取得
+     * @returns 
+     */
+    async selectFavoriteVideoList(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity,
+        defaultListLimit: number
+    ): Promise<FavoriteVideoTransaction[]> {
+
+        const page = getFavoriteVideoListSelectEntity.page;
+
+        let { query, params } = this.getQuery(getFavoriteVideoListSelectEntity);
+
+        let sql = GetFavoriteVideoListRepositoryPostgres.SELECT_LIST;
+
+        sql += query;
         sql += ` OFFSET ${(page - 1) * 10} ROWS`;
-        sql += ` FETCH NEXT 30 ROWS ONLY`;
+        sql += ` FETCH NEXT ${defaultListLimit} ROWS ONLY`;
 
         const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
 
         return favoriteVideoList;
+    }
+
+    /**
+     * お気に入り動画件数取得
+     * @returns 
+     */
+    async selectFavoriteVideoListCount(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity): Promise<FavoriteVideoListCountType[]> {
+
+        let { query, params } = this.getQuery(getFavoriteVideoListSelectEntity);
+
+        let sql = GetFavoriteVideoListRepositoryPostgres.SELECT_LIST;
+
+        sql += query;
+
+        const countResult = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoListCountType[]>(sql, ...params);
+
+        return countResult;
     }
 }
