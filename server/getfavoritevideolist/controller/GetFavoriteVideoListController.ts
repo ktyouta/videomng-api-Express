@@ -1,4 +1,4 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
 import { Router, Request, Response, NextFunction } from 'express';
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
@@ -98,7 +98,14 @@ export class GetFavoriteVideoListController extends RouteController {
 
         // ユーザーのお気に入り動画が存在しない
         if (favoriteVideoList.length === 0) {
-            return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `お気に入り動画が存在しません。`)
+
+            // レスポンスを作成
+            const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel = this.getFavoriteVideoListService.createResponse(
+                [],
+                0,
+                GetFavoriteVideoListController.DEFAULT_LIST_LIMIT
+            );
+            return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画が存在しません。`, getFavoriteVideoListResponse.data)
         }
 
         // お気に入り動画件数を取得
