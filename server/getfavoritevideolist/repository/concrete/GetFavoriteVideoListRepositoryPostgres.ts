@@ -81,11 +81,14 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         // カテゴリ
         if (videoCategory) {
             sql += ` AND EXISTS(
-                SELECT 1
-                FROM favorite_video_category_transaction b
-                WHERE b.user_id = $1
-                AND b.video_id = a.video_id
-                AND b.category_id = $${paramIndex}
+                SELECT 
+                    1
+                FROM
+                    favorite_video_category_transaction b
+                WHERE 
+                    b.user_id = $1 AND 
+                    b.video_id = a.video_id AND 
+                    b.category_id = $${paramIndex}
             )`;
             paramIndex++;
             params.push(videoCategory);
@@ -94,14 +97,21 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         // タグ
         if (videoTag) {
             sql += ` AND EXISTS(
-                SELECT 1
-                FROM favorite_video_tag_transaction c
-                WHERE c.user_id = $1
-                AND c.video_id = a.video_id
-                AND c.tag_id = (
-                    SELECT max(tag_id)
-                    FROM tag_master d
-                    WHERE d.tag_name = $${paramIndex}
+                SELECT 
+                    1
+                FROM 
+                    favorite_video_tag_transaction c
+                WHERE 
+                    c.user_id = $1 AND 
+                    c.video_id = a.video_id AND 
+                    c.tag_id = (
+                        SELECT 
+                            tag_id
+                        FROM 
+                            tag_master d
+                        WHERE 
+                            d.tag_name = $${paramIndex} AND
+                            d.user_id = $1
                 )
             )`;
             paramIndex++;

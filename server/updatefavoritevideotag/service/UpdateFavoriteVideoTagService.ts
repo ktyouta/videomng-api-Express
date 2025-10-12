@@ -159,8 +159,9 @@ export class UpdateFavoriteVideoTagService {
         for (const tag of tagList) {
 
             const tagNameModel = new TagNameModel(tag.name);
-            const tagList = await getUpdateFavoriteVideoTagRepository.selectTagMaster(tagNameModel);
+            const tagList = await getUpdateFavoriteVideoTagRepository.selectTagMaster(tagNameModel, userIdModel);
 
+            // タグマスタに登録済み
             if (tagList && tagList.length > 0) {
                 const tagInfo = tagList[0];
                 const tagIdModel = new TagIdModel(tagInfo.tagId);

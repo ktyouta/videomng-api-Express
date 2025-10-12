@@ -64,16 +64,21 @@ export class UpdateFavoriteVideoTagRepositoryPostgres implements UpdateFavoriteV
      * @param createFavoriteVideoMemoSeqSelectEntity 
      * @returns 
      */
-    public async selectTagMaster(tagNameModel: TagNameModel)
+    public async selectTagMaster(tagNameModel: TagNameModel, userIdModel: FrontUserIdModel)
         : Promise<TagMaster[]> {
 
         const tagName = tagNameModel.tagName;
+        const userId = userIdModel.frontUserId;
 
         const tagList = await PrismaClientInstance.getInstance().$queryRaw<TagMaster[]>`
-                SELECT tag_name as "tagName",
-                tag_id as "tagId"
-                FROM "tag_master" 
-                WHERE tag_name = ${tagName}
+                SELECT 
+                    tag_name as "tagName",
+                    tag_id as "tagId"
+                FROM 
+                    "tag_master" 
+                WHERE 
+                    tag_name = ${tagName} AND
+                    user_id = ${userId}
             `;
 
         return tagList;

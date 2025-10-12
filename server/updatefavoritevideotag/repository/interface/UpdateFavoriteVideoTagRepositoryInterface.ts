@@ -26,7 +26,7 @@ export interface UpdateFavoriteVideoTagRepositoryInterface {
      * タグマスタ取得
      * @param updateFavoriteVideoTagTagMasterSelectEntity 
      */
-    selectTagMaster(tagNameModel: TagNameModel): Promise<TagMaster[]>;
+    selectTagMaster(tagNameModel: TagNameModel, userIdModel: FrontUserIdModel): Promise<TagMaster[]>;
 
     /**
      * タグマスタ削除
