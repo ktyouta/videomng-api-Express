@@ -4,7 +4,10 @@ import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBa
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
 import { YouTubeDataApiVideoDetailPart } from "../properties/YouTubeDataApiVideoDetailPart";
 import { YouTubeDataApiVideoDetailVideoId } from "../properties/YouTubeDataApiVideoDetailVideoId";
+import { VideoIdListModel } from "./VideoIdListModel";
 
+
+type propsType = VideoIdModel | VideoIdListModel;
 
 /**
  * YouTube Data APIの動画詳細取得エンドポイント
@@ -18,7 +21,7 @@ export class YouTubeDataApiVideoDetailEndPointModel {
     private readonly youTubeDataApiApiKey: YouTubeDataApiApiKey = new YouTubeDataApiApiKey();
 
 
-    constructor(videoIdModel: VideoIdModel) {
+    constructor(videoIdModel: propsType) {
 
         // クエリパラメータを作成
         const queryBuilder: QueryBuilder = new QueryBuilder(YouTubeDataApiVideoDetailVideoId.QUERYKEY_VIDEOID, videoIdModel.videoId);

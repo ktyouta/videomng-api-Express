@@ -28,6 +28,9 @@ import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListT
 import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
 import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
+import { VideoIdListModel } from "../../external/youtubedataapi/videodetail/model/VideoIdListModel";
+import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
+import { YouTubeDataApiVideoDetailMaxRequestModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailMaxRequestModel";
 
 
 export class GetFavoriteVideoListService {
@@ -113,22 +116,53 @@ export class GetFavoriteVideoListService {
      */
     public async mergeYouTubeDataList(favoriteVideoList: FavoriteVideoTransaction[]) {
 
+        const videoIdList = favoriteVideoList.map((e) => {
+            return e.videoId;
+        });
+
+        const videoIdcChunks: string[][] = [];
+
+        // 動画詳細取得APIの1回当たりの最大取得可能件数で分割
+        for (let i = 0; i < videoIdList.length; i += YouTubeDataApiVideoDetailMaxRequestModel.MAX_VIDEO_IDS_PER_REQUEST) {
+            videoIdcChunks.push(videoIdList.slice(i, i + YouTubeDataApiVideoDetailMaxRequestModel.MAX_VIDEO_IDS_PER_REQUEST));
+        }
+
+        const videoIdListModelList = videoIdcChunks.map((e) => {
+
+            const videoIdListModel = new VideoIdListModel();
+
+            e.forEach((e1) => {
+                videoIdListModel.add(new VideoIdModel(e1));
+            });
+
+            return videoIdListModel;
+        });
+
+        // YouTube Data Apiから動画詳細を取得
+        const videoDetailList = (await Promise.all(videoIdListModelList.map(async (e) => {
+
+            // API Call
+            const youtubeVideoDetailApi = await this.callYouTubeDataDetailApi(e);
+
+            return youtubeVideoDetailApi.response.items;
+        }))).flat();
+
+        const videoMap = new Map<string, YouTubeDataApiVideoDetailItemType>(
+            videoDetailList.map(item => [item.id, item])
+        );
+
         // お気に入り動画リストとYouTube Data Apiの動画詳細のマージ
-        const favoriteVideoListMergedList = await Promise.all(favoriteVideoList.map(async (e: FavoriteVideoTransaction) => {
+        const favoriteVideoListMergedList = favoriteVideoList.map((e: FavoriteVideoTransaction) => {
 
-            const videoIdModel = new VideoIdModel(e.videoId);
-            // YouTube Data Apiから動画詳細を取得
-            const youtubeVideoDetailApi = await this.callYouTubeDataDetailApi(videoIdModel);
+            const apiData = videoMap.get(e.videoId);
 
-            const youtubeVideoItems = youtubeVideoDetailApi.response.items;
-
-            // YouTube Data APIからのデータ取得に失敗
-            if (youtubeVideoItems.length === 0) {
+            // APIから動画情報の取得に失敗
+            if (!apiData) {
                 return;
             }
 
-            return { ...e, ...youtubeVideoItems[0] };
-        }));
+            return { ...e, ...apiData };
+        });
 
         return favoriteVideoListMergedList.filter((e) => e !== undefined);
     }
@@ -139,13 +173,13 @@ export class GetFavoriteVideoListService {
      * @param videoIdModel 
      * @returns 
      */
-    private async callYouTubeDataDetailApi(videoIdModel: VideoIdModel) {
+    private async callYouTubeDataDetailApi(videoIdListModel: VideoIdListModel) {
 
         try {
 
             // YouTube Data APIのエンドポイント
             const youTubeDataApiVideoDetailEndPointModel = new YouTubeDataApiVideoDetailEndPointModel(
-                videoIdModel,
+                videoIdListModel,
             );
 
             // YouTube Data APIデータ取得
@@ -153,7 +187,7 @@ export class GetFavoriteVideoListService {
 
             return youtubeVideoDetailApi;
         } catch (err) {
-            throw Error(`ERROR:${err} endpoint:${ApiEndopoint.VIDEO_INFO_ID} id:${videoIdModel}`);
+            throw Error(`ERROR:${err} endpoint:${ApiEndopoint.VIDEO_INFO_ID} id:${videoIdListModel.videoId}`);
         }
     }
 }
