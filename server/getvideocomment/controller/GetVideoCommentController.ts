@@ -10,6 +10,7 @@ import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { GetVideoCommentService } from '../service/GetVideoCommentService';
 import { GetVideoCommentResponseModel } from '../model/GetVideoCommentResponseModel';
+import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 
 
 export class GetVideoCommentController extends RouteController {
@@ -40,10 +41,17 @@ export class GetVideoCommentController extends RouteController {
             throw Error(`動画IDが指定されていません。`);
         }
 
+        // クエリパラメータ
+        const query = req.query;
+
+        // 次コメント取得トークン
+        const nextPageToken = query[`nextpagetoken`] as string;
+        const nextPageTokenModel = new YouTubeDataApiCommentThreadNextPageToken(nextPageToken);
+
         const videoIdModel = new VideoIdModel(id);
 
         // YouTube Data Apiから動画コメントを取得する
-        const youTubeVideoCommentApi = await this.getVideoCommentService.callYouTubeDataCommentApi(videoIdModel);
+        const youTubeVideoCommentApi = await this.getVideoCommentService.callYouTubeDataCommentApi(videoIdModel, nextPageTokenModel);
 
         // レスポンスのYouTube動画
         const videoCommentResponseModel = new GetVideoCommentResponseModel(youTubeVideoCommentApi);

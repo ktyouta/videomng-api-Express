@@ -42,7 +42,9 @@ export class GetFavoriteVideoCommentService {
      * YouTube Data Apiを呼び出す
      * @param keyword 
      */
-    public async callYouTubeDataCommentApi(videoIdModel: VideoIdModel) {
+    public async callYouTubeDataCommentApi(videoIdModel: VideoIdModel,
+        nextPageTokenModel: YouTubeDataApiCommentThreadNextPageToken
+    ) {
 
         try {
 
@@ -50,7 +52,7 @@ export class GetFavoriteVideoCommentService {
             const youTubeDataApiCommentThreadEndPointModel = new YouTubeDataApiCommentThreadEndPointModel(
                 videoIdModel,
                 new YouTubeDataApiCommentThreadMaxResult(),
-                new YouTubeDataApiCommentThreadNextPageToken(),
+                nextPageTokenModel,
             );
 
             // YouTube Data Apiデータ取得

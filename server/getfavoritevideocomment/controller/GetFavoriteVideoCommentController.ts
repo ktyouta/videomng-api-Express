@@ -13,6 +13,7 @@ import { GetFavoriteVideoCommentResponseModel } from '../model/GetFavoriteVideoC
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FilterdBlockCommentModel } from '../model/FilterdBlockCommentModel';
 import { FavoriteVideoCommentResponseDataModel } from '../model/FavoriteVideoCommentResponseDataModel2';
+import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 
 
 export class GetFavoriteVideoCommentController extends RouteController {
@@ -49,8 +50,18 @@ export class GetFavoriteVideoCommentController extends RouteController {
         const jsonWebTokenVerifyModel = await this.getFavoriteVideoCommentService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
+        // クエリパラメータ
+        const query = req.query;
+
+        // 次コメント取得トークン
+        const nextPageToken = query[`nextpagetoken`] as string;
+        const nextPageTokenModel = new YouTubeDataApiCommentThreadNextPageToken(nextPageToken);
+
         // YouTube Data Apiから動画コメントを取得する
-        const youTubeFavoriteVideoCommentApi = await this.getFavoriteVideoCommentService.callYouTubeDataCommentApi(videoIdModel);
+        const youTubeFavoriteVideoCommentApi = await this.getFavoriteVideoCommentService.callYouTubeDataCommentApi(
+            videoIdModel,
+            nextPageTokenModel
+        );
 
         // 永続ロジック用オブジェクトを取得
         const getFavoriteVideoCommentRepository = this.getFavoriteVideoCommentService.getGetFavoriteVideoCommentRepository();
