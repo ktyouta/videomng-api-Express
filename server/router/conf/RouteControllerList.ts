@@ -15,6 +15,7 @@ import { GetBlockCommentListController } from "../../getblockcommentlist/control
 import { GetChannelVideoListController } from "../../getchannelvideolist/controller/GetChannelVideoListController";
 import { GetFavoriteCommentListController } from "../../getfavoritecommentlist/controller/GetFavoriteCommentListController";
 import { GetFavoriteVideoCommentController } from "../../getfavoritevideocomment/controller/GetFavoriteVideoCommentController";
+import { GetFavoriteVideoCustomController } from "../../getfavoritevideocustom/controller/GetFavoriteVideoCustomController";
 import { GetFavoriteVideoDetialController } from "../../getfavoritevideodetail/controller/GetFavoriteVideoDetialController";
 import { GetFavoriteVideoListController } from "../../getfavoritevideolist/controller/GetFavoriteVideoListController";
 import { GetFavoriteVideoMemoController } from "../../getfavoritevideomemo/controller/GetFavoriteVideoMemoController";
@@ -112,4 +113,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new UploadFavoriteVideoListCsvController(),
     // ヘルスチェック
     new HealthController(),
+    // カスタム情報取得
+    new GetFavoriteVideoCustomController(),
 ]
