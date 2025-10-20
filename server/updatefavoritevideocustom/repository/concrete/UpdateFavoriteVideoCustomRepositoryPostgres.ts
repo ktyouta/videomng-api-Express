@@ -1,15 +1,15 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
 import { JsonFileData } from "../../../util/service/JsonFileData";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { UpdateFavoriteVideoRepositoryInterface } from "../interface/UpdateFavoriteVideoRepositoryInterface";
-import { UpdateFavoriteVideoSelectEntity } from "../../entity/UpdateFavoriteVideoSelectEntity";
+import { UpdateFavoriteVideoCustomRepositoryInterface } from "../interface/UpdateFavoriteVideoCustomRepositoryInterface";
+import { UpdateFavoriteVideoCustomSelectEntity } from "../../entity/UpdateFavoriteVideoCustomSelectEntity";
 
 
 
 /**
  * json形式の永続ロジック用クラス
  */
-export class UpdateFavoriteVideoRepositoryPostgres implements UpdateFavoriteVideoRepositoryInterface {
+export class UpdateFavoriteVideoCustomRepositoryPostgres implements UpdateFavoriteVideoCustomRepositoryInterface {
 
     constructor() {
     }
@@ -20,7 +20,7 @@ export class UpdateFavoriteVideoRepositoryPostgres implements UpdateFavoriteVide
      * @param frontFavoriteVideoInfoMasterModel 
      * @returns 
      */
-    public async select(updateFavoriteVideoSelectEntity: UpdateFavoriteVideoSelectEntity): Promise<FavoriteVideoTransaction[]> {
+    public async select(updateFavoriteVideoSelectEntity: UpdateFavoriteVideoCustomSelectEntity): Promise<FavoriteVideoTransaction[]> {
 
         const userId = updateFavoriteVideoSelectEntity.frontUserId;
         const videoId = updateFavoriteVideoSelectEntity.videoId;

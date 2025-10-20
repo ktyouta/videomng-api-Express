@@ -5,7 +5,7 @@ import { FavoriteVideoTransactionRepositoryInterface } from "../../internaldata/
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { RepositoryType } from "../../util/const/CommonConst";
-import { UpdateFavoriteVideoRequestModel } from "../model/UpdateFavoriteVideoRequestModel";
+import { UpdateFavoriteVideoCustomRequestModel } from "../model/UpdateFavoriteVideoCustomRequestModel";
 import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideomemotransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
 import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";
 import { FavoriteVideoMemoTransactionInsertEntity } from "../../internaldata/favoritevideomemotransaction/entity/FavoriteVideoMemoTransactionInsertEntity";
@@ -17,12 +17,12 @@ import { FavoriteVideoCategoryTransactionRepositorys } from "../../internaldata/
 import { FavoriteVideoCategoryTransactionRepositoryInterface } from "../../internaldata/favoritevideocateorytransaction/repository/interface/FavoriteVideoCategoryTransactionRepositoryInterface";
 import { FavoriteVideoCategoryTransactionInsertEntity } from "../../internaldata/favoritevideocateorytransaction/entity/FavoriteVideoCategoryTransactionInsertEntity";
 import { FavoriteVideoTransactionUpdateEntity } from "../../internaldata/favoritevideotransaction/entity/FavoriteVideoTransactionUpdateEntity";
-import { UpdateFavoriteVideoRepositorys } from "../repository/UpdateFavoriteVideoRepositorys";
-import { UpdateFavoriteVideoRepositoryInterface } from "../repository/interface/UpdateFavoriteVideoRepositoryInterface";
-import { UpdateFavoriteVideoSelectEntity } from "../entity/UpdateFavoriteVideoSelectEntity";
+import { UpdateFavoriteVideoCustomRepositorys } from "../repository/UpdateFavoriteVideoCustomRepositorys";
+import { UpdateFavoriteVideoCustomRepositoryInterface } from "../repository/interface/UpdateFavoriteVideoCustomRepositoryInterface";
+import { UpdateFavoriteVideoCustomSelectEntity } from "../entity/UpdateFavoriteVideoCustomSelectEntity";
 
 
-export class UpdateFavoriteVideoService {
+export class UpdateFavoriteVideoCustomService {
 
     /**
      * jwtからユーザー情報を取得
@@ -46,8 +46,8 @@ export class UpdateFavoriteVideoService {
      * お気に入り動画更新の永続ロジックを取得
      * @returns 
      */
-    public getUpdateFavoriteVideoRepository(): UpdateFavoriteVideoRepositoryInterface {
-        return (new UpdateFavoriteVideoRepositorys()).get(RepositoryType.POSTGRESQL);
+    public getUpdateFavoriteVideoRepository(): UpdateFavoriteVideoCustomRepositoryInterface {
+        return (new UpdateFavoriteVideoCustomRepositorys()).get(RepositoryType.POSTGRESQL);
     }
 
 
@@ -77,7 +77,7 @@ export class UpdateFavoriteVideoService {
      * @param tx 
      */
     public async deleteCategory(favoriteVideoCategoryRepository: FavoriteVideoCategoryTransactionRepositoryInterface,
-        updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
+        updateFavoriteVideoRequestModel: UpdateFavoriteVideoCustomRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
@@ -95,7 +95,7 @@ export class UpdateFavoriteVideoService {
      * @param frontUserIdModel 
      */
     public async insertCategory(favoriteVideoCategoryRepository: FavoriteVideoCategoryTransactionRepositoryInterface,
-        updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
+        updateFavoriteVideoRequestModel: UpdateFavoriteVideoCustomRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
@@ -120,7 +120,7 @@ export class UpdateFavoriteVideoService {
      * @param frontUserIdModel 
      */
     public async updateFavoriteVideo(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
-        updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
+        updateFavoriteVideoRequestModel: UpdateFavoriteVideoCustomRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
@@ -144,13 +144,13 @@ export class UpdateFavoriteVideoService {
      * @param frontUserIdModel 
      * @returns 
      */
-    public async checkExistFavoriteVideo(getUpdateFavoriteVideoRepository: UpdateFavoriteVideoRepositoryInterface,
-        updateFavoriteVideoRequestModel: UpdateFavoriteVideoRequestModel,
+    public async checkExistFavoriteVideo(getUpdateFavoriteVideoRepository: UpdateFavoriteVideoCustomRepositoryInterface,
+        updateFavoriteVideoRequestModel: UpdateFavoriteVideoCustomRequestModel,
         frontUserIdModel: FrontUserIdModel
     ) {
 
         // お気に入り動画取得Entity
-        const updateFavoriteVideoSelectEntity = new UpdateFavoriteVideoSelectEntity(
+        const updateFavoriteVideoSelectEntity = new UpdateFavoriteVideoCustomSelectEntity(
             frontUserIdModel,
             updateFavoriteVideoRequestModel.videoIdModel
         );

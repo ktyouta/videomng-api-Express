@@ -1,5 +1,5 @@
 // お気に入り動画更新時のリクエストの型
-export type UpdateFavoriteVideoRequestType = {
+export type UpdateFavoriteVideoCustomRequestType = {
     summary: string,
     viewStatus: string,
     category: string[],

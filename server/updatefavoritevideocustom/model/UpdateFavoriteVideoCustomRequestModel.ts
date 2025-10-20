@@ -1,12 +1,12 @@
 import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { UpdateFavoriteVideoRequestType } from "./UpdateFavoriteVideoRequestType";
+import { UpdateFavoriteVideoCustomRequestType } from "./UpdateFavoriteVideoCustomRequestType";
 import { SummaryModel } from "../../internaldata/favoritevideotransaction/properties/SummaryModel";
 import { ViewStatusModel } from "../../internaldata/common/properties/ViewStatusModel";
 import { CategoryIdModel } from "../../internaldata/favoritevideocateorytransaction/properties/CategoryIdModel";
 import { FavoriteLevelModel } from "../../internaldata/favoritevideotransaction/properties/FavoriteLevelModel";
 
-export class UpdateFavoriteVideoRequestModel {
+export class UpdateFavoriteVideoCustomRequestModel {
 
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
@@ -34,13 +34,13 @@ export class UpdateFavoriteVideoRequestModel {
     }
 
     static async set(videoIdModel: VideoIdModel,
-        updateFavoriteVideoRequest: UpdateFavoriteVideoRequestType) {
+        updateFavoriteVideoRequest: UpdateFavoriteVideoCustomRequestType) {
 
         const _categoryIdModelList = updateFavoriteVideoRequest.category?.map((e: string) => {
             return new CategoryIdModel(e);
         });
 
-        return new UpdateFavoriteVideoRequestModel(
+        return new UpdateFavoriteVideoCustomRequestModel(
             videoIdModel,
             new SummaryModel(updateFavoriteVideoRequest.summary),
             await ViewStatusModel.reConstruct(updateFavoriteVideoRequest.viewStatus),

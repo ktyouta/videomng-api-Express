@@ -29,7 +29,7 @@ import { GetVideoListController } from "../../getvideolist/controller/GetVideoLi
 import { GetViewStatusListController } from "../../getviewstatuslist/controller/GetViewStatusListController";
 import { HealthController } from "../../health/controller/HealthController";
 import { SearchCommentByKeywordController } from "../../searchcommentbykeyword/controller/SearchCommentByKeywordController";
-import { UpdateFavoriteVideoController } from "../../updatefavoritevideo/controller/UpdateFavoriteVideoController";
+import { UpdateFavoriteVideoCustomController } from "../../updatefavoritevideocustom/controller/UpdateFavoriteVideoCustomController";
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
 import { UpdateFavoriteVideoTagController } from "../../updatefavoritevideotag/controller/UpdateFavoriteVideoTagController";
 import { UpdateFrontUserInfoController } from "../../updatefrontuserinfo/controller/UpdateFrontUserInfoController";
@@ -60,7 +60,7 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     // お気に入り動画登録処理
     new CreateFavoriteVideoController(),
     // お気に入り動画更新処理
-    new UpdateFavoriteVideoController(),
+    new UpdateFavoriteVideoCustomController(),
     // お気に入り動画削除処理
     new DeleteFavoriteVideoController(),
     // お気に入り動画リスト取得

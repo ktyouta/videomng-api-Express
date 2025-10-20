@@ -9,23 +9,23 @@ import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSetti
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
-import { UpdateFavoriteVideoService } from '../service/UpdateFavoriteVideoService';
-import { UpdateFavoriteVideoRequestType } from '../model/UpdateFavoriteVideoRequestType';
-import { UpdateFavoriteVideoRequestModel } from '../model/UpdateFavoriteVideoRequestModel';
+import { UpdateFavoriteVideoCustomService } from '../service/UpdateFavoriteVideoCustomService';
+import { UpdateFavoriteVideoCustomRequestType } from '../model/UpdateFavoriteVideoCustomRequestType';
+import { UpdateFavoriteVideoCustomRequestModel } from '../model/UpdateFavoriteVideoCustomRequestModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
-import { UpdateFavoriteVideoResponseModel } from '../model/UpdateFavoriteVideoResponseModel';
+import { UpdateFavoriteVideoCustomResponseModel } from '../model/UpdateFavoriteVideoCustomResponseModel';
 
 
-export class UpdateFavoriteVideoController extends RouteController {
+export class UpdateFavoriteVideoCustomController extends RouteController {
 
-    private readonly updateFavoriteVideoService = new UpdateFavoriteVideoService();
+    private readonly updateFavoriteVideoCustomService = new UpdateFavoriteVideoCustomService();
 
     protected getRouteSettingModel(): RouteSettingModel {
 
         return new RouteSettingModel(
             HttpMethodType.PUT,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_ID
+            ApiEndopoint.FAVORITE_VIDEO_CUSTOM
         );
     }
 
@@ -37,36 +37,36 @@ export class UpdateFavoriteVideoController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
-        const id = req.params.id;
+        const id = req.params.videoId;
 
         if (!id) {
-            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_ID}`);
+            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_CUSTOM}`);
         }
 
         const videoId = new VideoIdModel(id);
 
         // リクエストボディ
-        const requestBody: UpdateFavoriteVideoRequestType = req.body;
+        const requestBody: UpdateFavoriteVideoCustomRequestType = req.body;
 
         // リクエストボディの型変換
-        const updateFavoriteVideoRequestModel = await UpdateFavoriteVideoRequestModel.set(videoId, requestBody);
+        const updateFavoriteVideoRequestModel = await UpdateFavoriteVideoCustomRequestModel.set(videoId, requestBody);
 
         // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.updateFavoriteVideoService.checkJwtVerify(req);
+        const jsonWebTokenVerifyModel = await this.updateFavoriteVideoCustomService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
             // お気に入り動画更新の永続ロジックを取得
-            const getUpdateFavoriteVideoRepository = this.updateFavoriteVideoService.getUpdateFavoriteVideoRepository();
+            const getUpdateFavoriteVideoRepository = this.updateFavoriteVideoCustomService.getUpdateFavoriteVideoRepository();
             // お気に入り動画カテゴリの永続ロジックを取得
-            const favoriteVideoCategoryRepository = this.updateFavoriteVideoService.getFavoriteVideoCategoryRepository();
+            const favoriteVideoCategoryRepository = this.updateFavoriteVideoCustomService.getFavoriteVideoCategoryRepository();
             // お気に入り動画の永続ロジックを取得
-            const favoriteVideoRepository = this.updateFavoriteVideoService.getFavoriteVideoRepository();
+            const favoriteVideoRepository = this.updateFavoriteVideoCustomService.getFavoriteVideoRepository();
 
             // 動画の存在チェック
-            const isExistFavoriteVideo = await this.updateFavoriteVideoService.checkExistFavoriteVideo(
+            const isExistFavoriteVideo = await this.updateFavoriteVideoCustomService.checkExistFavoriteVideo(
                 getUpdateFavoriteVideoRepository,
                 updateFavoriteVideoRequestModel,
                 frontUserIdModel);
@@ -77,7 +77,7 @@ export class UpdateFavoriteVideoController extends RouteController {
             }
 
             // カテゴリを削除
-            await this.updateFavoriteVideoService.deleteCategory(
+            await this.updateFavoriteVideoCustomService.deleteCategory(
                 favoriteVideoCategoryRepository,
                 updateFavoriteVideoRequestModel,
                 frontUserIdModel,
@@ -85,7 +85,7 @@ export class UpdateFavoriteVideoController extends RouteController {
             );
 
             // カテゴリを登録
-            const favoriteCategoryList = await this.updateFavoriteVideoService.insertCategory(
+            const favoriteCategoryList = await this.updateFavoriteVideoCustomService.insertCategory(
                 favoriteVideoCategoryRepository,
                 updateFavoriteVideoRequestModel,
                 frontUserIdModel,
@@ -93,7 +93,7 @@ export class UpdateFavoriteVideoController extends RouteController {
             );
 
             // お気に入り動画情報を更新
-            const favoriteVideo = await this.updateFavoriteVideoService.updateFavoriteVideo(
+            const favoriteVideo = await this.updateFavoriteVideoCustomService.updateFavoriteVideo(
                 favoriteVideoRepository,
                 updateFavoriteVideoRequestModel,
                 frontUserIdModel,
@@ -101,7 +101,7 @@ export class UpdateFavoriteVideoController extends RouteController {
             );
 
             // レスポンス
-            const updateFavoriteVideoResponseModel = new UpdateFavoriteVideoResponseModel(
+            const updateFavoriteVideoResponseModel = new UpdateFavoriteVideoCustomResponseModel(
                 favoriteVideo,
                 favoriteCategoryList,
             );

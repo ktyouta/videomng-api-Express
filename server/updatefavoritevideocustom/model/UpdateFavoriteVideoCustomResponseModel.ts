@@ -1,9 +1,9 @@
 import { FavoriteVideoCategoryTransaction, FavoriteVideoTransaction } from "@prisma/client";
-import { UpdateFavoriteVideoResponseDataType } from "../type/UpdateFavoriteVideoResponseDataType";
+import { UpdateFavoriteVideoCustomResponseDataType } from "../type/UpdateFavoriteVideoCustomResponseDataType";
 
-export class UpdateFavoriteVideoResponseModel {
+export class UpdateFavoriteVideoCustomResponseModel {
 
-    private readonly _data: UpdateFavoriteVideoResponseDataType;
+    private readonly _data: UpdateFavoriteVideoCustomResponseDataType;
 
     constructor(detail: FavoriteVideoTransaction,
         category: FavoriteVideoCategoryTransaction[]) {

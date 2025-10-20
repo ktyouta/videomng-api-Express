@@ -6,7 +6,7 @@ import { FLG } from "../../util/const/CommonConst";
 
 
 
-export class UpdateFavoriteVideoSelectEntity {
+export class UpdateFavoriteVideoCustomSelectEntity {
 
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
