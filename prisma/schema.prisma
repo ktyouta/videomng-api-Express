@@ -172,3 +172,16 @@ model FavoriteVideoSortMaster {
   deleteFlg   String   @db.Char(1) @default("0") @map("delete_flg")
   @@map("favorite_video_sort_master") 
 }
+
+
+// フォルダマスタ
+model FolderMaster {
+  userId      Int   @map("user_id")
+  folderId    Int   @map("folder_id")
+  name      String   @db.VarChar(255)
+  createDate  DateTime @db.Timestamptz @map("create_date")
+  updateDate  DateTime @db.Timestamptz @map("update_date")
+  deleteFlg   String   @db.Char(1) @default("0") @map("delete_flg")
+  @@id([userId, folderId])
+  @@map("folder_master") 
+}

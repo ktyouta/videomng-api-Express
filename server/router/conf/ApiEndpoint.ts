@@ -28,4 +28,5 @@ export enum ApiEndopoint {
     FAVORITE_VIDEO_CSV_UPLOAD = "/videomng/v1/favoritevideo-upload-csv",
     HEALTH = "/videomng/v1/health",
     FAVORITE_VIDEO_CUSTOM = "/videomng/v1/favoritevideo/:videoId/custom",
+    FOLDER = "/videomng/v1/folder",
 }
