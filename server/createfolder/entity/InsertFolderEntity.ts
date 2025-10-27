@@ -4,8 +4,8 @@ import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUser
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { FLG } from "../../util/const/CommonConst";
 import { CreateFolderRequestType } from "../schema/CreateFolderRequestSchema";
-import { FolderNameModel } from "../model/FolderNameModel";
-import { FolderIdModel } from "../model/FolderIdModel";
+import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
+import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 
 
 export class InsertFolderEntity {

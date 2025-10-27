@@ -3,20 +3,20 @@ import { FrontUserBirthdayModel } from "../../internaldata/frontuserinfomaster/p
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { FLG } from "../../util/const/CommonConst";
-import { CreateFolderRequestType } from "../schema/CreateFolderRequestSchema";
 import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
+import { UpdateFolderRequestType } from "../schema/UpdateFolderRequestSchema";
 
 
-export class SelectFolderEntity {
+export class SelectDuplicationFolderEntity {
 
     // フォルダ名
     private readonly _folderNameModel: FolderNameModel;
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
 
-    constructor(requestBody: CreateFolderRequestType, frontUserIdModel: FrontUserIdModel) {
+    constructor(folderNameModel: FolderNameModel, frontUserIdModel: FrontUserIdModel) {
 
-        this._folderNameModel = new FolderNameModel(requestBody.name);
+        this._folderNameModel = folderNameModel;
         this._frontUserIdModel = frontUserIdModel;
     }
 

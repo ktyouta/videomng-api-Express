@@ -7,8 +7,8 @@ import { SelectFolderEntity } from "../entity/SelectFolderEntity";
 import { CreateFolderRepositoryInterface } from "../repository/interface/CreateFolderInterface";
 import { Prisma } from "@prisma/client";
 import { InsertFolderEntity } from "../entity/InsertFolderEntity";
-import { FolderIdModel } from "../model/FolderIdModel";
-import { FolderNameModel } from "../model/FolderNameModel";
+import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
+import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
 
 
 export class CreateFolderService {

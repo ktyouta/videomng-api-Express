@@ -76,7 +76,6 @@ export class CreateFolderRepositoryPostgres implements CreateFolderRepositoryInt
                 name: folderName,
                 createDate: new Date(),
                 updateDate: new Date(),
-                deleteFlg: FLG.OFF,
             },
         });
 

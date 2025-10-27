@@ -3,20 +3,21 @@ import { FrontUserBirthdayModel } from "../../internaldata/frontuserinfomaster/p
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { FLG } from "../../util/const/CommonConst";
-import { CreateFolderRequestType } from "../schema/CreateFolderRequestSchema";
 import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
+import { UpdateFolderRequestType } from "../schema/UpdateFolderRequestSchema";
+import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 
 
-export class SelectFolderEntity {
+export class SelectExistsFolderEntity {
 
-    // フォルダ名
-    private readonly _folderNameModel: FolderNameModel;
+    // フォルダID
+    private readonly _folderIdModel: FolderIdModel;
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
 
-    constructor(requestBody: CreateFolderRequestType, frontUserIdModel: FrontUserIdModel) {
+    constructor(folderIdModel: FolderIdModel, frontUserIdModel: FrontUserIdModel) {
 
-        this._folderNameModel = new FolderNameModel(requestBody.name);
+        this._folderIdModel = folderIdModel;
         this._frontUserIdModel = frontUserIdModel;
     }
 
@@ -24,7 +25,7 @@ export class SelectFolderEntity {
         return this._frontUserIdModel.frontUserId;
     }
 
-    get folderName() {
-        return this._folderNameModel.name;
+    get folderId() {
+        return this._folderIdModel.id;
     }
 }

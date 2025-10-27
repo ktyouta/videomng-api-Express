@@ -2,6 +2,7 @@ import { CreateBlockCommentController } from "../../createblockcomment/controlle
 import { CreateFavoriteCommentController } from "../../createfavoritecomment/controller/CreateFavoriteCommentController";
 import { CreateFavoriteVideoController } from "../../createfavoritevideo/controller/CreateFavoriteVideoController";
 import { CreateFavoriteVideoMemoController } from "../../createfavoritevideomemo/controller/CreateFavoriteVideoMemoController";
+import { CreateFolderController } from "../../createfolder/controller/CreateFolderController";
 import { CreateFrontUserInfoController } from "../../createfrontuserinfo/controller/CreateFrontUserInfoController";
 import { DeleteBlockCommentController } from "../../deleteblockcomment/controller/DeleteBlockCommentController";
 import { DeleteFavoriteCommentController } from "../../deletefavoritecomment/controller/DeleteFavoriteCommentController";
@@ -32,6 +33,7 @@ import { SearchCommentByKeywordController } from "../../searchcommentbykeyword/c
 import { UpdateFavoriteVideoCustomController } from "../../updatefavoritevideocustom/controller/UpdateFavoriteVideoCustomController";
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
 import { UpdateFavoriteVideoTagController } from "../../updatefavoritevideotag/controller/UpdateFavoriteVideoTagController";
+import { UpdateFolderController } from "../../updatefolder/controller/UpdateFolderController";
 import { UpdateFrontUserInfoController } from "../../updatefrontuserinfo/controller/UpdateFrontUserInfoController";
 import { UpdateFrontUserPasswordController } from "../../updatefrontuserpassword/controller/UpdateFrontUserPasswordController";
 import { UploadFavoriteVideoListCsvController } from "../../uploadfavoritevideolistcsv/controller/UploadFavoriteVideoListCsvController";
@@ -115,4 +117,8 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new HealthController(),
     // カスタム情報取得
     new GetFavoriteVideoCustomController(),
+    // フォルダ作成
+    new CreateFolderController(),
+    // フォルダ更新
+    new UpdateFolderController(),
 ]
