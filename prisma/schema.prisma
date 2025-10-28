@@ -184,3 +184,14 @@ model FolderMaster {
   @@id([userId, folderId])
   @@map("folder_master") 
 }
+
+// お気に入り動画フォルダ
+model FavoriteVideoFolderTransaction {
+  userId      Int   @map("user_id")
+  folderId    Int   @map("folder_id")
+  videoId    String   @db.VarChar(255)  @map("video_id")
+  createDate  DateTime @db.Timestamptz @map("create_date")
+  updateDate  DateTime @db.Timestamptz @map("update_date")
+  @@id([userId, folderId,videoId])
+  @@map("favorite_video_folder_transaction") 
+}
