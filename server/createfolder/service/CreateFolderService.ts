@@ -38,12 +38,12 @@ export class CreateFolderService {
      * @param frontUserIdModel 
      * @returns 
      */
-    public async getFolder(requestBody: CreateFolderRequestType,
+    public async getFolder(folderNameModel: FolderNameModel,
         frontUserIdModel: FrontUserIdModel) {
 
         // フォルダ取得Entity
         const selectFolderEntity = new SelectFolderEntity(
-            requestBody,
+            folderNameModel,
             frontUserIdModel
         );
 

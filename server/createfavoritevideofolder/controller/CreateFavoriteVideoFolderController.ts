@@ -14,11 +14,13 @@ import { RequestSchema, RequestType } from '../schema/RequestSchema';
 import { CreateFavoriteVideoFolderService } from '../service/CreateFavoriteVideoFolderService';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
 import { PathParamSchema } from '../schema/PathParamSchema';
+import { CreateFavoriteVideoFolderRepositorys } from '../repository/CreateFavoriteVideoFolderRepositorys';
+import { RepositoryType } from '../../util/const/CommonConst';
 
 
 export class CreateFavoriteVideoFolderController extends RouteController {
 
-    private readonly createFavoriteVideoFolderService = new CreateFavoriteVideoFolderService();
+    private readonly createFavoriteVideoFolderService = new CreateFavoriteVideoFolderService((new CreateFavoriteVideoFolderRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -71,8 +73,18 @@ export class CreateFavoriteVideoFolderController extends RouteController {
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
             // フォルダのマスタ存在チェック
+            const folder = await this.createFavoriteVideoFolderService.getFolder(folderIdModel, frontUserIdModel);
+
+            if (!folder) {
+                throw Error(`フォルダが存在しません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
+            }
 
             // お気に入り動画の存在チェック
+            const video = await this.createFavoriteVideoFolderService.getFavoriteVideo(frontUserIdModel, videoIdModel);
+
+            if (!video) {
+                throw Error(`お気に入り動画が存在しません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
+            }
 
             // お気に入りフォルダテーブルに登録
 

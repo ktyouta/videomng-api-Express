@@ -15,6 +15,7 @@ import { UpdateFolderRepositorys } from '../repository/UpdateFolderRepositorys';
 import { UpdateFolderRequestSchema, UpdateFolderRequestType } from '../schema/UpdateFolderRequestSchema';
 import { FolderNameModel } from '../../internaldata/foldermaster/model/FolderNameModel';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
+import { PathParamSchema } from '../schema/PathParamSchema';
 
 
 export class UpdateFolderController extends RouteController {
@@ -38,10 +39,11 @@ export class UpdateFolderController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
-        const id = req.params.folderId;
+        // パスパラメータのバリデーションチェック
+        const pathValidateResult = PathParamSchema.safeParse(req.params);
 
-        if (!id) {
-            throw Error(`フォルダIDが指定されていません。 endpoint:${ApiEndopoint.FOLDER_ID}`);
+        if (!pathValidateResult.success) {
+            throw Error(`${pathValidateResult.error.message} endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
         }
 
         // リクエストのバリデーションチェック
@@ -60,7 +62,7 @@ export class UpdateFolderController extends RouteController {
 
         // リクエストボディ
         const requestBody: UpdateFolderRequestType = validateResult.data;
-        const folderIdModel = new FolderIdModel(parseInt(id));
+        const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
         const folderNameModel = new FolderNameModel(requestBody.name);
 
         // jwtの認証を実行する
@@ -74,7 +76,7 @@ export class UpdateFolderController extends RouteController {
             const existsFolder = await this.updateFolderService.getExistsFolder(folderIdModel, frontUserIdModel);
 
             if (!existsFolder || existsFolder.length === 0) {
-                throw Error(`更新対象のフォルダが存在しません。フォルダID：${id}`);
+                throw Error(`更新対象のフォルダが存在しません。フォルダID：${folderIdModel.id}`);
             }
 
             // フォルダの重複チェック

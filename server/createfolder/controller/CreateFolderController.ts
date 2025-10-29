@@ -13,6 +13,7 @@ import { CreateFolderService } from '../service/CreateFolderService';
 import { CreateFolderRequestSchema, CreateFolderRequestType } from '../schema/CreateFolderRequestSchema';
 import { CreateFolderRepositorys } from '../repository/CreateFolderRepositorys';
 import { RepositoryType } from '../../util/const/CommonConst';
+import { FolderNameModel } from '../../internaldata/foldermaster/model/FolderNameModel';
 
 
 export class CreateFolderController extends RouteController {
@@ -52,6 +53,7 @@ export class CreateFolderController extends RouteController {
 
         // リクエストボディ
         const requestBody: CreateFolderRequestType = validateResult.data;
+        const folderNameModel = new FolderNameModel(requestBody.name);
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.createFolderService.checkJwtVerify(req);
@@ -61,7 +63,7 @@ export class CreateFolderController extends RouteController {
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
             // フォルダの重複チェック
-            const folderList = await this.createFolderService.getFolder(requestBody, frontUserIdModel);
+            const folderList = await this.createFolderService.getFolder(folderNameModel, frontUserIdModel);
 
             if (folderList && folderList.length > 0) {
                 return ApiResponse.create(res, HTTP_STATUS_CONFLICT, `同じ名前のフォルダが既に存在します。`,);

@@ -3,20 +3,20 @@ import { FrontUserBirthdayModel } from "../../internaldata/frontuserinfomaster/p
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { FLG } from "../../util/const/CommonConst";
-import { CreateFolderRequestType } from "../schema/CreateFolderRequestSchema";
 import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
+import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 
 
-export class SelectFolderEntity {
+export class SelectFavoriteVideoEntity {
 
     // フォルダ名
-    private readonly _folderNameModel: FolderNameModel;
+    private readonly _videoIdModel: VideoIdModel;
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
 
-    constructor(folderNameModel: FolderNameModel, frontUserIdModel: FrontUserIdModel) {
+    constructor(videoIdModel: VideoIdModel, frontUserIdModel: FrontUserIdModel) {
 
-        this._folderNameModel = folderNameModel;
+        this._videoIdModel = videoIdModel;
         this._frontUserIdModel = frontUserIdModel;
     }
 
@@ -24,7 +24,7 @@ export class SelectFolderEntity {
         return this._frontUserIdModel.frontUserId;
     }
 
-    get folderName() {
-        return this._folderNameModel.name;
+    get videoId() {
+        return this._videoIdModel.videoId;
     }
 }
