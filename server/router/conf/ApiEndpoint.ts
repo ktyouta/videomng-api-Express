@@ -31,4 +31,5 @@ export enum ApiEndopoint {
     FOLDER = "/videomng/v1/folder",
     FOLDER_ID = "/videomng/v1/folder/:folderId",
     FAVORITE_VIDEO_FOLDER = "/videomng/v1/folder/:folderId/favoritevideo",
+    FAVORITE_VIDEO_FOLDER_ID = "/videomng/v1/folder/:folderId/favoritevideo/:videoId",
 }
