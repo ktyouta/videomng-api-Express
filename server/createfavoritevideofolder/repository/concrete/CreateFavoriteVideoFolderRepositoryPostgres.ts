@@ -1,4 +1,4 @@
-import { FavoriteVideoTagTransaction, FavoriteVideoTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
+import { FavoriteVideoFolderTransaction, FavoriteVideoTagTransaction, FavoriteVideoTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
 import { JsonFileData } from "../../../util/service/JsonFileData";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { CreateFavoriteVideoFolderInterface } from "../interface/CreateFavoriteVideoFolderInterface";
@@ -6,7 +6,7 @@ import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontU
 import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
 import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
 import { FLG } from "../../../util/const/CommonConst";
-import { InsertFolderEntity } from "../../entity/InsertFolderEntity";
+import { InsertFavoriteVideoFolderEntity } from "../../entity/InsertFavoriteVideoFolderEntity";
 import { SelectFavoriteVideoEntity } from "../../entity/SelectFavoriteVideoEntity";
 
 
@@ -66,25 +66,25 @@ export class CreateFavoriteVideoFolderRepositoryPostgres implements CreateFavori
     }
 
     /**
-     * フォルダを作成
+     * お気に入り動画フォルダ登録
      */
-    async insert(insertFolderEntity: InsertFolderEntity,
-        tx: Prisma.TransactionClient): Promise<FolderMaster> {
+    async insert(insertFolderEntity: InsertFavoriteVideoFolderEntity,
+        tx: Prisma.TransactionClient): Promise<FavoriteVideoFolderTransaction> {
 
         const userId = insertFolderEntity.frontUserId;
         const folderId = insertFolderEntity.folderId;
-        const folderName = insertFolderEntity.folderName;
+        const videoId = insertFolderEntity.videoId;
 
-        const folder = await tx.folderMaster.create({
+        const data = await tx.favoriteVideoFolderTransaction.create({
             data: {
                 userId,
                 folderId,
-                name: folderName,
+                videoId,
                 createDate: new Date(),
                 updateDate: new Date(),
             },
         });
 
-        return folder;
+        return data;
     };
 }

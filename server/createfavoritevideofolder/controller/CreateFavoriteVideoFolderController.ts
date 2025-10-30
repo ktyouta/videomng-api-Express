@@ -87,8 +87,14 @@ export class CreateFavoriteVideoFolderController extends RouteController {
             }
 
             // お気に入りフォルダテーブルに登録
+            const favoriteVideoFolder = await this.createFavoriteVideoFolderService.createFavoriteVideoFolder(
+                frontUserIdModel,
+                videoIdModel,
+                folderIdModel,
+                tx
+            );
 
-            return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダに登録しました。`);
+            return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダに登録しました。`, favoriteVideoFolder);
         }, next);
     }
 }

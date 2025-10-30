@@ -9,6 +9,7 @@ import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdMod
 import { SelectFolderEntity } from "../entity/SelectFolderEntity";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { SelectFavoriteVideoEntity } from "../entity/SelectFavoriteVideoEntity";
+import { InsertFavoriteVideoFolderEntity } from "../entity/InsertFavoriteVideoFolderEntity";
 
 
 export class CreateFavoriteVideoFolderService {
@@ -58,7 +59,7 @@ export class CreateFavoriteVideoFolderService {
      * お気に入り動画取得
      * @param userNameModel 
      */
-    public async getFavoriteVideo(frontUserIdModel: FrontUserIdModel,
+    async getFavoriteVideo(frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel) {
 
         // お気に入り動画取得用Entity
@@ -68,5 +69,22 @@ export class CreateFavoriteVideoFolderService {
         const favoriteVideoDetial = await this.createFavoriteVideoFolderInterface.selectFavoriteVideo(entity);
 
         return favoriteVideoDetial;
+    }
+
+    /**
+     * お気に入り動画フォルダ登録
+     * @param userNameModel 
+     */
+    async createFavoriteVideoFolder(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        folderIdModel: FolderIdModel,
+        tx: Prisma.TransactionClient) {
+
+        const entity = new InsertFavoriteVideoFolderEntity(folderIdModel, videoIdModel, frontUserIdModel);
+
+        // お気に入り動画フォルダ登録
+        const data = await this.createFavoriteVideoFolderInterface.insert(entity, tx);
+
+        return data;
     }
 }
