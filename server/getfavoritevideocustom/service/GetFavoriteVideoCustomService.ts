@@ -14,9 +14,13 @@ import { FavoriteVideoTransaction } from "@prisma/client";
 import { GetFavoriteVideoCustomSelectEntity } from "../entity/GetFavoriteVideoCustomSelectEntity";
 import { GetFavoriteVideoCustomMemoSelectEntity } from "../entity/GetFavoriteVideoCustomMemoSelectEntity";
 import { GetFavoriteVideoCustomCategorySelectEntity } from "../entity/GetFavoriteVideoCustomCategorySelectEntity";
+import { FavoriteVideoTagType } from "../type/FavoriteVideoTagType";
+import { SelectTagListEntity } from "../entity/SelectTagListEntity";
 
 
 export class GetFavoriteVideoCustomService {
+
+    constructor(private readonly getGetFavoriteVideoCustomRepository: GetFavoriteVideoCustomRepositoryInterface) { }
 
     /**
      * jwtからユーザー情報を取得
@@ -36,26 +40,17 @@ export class GetFavoriteVideoCustomService {
     }
 
     /**
-     * 永続ロジック用オブジェクトを取得
-     */
-    public getGetFavoriteVideoCustomRepository(): GetFavoriteVideoCustomRepositoryInterface {
-        return (new GetFavoriteVideoCustomRepositorys()).get(RepositoryType.POSTGRESQL);
-    }
-
-
-    /**
      * お気に入り動画取得
      * @param userNameModel 
      */
-    public async getFavoriteVideoCustom(getGetFavoriteVideoCustomRepository: GetFavoriteVideoCustomRepositoryInterface,
-        frontUserIdModel: FrontUserIdModel,
+    public async getFavoriteVideoCustom(frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel): Promise<FavoriteVideoTransaction[]> {
 
         // お気に入り動画取得用Entity
         const getFavoriteVideoCustomSelectEntity = new GetFavoriteVideoCustomSelectEntity(frontUserIdModel, videoIdModel);
 
         // お気に入り動画取得
-        const favoriteVideoCustom = await getGetFavoriteVideoCustomRepository.selectVideo(getFavoriteVideoCustomSelectEntity);
+        const favoriteVideoCustom = await this.getGetFavoriteVideoCustomRepository.selectVideo(getFavoriteVideoCustomSelectEntity);
 
         return favoriteVideoCustom;
     }
@@ -65,15 +60,14 @@ export class GetFavoriteVideoCustomService {
      * お気に入り動画メモ取得
      * @param userNameModel 
      */
-    public async getFavoriteVideoMemo(getGetFavoriteVideoCustomRepository: GetFavoriteVideoCustomRepositoryInterface,
-        frontUserIdModel: FrontUserIdModel,
+    public async getFavoriteVideoMemo(frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel) {
 
         // お気に入り動画メモ取得用Entity
         const getFavoriteVideoCustomSelectEntity = new GetFavoriteVideoCustomMemoSelectEntity(frontUserIdModel, videoIdModel);
 
         // お気に入り動画メモ取得
-        const favoriteVideoMemo = await getGetFavoriteVideoCustomRepository.selectVideoMemo(getFavoriteVideoCustomSelectEntity);
+        const favoriteVideoMemo = await this.getGetFavoriteVideoCustomRepository.selectVideoMemo(getFavoriteVideoCustomSelectEntity);
 
         return favoriteVideoMemo;
     }
@@ -82,17 +76,32 @@ export class GetFavoriteVideoCustomService {
      * お気に入り動画カテゴリ取得
      * @param userNameModel 
      */
-    public async getFavoriteVideoCategory(getGetFavoriteVideoCustomRepository: GetFavoriteVideoCustomRepositoryInterface,
-        frontUserIdModel: FrontUserIdModel,
+    public async getFavoriteVideoCategory(frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel) {
 
         // お気に入り動画カテゴリ取得用Entity
         const getFavoriteVideoCustomCategorySelectEntity = new GetFavoriteVideoCustomCategorySelectEntity(frontUserIdModel, videoIdModel);
 
         // お気に入り動画カテゴリ取得
-        const favoriteVideoCategory = await getGetFavoriteVideoCustomRepository.selectVideoCategory(getFavoriteVideoCustomCategorySelectEntity);
+        const favoriteVideoCategory = await this.getGetFavoriteVideoCustomRepository.selectVideoCategory(getFavoriteVideoCustomCategorySelectEntity);
 
         return favoriteVideoCategory;
+    }
+
+    /**
+     * お気に入り動画タグリスト取得
+     * @param userNameModel 
+     */
+    public async getFavoriteVideoTagList(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,): Promise<FavoriteVideoTagType[]> {
+
+        // お気に入り動画タグリスト取得用Entity
+        const entity = new SelectTagListEntity(frontUserIdModel, videoIdModel);
+
+        // お気に入り動画タグリスト取得
+        const favoriteVideoTagList = await this.getGetFavoriteVideoCustomRepository.selectVideoTag(entity);
+
+        return favoriteVideoTagList;
     }
 
     /**
@@ -117,5 +126,4 @@ export class GetFavoriteVideoCustomService {
             throw Error(`ERROR:${err} endpoint:${ApiEndopoint.VIDEO_INFO_ID} id:${videoIdModel}`);
         }
     }
-
 }

@@ -15,11 +15,13 @@ import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel"
 import { GetFavoriteVideoCustomService } from "../service/GetFavoriteVideoCustomService";
 import { GetFavoriteVideoCustomResponseModel } from "../model/GetFavoriteVideoCustomResponseModel";
 import { FavoriteVideoCustomMergedModel } from "../model/FavoriteVideoCustomMergedModel";
+import { GetFavoriteVideoCustomRepositorys } from "../repository/GetFavoriteVideoCustomRepositorys";
+import { RepositoryType } from "../../util/const/CommonConst";
 
 
 export class GetFavoriteVideoCustomController extends RouteController {
 
-    private readonly getFavoriteVideoCustomService = new GetFavoriteVideoCustomService();
+    private readonly getFavoriteVideoCustomService = new GetFavoriteVideoCustomService((new GetFavoriteVideoCustomRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -50,12 +52,8 @@ export class GetFavoriteVideoCustomController extends RouteController {
         const jsonWebTokenVerifyModel = await this.getFavoriteVideoCustomService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
-        // 永続ロジック用オブジェクトを取得
-        const getGetFavoriteVideoCustomRepository = this.getFavoriteVideoCustomService.getGetFavoriteVideoCustomRepository();
-
         // お気に入り動画を取得
         const favoriteVideoList = await this.getFavoriteVideoCustomService.getFavoriteVideoCustom(
-            getGetFavoriteVideoCustomRepository,
             frontUserIdModel,
             videoIdModel);
 
@@ -66,13 +64,16 @@ export class GetFavoriteVideoCustomController extends RouteController {
 
         // お気に入り動画メモを取得する
         const favoriteVideoMemoList = await this.getFavoriteVideoCustomService.getFavoriteVideoMemo(
-            getGetFavoriteVideoCustomRepository,
             frontUserIdModel,
             videoIdModel);
 
         // お気に入り動画カテゴリを取得する
         const favoriteVideoCategoryList = await this.getFavoriteVideoCustomService.getFavoriteVideoCategory(
-            getGetFavoriteVideoCustomRepository,
+            frontUserIdModel,
+            videoIdModel);
+
+        // お気に入り動画タグを取得する
+        const favoriteVideoTagList = await this.getFavoriteVideoCustomService.getFavoriteVideoTagList(
             frontUserIdModel,
             videoIdModel);
 
@@ -81,6 +82,7 @@ export class GetFavoriteVideoCustomController extends RouteController {
             favoriteVideoList,
             favoriteVideoMemoList,
             favoriteVideoCategoryList,
+            favoriteVideoTagList,
         );
 
         // レスポンスを作成

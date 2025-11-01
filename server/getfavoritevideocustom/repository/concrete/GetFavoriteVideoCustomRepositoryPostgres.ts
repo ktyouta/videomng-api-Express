@@ -7,6 +7,8 @@ import { GetFavoriteVideoCustomCategorySelectEntity } from "../../entity/GetFavo
 import { FavoriteVideoDetailCategoryType } from "../../type/FavoriteVideoDetailCategoryType";
 import { GetFavoriteVideoCustomMemoSelectEntity } from "../../entity/GetFavoriteVideoCustomMemoSelectEntity";
 import { GetFavoriteVideoCustomSelectEntity } from "../../entity/GetFavoriteVideoCustomSelectEntity";
+import { SelectTagListEntity } from "../../entity/SelectTagListEntity";
+import { FavoriteVideoTagType } from "../../type/FavoriteVideoTagType";
 
 
 /**
@@ -94,5 +96,32 @@ export class GetFavoriteVideoCustomRepositoryPostgres implements GetFavoriteVide
             `;
 
         return favoriteVideoCategory;
+    }
+
+    /**
+     * お気に入りコメント取得
+     * @returns 
+     */
+    async selectVideoTag(entity: SelectTagListEntity): Promise<FavoriteVideoTagType[]> {
+
+        const frontUserId = entity.frontUserId;
+        const videoId = entity.videoId;
+
+        const favoriteVideoTag = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoTagType[]>`
+            SELECT
+                a.user_id as "userId",
+                a.video_id as "videoId",
+                a.tag_id as "tagId",
+                b.tag_name as "tagName"
+            FROM "favorite_video_tag_transaction" a
+            INNER JOIN "tag_master" b 
+            ON a.user_id = b.user_id AND
+            a.tag_id = b.tag_id
+            WHERE a.user_id = ${frontUserId} AND
+            a.video_id = ${videoId} AND
+            a.delete_flg = '0'
+            `;
+
+        return favoriteVideoTag;
     }
 }

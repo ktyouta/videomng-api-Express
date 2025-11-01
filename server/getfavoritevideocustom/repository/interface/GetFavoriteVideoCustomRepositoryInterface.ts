@@ -4,6 +4,8 @@ import { FavoriteVideoDetailType } from "../../type/FavoriteVideoDetailType";
 import { GetFavoriteVideoCustomSelectEntity } from "../../entity/GetFavoriteVideoCustomSelectEntity";
 import { GetFavoriteVideoCustomMemoSelectEntity } from "../../entity/GetFavoriteVideoCustomMemoSelectEntity";
 import { GetFavoriteVideoCustomCategorySelectEntity } from "../../entity/GetFavoriteVideoCustomCategorySelectEntity";
+import { SelectTagListEntity } from "../../entity/SelectTagListEntity";
+import { FavoriteVideoTagType } from "../../type/FavoriteVideoTagType";
 
 
 /**
@@ -28,4 +30,8 @@ export interface GetFavoriteVideoCustomRepositoryInterface {
      */
     selectVideoCategory(getFavoriteVideoDetialCategorySelectEntity: GetFavoriteVideoCustomCategorySelectEntity): Promise<FavoriteVideoDetailCategoryType[]>;
 
+    /**
+     * お気に入り動画タグ取得
+     */
+    selectVideoTag(entity: SelectTagListEntity): Promise<FavoriteVideoTagType[]>;
 }
