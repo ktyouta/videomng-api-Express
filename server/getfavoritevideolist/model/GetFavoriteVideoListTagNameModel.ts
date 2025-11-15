@@ -1,10 +1,10 @@
 export class GetFavoriteVideoListTagNameModel {
 
-    private readonly _tagName: string;
+    private readonly _tagName: string[];
 
     constructor(tagName: string) {
 
-        this._tagName = tagName;
+        this._tagName = tagName ? tagName.split(`,`) : [];
     }
 
     get tagName() {

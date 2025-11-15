@@ -95,7 +95,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         }
 
         // タグ
-        if (videoTag) {
+        if (videoTag && videoTag.length > 0) {
             sql += ` AND EXISTS(
                 SELECT 
                     1
@@ -104,13 +104,13 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                 WHERE 
                     c.user_id = $1 AND 
                     c.video_id = a.video_id AND 
-                    c.tag_id = (
+                    c.tag_id in (
                         SELECT 
                             tag_id
                         FROM 
                             tag_master d
                         WHERE 
-                            d.tag_name = $${paramIndex} AND
+                            d.tag_name = ANY($${paramIndex}) AND
                             d.user_id = $1
                 )
             )`;
