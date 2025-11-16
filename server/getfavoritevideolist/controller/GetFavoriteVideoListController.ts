@@ -23,6 +23,7 @@ import { FavoriteLevelModel } from "../../internaldata/favoritevideotransaction/
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
 import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
 import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
+import { GetFavoriteVideoListVideoCategoryModel } from "../model/GetFavoriteVideoListVideoCategoryModel";
 
 
 export class GetFavoriteVideoListController extends RouteController {
@@ -57,11 +58,11 @@ export class GetFavoriteVideoListController extends RouteController {
 
         // 視聴状況を取得
         const viewStatus = query[`viewstatus`] as string;
-        const viewStatusModel = await GetFavoriteVideoListViewStatusModel.set(viewStatus);
+        const viewStatusModel = new GetFavoriteVideoListViewStatusModel(viewStatus);
 
         // 動画カテゴリを取得
         const videoCategory = query[`videocategory`] as string;
-        const videoCategoryId = new YouTubeDataApiVideoListVideoCategoryId(videoCategory);
+        const videoCategoryId = new GetFavoriteVideoListVideoCategoryModel(videoCategory);
 
         // タグを取得
         const videoTag = query[`videotag`] as string;

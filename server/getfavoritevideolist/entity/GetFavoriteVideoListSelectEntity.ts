@@ -6,6 +6,7 @@ import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVide
 import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
 import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
 import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
+import { GetFavoriteVideoListVideoCategoryModel } from "../model/GetFavoriteVideoListVideoCategoryModel";
 import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
 
 
@@ -17,7 +18,7 @@ export class GetFavoriteVideoListSelectEntity {
     // 視聴状況
     private readonly _viewStatusModel: GetFavoriteVideoListViewStatusModel;
     // カテゴリ
-    private readonly _videoCategoryId: YouTubeDataApiVideoListVideoCategoryId;
+    private readonly _videoCategoryId: GetFavoriteVideoListVideoCategoryModel;
     // タグ名称
     private readonly _tagNameModel: GetFavoriteVideoListTagNameModel;
     // ソートキー
@@ -30,7 +31,7 @@ export class GetFavoriteVideoListSelectEntity {
 
     constructor(frontUserIdModel: FrontUserIdModel,
         viewStatusModel: GetFavoriteVideoListViewStatusModel,
-        videoCategoryId: YouTubeDataApiVideoListVideoCategoryId,
+        videoCategoryId: GetFavoriteVideoListVideoCategoryModel,
         tagNameModel: GetFavoriteVideoListTagNameModel,
         sortKeyModel: GetFavoriteVideoListSortIdModel,
         favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel,
@@ -58,7 +59,7 @@ export class GetFavoriteVideoListSelectEntity {
     }
 
     public get videoCategoryId() {
-        return this._videoCategoryId.value;
+        return this._videoCategoryId.videoCategory;
     }
 
     public get tagNameModel() {

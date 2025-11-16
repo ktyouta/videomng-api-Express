@@ -44,10 +44,6 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                 video_id as "videoId" 
     `;
 
-    private static readonly SELECT_LIST_COUNT = `
-              SELECT count(*) 
-    `;
-
     constructor() {
     }
 
@@ -59,7 +55,6 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         const videoTag = getFavoriteVideoListSelectEntity.tagName;
         const sortId = getFavoriteVideoListSelectEntity.sortId;
         const favoriteLevel = getFavoriteVideoListSelectEntity.favoriteLevel;
-        const page = getFavoriteVideoListSelectEntity.page;
 
         let sql = `
             FROM favorite_video_transaction a
@@ -72,14 +67,14 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         let paramIndex = 2;
 
         // 視聴状況
-        if (viewStatus) {
-            sql += ` AND view_status = $${paramIndex}`;
+        if (viewStatus && viewStatus.length > 0) {
+            sql += ` AND view_status = ANY($${paramIndex})`;
             paramIndex++;
             params.push(viewStatus);
         }
 
         // カテゴリ
-        if (videoCategory) {
+        if (videoCategory && videoCategory.length > 0) {
             sql += ` AND EXISTS(
                 SELECT 
                     1
@@ -88,7 +83,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                 WHERE 
                     b.user_id = $1 AND 
                     b.video_id = a.video_id AND 
-                    b.category_id = $${paramIndex}
+                    b.category_id = ANY($${paramIndex})
             )`;
             paramIndex++;
             params.push(videoCategory);
@@ -119,10 +114,10 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         }
 
         // お気に入り度
-        if (favoriteLevel) {
-            sql += ` AND favorite_level = $${paramIndex}`;
+        if (favoriteLevel && favoriteLevel.length > 0) {
+            sql += ` AND favorite_level = ANY($${paramIndex})`;
             paramIndex++;
-            params.push(parseInt(favoriteLevel));
+            params.push(favoriteLevel);
         }
 
         // ソート

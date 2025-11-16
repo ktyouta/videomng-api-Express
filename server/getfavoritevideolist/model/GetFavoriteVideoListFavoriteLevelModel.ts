@@ -1,14 +1,12 @@
 export class GetFavoriteVideoListFavoriteLevelModel {
 
-    private readonly _favoriteLevel: string;
+    private readonly _favoriteLevel: string[];
 
     constructor(favoriteLevel: string) {
 
-        if (Number.isNaN(favoriteLevel)) {
-            favoriteLevel = ``;
-        }
+        const favoriteLevelList = favoriteLevel ? favoriteLevel.split(`,`) : [];
 
-        this._favoriteLevel = favoriteLevel;
+        this._favoriteLevel = favoriteLevelList;
     }
 
     get favoriteLevel() {

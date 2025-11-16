@@ -7,11 +7,13 @@ import { CategoryIdModel } from "../../internaldata/favoritevideocateorytransact
 export class GetFavoriteVideoListVideoCategoryModel {
 
     // カテゴリ
-    private readonly _videoCategory: string;
+    private readonly _videoCategory: string[];
 
     constructor(videoCategory: string) {
 
-        this._videoCategory = videoCategory;
+        const videoCategoryList = videoCategory ? videoCategory.split(`,`) : [];
+
+        this._videoCategory = videoCategoryList;
     }
 
     public get videoCategory() {
