@@ -24,11 +24,13 @@ import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVide
 import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
 import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
 import { GetFavoriteVideoListVideoCategoryModel } from "../model/GetFavoriteVideoListVideoCategoryModel";
+import { GetFavoriteVideoListRepositorys } from "../repository/GetFavoriteVideoListRepositorys";
+import { RepositoryType } from "../../util/const/CommonConst";
 
 
 export class GetFavoriteVideoListController extends RouteController {
 
-    private readonly getFavoriteVideoListService = new GetFavoriteVideoListService();
+    private readonly getFavoriteVideoListService = new GetFavoriteVideoListService((new GetFavoriteVideoListRepositorys()).get(RepositoryType.POSTGRESQL));
     // 動画取得件条件
     private static readonly DEFAULT_LIST_LIMIT = 30;
 
@@ -97,14 +99,18 @@ export class GetFavoriteVideoListController extends RouteController {
             GetFavoriteVideoListController.DEFAULT_LIST_LIMIT
         );
 
+        // フォルダリストを取得
+        const folderList = await this.getFavoriteVideoListService.getFolderList(frontUserIdModel);
+
         // ユーザーのお気に入り動画が存在しない
-        if (favoriteVideoList.length === 0) {
+        if (favoriteVideoList.length === 0 && folderList.length === 0) {
 
             // レスポンスを作成
             const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel = this.getFavoriteVideoListService.createResponse(
                 [],
                 0,
-                GetFavoriteVideoListController.DEFAULT_LIST_LIMIT
+                GetFavoriteVideoListController.DEFAULT_LIST_LIMIT,
+                [],
             );
             return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画が存在しません。`, getFavoriteVideoListResponse.data)
         }
@@ -119,7 +125,8 @@ export class GetFavoriteVideoListController extends RouteController {
         const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel = this.getFavoriteVideoListService.createResponse(
             favoriteVideoListMergedList,
             total,
-            GetFavoriteVideoListController.DEFAULT_LIST_LIMIT
+            GetFavoriteVideoListController.DEFAULT_LIST_LIMIT,
+            folderList
         );
 
         return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoListResponse.data);

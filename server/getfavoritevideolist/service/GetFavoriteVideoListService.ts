@@ -14,7 +14,7 @@ import { GetFavoriteVideoListRepositorys } from "../repository/GetFavoriteVideoL
 import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { GetFavoriteVideoListRepositoryInterface } from "../repository/interface/GetFavoriteVideoListRepositoryInterface";
-import { FavoriteVideoTransaction } from "@prisma/client";
+import { FavoriteVideoTransaction, FolderMaster } from "@prisma/client";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
 import { CookieModel } from "../../cookie/model/CookieModel";
@@ -31,9 +31,12 @@ import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPage
 import { VideoIdListModel } from "../../external/youtubedataapi/videodetail/model/VideoIdListModel";
 import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
 import { YouTubeDataApiVideoDetailMaxRequestModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailMaxRequestModel";
+import { GetFolderListEntity } from "../entity/GetFolderListEntity";
 
 
 export class GetFavoriteVideoListService {
+
+    constructor(private readonly getFavoriteVideoListRepository: GetFavoriteVideoListRepositoryInterface) { }
 
     /**
      * jwtからユーザー情報を取得
@@ -52,13 +55,6 @@ export class GetFavoriteVideoListService {
         }
     }
 
-    /**
-     * 永続ロジック用オブジェクトを取得
-     */
-    private getGetFavoriteVideoListRepository(): GetFavoriteVideoListRepositoryInterface {
-        return (new GetFavoriteVideoListRepositorys()).get(RepositoryType.POSTGRESQL);
-    }
-
 
     /**
      * お気に入り動画取得
@@ -68,11 +64,8 @@ export class GetFavoriteVideoListService {
         defaultListLimit: number,
     ): Promise<FavoriteVideoTransaction[]> {
 
-        // 永続ロジック用オブジェクトを取得
-        const getGetFavoriteVideoListRepository = this.getGetFavoriteVideoListRepository();
-
         // お気に入り動画取得
-        const favoriteVideos = await getGetFavoriteVideoListRepository.selectFavoriteVideoList(
+        const favoriteVideos = await this.getFavoriteVideoListRepository.selectFavoriteVideoList(
             getFavoriteVideoListSelectEntity,
             defaultListLimit
         );
@@ -82,16 +75,28 @@ export class GetFavoriteVideoListService {
 
 
     /**
+     * フォルダリスト取得
+     * @param userNameModel 
+     */
+    public async getFolderList(frontUserIdModel: FrontUserIdModel): Promise<FolderMaster[]> {
+
+        // 永続ロジック用オブジェクトを取得
+        const getFolderListEntity = new GetFolderListEntity(frontUserIdModel);
+
+        // お気に入り動画取得
+        const favoriteVideos = await this.getFavoriteVideoListRepository.selectFolderList(getFolderListEntity);
+
+        return favoriteVideos;
+    }
+
+    /**
      * お気に入り動画件数取得
      * @param userNameModel 
      */
     public async getFavoriteVideoListCount(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity) {
 
-        // 永続ロジック用オブジェクトを取得
-        const getGetFavoriteVideoListRepository = this.getGetFavoriteVideoListRepository();
-
         // お気に入り動画取得
-        const countResult = await getGetFavoriteVideoListRepository.selectFavoriteVideoListCount(getFavoriteVideoListSelectEntity);
+        const countResult = await this.getFavoriteVideoListRepository.selectFavoriteVideoListCount(getFavoriteVideoListSelectEntity);
 
         return countResult?.length ?? 0;
     }
@@ -104,8 +109,9 @@ export class GetFavoriteVideoListService {
      */
     public createResponse(favoriteVideoListMergedList: FavoriteVideoListMergedType[],
         total: number,
-        defaultListLimit: number): GetFavoriteVideoListResponseModel {
-        return new GetFavoriteVideoListResponseModel(favoriteVideoListMergedList, total, defaultListLimit);
+        defaultListLimit: number,
+        folderList: FolderMaster[]): GetFavoriteVideoListResponseModel {
+        return new GetFavoriteVideoListResponseModel(favoriteVideoListMergedList, total, defaultListLimit, folderList);
     }
 
 

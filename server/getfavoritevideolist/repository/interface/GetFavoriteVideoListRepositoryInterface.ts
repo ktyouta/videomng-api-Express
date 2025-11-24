@@ -1,6 +1,7 @@
-import { FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteVideoTransaction, FolderMaster, FrontUserInfoMaster } from "@prisma/client";
 import { GetFavoriteVideoListSelectEntity } from "../../entity/GetFavoriteVideoListSelectEntity";
 import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
+import { GetFolderListEntity } from "../../entity/GetFolderListEntity";
 
 
 /**
@@ -18,4 +19,9 @@ export interface GetFavoriteVideoListRepositoryInterface {
      */
     selectFavoriteVideoListCount(getFavoriteVideoListSelectEntity: GetFavoriteVideoListSelectEntity): Promise<FavoriteVideoListCountType[]>;
 
+    /**
+     * フォルダリスト取得
+     * @param getFolderListEntity 
+     */
+    selectFolderList(getFolderListEntity: GetFolderListEntity): Promise<FolderMaster[]>;
 }

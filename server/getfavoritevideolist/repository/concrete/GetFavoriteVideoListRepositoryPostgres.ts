@@ -1,8 +1,9 @@
-import { FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteVideoTransaction, FolderMaster, FrontUserInfoMaster } from "@prisma/client";
 import { GetFavoriteVideoListSelectEntity } from "../../entity/GetFavoriteVideoListSelectEntity";
 import { GetFavoriteVideoListRepositoryInterface } from "../interface/GetFavoriteVideoListRepositoryInterface";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
+import { GetFolderListEntity } from "../../entity/GetFolderListEntity";
 
 type queryType = {
     query: string,
@@ -213,4 +214,26 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
 
         return countResult;
     }
+
+    /**
+     * フォルダリスト取得
+     * @param insertFolderEntity 
+     * @param tx 
+     * @returns 
+     */
+    async selectFolderList(getFolderListEntity: GetFolderListEntity): Promise<FolderMaster[]> {
+
+        const userId = getFolderListEntity.frontUserId;
+
+        const result = await PrismaClientInstance.getInstance().folderMaster.findMany({
+            where: {
+                userId,
+            },
+            orderBy: {
+                updateDate: `desc`
+            }
+        });
+
+        return result;
+    };
 }
