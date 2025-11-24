@@ -35,7 +35,9 @@ export class GetFavoriteVideoCustomRepositoryPostgres implements GetFavoriteVide
                 COALESCE(a.summary, '') AS "summary",
                 a.view_status as "viewStatus",
                 b.label as "viewStatusName",
-                a.favorite_level as "favoriteLevel"
+                a.favorite_level as "favoriteLevel",
+                a.create_date as "createDate",
+                a.update_date as "updateDate"
             FROM "favorite_video_transaction" a
             LEFT JOIN "view_status_master" b
             ON a.view_status = b.id 
