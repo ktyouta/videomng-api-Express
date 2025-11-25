@@ -1,0 +1,105 @@
+import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
+import { Router, Request, Response, NextFunction } from 'express';
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
+import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
+import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
+import { RouteController } from "../../router/controller/RouteController";
+import { RepositoryType } from "../../util/const/CommonConst";
+import { GetFavoriteVideoFolderService } from "../service/GetFavoriteVideoFolderService";
+import { GetFavoriteVideoFolderRepositorys } from "../repository/GetFavoriteVideoFolderRepositorys";
+import { GetFavoriteVideoFolderPageModel } from "../model/GetFavoriteVideoListPageModel";
+import { GetFavoriteVideoFolderSelectEntity } from "../entity/GetFavoriteVideoFolderSelectEntity";
+import { GetFavoriteVideoFolderResponseModel } from "../model/GetFavoriteVideoListResponseModel";
+import { PathParamSchema } from "../schema/PathParamSchema";
+import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
+
+
+export class GetFavoriteVideoFolderController extends RouteController {
+
+    private readonly getFavoriteVideoFolderService = new GetFavoriteVideoFolderService((new GetFavoriteVideoFolderRepositorys()).get(RepositoryType.POSTGRESQL));
+    // 動画取得件条件
+    private static readonly DEFAULT_LIST_LIMIT = 30;
+
+    protected getRouteSettingModel(): RouteSettingModel {
+
+        return new RouteSettingModel(
+            HttpMethodType.GET,
+            this.doExecute,
+            ApiEndopoint.FAVORITE_VIDEO_FOLDER
+        );
+    }
+
+    /**
+     * フォルダ配下のお気に入り動画リストを取得する
+     * @param req 
+     * @param res 
+     * @returns 
+     */
+    public async doExecute(req: Request, res: Response, next: NextFunction) {
+
+        // パスパラメータのバリデーションチェック
+        const pathValidateResult = PathParamSchema.safeParse(req.params);
+
+        if (!pathValidateResult.success) {
+            throw Error(`${pathValidateResult.error.message} endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
+        }
+
+        const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
+
+        // jwtの認証を実行する
+        const jsonWebTokenVerifyModel = await this.getFavoriteVideoFolderService.checkJwtVerify(req);
+        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
+
+        // クエリパラメータを取得
+        const query = req.query;
+
+        // ページ
+        const page = query[`page`] as string;
+        const pageModel = new GetFavoriteVideoFolderPageModel(page);
+
+        // お気に入り動画取得用Entity
+        const getFavoriteVideoFolderSelectEntity = new GetFavoriteVideoFolderSelectEntity(
+            frontUserIdModel,
+            pageModel,
+            folderIdModel,
+        );
+
+        // お気に入り動画リストを取得
+        const favoriteVideoList = await this.getFavoriteVideoFolderService.getFavoriteVideoFolder(
+            getFavoriteVideoFolderSelectEntity,
+            GetFavoriteVideoFolderController.DEFAULT_LIST_LIMIT
+        );
+
+        // ユーザーのお気に入り動画が存在しない
+        if (favoriteVideoList.length === 0) {
+
+            // レスポンスを作成
+            const getFavoriteVideoFolderResponse: GetFavoriteVideoFolderResponseModel = this.getFavoriteVideoFolderService.createResponse(
+                [],
+                0,
+                GetFavoriteVideoFolderController.DEFAULT_LIST_LIMIT,
+            );
+            return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画が存在しません。`, getFavoriteVideoFolderResponse.data)
+        }
+
+        // お気に入り動画件数を取得
+        const total = await this.getFavoriteVideoFolderService.getFavoriteVideoFolderCount(getFavoriteVideoFolderSelectEntity);
+
+        // お気に入り動画リストからYouTube Data Apiの情報を取得してマージする
+        const favoriteVideoListMergedList = await this.getFavoriteVideoFolderService.mergeYouTubeDataList(favoriteVideoList);
+
+        // レスポンスを作成
+        const getFavoriteVideoFolderResponse: GetFavoriteVideoFolderResponseModel = this.getFavoriteVideoFolderService.createResponse(
+            favoriteVideoListMergedList,
+            total,
+            GetFavoriteVideoFolderController.DEFAULT_LIST_LIMIT,
+        );
+
+        return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoFolderResponse.data);
+    }
+}

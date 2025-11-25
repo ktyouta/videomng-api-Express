@@ -43,7 +43,7 @@ export class UpdateFolderController extends RouteController {
         const pathValidateResult = PathParamSchema.safeParse(req.params);
 
         if (!pathValidateResult.success) {
-            throw Error(`${pathValidateResult.error.message} endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
+            throw Error(`${pathValidateResult.error.message} endpoint:${ApiEndopoint.FOLDER_ID}`);
         }
 
         // リクエストのバリデーションチェック
