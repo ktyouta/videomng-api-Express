@@ -26,6 +26,7 @@ import { GetFavoriteVideoListController } from "../../getfavoritevideolist/contr
 import { GetFavoriteVideoMemoController } from "../../getfavoritevideomemo/controller/GetFavoriteVideoMemoController";
 import { GetFavoriteVideoSortListController } from "../../getfavoritevideosortlist/controller/GetFavoriteVideoSortListController";
 import { GetFavoriteVideoTagListController } from "../../getfavoritevideotag/controller/GetFavoriteVideoTagListController";
+import { GetFolderController } from "../../getfolder/controller/GetFolderController";
 import { GetTagListController } from "../../gettaglist/controller/GetTagListController";
 import { GetVideoCategoryController } from "../../getvideocategory/controller/GetVideoCategoryController";
 import { GetVideoCommentController } from "../../getvideocomment/controller/GetVideoCommentController";
@@ -133,4 +134,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new DeleteFavoriteVideoFolderController(),
     // フォルダ配下のお気に入り動画取得
     new GetFavoriteVideoFolderController(),
+    // フォルダ情報取得
+    new GetFolderController(),
 ]
