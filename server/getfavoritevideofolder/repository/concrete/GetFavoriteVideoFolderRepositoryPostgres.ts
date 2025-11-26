@@ -16,8 +16,8 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
 
     private static readonly SELECT_LIST = `
               SELECT
-                user_id as "userId",
-                video_id as "videoId" 
+                a.user_id as "userId",
+                a.video_id as "videoId" 
     `;
 
     constructor() {

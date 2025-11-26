@@ -10,6 +10,7 @@ import { SelectFolderEntity } from "../entity/SelectFolderEntity";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { SelectFavoriteVideoEntity } from "../entity/SelectFavoriteVideoEntity";
 import { InsertFavoriteVideoFolderEntity } from "../entity/InsertFavoriteVideoFolderEntity";
+import { SelectFavoriteVideoFolderEntity } from "../entity/SelectFavoriteVideoFolderEntity";
 
 
 export class CreateFavoriteVideoFolderService {
@@ -86,5 +87,21 @@ export class CreateFavoriteVideoFolderService {
         const data = await this.createFavoriteVideoFolderInterface.insert(entity, tx);
 
         return data;
+    }
+
+    /**
+     * フォルダ内のお気に入り動画取得
+     * @param userNameModel 
+     */
+    async getFavoriteVideoFolder(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        folderIdModel: FolderIdModel,) {
+
+        const entity = new SelectFavoriteVideoFolderEntity(folderIdModel, videoIdModel, frontUserIdModel);
+
+        // 動画取得
+        const favoriteVideoDetial = await this.createFavoriteVideoFolderInterface.selectFavoriteVideoFolder(entity);
+
+        return favoriteVideoDetial;
     }
 }

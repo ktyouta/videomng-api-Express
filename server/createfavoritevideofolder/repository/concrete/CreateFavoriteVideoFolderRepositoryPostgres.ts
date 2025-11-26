@@ -8,6 +8,7 @@ import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
 import { FLG } from "../../../util/const/CommonConst";
 import { InsertFavoriteVideoFolderEntity } from "../../entity/InsertFavoriteVideoFolderEntity";
 import { SelectFavoriteVideoEntity } from "../../entity/SelectFavoriteVideoEntity";
+import { SelectFavoriteVideoFolderEntity } from "../../entity/SelectFavoriteVideoFolderEntity";
 
 
 
@@ -87,4 +88,28 @@ export class CreateFavoriteVideoFolderRepositoryPostgres implements CreateFavori
 
         return data;
     };
+
+    /**
+     * フォルダ内のお気に入り動画取得
+     * @param frontFavoriteVideoTagInfoMasterModel 
+     * @returns 
+     */
+    async selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoTransaction | null> {
+
+        const userId = selectFavoriteVideoFolderEntity.frontUserId;
+        const folderId = selectFavoriteVideoFolderEntity.folderId;
+        const videoId = selectFavoriteVideoFolderEntity.videoId;
+
+        const video = await PrismaClientInstance.getInstance().favoriteVideoTransaction.findUnique({
+            where: {
+                userId_videoId: {
+                    userId,
+                    videoId,
+                },
+                deleteFlg: FLG.OFF,
+            },
+        });
+
+        return video;
+    }
 }

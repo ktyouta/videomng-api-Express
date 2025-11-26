@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { RouteController } from '../../router/controller/RouteController';
 import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { HTTP_STATUS_CONFLICT, HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { ZodIssue } from 'zod';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
@@ -84,6 +84,17 @@ export class CreateFavoriteVideoFolderController extends RouteController {
 
             if (!video) {
                 throw Error(`お気に入り動画が存在しません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
+            }
+
+            // お気に入り動画のフォルダ存在チェック
+            const existFavoriteVideoFolder = await this.createFavoriteVideoFolderService.getFavoriteVideoFolder(
+                frontUserIdModel,
+                videoIdModel,
+                folderIdModel,
+            );
+
+            if (existFavoriteVideoFolder) {
+                return ApiResponse.create(res, HTTP_STATUS_CONFLICT, `既に登録されています。`);
             }
 
             // お気に入りフォルダテーブルに登録
