@@ -94,19 +94,19 @@ export class CreateFavoriteVideoFolderRepositoryPostgres implements CreateFavori
      * @param frontFavoriteVideoTagInfoMasterModel 
      * @returns 
      */
-    async selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoTransaction | null> {
+    async selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoFolderTransaction | null> {
 
         const userId = selectFavoriteVideoFolderEntity.frontUserId;
         const folderId = selectFavoriteVideoFolderEntity.folderId;
         const videoId = selectFavoriteVideoFolderEntity.videoId;
 
-        const video = await PrismaClientInstance.getInstance().favoriteVideoTransaction.findUnique({
+        const video = await PrismaClientInstance.getInstance().favoriteVideoFolderTransaction.findUnique({
             where: {
-                userId_videoId: {
+                userId_folderId_videoId: {
                     userId,
                     videoId,
+                    folderId,
                 },
-                deleteFlg: FLG.OFF,
             },
         });
 

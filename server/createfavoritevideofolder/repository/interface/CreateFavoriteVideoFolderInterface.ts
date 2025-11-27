@@ -32,5 +32,5 @@ export interface CreateFavoriteVideoFolderInterface {
      * フォルダ内のお気に入り動画取得
      * @param selectFavoriteVideoFolderEntity 
      */
-    selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoTransaction | null>;
+    selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoFolderTransaction | null>;
 }
