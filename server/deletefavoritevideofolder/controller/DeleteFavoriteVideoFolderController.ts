@@ -67,7 +67,7 @@ export class DeleteFavoriteVideoFolderController extends RouteController {
                 throw Error(`お気に入り動画のフォルダ削除処理で想定外の削除件数が発生しました。（ユーザーID=${frontUserIdModel.frontUserId}, フォルダID=${folderIdModel.id}, 動画ID=${videoIdModel.videoId}, 件数=${result.count}）`);
             }
 
-            return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `フォルダから削除しました。`);
+            return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダから削除しました。`);
         }, next);
     }
 }

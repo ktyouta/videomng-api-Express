@@ -9,7 +9,6 @@ export const PathParamSchema = z.object({
     videoId: z
         .string()
         .min(1)
-        .regex(/^\d+$/, "動画IDが不正です。(数値以外)")
 });
 
 export type PathParamType = z.infer<typeof PathParamSchema>;
