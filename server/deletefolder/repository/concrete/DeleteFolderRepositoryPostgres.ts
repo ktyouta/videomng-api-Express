@@ -2,6 +2,7 @@ import { FavoriteVideoTagTransaction, FolderMaster, Prisma, TagMaster } from "@p
 import { DeleteFavoriteVideoFolderEntity } from "../../entity/DeleteFavoriteVideoFolderEntity";
 import { DeleteFolderEntity } from "../../entity/DeleteFolderEntity";
 import { DeleteFolderRepositoryInterface } from "../interface/DeleteFolderRepositoryInterface";
+import { DeleteFavoriteVideoEntity } from "../../entity/DeleteFavoriteVideoEntity";
 
 
 /**
@@ -48,5 +49,34 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
         });
 
         return result;
+    };
+
+    /**
+     * お気に入り動画フォルダを削除
+     */
+    async deleteFavoriteVideo(entity: DeleteFavoriteVideoEntity,
+        tx: Prisma.TransactionClient): Promise<void> {
+
+        const userId = entity.frontUserId;
+        const folderId = entity.folderId;
+
+        await tx.$queryRaw`
+            UPDATE 
+                favorite_video_transaction a
+            SET
+                delete_flg = '1'
+            WHERE 
+                a.user_id = ${userId} AND
+                EXISTS(
+                    SELECT 
+                        1
+                    FROM
+                        favorite_video_folder_transaction b
+                    WHERE
+                        b.user_id = ${userId} AND
+                        b.folder_id = ${folderId} AND
+                        b.video_id = a.video_id
+            )
+        `;
     };
 }

@@ -15,6 +15,7 @@ import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdMod
 import { PathParamSchema } from '../schema/PathParamSchema';
 import { DeleteFolderRepositorys } from '../repository/DeleteFolderRepositorys';
 import { DeleteFolderService } from '../service/DeleteFolderService';
+import { RequestBodySchema, RequestBodyType } from '../schema/RequestBodySchema';
 
 
 export class DeleteFolderController extends RouteController {
@@ -47,6 +48,23 @@ export class DeleteFolderController extends RouteController {
 
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
 
+        // リクエストのバリデーションチェック
+        const validateResult = RequestBodySchema.safeParse(req.body);
+
+        // バリデーションエラー
+        if (!validateResult.success) {
+
+            // エラーメッセージを取得
+            const validatErrMessage = validateResult.error.errors.map((e: ZodIssue) => {
+                return e.message;
+            }).join(`,`);
+
+            return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
+        }
+
+        // リクエストボディ
+        const requestBody: RequestBodyType = validateResult.data;
+
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.deleteFolderService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
@@ -59,6 +77,11 @@ export class DeleteFolderController extends RouteController {
 
             if (result && result.count > 1) {
                 throw Error(`フォルダ削除処理で想定外の削除件数が発生しました。（ユーザーID=${frontUserIdModel.frontUserId}, フォルダID=${folderIdModel.id},  件数=${result.count}）`);
+            }
+
+            // フォルダ内の動画も削除する
+            if (requestBody.deleteVideos) {
+                await this.deleteFolderService.deleteFavoriteVideo(folderIdModel, frontUserIdModel, tx);
             }
 
             // お気に入り動画フォルダ削除
