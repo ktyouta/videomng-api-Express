@@ -5,6 +5,7 @@ import { SummaryModel } from "../../internaldata/favoritevideotransaction/proper
 import { ViewStatusModel } from "../../internaldata/common/properties/ViewStatusModel";
 import { CategoryIdModel } from "../../internaldata/favoritevideocateorytransaction/properties/CategoryIdModel";
 import { FavoriteLevelModel } from "../../internaldata/favoritevideotransaction/properties/FavoriteLevelModel";
+import { IsVisibleAfterFolderAddModel } from "../../internaldata/favoritevideotransaction/properties/IsVisibleAfterFolderAddModel";
 
 export class UpdateFavoriteVideoCustomRequestModel {
 
@@ -18,19 +19,23 @@ export class UpdateFavoriteVideoCustomRequestModel {
     private readonly _categoryIdModelList: CategoryIdModel[];
     // お気に入り度
     private readonly _favoriteLevelModel: FavoriteLevelModel;
+    // フォルダ内動画一覧画面表示フラグ
+    private readonly _isVisibleAfterFolderAddModel: IsVisibleAfterFolderAddModel;
 
 
     constructor(videoIdModel: VideoIdModel,
         summaryModel: SummaryModel,
         viewStatusModel: ViewStatusModel,
         categoryIdModelList: CategoryIdModel[],
-        favoriteLevelModel: FavoriteLevelModel,) {
+        favoriteLevelModel: FavoriteLevelModel,
+        isVisibleAfterFolderAddModel: IsVisibleAfterFolderAddModel) {
 
         this._videoIdModel = videoIdModel;
         this._summaryModel = summaryModel;
         this._viewStatusModel = viewStatusModel;
         this._categoryIdModelList = categoryIdModelList;
         this._favoriteLevelModel = favoriteLevelModel;
+        this._isVisibleAfterFolderAddModel = isVisibleAfterFolderAddModel;
     }
 
     static async set(videoIdModel: VideoIdModel,
@@ -46,6 +51,7 @@ export class UpdateFavoriteVideoCustomRequestModel {
             await ViewStatusModel.reConstruct(updateFavoriteVideoRequest.viewStatus),
             _categoryIdModelList,
             new FavoriteLevelModel(updateFavoriteVideoRequest.favoriteLevel),
+            new IsVisibleAfterFolderAddModel(updateFavoriteVideoRequest.isVisibleAfterFolderAdd),
         );
     }
 
@@ -67,5 +73,9 @@ export class UpdateFavoriteVideoCustomRequestModel {
 
     public get favoriteLevelModel() {
         return this._favoriteLevelModel;
+    }
+
+    public get isVisibleAfterFolderAddModel() {
+        return this._isVisibleAfterFolderAddModel;
     }
 }

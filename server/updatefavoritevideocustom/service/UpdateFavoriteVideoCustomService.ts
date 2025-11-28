@@ -131,6 +131,7 @@ export class UpdateFavoriteVideoCustomService {
                 updateFavoriteVideoRequestModel.summaryModel,
                 updateFavoriteVideoRequestModel.viewStatusModel,
                 updateFavoriteVideoRequestModel.favoriteLevelModel,
+                updateFavoriteVideoRequestModel.isVisibleAfterFolderAddModel,
             ), tx);
 
         return favoriteVideo;

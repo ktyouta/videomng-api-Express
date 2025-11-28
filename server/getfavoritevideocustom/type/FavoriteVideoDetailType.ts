@@ -2,4 +2,5 @@ import { FavoriteVideoCategoryTransaction, FavoriteVideoTransaction } from "@pri
 
 export type FavoriteVideoDetailType = FavoriteVideoTransaction & {
     viewStatusName: string,
+    isVisibleAfterFolderAdd: string,
 }

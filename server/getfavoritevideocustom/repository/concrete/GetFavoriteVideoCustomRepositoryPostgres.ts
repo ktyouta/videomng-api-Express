@@ -37,7 +37,8 @@ export class GetFavoriteVideoCustomRepositoryPostgres implements GetFavoriteVide
                 b.label as "viewStatusName",
                 a.favorite_level as "favoriteLevel",
                 a.create_date as "createDate",
-                a.update_date as "updateDate"
+                a.update_date as "updateDate",
+                a.is_visible_after_folder_add as "isVisibleAfterFolderAdd"
             FROM "favorite_video_transaction" a
             LEFT JOIN "view_status_master" b
             ON a.view_status = b.id 

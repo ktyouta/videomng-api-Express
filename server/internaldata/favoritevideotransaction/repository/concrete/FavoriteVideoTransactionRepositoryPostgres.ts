@@ -59,6 +59,7 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
         const summary = favoriteVideoTransactionUpdateEntity.summary;
         const viewStatus = favoriteVideoTransactionUpdateEntity.viewStatus;
         const favoriteLevel = favoriteVideoTransactionUpdateEntity.favoriteLevel;
+        const isVisibleAfterFolderAdd = favoriteVideoTransactionUpdateEntity.isVisibleAfterFolderAdd;
 
         const favoriteVideo = await tx.favoriteVideoTransaction.update({
             where: {
@@ -72,6 +73,7 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
                 viewStatus,
                 updateDate: new Date(),
                 favoriteLevel,
+                isVisibleAfterFolderAdd,
             },
         });
 

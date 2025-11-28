@@ -4,4 +4,5 @@ export type UpdateFavoriteVideoCustomRequestType = {
     viewStatus: string,
     category: string[],
     favoriteLevel: number,
+    isVisibleAfterFolderAdd: string,
 }

@@ -54,6 +54,7 @@ model FavoriteVideoTransaction {
   summary    String?   @db.VarChar(500)  @default("") @map("summary")
   viewStatus    String?   @db.VarChar(2)  @map("view_status")
   favoriteLevel    Int?  @map("favorite_level")
+  isVisibleAfterFolderAdd   String?   @db.Char(1)  @map("is_visible_after_folder_add")
   createDate  DateTime @db.Timestamptz @map("create_date")
   updateDate  DateTime @db.Timestamptz @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")
