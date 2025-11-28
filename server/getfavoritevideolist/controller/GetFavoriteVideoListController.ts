@@ -121,12 +121,15 @@ export class GetFavoriteVideoListController extends RouteController {
         // お気に入り動画リストからYouTube Data Apiの情報を取得してマージする
         const favoriteVideoListMergedList = await this.getFavoriteVideoListService.mergeYouTubeDataList(favoriteVideoList);
 
+        // フォルダに表示するサムネを取得
+        const folderListMergedList = await this.getFavoriteVideoListService.getFavoriteVideoFolderThumbnail(folderList);
+
         // レスポンスを作成
         const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel = this.getFavoriteVideoListService.createResponse(
             favoriteVideoListMergedList,
             total,
             GetFavoriteVideoListController.DEFAULT_LIST_LIMIT,
-            folderList
+            folderListMergedList,
         );
 
         return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoListResponse.data);

@@ -4,6 +4,7 @@ import { GetFavoriteVideoListRepositoryInterface } from "../interface/GetFavorit
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
 import { GetFolderListEntity } from "../../entity/GetFolderListEntity";
+import { FavoriteVideoFolderType } from "../../model/FavoriteVideoFolderType";
 
 type queryType = {
     query: string,
@@ -221,18 +222,37 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
      * @param tx 
      * @returns 
      */
-    async selectFolderList(getFolderListEntity: GetFolderListEntity): Promise<FolderMaster[]> {
+    async selectFolderList(getFolderListEntity: GetFolderListEntity): Promise<FavoriteVideoFolderType[]> {
 
         const userId = getFolderListEntity.frontUserId;
 
-        const result = await PrismaClientInstance.getInstance().folderMaster.findMany({
-            where: {
-                userId,
-            },
-            orderBy: {
-                updateDate: `desc`
-            }
-        });
+        const result = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoFolderType[]>`
+                SELECT
+                    a.user_id as "userId",
+                    a.folder_id as "folderId",
+                    a.name as "name",
+                    a.create_date as "createDate",
+                    a.update_date as "updateDate",
+                    (
+                        SELECT
+                            c.video_id
+                        FROM(
+                            SELECT
+                                b.video_id as video_id,
+                                b.update_date as update_date,
+                                max(b.update_date) over(partition by b.user_id,b.folder_id) as max_update_date
+                            FROM
+                                favorite_video_folder_transaction b
+                            WHERE
+                                b.user_id = a.user_id
+                                AND b.folder_id = a.folder_id
+                        ) c
+                        WHERE
+                            c.update_date = c.max_update_date
+                    ) as "latestVideoId"
+                FROM "folder_master" a
+                WHERE a.user_id = ${userId}
+            `;
 
         return result;
     };

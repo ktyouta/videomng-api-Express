@@ -32,6 +32,9 @@ import { VideoIdListModel } from "../../external/youtubedataapi/videodetail/mode
 import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
 import { YouTubeDataApiVideoDetailMaxRequestModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailMaxRequestModel";
 import { GetFolderListEntity } from "../entity/GetFolderListEntity";
+import { FavoriteVideoFolderType } from "../model/FavoriteVideoFolderType";
+import { FavoriteVideoFolderThumbnailType } from "../model/FavoriteVideoFolderThumbnailType";
+import { ThumbnailType } from "../../common/type/ThumbnailType";
 
 
 export class GetFavoriteVideoListService {
@@ -73,12 +76,11 @@ export class GetFavoriteVideoListService {
         return favoriteVideos;
     }
 
-
     /**
      * フォルダリスト取得
      * @param userNameModel 
      */
-    public async getFolderList(frontUserIdModel: FrontUserIdModel): Promise<FolderMaster[]> {
+    public async getFolderList(frontUserIdModel: FrontUserIdModel): Promise<FavoriteVideoFolderType[]> {
 
         // 永続ロジック用オブジェクトを取得
         const getFolderListEntity = new GetFolderListEntity(frontUserIdModel);
@@ -110,7 +112,7 @@ export class GetFavoriteVideoListService {
     public createResponse(favoriteVideoListMergedList: FavoriteVideoListMergedType[],
         total: number,
         defaultListLimit: number,
-        folderList: FolderMaster[]): GetFavoriteVideoListResponseModel {
+        folderList: FavoriteVideoFolderThumbnailType[]): GetFavoriteVideoListResponseModel {
         return new GetFavoriteVideoListResponseModel(favoriteVideoListMergedList, total, defaultListLimit, folderList);
     }
 
@@ -195,5 +197,53 @@ export class GetFavoriteVideoListService {
         } catch (err) {
             throw Error(`ERROR:${err} endpoint:${ApiEndopoint.VIDEO_INFO_ID} id:${videoIdListModel.videoId}`);
         }
+    }
+
+    /**
+     * フォルダに表示するサムネを取得
+     * @param folder 
+     */
+    async getFavoriteVideoFolderThumbnail(folderList: FavoriteVideoFolderType[]): Promise<FavoriteVideoFolderThumbnailType[]> {
+
+        // YouTube Data Apiから動画情報を取得
+        const folderThumbnailList = (await Promise.all(folderList.map(async (e) => {
+
+            if (!e.latestVideoId) {
+                return;
+            };
+
+            const videoId = new VideoIdModel(e.latestVideoId);
+
+            // YouTube Data APIのエンドポイント
+            const youTubeDataApiVideoDetailEndPointModel = new YouTubeDataApiVideoDetailEndPointModel(
+                videoId,
+            );
+
+            // YouTube Data APIデータ取得
+            const youtubeVideoDetailApi = await YouTubeDataApiVideoDetailModel.call(youTubeDataApiVideoDetailEndPointModel);
+
+            return youtubeVideoDetailApi.response.items;
+        }))).filter((e) => !!e).flat();
+
+        const videoMap = new Map<string, YouTubeDataApiVideoDetailItemType>(
+            folderThumbnailList.map(item => [item.id, item])
+        );
+
+        // フォルダーリストとYouTube Data Apiの動画詳細のマージ
+        const folderListMergedList = folderList.map((e) => {
+
+            const apiData = videoMap.get(e.latestVideoId);
+
+            // APIから動画情報の取得に失敗
+            if (!apiData) {
+                return { ...e };
+            }
+
+            const thumbnails: ThumbnailType = apiData.snippet.thumbnails;
+
+            return { ...e, thumbnails };
+        }).filter((e) => !!e);
+
+        return folderListMergedList;
     }
 }

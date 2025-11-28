@@ -2,6 +2,7 @@ import { FavoriteVideoTransaction, FolderMaster, FrontUserInfoMaster } from "@pr
 import { GetFavoriteVideoListSelectEntity } from "../../entity/GetFavoriteVideoListSelectEntity";
 import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
 import { GetFolderListEntity } from "../../entity/GetFolderListEntity";
+import { FavoriteVideoFolderType } from "../../model/FavoriteVideoFolderType";
 
 
 /**
@@ -23,5 +24,5 @@ export interface GetFavoriteVideoListRepositoryInterface {
      * フォルダリスト取得
      * @param getFolderListEntity 
      */
-    selectFolderList(getFolderListEntity: GetFolderListEntity): Promise<FolderMaster[]>;
+    selectFolderList(getFolderListEntity: GetFolderListEntity): Promise<FavoriteVideoFolderType[]>;
 }

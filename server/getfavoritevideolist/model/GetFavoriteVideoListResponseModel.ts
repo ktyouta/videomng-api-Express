@@ -1,6 +1,7 @@
 import { FavoriteVideoTransaction, FolderMaster } from "@prisma/client";
 import { FavoriteVideoListMergedType } from "./FavoriteVideoListMergedType";
 import { GetFavoriteVideoListResponseDataType } from "./GetFavoriteVideoListResponseDataType";
+import { FavoriteVideoFolderThumbnailType } from "./FavoriteVideoFolderThumbnailType";
 
 export class GetFavoriteVideoListResponseModel {
 
@@ -9,7 +10,7 @@ export class GetFavoriteVideoListResponseModel {
     constructor(favoriteVideoListMergedList: FavoriteVideoListMergedType[],
         total: number,
         defaultListLimit: number,
-        folderList: FolderMaster[],
+        folderList: FavoriteVideoFolderThumbnailType[],
     ) {
 
         this._data = {
