@@ -62,6 +62,18 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
             FROM favorite_video_transaction a
             WHERE user_id = $1
               AND delete_flg = '0'
+              AND (
+                is_visible_after_folder_add = '1' OR 
+                NOT EXISTS(
+                    SELECT 
+                        1
+                    FROM
+                        favorite_video_folder_transaction b
+                    WHERE 
+                        b.user_id = $1 AND 
+                        b.video_id = a.video_id 
+                )
+              )
           `;
 
         const params = [];

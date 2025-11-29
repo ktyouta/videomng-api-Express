@@ -6,7 +6,7 @@ export class IsVisibleAfterFolderAddModel {
 
     constructor(value: string) {
 
-        if (value && value !== IsVisibleAfterFolderAddModel.VISIBLE) {
+        if (value && (value !== IsVisibleAfterFolderAddModel.VISIBLE && value !== IsVisibleAfterFolderAddModel.DEFAULT)) {
             throw Error(`フォルダ内動画一覧画面表示フラグの値が不正です。value:${value}`);
         }
 
