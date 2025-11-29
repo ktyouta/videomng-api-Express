@@ -13,9 +13,14 @@ import { VideoMemoSeqModel } from "../../internaldata/favoritevideomemotransacti
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { CookieModel } from "../../cookie/model/CookieModel";
 import { Request } from 'express';
+import { DeleteFavoriteVideoRepositorys } from "../repository/DeleteFavoriteVideoRepositorys";
+import { DeleteFavoriteVideoInterface } from "../repository/interface/DeleteFavoriteVideoInterface";
+import { DeleteFavoriteVideoFolderEntity } from "../entity/DeleteFavoriteVideoFolderEntity";
 
 
 export class DeleteFavoriteVideoService {
+
+    constructor(private readonly deleteFavoriteVideoInterface: DeleteFavoriteVideoInterface) { }
 
     /**
      * jwtからユーザー情報を取得
@@ -73,7 +78,7 @@ export class DeleteFavoriteVideoService {
     }
 
     /**
-     * お気に入り動画コメントに動画を追加する
+     * メモを削除
      * @param favoriteVideoRepository 
      * @param deleteFavoriteVideoRequestModel 
      * @param frontUserIdModel 
@@ -90,4 +95,23 @@ export class DeleteFavoriteVideoService {
             tx);
     }
 
+    /**
+     * お気に入り動画フォルダを削除
+     * @param frontUserIdModel 
+     * @param videoIdModel 
+     * @param tx 
+     * @returns 
+     */
+    async deleteFavoriteVideoFolder(videoIdModel: VideoIdModel,
+        frontUserIdModel: FrontUserIdModel,
+        tx: Prisma.TransactionClient
+    ) {
+
+        const entity = new DeleteFavoriteVideoFolderEntity(videoIdModel, frontUserIdModel);
+
+        // 削除
+        const result = await this.deleteFavoriteVideoInterface.deleteFavoriteVideoFolder(entity, tx);
+
+        return result;
+    }
 }

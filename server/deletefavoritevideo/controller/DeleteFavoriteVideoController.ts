@@ -11,11 +11,13 @@ import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { DeleteFavoriteVideoService } from '../service/DeleteFavoriteVideoService';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { DeleteFavoriteVideoRepositorys } from '../repository/DeleteFavoriteVideoRepositorys';
+import { RepositoryType } from '../../util/const/CommonConst';
 
 
 export class DeleteFavoriteVideoController extends RouteController {
 
-    private readonly deleteFavoriteVideoService = new DeleteFavoriteVideoService();
+    private readonly deleteFavoriteVideoService = new DeleteFavoriteVideoService((new DeleteFavoriteVideoRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -62,9 +64,16 @@ export class DeleteFavoriteVideoController extends RouteController {
                 tx
             );
 
-            // コメントを削除
+            // メモを削除
             await this.deleteFavoriteVideoService.deleteMemo(
                 favoriteVideoMemoRepository,
+                videoId,
+                frontUserIdModel,
+                tx
+            );
+
+            // お気に入り動画フォルダを削除
+            await this.deleteFavoriteVideoService.deleteFavoriteVideoFolder(
                 videoId,
                 frontUserIdModel,
                 tx
