@@ -264,6 +264,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                     ) as "latestVideoId"
                 FROM "folder_master" a
                 WHERE a.user_id = ${userId}
+                ORDER BY a.update_date DESC
             `;
 
         return result;

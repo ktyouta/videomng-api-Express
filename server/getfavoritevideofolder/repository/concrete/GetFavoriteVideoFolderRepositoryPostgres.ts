@@ -63,6 +63,7 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
         let sql = GetFavoriteVideoFolderRepositoryPostgres.SELECT_LIST;
 
         sql += query;
+        sql += ` ORDER BY b.update_date DESC`
         sql += ` OFFSET ${(page - 1) * defaultListLimit} ROWS`;
         sql += ` FETCH NEXT ${defaultListLimit} ROWS ONLY`;
 
