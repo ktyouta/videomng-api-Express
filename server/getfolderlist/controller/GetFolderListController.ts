@@ -11,21 +11,20 @@ import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
-import { PathParamSchema } from '../schema/PathParamSchema';
-import { GetFolderService } from '../service/GetFolderService';
-import { GetFolderRepositorys } from '../repository/GetFolderRepositorys';
+import { GetFolderService } from '../service/GetFolderListService';
+import { GetFolderListRepositorys } from '../repository/GetFolderListRepositorys';
 
 
-export class GetFolderController extends RouteController {
+export class GetFolderListController extends RouteController {
 
-    private readonly getFolderService = new GetFolderService((new GetFolderRepositorys()).get(RepositoryType.POSTGRESQL));
+    private readonly getFolderService = new GetFolderService((new GetFolderListRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FOLDER_ID
+            ApiEndopoint.FOLDER
         );
     }
 
@@ -37,26 +36,17 @@ export class GetFolderController extends RouteController {
      */
     public async doExecute(req: Request, res: Response, next: NextFunction) {
 
-        // パスパラメータのバリデーションチェック
-        const pathValidateResult = PathParamSchema.safeParse(req.params);
-
-        if (!pathValidateResult.success) {
-            throw Error(`${pathValidateResult.error.message} endpoint:${ApiEndopoint.FOLDER_ID}`);
-        }
-
-        const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
-
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.getFolderService.checkJwtVerify(req);
         const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
-        // フォルダ取得
-        const folder = await this.getFolderService.getFolder(folderIdModel, frontUserIdModel);
+        // フォルダリスト取得
+        const result = await this.getFolderService.getFolderList(frontUserIdModel);
 
-        if (!folder) {
-            throw Error(`フォルダが存在しません。フォルダID：${folderIdModel.id}`);
+        if (!result || result.length === 0) {
+            return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダが存在しません。`, []);
         }
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダを取得しました。`, folder);
+        return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダを取得しました。`, result);
     }
 }
