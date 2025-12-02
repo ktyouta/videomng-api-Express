@@ -35,7 +35,7 @@ import { GetFolderListEntity } from "../entity/GetFolderListEntity";
 import { FavoriteVideoFolderType } from "../model/FavoriteVideoFolderType";
 import { FavoriteVideoFolderThumbnailType } from "../model/FavoriteVideoFolderThumbnailType";
 import { ThumbnailType } from "../../common/type/ThumbnailType";
-import { ShowFolderModel } from "../model/ShowFolderModel";
+import { FolderListModel, } from "../model/FolderListModel";
 
 
 export class GetFavoriteVideoListService {
@@ -82,16 +82,11 @@ export class GetFavoriteVideoListService {
      * @param userNameModel 
      */
     public async getFolderList(frontUserIdModel: FrontUserIdModel,
-        showFolderModel: ShowFolderModel
+        folderListModel: FolderListModel,
     ): Promise<FavoriteVideoFolderType[]> {
 
-        // フォルダを取得しない
-        if (!showFolderModel.isOn()) {
-            return [];
-        }
-
         // 永続ロジック用オブジェクトを取得
-        const getFolderListEntity = new GetFolderListEntity(frontUserIdModel);
+        const getFolderListEntity = new GetFolderListEntity(frontUserIdModel, folderListModel);
 
         // お気に入り動画取得
         const favoriteVideos = await this.getFavoriteVideoListRepository.selectFolderList(getFolderListEntity);

@@ -237,8 +237,13 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
     async selectFolderList(getFolderListEntity: GetFolderListEntity): Promise<FavoriteVideoFolderType[]> {
 
         const userId = getFolderListEntity.frontUserId;
+        const folderList = getFolderListEntity.folderList;
 
-        const result = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoFolderType[]>`
+        const params = [];
+        params.push(userId);
+        let paramIndex = 2;
+
+        let sql = `
                 SELECT
                     a.user_id as "userId",
                     a.folder_id as "folderId",
@@ -262,10 +267,22 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                         WHERE
                             c.update_date = c.max_update_date
                     ) as "latestVideoId"
-                FROM "folder_master" a
-                WHERE a.user_id = ${userId}
-                ORDER BY a.update_date DESC
-            `;
+                FROM 
+                    "folder_master" a
+                WHERE 
+                    a.user_id = $1
+        `;
+
+        // フォルダID
+        if (folderList && folderList.length > 0) {
+            sql += ` AND a.folder_id = ANY($${paramIndex})`;
+            paramIndex++;
+            params.push(folderList);
+        }
+
+        sql += ` ORDER BY a.update_date DESC`;
+
+        const result = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoFolderType[]>(sql, ...params);
 
         return result;
     };
