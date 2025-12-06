@@ -1,14 +1,14 @@
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { Request } from 'express';
-import { CreateFolderRequestType } from "../schema/CreateFolderRequestSchema";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { SelectFolderEntity } from "../entity/SelectFolderEntity";
-import { CreateFolderRepositoryInterface } from "../repository/interface/CreateFolderInterface";
 import { Prisma } from "@prisma/client";
-import { InsertFolderEntity } from "../entity/InsertFolderEntity";
+import { Request } from 'express';
+import { CookieModel } from "../../cookie/model/CookieModel";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { FolderColorModel } from "../../internaldata/foldermaster/model/FolderColorModel";
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
+import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
+import { InsertFolderEntity } from "../entity/InsertFolderEntity";
+import { SelectFolderEntity } from "../entity/SelectFolderEntity";
+import { CreateFolderRepositoryInterface } from "../repository/interface/CreateFolderInterface";
 
 
 export class CreateFolderService {
@@ -56,8 +56,9 @@ export class CreateFolderService {
      * フォルダーを登録する
      * @returns 
      */
-    public async createFolder(requestBody: CreateFolderRequestType,
-        frontUserIdModel: FrontUserIdModel,
+    public async createFolder(frontUserIdModel: FrontUserIdModel,
+        folderNameModel: FolderNameModel,
+        folderColorModel: FolderColorModel,
         tx: Prisma.TransactionClient) {
 
         // フォルダIDを取得
@@ -66,8 +67,9 @@ export class CreateFolderService {
 
         const insertFolderEntity = new InsertFolderEntity(
             new FolderIdModel(nextTagId),
-            new FolderNameModel(requestBody.name),
+            folderNameModel,
             frontUserIdModel,
+            folderColorModel,
         );
 
         // 登録

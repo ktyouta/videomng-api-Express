@@ -180,6 +180,7 @@ model FolderMaster {
   userId      Int   @map("user_id")
   folderId    Int   @map("folder_id")
   name      String   @db.VarChar(255)
+  folderColor      String?   @db.VarChar(255) @map("folder_color")
   createDate  DateTime @db.Timestamptz @map("create_date")
   updateDate  DateTime @db.Timestamptz @map("update_date")
   @@id([userId, folderId])

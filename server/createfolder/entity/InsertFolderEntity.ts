@@ -1,11 +1,7 @@
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { FrontUserBirthdayModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserBirthdayModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { FLG } from "../../util/const/CommonConst";
-import { CreateFolderRequestType } from "../schema/CreateFolderRequestSchema";
-import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
+import { FolderColorModel } from "../../internaldata/foldermaster/model/FolderColorModel";
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
+import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
 
 
 export class InsertFolderEntity {
@@ -16,16 +12,21 @@ export class InsertFolderEntity {
     private readonly _frontUserIdModel: FrontUserIdModel;
     // フォルダID
     private readonly _folderIdModel: FolderIdModel;
+    // フォルダ名
+    private readonly _folderColorModel: FolderColorModel;
 
     constructor(
         folderIdModel: FolderIdModel,
         folderNameModel: FolderNameModel,
         frontUserIdModel: FrontUserIdModel,
+        folderColorModel: FolderColorModel,
     ) {
 
         this._folderNameModel = folderNameModel;
         this._frontUserIdModel = frontUserIdModel;
         this._folderIdModel = folderIdModel;
+        this._folderColorModel = folderColorModel;
+        ;
     }
 
     get frontUserId() {
@@ -38,5 +39,9 @@ export class InsertFolderEntity {
 
     get folderId() {
         return this._folderIdModel.id;
+    }
+
+    get folderColor() {
+        return this._folderColorModel.value;
     }
 }
