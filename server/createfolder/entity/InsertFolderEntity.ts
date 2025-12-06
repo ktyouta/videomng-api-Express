@@ -12,7 +12,7 @@ export class InsertFolderEntity {
     private readonly _frontUserIdModel: FrontUserIdModel;
     // フォルダID
     private readonly _folderIdModel: FolderIdModel;
-    // フォルダ名
+    // フォルダカラー
     private readonly _folderColorModel: FolderColorModel;
 
     constructor(

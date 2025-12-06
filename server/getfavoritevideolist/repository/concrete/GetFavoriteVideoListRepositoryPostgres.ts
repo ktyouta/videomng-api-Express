@@ -1,10 +1,10 @@
-import { FavoriteVideoTransaction, FolderMaster, FrontUserInfoMaster } from "@prisma/client";
-import { GetFavoriteVideoListSelectEntity } from "../../entity/GetFavoriteVideoListSelectEntity";
-import { GetFavoriteVideoListRepositoryInterface } from "../interface/GetFavoriteVideoListRepositoryInterface";
+import { FavoriteVideoTransaction } from "@prisma/client";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
+import { GetFavoriteVideoListSelectEntity } from "../../entity/GetFavoriteVideoListSelectEntity";
 import { GetFolderListEntity } from "../../entity/GetFolderListEntity";
 import { FavoriteVideoFolderType } from "../../model/FavoriteVideoFolderType";
+import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
+import { GetFavoriteVideoListRepositoryInterface } from "../interface/GetFavoriteVideoListRepositoryInterface";
 
 type queryType = {
     query: string,
@@ -248,6 +248,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                     a.user_id as "userId",
                     a.folder_id as "folderId",
                     a.name as "name",
+                    a.folder_color as "folderColor",
                     a.create_date as "createDate",
                     a.update_date as "updateDate",
                     (

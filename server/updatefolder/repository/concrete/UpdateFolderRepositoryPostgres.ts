@@ -1,14 +1,9 @@
-import { FavoriteVideoTagTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
+import { FolderMaster, Prisma } from "@prisma/client";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
-import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
 import { SelectDuplicationFolderEntity } from "../../entity/SelectDuplicationFolderEntity";
-import { FolderNextSeqType } from "../../type/FolderNextSeqType";
-import { UpdateFolderEntity } from "../../entity/UpdateFolderEntity";
-import { FLG } from "../../../util/const/CommonConst";
-import { UpdateFolderRepositoryInterface } from "../interface/UpdateFolderInterface";
 import { SelectExistsFolderEntity } from "../../entity/SelectExistsFolderEntity";
+import { UpdateFolderEntity } from "../../entity/UpdateFolderEntity";
+import { UpdateFolderRepositoryInterface } from "../interface/UpdateFolderInterface";
 
 
 
@@ -69,6 +64,7 @@ export class UpdateFolderRepositoryPostgres implements UpdateFolderRepositoryInt
         const userId = insertFolderEntity.frontUserId;
         const folderId = insertFolderEntity.folderId;
         const folderName = insertFolderEntity.folderName;
+        const folderColor = insertFolderEntity.folderColor;
 
         const folder = tx.folderMaster.update({
             where: {
@@ -79,6 +75,7 @@ export class UpdateFolderRepositoryPostgres implements UpdateFolderRepositoryInt
             },
             data: {
                 name: folderName,
+                folderColor,
                 updateDate: new Date(),
             },
         });

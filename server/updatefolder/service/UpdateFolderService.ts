@@ -1,15 +1,15 @@
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { Request } from 'express';
-import { UpdateFolderRequestType } from "../schema/UpdateFolderRequestSchema";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { SelectExistsFolderEntity } from "../entity/SelectExistsFolderEntity";
-import { UpdateFolderRepositoryInterface } from "../repository/interface/UpdateFolderInterface";
 import { Prisma } from "@prisma/client";
-import { UpdateFolderEntity } from "../entity/UpdateFolderEntity";
+import { Request } from 'express';
+import { CookieModel } from "../../cookie/model/CookieModel";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { FolderColorModel } from "../../internaldata/foldermaster/model/FolderColorModel";
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
+import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { SelectDuplicationFolderEntity } from "../entity/SelectDuplicationFolderEntity";
+import { SelectExistsFolderEntity } from "../entity/SelectExistsFolderEntity";
+import { UpdateFolderEntity } from "../entity/UpdateFolderEntity";
+import { UpdateFolderRepositoryInterface } from "../repository/interface/UpdateFolderInterface";
 
 
 export class UpdateFolderService {
@@ -81,12 +81,14 @@ export class UpdateFolderService {
     async update(folderIdModel: FolderIdModel,
         folderNameModel: FolderNameModel,
         frontUserIdModel: FrontUserIdModel,
+        folderColorModel: FolderColorModel,
         tx: Prisma.TransactionClient) {
 
         const entity = new UpdateFolderEntity(
             folderIdModel,
             folderNameModel,
             frontUserIdModel,
+            folderColorModel,
         );
 
         // 更新

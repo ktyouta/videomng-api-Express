@@ -1,21 +1,21 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CONFLICT, HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
+import { Prisma } from '@prisma/client';
+import { NextFunction, Request, Response } from 'express';
 import { ZodIssue } from 'zod';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
-import { Prisma } from '@prisma/client';
-import { RepositoryType } from '../../util/const/CommonConst';
-import { UpdateFolderService } from '../service/UpdateFolderService';
-import { UpdateFolderRepositorys } from '../repository/UpdateFolderRepositorys';
-import { UpdateFolderRequestSchema, UpdateFolderRequestType } from '../schema/UpdateFolderRequestSchema';
-import { FolderNameModel } from '../../internaldata/foldermaster/model/FolderNameModel';
+import { FolderColorModel } from '../../internaldata/foldermaster/model/FolderColorModel';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
+import { FolderNameModel } from '../../internaldata/foldermaster/model/FolderNameModel';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { RepositoryType } from '../../util/const/CommonConst';
+import { HTTP_STATUS_CONFLICT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { UpdateFolderRepositorys } from '../repository/UpdateFolderRepositorys';
 import { PathParamSchema } from '../schema/PathParamSchema';
+import { UpdateFolderRequestSchema, UpdateFolderRequestType } from '../schema/UpdateFolderRequestSchema';
+import { UpdateFolderService } from '../service/UpdateFolderService';
 
 
 export class UpdateFolderController extends RouteController {
@@ -64,6 +64,7 @@ export class UpdateFolderController extends RouteController {
         const requestBody: UpdateFolderRequestType = validateResult.data;
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
         const folderNameModel = new FolderNameModel(requestBody.name);
+        const folderColorModel = new FolderColorModel(requestBody.folderColor);
 
         // jwtの認証を実行する
         const jsonWebTokenVerifyModel = await this.updateFolderService.checkJwtVerify(req);
@@ -82,12 +83,12 @@ export class UpdateFolderController extends RouteController {
             // フォルダの重複チェック
             const duplicationFolder = await this.updateFolderService.getDuplicationFolder(folderNameModel, frontUserIdModel);
 
-            if (duplicationFolder && duplicationFolder.length > 0) {
+            if (duplicationFolder && duplicationFolder.length > 1) {
                 return ApiResponse.create(res, HTTP_STATUS_CONFLICT, `同じ名前のフォルダが既に存在します。`,);
             }
 
             // フォルダ更新
-            const folder = await this.updateFolderService.update(folderIdModel, folderNameModel, frontUserIdModel, tx);
+            const folder = await this.updateFolderService.update(folderIdModel, folderNameModel, frontUserIdModel, folderColorModel, tx);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダを更新しました。`, folder);
         }, next);
