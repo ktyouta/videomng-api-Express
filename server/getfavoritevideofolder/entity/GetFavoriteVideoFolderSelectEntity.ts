@@ -1,9 +1,7 @@
-import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
-import { GetFavoriteVideoFolderPageModel } from "../model/GetFavoriteVideoListPageModel";
+import { GetFavoriteVideoFolderPageModel } from "../model/GetFavoriteVideoFolderPageModel";
+import { GetFavoriteVideoFolderSortIdModel } from "../model/GetFavoriteVideoFolderSortIdModel";
 
 
 export class GetFavoriteVideoFolderSelectEntity {
@@ -14,16 +12,20 @@ export class GetFavoriteVideoFolderSelectEntity {
     private readonly _pageModel: GetFavoriteVideoFolderPageModel;
     // フォルダID
     private readonly _folderIdModel: FolderIdModel;
+    // ソートID
+    private readonly _sortIdModel: GetFavoriteVideoFolderSortIdModel;
 
 
     constructor(frontUserIdModel: FrontUserIdModel,
         pageModel: GetFavoriteVideoFolderPageModel,
-        folderIdModel: FolderIdModel
+        folderIdModel: FolderIdModel,
+        sortIdModel: GetFavoriteVideoFolderSortIdModel,
     ) {
 
         this._frontUserIdModel = frontUserIdModel;
         this._pageModel = pageModel;
         this._folderIdModel = folderIdModel;
+        this._sortIdModel = sortIdModel;
     }
 
     get frontUserId() {
@@ -36,5 +38,9 @@ export class GetFavoriteVideoFolderSelectEntity {
 
     get folderId() {
         return this._folderIdModel.id;
+    }
+
+    get sortId() {
+        return this._sortIdModel.sortId;
     }
 }
