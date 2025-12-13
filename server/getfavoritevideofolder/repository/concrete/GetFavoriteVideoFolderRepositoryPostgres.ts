@@ -51,6 +51,10 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
 
         const frontUserId = getFavoriteVideoFolderSelectEntity.frontUserId;
         const folderId = getFavoriteVideoFolderSelectEntity.folderId;
+        const viewStatus = getFavoriteVideoFolderSelectEntity.viewStatus;
+        const videoCategory = getFavoriteVideoFolderSelectEntity.videoCategoryId;
+        const videoTag = getFavoriteVideoFolderSelectEntity.tagName;
+        const favoriteLevel = getFavoriteVideoFolderSelectEntity.favoriteLevel;
 
         let sql = `
             FROM favorite_video_folder_transaction a
@@ -65,6 +69,61 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
         const params = [];
         params.push(frontUserId);
         params.push(folderId);
+        let paramIndex = 3;
+
+        // 視聴状況
+        if (viewStatus && viewStatus.length > 0) {
+            sql += ` AND b.view_status = ANY($${paramIndex})`;
+            paramIndex++;
+            params.push(viewStatus);
+        }
+
+        // カテゴリ
+        if (videoCategory && videoCategory.length > 0) {
+            sql += ` AND EXISTS(
+                SELECT 
+                    1
+                FROM
+                    favorite_video_category_transaction c
+                WHERE 
+                    c.user_id = $1 AND 
+                    c.video_id = a.video_id AND 
+                    c.category_id = ANY($${paramIndex})
+            )`;
+            paramIndex++;
+            params.push(videoCategory);
+        }
+
+        // タグ
+        if (videoTag && videoTag.length > 0) {
+            sql += ` AND EXISTS(
+                SELECT 
+                    1
+                FROM 
+                    favorite_video_tag_transaction d
+                WHERE 
+                    d.user_id = $1 AND 
+                    d.video_id = a.video_id AND 
+                    d.tag_id in (
+                        SELECT 
+                            tag_id
+                        FROM 
+                            tag_master e
+                        WHERE 
+                            e.tag_name = ANY($${paramIndex}) AND
+                            e.user_id = $1
+                )
+            )`;
+            paramIndex++;
+            params.push(videoTag);
+        }
+
+        // お気に入り度
+        if (favoriteLevel && favoriteLevel.length > 0) {
+            sql += ` AND b.favorite_level = ANY($${paramIndex})`;
+            paramIndex++;
+            params.push(favoriteLevel);
+        }
 
         return {
             query: sql,

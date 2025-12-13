@@ -88,7 +88,11 @@ export class GetFavoriteVideoFolderController extends RouteController {
             frontUserIdModel,
             pageModel,
             folderIdModel,
-            sortIdModel
+            sortIdModel,
+            viewStatusModel,
+            videoCategoryId,
+            tagNameModel,
+            favoriteLevelModel,
         );
 
         // お気に入り動画リストを取得
