@@ -1,9 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
-import { Logger } from './util/service/Logger';
 import bodyParser from 'body-parser';
+import { NextFunction, Request, Response } from 'express';
 import { ROUTE_CONTROLLER_LIST } from './router/conf/RouteControllerList';
-import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './util/const/HttpStatusConst';
 import { envConfig } from './util/const/EnvConfig';
+import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './util/const/HttpStatusConst';
+import { Logger } from './util/service/Logger';
 
 
 const express = require('express');
@@ -19,6 +19,9 @@ app.use(cookieParser());
 const corsProtocol = envConfig.corsProtocol ?? ``;
 const corsDomain = envConfig.corsDomain ?? ``;
 const corsPort = envConfig.corsPort ?? ``;
+
+// プロキシ信頼設定
+app.set('trust proxy', 1);
 
 // cors設定
 app.use(cors({
