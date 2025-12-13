@@ -8,8 +8,12 @@ import { RepositoryType } from "../../util/const/CommonConst";
 import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
 import { GetFavoriteVideoFolderSelectEntity } from "../entity/GetFavoriteVideoFolderSelectEntity";
+import { GetFavoriteVideoFolderFavoriteLevelModel } from '../model/GetFavoriteVideoFolderFavoriteLevelModel';
 import { GetFavoriteVideoFolderPageModel } from "../model/GetFavoriteVideoFolderPageModel";
 import { GetFavoriteVideoFolderSortIdModel } from '../model/GetFavoriteVideoFolderSortIdModel';
+import { GetFavoriteVideoFolderTagNameModel } from '../model/GetFavoriteVideoFolderTagNameModel';
+import { GetFavoriteVideoFolderVideoCategoryModel } from '../model/GetFavoriteVideoFolderVideoCategoryModel';
+import { GetFavoriteVideoFolderViewStatusModel } from '../model/GetFavoriteVideoFolderViewStatusModel';
 import { GetFavoriteVideoFolderResponseModel } from "../model/GetFavoriteVideoListResponseModel";
 import { GetFavoriteVideoFolderRepositorys } from "../repository/GetFavoriteVideoFolderRepositorys";
 import { PathParamSchema } from "../schema/PathParamSchema";
@@ -54,6 +58,22 @@ export class GetFavoriteVideoFolderController extends RouteController {
 
         // クエリパラメータを取得
         const query = req.query;
+
+        // 視聴状況
+        const viewStatus = query[`folderViewstatus`] as string;
+        const viewStatusModel = new GetFavoriteVideoFolderViewStatusModel(viewStatus);
+
+        // 動画カテゴリ
+        const videoCategory = query[`folderVideocategory`] as string;
+        const videoCategoryId = new GetFavoriteVideoFolderVideoCategoryModel(videoCategory);
+
+        // タグ
+        const videoTag = query[`folderVideotag`] as string;
+        const tagNameModel = new GetFavoriteVideoFolderTagNameModel(videoTag);
+
+        // お気に入り度
+        const favoriteLevel = query[`folderFavoritelevel`] as string;
+        const favoriteLevelModel = new GetFavoriteVideoFolderFavoriteLevelModel(favoriteLevel);
 
         // ページ
         const page = query[`folderPage`] as string;

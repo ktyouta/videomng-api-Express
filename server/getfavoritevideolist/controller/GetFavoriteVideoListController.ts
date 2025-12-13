@@ -1,32 +1,22 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
+import { NextFunction, Request, Response } from 'express';
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { GetFavoriteVideoListResponseModel } from "../model/GetFavoriteVideoListResponseModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { GetFavoriteVideoListService } from "../service/GetFavoriteVideoListService";
-import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
-import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId";
-import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
-import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
-import { FavoriteVideoSortIdModel } from "../../internaldata/favoritevideosortmaster/properties/FavoriteVideoSortIdModel";
-import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
-import { FavoriteLevelModel } from "../../internaldata/favoritevideotransaction/properties/FavoriteLevelModel";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { RepositoryType } from "../../util/const/CommonConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
+import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
+import { FolderListModel } from "../model/FolderListModel";
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
 import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
-import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
+import { GetFavoriteVideoListResponseModel } from "../model/GetFavoriteVideoListResponseModel";
+import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
+import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
 import { GetFavoriteVideoListVideoCategoryModel } from "../model/GetFavoriteVideoListVideoCategoryModel";
+import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
 import { GetFavoriteVideoListRepositorys } from "../repository/GetFavoriteVideoListRepositorys";
-import { RepositoryType } from "../../util/const/CommonConst";
-import { FolderListModel } from "../model/FolderListModel";
+import { GetFavoriteVideoListService } from "../service/GetFavoriteVideoListService";
 
 
 export class GetFavoriteVideoListController extends RouteController {
@@ -83,7 +73,7 @@ export class GetFavoriteVideoListController extends RouteController {
         const page = query[`page`] as string;
         const pageModel = new GetFavoriteVideoListPageModel(page);
 
-        // フォルダ表示フラグ
+        // フォルダ
         const folder = query[`folder`] as string;
         const folderListModel = new FolderListModel(folder);
 
