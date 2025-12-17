@@ -1,16 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
-import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { FrontUserInfoSelectEntity } from '../entity/FrontUserInfoSelectEntity';
+import { FrontUserInfoUpdateLastLoginDateEntity } from '../entity/FrontUserInfoUpdateLastLoginDateEntity';
 import { FrontUserLoginSelectEntity } from '../entity/FrontUserLoginSelectEntity';
-import { FrontUserLoginRequestType } from '../model/FrontUserLoginRequestType';
 import { FrontUserLoginRepositorys } from '../repository/FrontUserLoginRepositorys';
 import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
-import { FrontUserInfoUpdateLastLoginDateEntity } from '../entity/FrontUserInfoUpdateLastLoginDateEntity';
 
 
 export class FrontUserLoginService {
@@ -65,12 +63,10 @@ export class FrontUserLoginService {
      * @param frontUserInfoCreateRequestBody 
      * @returns 
      */
-    public createJsonWebToken(userIdModel: FrontUserIdModel,
-        inputPasswordModel: FrontUserPasswordModel
-    ) {
+    public createJsonWebToken(userIdModel: FrontUserIdModel) {
 
         try {
-            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel, inputPasswordModel);
+            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel);
 
             return newJsonWebTokenModel;
         } catch (err) {

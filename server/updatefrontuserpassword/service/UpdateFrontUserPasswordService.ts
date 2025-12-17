@@ -1,20 +1,18 @@
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { FLG, RepositoryType } from "../../util/const/CommonConst";
-import { FrontUserLoginMasterInsertEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterInsertEntity";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
+import { FrontUserLoginMaster } from "@prisma/client";
 import { Request } from 'express';
-import { UpdateFrontUserPasswordRequestType } from "../model/UpdateFrontUserPasswordRequestType";
-import { UpdateFrontUserPasswordRepositorys } from "../repository/UpdateFrontUserPasswordRepositorys";
+import { CookieModel } from "../../cookie/model/CookieModel";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { FrontUserLoginMasterUpdateEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateEntity";
+import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
+import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
+import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
+import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RepositoryType } from "../../util/const/CommonConst";
 import { UpdateFrontUserPasswordSelectEntity } from "../entity/UpdateFrontUserPasswordSelectEntity";
 import { UpdateFrontUserPasswordRequestModel } from "../model/UpdateFrontUserPasswordRequestModel";
-import { FrontUserInfoMaster, FrontUserLoginMaster } from "@prisma/client";
-import { FrontUserLoginMasterUpdateEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateEntity";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { UpdateFrontUserPasswordRequestType } from "../model/UpdateFrontUserPasswordRequestType";
+import { UpdateFrontUserPasswordRepositorys } from "../repository/UpdateFrontUserPasswordRepositorys";
 
 
 export class UpdateFrontUserPasswordService {
@@ -101,14 +99,10 @@ export class UpdateFrontUserPasswordService {
      * @param frontUserInfoCreateRequestBody 
      * @returns 
      */
-    public createJsonWebToken(userIdModel: FrontUserIdModel,
-        updateFrontUserPasswordRequestBody: UpdateFrontUserPasswordRequestModel
-    ) {
-
-        const frontUserPassword = updateFrontUserPasswordRequestBody.newPasswordModel;
+    public createJsonWebToken(userIdModel: FrontUserIdModel) {
 
         try {
-            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel, frontUserPassword);
+            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel);
 
             return newJsonWebTokenModel;
         } catch (err) {

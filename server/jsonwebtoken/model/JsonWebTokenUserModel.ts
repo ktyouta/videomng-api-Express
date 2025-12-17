@@ -1,16 +1,11 @@
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { FrontUserBirthdayModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserBirthdayModel';
-import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
-import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { envConfig } from '../../util/const/EnvConfig';
-import { JsonFileData } from '../../util/service/JsonFileData';
 import { JsonWebTokenUserInfoSelectEntity } from '../entity/JsonWebTokenUserInfoSelectEntity';
 import { JsonWebTokenUserInfoRepositorys } from '../repository/JsonWebTokenUserInfoRepositorys';
 import { FrontUserInfoType } from '../type/FrontUserInfoType';
 import { JsonWebTokenModel } from './JsonWebTokenModel';
-import { NewJsonWebTokenModel } from './NewJsonWebTokenModel';
 
 
 export class JsonWebTokenUserModel {
@@ -18,19 +13,15 @@ export class JsonWebTokenUserModel {
     private static readonly jwt = require("jsonwebtoken");
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
-    // パスワード
-    private readonly _frontUserPasswordModel: FrontUserPasswordModel;
     // フロントユーザー情報
     private readonly _frontUserInfo: FrontUserInfoType;
 
 
     private constructor(frontUserIdModel: FrontUserIdModel,
-        frontUserPassword: FrontUserPasswordModel,
         frontUserInfo: FrontUserInfoType
     ) {
 
         this._frontUserIdModel = frontUserIdModel;
-        this._frontUserPasswordModel = frontUserPassword;
         this._frontUserInfo = frontUserInfo;
     }
 
@@ -67,17 +58,16 @@ export class JsonWebTokenUserModel {
             const id: string = decoded.ID;
             const verifyArray: string[] = id.split(',');
 
-            if (!verifyArray || verifyArray.length !== 2) {
+            if (!verifyArray || verifyArray.length !== 1) {
                 throw Error(`jwtの認証情報が不正です。`);
             }
 
             const userId = Number.parseInt(verifyArray[0]);
 
             const frontUserIdModel: FrontUserIdModel = FrontUserIdModel.reConstruct(userId);
-            const frontUserPassword: FrontUserPasswordModel = FrontUserPasswordModel.reConstruct(verifyArray[1]);
 
             // ユーザーマスタからデータを取得
-            const frontUserList = await this.getFrontUser(frontUserIdModel, frontUserPassword);
+            const frontUserList = await this.getFrontUser(frontUserIdModel);
 
             // jwtのユーザー情報がユーザーマスタに存在しない
             if (!frontUserList || frontUserList.length === 0) {
@@ -86,7 +76,6 @@ export class JsonWebTokenUserModel {
 
             return new JsonWebTokenUserModel(
                 frontUserIdModel,
-                frontUserPassword,
                 frontUserList[0],
             );
         } catch (err) {
@@ -97,10 +86,6 @@ export class JsonWebTokenUserModel {
 
     get frontUserIdModel() {
         return this._frontUserIdModel;
-    }
-
-    get frontUserPasswordModel() {
-        return this._frontUserPasswordModel;
     }
 
     get frontUserId() {
@@ -117,14 +102,13 @@ export class JsonWebTokenUserModel {
      * @param frontUserPassword 
      * @returns 
      */
-    private static getFrontUser(frontUserIdModel: FrontUserIdModel,
-        frontUserPassword: FrontUserPasswordModel) {
+    private static getFrontUser(frontUserIdModel: FrontUserIdModel) {
 
         // 永続ロジック用オブジェクトを取得
         const frontUserInfoCreateRepository = (new JsonWebTokenUserInfoRepositorys()).get(RepositoryType.POSTGRESQL);
 
         // ユーザログイン情報取得用Entity
-        const frontUserInfoCreateSelectEntity = new JsonWebTokenUserInfoSelectEntity(frontUserIdModel, frontUserPassword);
+        const frontUserInfoCreateSelectEntity = new JsonWebTokenUserInfoSelectEntity(frontUserIdModel);
 
         // ユーザーログイン情報を取得
         const frontUserList = frontUserInfoCreateRepository.select(frontUserInfoCreateSelectEntity);

@@ -1,25 +1,24 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { CreateFrontUserInfoService } from "../service/CreateFrontUserInfoService";
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoCreateRequestType } from "../model/FrontUserInfoCreateRequestType";
-import { FrontUserInfoCreateRequestModelSchema } from "../model/FrontUserInfoCreateRequestModelSchema";
+import { Prisma } from "@prisma/client";
+import { NextFunction, Request, Response } from 'express';
 import { ZodIssue } from "zod";
-import { FrontUserInfoCreateRequestModel } from "../model/FrontUserInfoCreateRequestModel";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { FrontUserInfoCreateResponseModel } from "../model/FrontUserInfoCreateResponseModel";
-import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
+import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
 import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
+import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RouteController } from "../../router/controller/RouteController";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { IS_ALLOW_USER_OPERATION } from "../../util/const/AllowUserOperationConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
+import { PrismaTransaction } from "../../util/service/PrismaTransaction";
+import { FrontUserInfoCreateRequestModel } from "../model/FrontUserInfoCreateRequestModel";
+import { FrontUserInfoCreateRequestModelSchema } from "../model/FrontUserInfoCreateRequestModelSchema";
+import { FrontUserInfoCreateRequestType } from "../model/FrontUserInfoCreateRequestType";
+import { FrontUserInfoCreateResponseModel } from "../model/FrontUserInfoCreateResponseModel";
+import { CreateFrontUserInfoService } from "../service/CreateFrontUserInfoService";
 
 
 export class CreateFrontUserInfoController extends RouteController {
@@ -105,7 +104,7 @@ export class CreateFrontUserInfoController extends RouteController {
 
             // jwtを作成
             const newJsonWebTokenModel =
-                await this.createFrontUserInfoService.createJsonWebToken(userIdModel, frontUserInfoCreateRequestBody);
+                await this.createFrontUserInfoService.createJsonWebToken(userIdModel);
 
             // レスポンスを作成
             const frontUserInfoCreateResponse: FrontUserInfoCreateResponseModel =

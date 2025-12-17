@@ -1,19 +1,19 @@
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
+import { FrontUserInfoMasterRepositorys } from "../../internaldata/frontuserinfomaster/repository/FrontUserInfoMasterRepositorys";
+import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
+import { FrontUserLoginMasterInsertEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterInsertEntity";
+import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
+import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
+import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RepositoryType } from "../../util/const/CommonConst";
+import { FrontUserInfoCreateSelectEntity } from "../entity/FrontUserInfoCreateSelectEntity";
 import { FrontUserInfoCreateRequestModel } from "../model/FrontUserInfoCreateRequestModel";
 import { FrontUserInfoCreateRequestType } from "../model/FrontUserInfoCreateRequestType";
-import { FLG, RepositoryType } from "../../util/const/CommonConst";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { FrontUserInfoCreateResponseModel } from "../model/FrontUserInfoCreateResponseModel";
-import { FrontUserLoginMasterInsertEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterInsertEntity";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
-import { FrontUserInfoMasterRepositorys } from "../../internaldata/frontuserinfomaster/repository/FrontUserInfoMasterRepositorys";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 import { FrontUserInfoCreateRepositorys } from "../repository/FrontUserInfoCreateRepositorys";
-import { FrontUserInfoCreateSelectEntity } from "../entity/FrontUserInfoCreateSelectEntity";
 
 
 export class CreateFrontUserInfoService {
@@ -81,14 +81,10 @@ export class CreateFrontUserInfoService {
      * @param userIdModel 
      * @param frontUserInfoCreateRequestBody 
      */
-    public createJsonWebToken(userIdModel: FrontUserIdModel,
-        frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel
-    ) {
-
-        const frontUserPassword = frontUserInfoCreateRequestBody.frontUserPasswordModel;
+    public createJsonWebToken(userIdModel: FrontUserIdModel) {
 
         try {
-            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel, frontUserPassword);
+            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel);
 
             return newJsonWebTokenModel;
         } catch (err) {

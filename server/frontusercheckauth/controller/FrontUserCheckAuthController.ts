@@ -1,18 +1,13 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { FrontUserCheckAuthService } from '../service/FrontUserCheckAuthService';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
-import { Prisma } from '@prisma/client';
-import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
-import { FrontUserCheckAuthResponseModel } from '../model/FrontUserCheckAuthResponseModel';
+import { NextFunction, Request, Response } from 'express';
 import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
+import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { FrontUserCheckAuthResponseModel } from '../model/FrontUserCheckAuthResponseModel';
+import { FrontUserCheckAuthService } from '../service/FrontUserCheckAuthService';
 
 
 export class FrontUserCheckAuthController extends RouteController {
@@ -41,11 +36,9 @@ export class FrontUserCheckAuthController extends RouteController {
             // jwtの認証を実行する
             const jsonWebTokenVerifyModel = await this.frontUserCheckAuthService.checkJwtVerify(req);
             const frontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
-            const frontUserPasswordModel = jsonWebTokenVerifyModel.frontUserPasswordModel;
 
             // jwtを作成
-            const newJsonWebTokenModel =
-                await this.frontUserCheckAuthService.createJsonWebToken(frontUserIdModel, frontUserPasswordModel);
+            const newJsonWebTokenModel = await this.frontUserCheckAuthService.createJsonWebToken(frontUserIdModel);
 
             // cookieを返却
             res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);

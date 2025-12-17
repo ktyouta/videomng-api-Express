@@ -1,25 +1,24 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { FrontUserLoginService } from '../service/FrontUserLoginService';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { Prisma } from '@prisma/client';
+import { NextFunction, Request, Response } from 'express';
 import { ZodIssue } from 'zod';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { FrontUserLoginRequestModelSchema } from '../model/FrontUserLoginRequestModelSchema';
-import { FrontUserLoginRequestType } from '../model/FrontUserLoginRequestType';
-import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
+import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { FrontUserSaltValueModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel';
-import { FrontUserLoginCreateResponseModel } from '../model/FrontUserLoginResponseModel';
-import { LOGIN_ERR_MESSAGE } from '../const/FrontUserLoginConst';
-import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
-import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
-import { Prisma } from '@prisma/client';
+import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
 import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { LOGIN_ERR_MESSAGE } from '../const/FrontUserLoginConst';
+import { FrontUserLoginRequestModelSchema } from '../model/FrontUserLoginRequestModelSchema';
+import { FrontUserLoginRequestType } from '../model/FrontUserLoginRequestType';
+import { FrontUserLoginCreateResponseModel } from '../model/FrontUserLoginResponseModel';
+import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
+import { FrontUserLoginService } from '../service/FrontUserLoginService';
 
 
 export class FrontUserLoginController extends RouteController {
@@ -105,7 +104,7 @@ export class FrontUserLoginController extends RouteController {
 
             // jwtを作成
             const newJsonWebTokenModel =
-                await this.frontUserLoginService.createJsonWebToken(frontUserIdModel, inputPasswordModel);
+                await this.frontUserLoginService.createJsonWebToken(frontUserIdModel);
 
             // レスポンスを作成
             const frontUserLoginCreateResponseModel = new FrontUserLoginCreateResponseModel(frontUser);

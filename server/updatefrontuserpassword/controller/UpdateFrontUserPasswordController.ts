@@ -1,24 +1,23 @@
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { ZodIssue } from "zod";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { RouteController } from "../../router/controller/RouteController";
 import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { UpdateFrontUserPasswordService } from "../service/UpdateFrontUserPasswordService";
-import { UpdateFrontUserPasswordRequestType } from "../model/UpdateFrontUserPasswordRequestType";
-import { UpdateFrontUserPasswordRequestModelSchema } from "../model/UpdateFrontUserPasswordRequestModelSchema";
-import { UpdateFrontUserPasswordRequestModel } from "../model/UpdateFrontUserPasswordRequestModel";
+import { NextFunction, Request, Response } from 'express';
+import { ZodIssue } from "zod";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel";
+import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
 import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
+import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RouteController } from "../../router/controller/RouteController";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { IS_ALLOW_USER_OPERATION } from "../../util/const/AllowUserOperationConst";
+import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
+import { PrismaTransaction } from "../../util/service/PrismaTransaction";
+import { UpdateFrontUserPasswordRequestModel } from "../model/UpdateFrontUserPasswordRequestModel";
+import { UpdateFrontUserPasswordRequestModelSchema } from "../model/UpdateFrontUserPasswordRequestModelSchema";
+import { UpdateFrontUserPasswordRequestType } from "../model/UpdateFrontUserPasswordRequestType";
+import { UpdateFrontUserPasswordService } from "../service/UpdateFrontUserPasswordService";
 
 
 export class UpdateFrontUserPasswordController extends RouteController {
@@ -128,7 +127,7 @@ export class UpdateFrontUserPasswordController extends RouteController {
 
             // jwtを作成
             const newJsonWebTokenModel =
-                await this.updateFrontUserPasswordService.createJsonWebToken(userIdModel, updateFrontUserPasswordRequestBody);
+                await this.updateFrontUserPasswordService.createJsonWebToken(userIdModel);
 
             // cookieを返却
             res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);

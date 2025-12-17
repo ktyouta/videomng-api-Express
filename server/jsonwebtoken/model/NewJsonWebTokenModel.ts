@@ -1,6 +1,5 @@
 import { CookieOptions } from 'express';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { envConfig } from '../../util/const/EnvConfig';
 import { IS_ENV_PRODUCTION } from '../../util/const/EnvProductionConst';
 
@@ -17,7 +16,7 @@ export class NewJsonWebTokenModel {
         sameSite: IS_ENV_PRODUCTION ? 'none' : 'lax',
     };
 
-    constructor(frontUserIdModel: FrontUserIdModel, frontUserPasswordModel: FrontUserPasswordModel) {
+    constructor(frontUserIdModel: FrontUserIdModel) {
 
         const jwtSecretKey = envConfig.jwtKey;
         const accessTokenExpires = envConfig.accessTokenExpires;
@@ -36,13 +35,7 @@ export class NewJsonWebTokenModel {
             throw Error(`jwtの作成にはユーザーIDが必要です。`);
         }
 
-        const frontUserPassword = frontUserPasswordModel.frontUserPassword;
-
-        if (!frontUserPassword) {
-            throw Error(`jwtの作成にはパスワードが必要です。`);
-        }
-
-        const jwtStr = `${frontUserId},${frontUserPassword}`;
+        const jwtStr = `${frontUserId}`;
         this._token = this.jwt.sign({ ID: jwtStr }, jwtSecretKey, { expiresIn: accessTokenExpires });
     }
 

@@ -1,14 +1,9 @@
-import { Prisma } from "@prisma/client";
-import { FavoriteVideoTransactionInsertEntity } from "../../internaldata/favoritevideotransaction/entity/FavoriteVideoTransactionInsertEntity";
-import { FavoriteVideoTransactionRepositorys } from "../../internaldata/favoritevideotransaction/repository/FavoriteVideoTransactionRepositorys";
-import { FavoriteVideoTransactionRepositoryInterface } from "../../internaldata/favoritevideotransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
+import { Request } from 'express';
+import { CookieModel } from "../../cookie/model/CookieModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { Request } from 'express';
 
 
 export class FrontUserCheckAuthService {
@@ -37,12 +32,10 @@ export class FrontUserCheckAuthService {
      * @param inputPasswordModel 
      * @returns 
      */
-    public createJsonWebToken(userIdModel: FrontUserIdModel,
-        inputPasswordModel: FrontUserPasswordModel
-    ) {
+    public createJsonWebToken(userIdModel: FrontUserIdModel) {
 
         try {
-            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel, inputPasswordModel);
+            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel);
 
             return newJsonWebTokenModel;
         } catch (err) {

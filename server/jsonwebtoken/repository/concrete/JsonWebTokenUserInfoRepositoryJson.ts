@@ -1,9 +1,7 @@
-import { FrontUserLoginMaster } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { JsonWebTokenUserInfoSelectEntity } from "../../entity/JsonWebTokenUserInfoSelectEntity";
-import { JsonWebTokenUserInfoRepositoryInterface } from "../interface/JsonWebTokenUserInfoRepositoryInterface";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { JsonWebTokenUserInfoSelectEntity } from "../../entity/JsonWebTokenUserInfoSelectEntity";
 import { FrontUserInfoType } from "../../type/FrontUserInfoType";
+import { JsonWebTokenUserInfoRepositoryInterface } from "../interface/JsonWebTokenUserInfoRepositoryInterface";
 
 
 
@@ -26,7 +24,6 @@ export class JsonWebTokenUserInfoRepositoryJson implements JsonWebTokenUserInfoR
         Promise<FrontUserInfoType[]> {
 
         const userId = JsonWebTokenUserInfoSelectEntity.frontUserId;
-        const password = JsonWebTokenUserInfoSelectEntity.frontUserPassword;
 
         // ユーザー情報を取得
         const frontUserList = await PrismaClientInstance.getInstance().$queryRaw<FrontUserInfoType[]>`
@@ -38,7 +35,6 @@ export class JsonWebTokenUserInfoRepositoryJson implements JsonWebTokenUserInfoR
             FROM "front_user_login_master" a 
             INNER JOIN "front_user_info_master" b
             ON a.user_id = CAST(${userId} AS INTEGER) AND
-            a.password = ${password} AND
             a.delete_flg = '0' AND
             a.user_id = b.user_id
         `;
