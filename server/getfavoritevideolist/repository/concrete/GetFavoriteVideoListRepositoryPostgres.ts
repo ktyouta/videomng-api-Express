@@ -253,20 +253,25 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                     a.update_date as "updateDate",
                     (
                         SELECT
-                            c.video_id
+                            d.video_id
                         FROM(
                             SELECT
-                                b.video_id as video_id,
-                                b.update_date as update_date,
-                                max(b.update_date) over(partition by b.user_id,b.folder_id) as max_update_date
+                                c.video_id as video_id,
+                                c.update_date as update_date,
+                                row_number() OVER(partition by c.user_id,b.folder_id ORDER BY c.update_date DESC) as row_number
                             FROM
                                 favorite_video_folder_transaction b
+                            INNER JOIN
+                                favorite_video_transaction c
+                            ON
+                                b.video_id = c.video_id
+                                AND b.user_id = c.user_id
                             WHERE
                                 b.user_id = a.user_id
                                 AND b.folder_id = a.folder_id
-                        ) c
+                        ) d
                         WHERE
-                            c.update_date = c.max_update_date
+                            d.row_number = 1
                     ) as "latestVideoId"
                 FROM 
                     "folder_master" a
