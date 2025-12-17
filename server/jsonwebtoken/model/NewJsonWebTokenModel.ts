@@ -36,7 +36,7 @@ export class NewJsonWebTokenModel {
         }
 
         const jwtStr = `${frontUserId}`;
-        this._token = this.jwt.sign({ ID: jwtStr }, jwtSecretKey, { expiresIn: accessTokenExpires });
+        this._token = this.jwt.sign({ sub: jwtStr }, jwtSecretKey, { expiresIn: accessTokenExpires });
     }
 
     get token() {

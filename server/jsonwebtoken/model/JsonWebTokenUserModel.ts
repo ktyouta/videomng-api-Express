@@ -51,18 +51,17 @@ export class JsonWebTokenUserModel {
 
             const decoded = this.jwt.verify(token, jwtSecretKey);
 
-            if (!decoded) {
+            if (!decoded || typeof decoded !== `object`) {
                 throw Error(`jwtから認証情報の取得に失敗しました。`);
             }
 
-            const id: string = decoded.ID;
-            const verifyArray: string[] = id.split(',');
+            const id: string = decoded.sub;
 
-            if (!verifyArray || verifyArray.length !== 1) {
+            if (!id) {
                 throw Error(`jwtの認証情報が不正です。`);
             }
 
-            const userId = Number.parseInt(verifyArray[0]);
+            const userId = Number.parseInt(id);
 
             const frontUserIdModel: FrontUserIdModel = FrontUserIdModel.reConstruct(userId);
 
