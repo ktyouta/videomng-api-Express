@@ -1,18 +1,17 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
+import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { GetVideoListService } from '../service/GetVideoListService';
-import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { GetVideoListQueryParameterSchema } from '../model/GetVideoListQueryParameterSchema';
-import { VideoType, YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiVideoListVideoCategoryId } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId';
+import { VideoType, YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
+import { GetVideoListQueryParameterSchema } from '../model/GetVideoListQueryParameterSchema';
+import { GetVideoListService } from '../service/GetVideoListService';
 
 
 export class GetVideoListController extends RouteController {
@@ -59,15 +58,15 @@ export class GetVideoListController extends RouteController {
         const youTubeDataApiVideoListKeyword = new YouTubeDataApiVideoListKeyword(keyword);
 
         // 動画種別を取得
-        const videoType = query[`videotype`] as VideoType;
+        const videoType = query[`videoType`] as VideoType;
         const youTubeDataApiVideoListVideoType = new YouTubeDataApiVideoListVideoType(videoType);
 
         // 次データ取得用トークンを取得
-        const nextPageToken = query[`nextpagetoken`] as string;
+        const nextPageToken = query[`nextPageToken`] as string;
         const youTubeDataApiVideoListNextPageToken = new YouTubeDataApiVideoListNextPageToken(nextPageToken);
 
         // 動画カテゴリを取得
-        const videoCategory = query[`videocategory`] as VideoType;
+        const videoCategory = query[`videoCategory`] as VideoType;
         const youTubeDataApiVideoListVideoCategoryId = new YouTubeDataApiVideoListVideoCategoryId(videoCategory);
 
         // YouTube Data Apiから動画を取得する

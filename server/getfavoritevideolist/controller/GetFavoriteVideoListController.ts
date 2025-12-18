@@ -50,23 +50,23 @@ export class GetFavoriteVideoListController extends RouteController {
         const query = req.query;
 
         // 視聴状況を取得
-        const viewStatus = query[`viewstatus`] as string;
+        const viewStatus = query[`viewStatus`] as string;
         const viewStatusModel = new GetFavoriteVideoListViewStatusModel(viewStatus);
 
         // 動画カテゴリを取得
-        const videoCategory = query[`videocategory`] as string;
+        const videoCategory = query[`videoCategory`] as string;
         const videoCategoryId = new GetFavoriteVideoListVideoCategoryModel(videoCategory);
 
         // タグを取得
-        const videoTag = query[`videotag`] as string;
+        const videoTag = query[`videoTag`] as string;
         const tagNameModel = new GetFavoriteVideoListTagNameModel(videoTag);
 
         // ソートID
-        const sortId = query[`sortkey`] as string;
+        const sortId = query[`sortKey`] as string;
         const sortIdModel = await GetFavoriteVideoListSortIdModel.set(sortId);
 
         // お気に入り度
-        const favoriteLevel = query[`favoritelevel`] as string;
+        const favoriteLevel = query[`favoriteLevel`] as string;
         const favoriteLevelModel = new GetFavoriteVideoListFavoriteLevelModel(favoriteLevel);
 
         // ページ

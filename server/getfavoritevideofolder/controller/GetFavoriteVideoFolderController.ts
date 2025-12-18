@@ -60,19 +60,19 @@ export class GetFavoriteVideoFolderController extends RouteController {
         const query = req.query;
 
         // 視聴状況
-        const viewStatus = query[`folderViewstatus`] as string;
+        const viewStatus = query[`folderViewStatus`] as string;
         const viewStatusModel = new GetFavoriteVideoFolderViewStatusModel(viewStatus);
 
         // 動画カテゴリ
-        const videoCategory = query[`folderVideocategory`] as string;
+        const videoCategory = query[`folderVideoCategory`] as string;
         const videoCategoryId = new GetFavoriteVideoFolderVideoCategoryModel(videoCategory);
 
         // タグ
-        const videoTag = query[`folderVideotag`] as string;
+        const videoTag = query[`folderVideoTag`] as string;
         const tagNameModel = new GetFavoriteVideoFolderTagNameModel(videoTag);
 
         // お気に入り度
-        const favoriteLevel = query[`folderFavoritelevel`] as string;
+        const favoriteLevel = query[`folderFavoriteLevel`] as string;
         const favoriteLevelModel = new GetFavoriteVideoFolderFavoriteLevelModel(favoriteLevel);
 
         // ページ
@@ -80,7 +80,7 @@ export class GetFavoriteVideoFolderController extends RouteController {
         const pageModel = new GetFavoriteVideoFolderPageModel(page);
 
         // ソートキー
-        const sortId = query[`folderSortkey`] as string;
+        const sortId = query[`folderSortKey`] as string;
         const sortIdModel = await GetFavoriteVideoFolderSortIdModel.set(sortId);
 
         // お気に入り動画取得用Entity
