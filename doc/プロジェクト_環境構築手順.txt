@@ -56,11 +56,11 @@ npx prisma generate
 
 
 ⑧sqlフォルダ内のクエリを実行する
-※create_function_update_favorite_video_transaction_update_date.sqlとcreate_triggers_for_update_favorite_video_transaction_update_date.sqlについては、
-以下の順で実行すること
+以下の順で先に実行すること
 1. create_function_update_favorite_video_transaction_update_date.sql
+   create_function_update_folder_master_update_date.sql
 2. create_triggers_for_update_favorite_video_transaction_update_date.sql
-
+   create_triggers_for_update_folder_master_update_date.sql
 
 ⑨アプリケーションを起動する
 npm start
