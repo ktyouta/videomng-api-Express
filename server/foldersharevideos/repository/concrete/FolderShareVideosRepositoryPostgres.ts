@@ -23,8 +23,8 @@ export class FolderShareVideosRepositoryPostgres implements FolderShareVideosRep
 
         let sql = `
             SELECT
-                video_id as "videoId",
-                folder_id as "folderId"
+                a.video_id as "videoId",
+                a.folder_id as "folderId"
             FROM 
                 favorite_video_folder_transaction a
             INNER JOIN 
