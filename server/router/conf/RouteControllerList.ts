@@ -12,6 +12,7 @@ import { DeleteFavoriteVideoFolderController } from "../../deletefavoritevideofo
 import { DeleteFavoriteVideoMemoController } from "../../deletefavoritevideomemo/controller/DeleteFavoriteVideoMemoController";
 import { DeleteFolderController } from "../../deletefolder/controller/DeleteFolderController";
 import { DownloadFavoriteVideoListCsvController } from "../../downloadfavoritevideolistcsv/controller/DownloadFavoriteVideoListCsvController";
+import { FolderShareVideosController } from "../../foldersharevideos/controller/FolderShareVideosController";
 import { FrontUserCheckAuthController } from "../../frontusercheckauth/controller/FrontUserCheckAuthController";
 import { FrontUserLoginController } from "../../frontuserlogin/controller/FrontUserLoginController";
 import { FrontUserLogoutController } from "../../frontuserlogout/controller/FrontUserLogoutController";
@@ -139,4 +140,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetFolderController(),
     // フォルダリスト取得
     new GetFolderListController(),
+    // 別フォルダに登録された動画を取得
+    new FolderShareVideosController(),
 ]
