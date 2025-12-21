@@ -1,19 +1,18 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { Response } from 'express';
+import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { ZodIssue } from 'zod';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetFavoriteVideoCommentConst';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
-import { GetFavoriteVideoCommentService } from '../service/GetFavoriteVideoCommentService';
-import { GetFavoriteVideoCommentResponseModel } from '../model/GetFavoriteVideoCommentResponseModel';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { FilterdBlockCommentModel } from '../model/FilterdBlockCommentModel';
 import { FavoriteVideoCommentResponseDataModel } from '../model/FavoriteVideoCommentResponseDataModel2';
-import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
+import { FilterdBlockCommentModel } from '../model/FilterdBlockCommentModel';
+import { GetFavoriteVideoCommentResponseModel } from '../model/GetFavoriteVideoCommentResponseModel';
+import { GetFavoriteVideoCommentService } from '../service/GetFavoriteVideoCommentService';
 
 
 export class GetFavoriteVideoCommentController extends RouteController {
@@ -25,7 +24,8 @@ export class GetFavoriteVideoCommentController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_COMMENT
+            ApiEndopoint.FAVORITE_VIDEO_COMMENT,
+            [authMiddleware]
         );
     }
 
@@ -36,8 +36,9 @@ export class GetFavoriteVideoCommentController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response) {
+    public async doExecute(req: AuthenticatedRequest, res: Response) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {
@@ -45,10 +46,6 @@ export class GetFavoriteVideoCommentController extends RouteController {
         }
 
         const videoIdModel = new VideoIdModel(id);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFavoriteVideoCommentService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // クエリパラメータ
         const query = req.query;

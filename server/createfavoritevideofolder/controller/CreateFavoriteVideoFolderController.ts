@@ -1,21 +1,21 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CONFLICT, HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
+import { NextFunction, Response } from 'express';
+import { ZodIssue } from 'zod';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { RepositoryType } from '../../util/const/CommonConst';
+import { HTTP_STATUS_CONFLICT, HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { CreateFavoriteVideoFolderRepositorys } from '../repository/CreateFavoriteVideoFolderRepositorys';
+import { PathParamSchema } from '../schema/PathParamSchema';
 import { RequestSchema, RequestType } from '../schema/RequestSchema';
 import { CreateFavoriteVideoFolderService } from '../service/CreateFavoriteVideoFolderService';
-import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
-import { PathParamSchema } from '../schema/PathParamSchema';
-import { CreateFavoriteVideoFolderRepositorys } from '../repository/CreateFavoriteVideoFolderRepositorys';
-import { RepositoryType } from '../../util/const/CommonConst';
 
 
 export class CreateFavoriteVideoFolderController extends RouteController {
@@ -27,7 +27,8 @@ export class CreateFavoriteVideoFolderController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.POST,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_FOLDER
+            ApiEndopoint.FAVORITE_VIDEO_FOLDER,
+            [authMiddleware]
         );
     }
 
@@ -37,8 +38,9 @@ export class CreateFavoriteVideoFolderController extends RouteController {
      * @param res 
      * @returns 
      */
-    async doExecute(req: Request, res: Response, next: NextFunction) {
+    async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         // パスパラメータのバリデーションチェック
         const pathValidateResult = PathParamSchema.safeParse(req.params);
 
@@ -64,10 +66,6 @@ export class CreateFavoriteVideoFolderController extends RouteController {
         const requestBody: RequestType = validateResult.data;
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
         const videoIdModel = new VideoIdModel(requestBody.videoId);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.createFavoriteVideoFolderService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {

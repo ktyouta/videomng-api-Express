@@ -1,7 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import { CookieModel } from '../cookie/model/CookieModel';
+import { JsonWebTokenModel } from '../jsonwebtoken/model/JsonWebTokenModel';
 import { JsonWebTokenUserModel } from '../jsonwebtoken/model/JsonWebTokenUserModel';
+import { HTTP_STATUS_UNAUTHORIZED } from '../util/const/HttpStatusConst';
+import { ApiResponse } from '../util/service/ApiResponse';
 
+/**
+ * トークン認証処理
+ * @param req 
+ * @param res 
+ * @param next 
+ */
 export async function authMiddleware(
     req: Request,
     res: Response,
@@ -12,10 +21,13 @@ export async function authMiddleware(
         const cookieModel = new CookieModel(req);
         const jsonWebTokenUserModel = await JsonWebTokenUserModel.get(cookieModel);
 
-        req.frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
+        req.jsonWebTokenUserModel = jsonWebTokenUserModel;
 
         next();
     } catch (err) {
-        res.status(401).json({ message: '認証エラー' });
+
+        // cookieを削除
+        res.clearCookie(JsonWebTokenModel.KEY, { httpOnly: true });
+        ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証エラー`);
     }
 };

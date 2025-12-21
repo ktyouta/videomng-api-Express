@@ -1,19 +1,14 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { GetFavoriteCommentListService } from "../service/GetFavoriteCommentListService";
-import { GetFavoriteCommentListResponseModel } from "../model/GetFavoriteCommentListResponseModel";
+import { NextFunction, Response } from 'express';
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
+import { authMiddleware } from "../../middleware/authMiddleware";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RouteController } from "../../router/controller/RouteController";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
+import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
+import { GetFavoriteCommentListResponseModel } from "../model/GetFavoriteCommentListResponseModel";
+import { GetFavoriteCommentListService } from "../service/GetFavoriteCommentListService";
 
 
 export class GetFavoriteCommentListController extends RouteController {
@@ -25,7 +20,8 @@ export class GetFavoriteCommentListController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_COMMENT
+            ApiEndopoint.FAVORITE_COMMENT,
+            [authMiddleware]
         );
     }
 
@@ -35,8 +31,9 @@ export class GetFavoriteCommentListController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {
@@ -44,10 +41,6 @@ export class GetFavoriteCommentListController extends RouteController {
         }
 
         const videoIdModel = new VideoIdModel(id);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFavoriteCommentListService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // お気に入りコメントリストを取得
         const favoriteCommentList = await this.getFavoriteCommentListService.getFavoriteCommentList(frontUserIdModel, videoIdModel);

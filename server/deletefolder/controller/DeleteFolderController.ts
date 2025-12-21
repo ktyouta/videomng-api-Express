@@ -1,21 +1,20 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CONFLICT, HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
-import { RepositoryType } from '../../util/const/CommonConst';
-import { FolderNameModel } from '../../internaldata/foldermaster/model/FolderNameModel';
+import { NextFunction, Response } from 'express';
+import { ZodIssue } from 'zod';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
-import { PathParamSchema } from '../schema/PathParamSchema';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { RepositoryType } from '../../util/const/CommonConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { DeleteFolderRepositorys } from '../repository/DeleteFolderRepositorys';
-import { DeleteFolderService } from '../service/DeleteFolderService';
+import { PathParamSchema } from '../schema/PathParamSchema';
 import { RequestBodySchema, RequestBodyType } from '../schema/RequestBodySchema';
+import { DeleteFolderService } from '../service/DeleteFolderService';
 
 
 export class DeleteFolderController extends RouteController {
@@ -27,7 +26,8 @@ export class DeleteFolderController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.DELETE,
             this.doExecute,
-            ApiEndopoint.FOLDER_ID
+            ApiEndopoint.FOLDER_ID,
+            [authMiddleware]
         );
     }
 
@@ -37,8 +37,9 @@ export class DeleteFolderController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         // パスパラメータのバリデーションチェック
         const pathValidateResult = PathParamSchema.safeParse(req.params);
 
@@ -64,10 +65,6 @@ export class DeleteFolderController extends RouteController {
 
         // リクエストボディ
         const requestBody: RequestBodyType = validateResult.data;
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.deleteFolderService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {

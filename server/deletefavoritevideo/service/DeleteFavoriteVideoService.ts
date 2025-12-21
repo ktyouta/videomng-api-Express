@@ -1,44 +1,18 @@
 import { Prisma } from "@prisma/client";
-import { FavoriteVideoTransactionInsertEntity } from "../../internaldata/favoritevideotransaction/entity/FavoriteVideoTransactionInsertEntity";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
+import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";
+import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideomemotransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
 import { FavoriteVideoTransactionRepositorys } from "../../internaldata/favoritevideotransaction/repository/FavoriteVideoTransactionRepositorys";
 import { FavoriteVideoTransactionRepositoryInterface } from "../../internaldata/favoritevideotransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { RepositoryType } from "../../util/const/CommonConst";
-import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideomemotransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
-import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";
-import { FavoriteVideoMemoTransactionInsertEntity } from "../../internaldata/favoritevideomemotransaction/entity/FavoriteVideoMemoTransactionInsertEntity";
-import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
-import { VideoMemoSeqModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel";
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { Request } from 'express';
-import { DeleteFavoriteVideoRepositorys } from "../repository/DeleteFavoriteVideoRepositorys";
-import { DeleteFavoriteVideoInterface } from "../repository/interface/DeleteFavoriteVideoInterface";
 import { DeleteFavoriteVideoFolderEntity } from "../entity/DeleteFavoriteVideoFolderEntity";
+import { DeleteFavoriteVideoInterface } from "../repository/interface/DeleteFavoriteVideoInterface";
 
 
 export class DeleteFavoriteVideoService {
 
     constructor(private readonly deleteFavoriteVideoInterface: DeleteFavoriteVideoInterface) { }
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画更新時の認証エラー ERROR:${err}`);
-        }
-    }
-
 
     /**
      * お気に入り動画の永続ロジックを取得

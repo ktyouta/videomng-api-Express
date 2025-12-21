@@ -1,19 +1,20 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
+import { BlockCommentTransaction, Prisma } from '@prisma/client';
+import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
-import { BlockCommentTransaction, Prisma } from '@prisma/client';
-import { CreateBlockCommentService } from '../service/CreateBlockCommentService';
-import { CreateBlockCommentRequestType } from '../model/CreateBlockCommentRequestType';
-import { CreateBlockCommentRequestModelSchema } from '../model/CreateBlockCommentRequestModelSchema';
-import { CreateBlockCommentRequestModel } from '../model/CreateBlockCommentRequestModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { CreateBlockCommentRequestModel } from '../model/CreateBlockCommentRequestModel';
+import { CreateBlockCommentRequestModelSchema } from '../model/CreateBlockCommentRequestModelSchema';
+import { CreateBlockCommentRequestType } from '../model/CreateBlockCommentRequestType';
+import { CreateBlockCommentService } from '../service/CreateBlockCommentService';
 
 
 export class CreateBlockCommentController extends RouteController {
@@ -25,7 +26,8 @@ export class CreateBlockCommentController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.POST,
             this.doExecute,
-            ApiEndopoint.BLOCK_COMMENT
+            ApiEndopoint.BLOCK_COMMENT,
+            [authMiddleware]
         );
     }
 
@@ -35,8 +37,9 @@ export class CreateBlockCommentController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel: FrontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {
@@ -64,10 +67,6 @@ export class CreateBlockCommentController extends RouteController {
 
         // リクエストボディの型変換
         const createBlockCommentRequestModel: CreateBlockCommentRequestModel = new CreateBlockCommentRequestModel(requestBody, videoIdModel);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.createBlockCommentService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {

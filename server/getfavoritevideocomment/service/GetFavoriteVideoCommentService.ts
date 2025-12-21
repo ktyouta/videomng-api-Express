@@ -1,42 +1,19 @@
 import { BlockCommentTransaction } from '@prisma/client';
-import { CookieModel } from '../../cookie/model/CookieModel';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
-import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { JsonWebTokenUserModel } from '../../jsonwebtoken/model/JsonWebTokenUserModel';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { Request } from 'express';
-import { GetFavoriteVideoCommentRepositorys } from '../repository/GetFavoriteVideoCommentRepositorys';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { GetFavoriteVideoBlockCommentSelectEntity } from '../entity/GetFavoriteVideoBlockCommentSelectEntity';
-import { GetFavoriteVideoCommentRepositoryInterface } from '../repository/interface/GetFavoriteVideoCommentRepositoryInterface';
 import { GetFavoriteVideoFavoriteCommentSelectEntity } from '../entity/GetFavoriteVideoFavoriteCommentSelectEntity';
+import { GetFavoriteVideoCommentRepositorys } from '../repository/GetFavoriteVideoCommentRepositorys';
+import { GetFavoriteVideoCommentRepositoryInterface } from '../repository/interface/GetFavoriteVideoCommentRepositoryInterface';
 
 
 export class GetFavoriteVideoCommentService {
-
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画登録時の認証エラー ERROR:${err}`);
-        }
-    }
-
 
     /**
      * YouTube Data Apiを呼び出す

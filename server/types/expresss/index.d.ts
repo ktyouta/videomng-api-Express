@@ -1,11 +1,12 @@
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
+import { JsonWebTokenUserModel } from '../../jsonwebtoken/Model/JsonWebTokenUserModel';
 
 declare global {
     namespace Express {
         interface Request {
-            frontUserIdModel?: FrontUserIdModel;
+            jsonWebTokenUserModel?: JsonWebTokenUserModel,
         }
     }
 }
 
 export { };
+

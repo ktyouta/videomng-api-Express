@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { FrontUserIdModel } from "../internaldata/common/properties/FrontUserIdModel";
+import { JsonWebTokenUserModel } from '../jsonwebtoken/model/JsonWebTokenUserModel';
 
 export type AuthenticatedRequest = {
-    frontUserIdModel: FrontUserIdModel;
+    jsonWebTokenUserModel: JsonWebTokenUserModel,
 } & Request;

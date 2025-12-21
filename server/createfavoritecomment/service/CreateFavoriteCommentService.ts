@@ -1,38 +1,16 @@
 import { Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { RepositoryType } from "../../util/const/CommonConst";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { Request } from 'express';
-import { CreateFavoriteCommentRequestModel } from "../model/CreateFavoriteCommentRequestModel";
-import { CreateFavoriteCommentRepositoryInterface } from "../repository/interface/CreateFavoriteCommentRepositoryInterface";
-import { CreateFavoriteCommentRepositorys } from "../repository/CreateFavoriteCommentRepositorys";
-import { CreateFavoriteCommentSelectEntity } from "../entity/CreateFavoriteCommentSelectEntity";
-import { FavoriteCommentTransactionRepositoryInterface } from "../../internaldata/favoritecommenttransaction/repository/interface/FavoriteCommentTransactionRepositoryInterface";
-import { FavoriteCommentTransactionRepositorys } from "../../internaldata/favoritecommenttransaction/repository/FavoriteCommentTransactionRepositorys";
 import { FavoriteCommentTransactionInsertEntity } from "../../internaldata/favoritecommenttransaction/entity/FavoriteCommentTransactionInsertEntity";
+import { FavoriteCommentTransactionRepositorys } from "../../internaldata/favoritecommenttransaction/repository/FavoriteCommentTransactionRepositorys";
+import { FavoriteCommentTransactionRepositoryInterface } from "../../internaldata/favoritecommenttransaction/repository/interface/FavoriteCommentTransactionRepositoryInterface";
+import { RepositoryType } from "../../util/const/CommonConst";
+import { CreateFavoriteCommentSelectEntity } from "../entity/CreateFavoriteCommentSelectEntity";
+import { CreateFavoriteCommentRequestModel } from "../model/CreateFavoriteCommentRequestModel";
+import { CreateFavoriteCommentRepositorys } from "../repository/CreateFavoriteCommentRepositorys";
+import { CreateFavoriteCommentRepositoryInterface } from "../repository/interface/CreateFavoriteCommentRepositoryInterface";
 
 
 export class CreateFavoriteCommentService {
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入りコメント登録時の認証エラー ERROR:${err}`);
-        }
-    }
-
 
     /**
      * お気に入りコメントの重複チェック

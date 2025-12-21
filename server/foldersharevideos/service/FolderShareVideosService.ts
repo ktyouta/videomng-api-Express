@@ -1,7 +1,4 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
-import { Request } from 'express';
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { SelectShareVideoEntity } from "../entity/SelectShareVideoEntity";
 import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
 import { FolderShareVideosResponseModel } from "../model/FolderShareVideosResponseModel";
@@ -11,24 +8,6 @@ import { FolderShareVideosRepositoryInterface } from "../repository/interface/Fo
 export class FolderShareVideosService {
 
     constructor(private readonly getFavoriteVideoFolderRepository: FolderShareVideosRepositoryInterface) { }
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画リスト取得時の認証エラー ERROR:${err}`);
-        }
-    }
-
 
     /**
      * お気に入り動画取得

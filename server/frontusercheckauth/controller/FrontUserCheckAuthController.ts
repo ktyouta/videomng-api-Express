@@ -1,9 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { FrontUserCheckAuthResponseModel } from '../model/FrontUserCheckAuthResponseModel';
@@ -19,7 +21,8 @@ export class FrontUserCheckAuthController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FRONT_USER_CHECK_AUTH
+            ApiEndopoint.FRONT_USER_CHECK_AUTH,
+            [authMiddleware]
         );
     }
 
@@ -29,13 +32,12 @@ export class FrontUserCheckAuthController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
         try {
 
-            // jwtの認証を実行する
-            const jsonWebTokenVerifyModel = await this.frontUserCheckAuthService.checkJwtVerify(req);
-            const frontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
+            const jsonWebTokenUserModel = req.jsonWebTokenUserModel;
+            const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
 
             // jwtを作成
             const newJsonWebTokenModel = await this.frontUserCheckAuthService.createJsonWebToken(frontUserIdModel);
@@ -44,7 +46,7 @@ export class FrontUserCheckAuthController extends RouteController {
             res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
             // レスポンス
-            const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(jsonWebTokenVerifyModel);
+            const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(jsonWebTokenUserModel);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `認証成功`, frontUserCheckAuthResponseModel.data);
         } catch (e) {

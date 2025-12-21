@@ -1,19 +1,14 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { GetBlockCommentListService } from "../service/GetBlockCommentListService";
-import { GetBlockCommentListResponseModel } from "../model/GetBlockCommentListResponseModel";
+import { NextFunction, Response } from 'express';
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
+import { authMiddleware } from "../../middleware/authMiddleware";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RouteController } from "../../router/controller/RouteController";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
+import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
+import { GetBlockCommentListResponseModel } from "../model/GetBlockCommentListResponseModel";
+import { GetBlockCommentListService } from "../service/GetBlockCommentListService";
 
 
 export class GetBlockCommentListController extends RouteController {
@@ -25,7 +20,8 @@ export class GetBlockCommentListController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.BLOCK_COMMENT
+            ApiEndopoint.BLOCK_COMMENT,
+            [authMiddleware]
         );
     }
 
@@ -35,8 +31,9 @@ export class GetBlockCommentListController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {
@@ -44,10 +41,6 @@ export class GetBlockCommentListController extends RouteController {
         }
 
         const videoIdModel = new VideoIdModel(id);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getBlockCommentListService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // ブロックコメントリストを取得
         const blockCommentList = await this.getBlockCommentListService.getBlockCommentList(frontUserIdModel, videoIdModel);

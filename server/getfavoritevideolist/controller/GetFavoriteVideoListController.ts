@@ -44,7 +44,7 @@ export class GetFavoriteVideoListController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
 
         // クエリパラメータを取得
         const query = req.query;

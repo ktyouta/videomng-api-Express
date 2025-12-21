@@ -1,18 +1,17 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
-import { DeleteFavoriteVideoService } from '../service/DeleteFavoriteVideoService';
+import { NextFunction, Response } from 'express';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
-import { DeleteFavoriteVideoRepositorys } from '../repository/DeleteFavoriteVideoRepositorys';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { RepositoryType } from '../../util/const/CommonConst';
+import { HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { DeleteFavoriteVideoRepositorys } from '../repository/DeleteFavoriteVideoRepositorys';
+import { DeleteFavoriteVideoService } from '../service/DeleteFavoriteVideoService';
 
 
 export class DeleteFavoriteVideoController extends RouteController {
@@ -24,7 +23,8 @@ export class DeleteFavoriteVideoController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.DELETE,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_ID
+            ApiEndopoint.FAVORITE_VIDEO_ID,
+            [authMiddleware]
         );
     }
 
@@ -34,8 +34,9 @@ export class DeleteFavoriteVideoController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.id;
 
         if (!id) {
@@ -43,10 +44,6 @@ export class DeleteFavoriteVideoController extends RouteController {
         }
 
         const videoId = new VideoIdModel(id);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.deleteFavoriteVideoService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {

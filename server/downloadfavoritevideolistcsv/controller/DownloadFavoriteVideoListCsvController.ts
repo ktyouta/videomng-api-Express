@@ -1,16 +1,11 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { NextFunction, Response } from 'express';
+import { authMiddleware } from "../../middleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { RouteController } from "../../router/controller/RouteController";
-import { DownloadFavoriteVideoListCsvService } from "../service/DownloadFavoriteVideoListCsvService";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
 import { DateUtil } from "../../util/service/DateUtil";
+import { DownloadFavoriteVideoListCsvService } from "../service/DownloadFavoriteVideoListCsvService";
 
 
 export class DownloadFavoriteVideoListCsvController extends RouteController {
@@ -22,7 +17,8 @@ export class DownloadFavoriteVideoListCsvController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_CSV_DOWNLOAD
+            ApiEndopoint.FAVORITE_VIDEO_CSV_DOWNLOAD,
+            [authMiddleware]
         );
     }
 
@@ -37,11 +33,9 @@ export class DownloadFavoriteVideoListCsvController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.downloadFavoriteVideoListCsvService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
 
         // お気に入り動画リストを取得
         const favoriteVideoList = await this.downloadFavoriteVideoListCsvService.getFavoriteVideoList(

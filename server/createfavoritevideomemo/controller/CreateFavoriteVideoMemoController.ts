@@ -1,20 +1,20 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { CreateFavoriteVideoMemoRequestModel } from '../model/CreateFavoriteVideoMemoRequestModel';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
-import { CreateFavoriteVideoMemoService } from '../service/CreateFavoriteVideoMemoService';
-import { CreateFavoriteVideoMemoRequestType } from '../Type/CreateFavoriteVideoMemoRequestType';
+import { NextFunction, Response } from 'express';
+import { ZodIssue } from 'zod';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { CreateFavoriteVideoMemoRequestModel } from '../model/CreateFavoriteVideoMemoRequestModel';
 import { CreateFavoriteVideoMemoRequestModelSchema } from '../model/CreateFavoriteVideoMemoRequestModelSchema';
 import { CreateFavoriteVideoMemoResponseModel } from '../model/CreateFavoriteVideoMemoResponseModel';
-import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { CreateFavoriteVideoMemoService } from '../service/CreateFavoriteVideoMemoService';
+import { CreateFavoriteVideoMemoRequestType } from '../Type/CreateFavoriteVideoMemoRequestType';
 
 
 export class CreateFavoriteVideoMemoController extends RouteController {
@@ -26,7 +26,8 @@ export class CreateFavoriteVideoMemoController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.POST,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_MEMO
+            ApiEndopoint.FAVORITE_VIDEO_MEMO,
+            [authMiddleware]
         );
     }
 
@@ -36,8 +37,9 @@ export class CreateFavoriteVideoMemoController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {
@@ -65,10 +67,6 @@ export class CreateFavoriteVideoMemoController extends RouteController {
 
         // リクエストボディの型変換
         const createFavoriteVideoMemoRequestModel = new CreateFavoriteVideoMemoRequestModel(requestBody, videoIdModel);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.createFavoriteVideoMemoService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
