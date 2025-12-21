@@ -1,9 +1,10 @@
 import bodyParser from 'body-parser';
 import { NextFunction, Request, Response } from 'express';
+import { accessLogMiddleware } from './middleware/accessLogMiddleware';
+import { errorLogMiddleware } from './middleware/errorLogMiddleware';
 import { ROUTE_CONTROLLER_LIST } from './router/conf/RouteControllerList';
 import { envConfig } from './util/const/EnvConfig';
 import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './util/const/HttpStatusConst';
-import { Logger } from './util/service/Logger';
 
 
 const express = require('express');
@@ -28,36 +29,6 @@ app.use(cors({
     credentials: true,
     origin: `${corsProtocol}${corsDomain}${corsPort}`
 }));
-
-
-// コントローラーアクセス時のログ出力
-function accessLogMiddleware(req: Request) {
-
-    const userAgent = req.headers['user-agent'];
-    const ip = req.ip;
-    const queryParams = JSON.stringify(req.query);
-    const requestBody = JSON.stringify(req.body);
-    // 出力内容
-    const output = `${req.method} ${req.originalUrl} | User-Agent: ${userAgent} | Query: ${queryParams} | Request Body: ${requestBody} | ip: ${ip}`;
-
-    // ログに出力
-    Logger.info(output);
-};
-
-
-// エラー時のログ出力
-function errorLogMiddleware(err: Error, req: Request) {
-
-    const userAgent = req.headers['user-agent'];
-    const ip = req.ip;
-    const queryParams = JSON.stringify(req.query);
-    const requestBody = JSON.stringify(req.body);
-    // 出力内容
-    const output = `${req.method} ${req.originalUrl} | User-Agent: ${userAgent} | Query: ${queryParams} | Request Body: ${requestBody} | ip: ${ip} | ERROR: ${err}`;
-
-    // エラーログに出力
-    Logger.error(output);
-};
 
 
 // エラーハンドリング

@@ -1,8 +1,9 @@
-import { NextFunction, Request, Response } from 'express';
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { NextFunction, Response } from 'express';
+import { authMiddleware } from '../../middleware/authMiddleware';
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { RepositoryType } from "../../util/const/CommonConst";
 import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
@@ -30,7 +31,8 @@ export class GetFavoriteVideoListController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO
+            ApiEndopoint.FAVORITE_VIDEO,
+            [authMiddleware]
         );
     }
 
@@ -40,11 +42,9 @@ export class GetFavoriteVideoListController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFavoriteVideoListService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
+        const frontUserIdModel = req.frontUserIdModel;
 
         // クエリパラメータを取得
         const query = req.query;
@@ -107,7 +107,9 @@ export class GetFavoriteVideoListController extends RouteController {
                 GetFavoriteVideoListController.DEFAULT_LIST_LIMIT,
                 [],
             );
-            return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画が存在しません。`, getFavoriteVideoListResponse.data)
+
+            ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画が存在しません。`, getFavoriteVideoListResponse.data);
+            return;
         }
 
         // お気に入り動画件数を取得
@@ -127,6 +129,7 @@ export class GetFavoriteVideoListController extends RouteController {
             folderListMergedList,
         );
 
-        return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoListResponse.data);
+        ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoListResponse.data);
+        return;
     }
 }

@@ -21,5 +21,8 @@
     "rootDir": "server",
     "outDir": "dist",
   },
-  "include": ["server"]
+  "include": ["server"],
+  "ts-node": {
+    "files": true
+  }
 }

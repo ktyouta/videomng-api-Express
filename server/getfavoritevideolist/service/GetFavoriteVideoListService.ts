@@ -1,64 +1,26 @@
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { FLG, RepositoryType } from "../../util/const/CommonConst";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { GetFavoriteVideoListResponseModel } from "../model/GetFavoriteVideoListResponseModel";
-import { FrontUserLoginMasterInsertEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterInsertEntity";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
-import { FrontUserInfoMasterRepositorys } from "../../internaldata/frontuserinfomaster/repository/FrontUserInfoMasterRepositorys";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { GetFavoriteVideoListRepositorys } from "../repository/GetFavoriteVideoListRepositorys";
-import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { GetFavoriteVideoListRepositoryInterface } from "../repository/interface/GetFavoriteVideoListRepositoryInterface";
-import { FavoriteVideoTransaction, FolderMaster } from "@prisma/client";
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { Request } from 'express';
-import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
-import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
-import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
-import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId";
-import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
-import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
-import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
-import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
-import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
-import { VideoIdListModel } from "../../external/youtubedataapi/videodetail/model/VideoIdListModel";
-import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
-import { YouTubeDataApiVideoDetailMaxRequestModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailMaxRequestModel";
-import { GetFolderListEntity } from "../entity/GetFolderListEntity";
-import { FavoriteVideoFolderType } from "../model/FavoriteVideoFolderType";
-import { FavoriteVideoFolderThumbnailType } from "../model/FavoriteVideoFolderThumbnailType";
+import { FavoriteVideoTransaction } from "@prisma/client";
 import { ThumbnailType } from "../../common/type/ThumbnailType";
+import { VideoIdListModel } from "../../external/youtubedataapi/videodetail/model/VideoIdListModel";
+import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
+import { YouTubeDataApiVideoDetailMaxRequestModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailMaxRequestModel";
+import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
+import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
+import { GetFolderListEntity } from "../entity/GetFolderListEntity";
+import { FavoriteVideoFolderThumbnailType } from "../model/FavoriteVideoFolderThumbnailType";
+import { FavoriteVideoFolderType } from "../model/FavoriteVideoFolderType";
+import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
 import { FolderListModel, } from "../model/FolderListModel";
+import { GetFavoriteVideoListResponseModel } from "../model/GetFavoriteVideoListResponseModel";
+import { GetFavoriteVideoListRepositoryInterface } from "../repository/interface/GetFavoriteVideoListRepositoryInterface";
 
 
 export class GetFavoriteVideoListService {
 
     constructor(private readonly getFavoriteVideoListRepository: GetFavoriteVideoListRepositoryInterface) { }
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画リスト取得時の認証エラー ERROR:${err}`);
-        }
-    }
-
 
     /**
      * お気に入り動画取得
