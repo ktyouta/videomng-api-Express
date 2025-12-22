@@ -1,20 +1,15 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { GetFavoriteVideoDetialService } from "../service/GetFavoriteVideoDetialService";
-import { GetFavoriteVideoDetialResponseModel } from "../model/GetFavoriteVideoDetialResponseModel";
+import { NextFunction, Response } from 'express';
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
+import { authMiddleware } from "../../middleware/authMiddleware";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RouteController } from "../../router/controller/RouteController";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
 import { FavoriteVideoDetailMergedModel } from "../model/FavoriteVideoDetailMergedModel";
+import { GetFavoriteVideoDetialResponseModel } from "../model/GetFavoriteVideoDetialResponseModel";
+import { GetFavoriteVideoDetialService } from "../service/GetFavoriteVideoDetialService";
 
 
 export class GetFavoriteVideoDetialController extends RouteController {
@@ -26,7 +21,8 @@ export class GetFavoriteVideoDetialController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_ID
+            ApiEndopoint.FAVORITE_VIDEO_ID,
+            [authMiddleware]
         );
     }
 
@@ -36,8 +32,9 @@ export class GetFavoriteVideoDetialController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.id;
 
         if (!id) {
@@ -45,10 +42,6 @@ export class GetFavoriteVideoDetialController extends RouteController {
         }
 
         const videoIdModel = new VideoIdModel(id);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFavoriteVideoDetialService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // 永続ロジック用オブジェクトを取得
         const getGetFavoriteVideoDetialRepository = this.getFavoriteVideoDetialService.getGetFavoriteVideoDetialRepository();

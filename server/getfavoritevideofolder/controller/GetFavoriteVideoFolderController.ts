@@ -1,9 +1,10 @@
-import { NextFunction, Request, Response } from 'express';
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { NextFunction, Response } from 'express';
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
+import { authMiddleware } from '../../middleware/authMiddleware';
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { RepositoryType } from "../../util/const/CommonConst";
 import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
@@ -31,7 +32,8 @@ export class GetFavoriteVideoFolderController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_FOLDER
+            ApiEndopoint.FAVORITE_VIDEO_FOLDER,
+            [authMiddleware]
         );
     }
 
@@ -41,8 +43,9 @@ export class GetFavoriteVideoFolderController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         // パスパラメータのバリデーションチェック
         const pathValidateResult = PathParamSchema.safeParse(req.params);
 
@@ -51,10 +54,6 @@ export class GetFavoriteVideoFolderController extends RouteController {
         }
 
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFavoriteVideoFolderService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // クエリパラメータを取得
         const query = req.query;

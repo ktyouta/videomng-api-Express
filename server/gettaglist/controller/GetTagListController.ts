@@ -1,19 +1,13 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { NextFunction, Response } from 'express';
+import { authMiddleware } from "../../middleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { GetTagListService } from "../service/GetTagListService";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
+import { HTTP_STATUS_CREATED } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
 import { GetTagListResponseModel } from "../model/GetTagListResponseModel";
+import { GetTagListService } from "../service/GetTagListService";
 
 
 export class GetTagListController extends RouteController {
@@ -25,7 +19,8 @@ export class GetTagListController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.TAG_INFO
+            ApiEndopoint.TAG_INFO,
+            [authMiddleware]
         );
     }
 
@@ -35,11 +30,9 @@ export class GetTagListController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getTagListService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
 
         // 永続ロジック用オブジェクトを取得
         const getGetTagListRepository = this.getTagListService.getGetTagListRepository();

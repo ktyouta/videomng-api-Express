@@ -1,19 +1,16 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CONFLICT, HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
-import { Prisma } from '@prisma/client';
-import { RepositoryType } from '../../util/const/CommonConst';
+import { NextFunction, Response } from 'express';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { RepositoryType } from '../../util/const/CommonConst';
+import { HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { GetFolderRepositorys } from '../repository/GetFolderRepositorys';
 import { PathParamSchema } from '../schema/PathParamSchema';
 import { GetFolderService } from '../service/GetFolderService';
-import { GetFolderRepositorys } from '../repository/GetFolderRepositorys';
 
 
 export class GetFolderController extends RouteController {
@@ -25,7 +22,8 @@ export class GetFolderController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FOLDER_ID
+            ApiEndopoint.FOLDER_ID,
+            [authMiddleware]
         );
     }
 
@@ -35,8 +33,9 @@ export class GetFolderController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         // パスパラメータのバリデーションチェック
         const pathValidateResult = PathParamSchema.safeParse(req.params);
 
@@ -45,10 +44,6 @@ export class GetFolderController extends RouteController {
         }
 
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFolderService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // フォルダ取得
         const folder = await this.getFolderService.getFolder(folderIdModel, frontUserIdModel);

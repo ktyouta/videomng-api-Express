@@ -1,22 +1,17 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
+import { NextFunction, Response } from 'express';
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { GetFavoriteVideoCustomService } from "../service/GetFavoriteVideoCustomService";
-import { GetFavoriteVideoCustomResponseModel } from "../model/GetFavoriteVideoCustomResponseModel";
-import { FavoriteVideoCustomMergedModel } from "../model/FavoriteVideoCustomMergedModel";
-import { GetFavoriteVideoCustomRepositorys } from "../repository/GetFavoriteVideoCustomRepositorys";
+import { authMiddleware } from "../../middleware/authMiddleware";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RouteController } from "../../router/controller/RouteController";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
 import { RepositoryType } from "../../util/const/CommonConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
+import { FavoriteVideoCustomMergedModel } from "../model/FavoriteVideoCustomMergedModel";
+import { GetFavoriteVideoCustomResponseModel } from "../model/GetFavoriteVideoCustomResponseModel";
+import { GetFavoriteVideoCustomRepositorys } from "../repository/GetFavoriteVideoCustomRepositorys";
+import { GetFavoriteVideoCustomService } from "../service/GetFavoriteVideoCustomService";
 
 
 export class GetFavoriteVideoCustomController extends RouteController {
@@ -28,7 +23,8 @@ export class GetFavoriteVideoCustomController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.GET,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_CUSTOM
+            ApiEndopoint.FAVORITE_VIDEO_CUSTOM,
+            [authMiddleware]
         );
     }
 
@@ -38,8 +34,9 @@ export class GetFavoriteVideoCustomController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {
@@ -47,10 +44,6 @@ export class GetFavoriteVideoCustomController extends RouteController {
         }
 
         const videoIdModel = new VideoIdModel(id);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.getFavoriteVideoCustomService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // お気に入り動画を取得
         const favoriteVideoList = await this.getFavoriteVideoCustomService.getFavoriteVideoCustom(

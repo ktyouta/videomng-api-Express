@@ -1,43 +1,20 @@
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { FLG, RepositoryType } from "../../util/const/CommonConst";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { GetFavoriteVideoCustomRepositorys } from "../repository/GetFavoriteVideoCustomRepositorys";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { GetFavoriteVideoCustomRepositoryInterface } from "../repository/interface/GetFavoriteVideoCustomRepositoryInterface";
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { Request } from 'express';
-import { CookieModel } from "../../cookie/model/CookieModel";
+import { FavoriteVideoTransaction } from "@prisma/client";
 import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
 import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
-import { FavoriteVideoTransaction } from "@prisma/client";
-import { GetFavoriteVideoCustomSelectEntity } from "../entity/GetFavoriteVideoCustomSelectEntity";
-import { GetFavoriteVideoCustomMemoSelectEntity } from "../entity/GetFavoriteVideoCustomMemoSelectEntity";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { GetFavoriteVideoCustomCategorySelectEntity } from "../entity/GetFavoriteVideoCustomCategorySelectEntity";
-import { FavoriteVideoTagType } from "../type/FavoriteVideoTagType";
+import { GetFavoriteVideoCustomMemoSelectEntity } from "../entity/GetFavoriteVideoCustomMemoSelectEntity";
+import { GetFavoriteVideoCustomSelectEntity } from "../entity/GetFavoriteVideoCustomSelectEntity";
 import { SelectTagListEntity } from "../entity/SelectTagListEntity";
+import { GetFavoriteVideoCustomRepositoryInterface } from "../repository/interface/GetFavoriteVideoCustomRepositoryInterface";
+import { FavoriteVideoTagType } from "../type/FavoriteVideoTagType";
 
 
 export class GetFavoriteVideoCustomService {
 
     constructor(private readonly getGetFavoriteVideoCustomRepository: GetFavoriteVideoCustomRepositoryInterface) { }
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画リスト取得時の認証エラー ERROR:${err}`);
-        }
-    }
 
     /**
      * お気に入り動画取得

@@ -1,52 +1,20 @@
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { FLG, RepositoryType } from "../../util/const/CommonConst";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { FrontUserLoginMasterInsertEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterInsertEntity";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
-import { FrontUserInfoMasterRepositorys } from "../../internaldata/frontuserinfomaster/repository/FrontUserInfoMasterRepositorys";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { GetFavoriteVideoFolderRepositorys } from "../repository/GetFavoriteVideoFolderRepositorys";
-import { GetFavoriteVideoFolderSelectEntity } from "../entity/GetFavoriteVideoFolderSelectEntity";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { GetFavoriteVideoFolderRepositoryInterface } from "../repository/interface/GetFavoriteVideoFolderRepositoryInterface";
-import { FavoriteVideoTransaction, FolderMaster } from "@prisma/client";
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { Request } from 'express';
-import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
-import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
+import { FavoriteVideoTransaction } from "@prisma/client";
 import { VideoIdListModel } from "../../external/youtubedataapi/videodetail/model/VideoIdListModel";
-import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
+import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
 import { YouTubeDataApiVideoDetailMaxRequestModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailMaxRequestModel";
+import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
+import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { GetFavoriteVideoFolderSelectEntity } from "../entity/GetFavoriteVideoFolderSelectEntity";
+import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
 import { GetFavoriteVideoFolderResponseModel } from "../model/GetFavoriteVideoListResponseModel";
+import { GetFavoriteVideoFolderRepositoryInterface } from "../repository/interface/GetFavoriteVideoFolderRepositoryInterface";
 
 
 export class GetFavoriteVideoFolderService {
 
     constructor(private readonly getFavoriteVideoFolderRepository: GetFavoriteVideoFolderRepositoryInterface) { }
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画リスト取得時の認証エラー ERROR:${err}`);
-        }
-    }
-
 
     /**
      * お気に入り動画取得
