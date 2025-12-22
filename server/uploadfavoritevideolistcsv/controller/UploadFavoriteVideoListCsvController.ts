@@ -1,20 +1,17 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { UploadFavoriteVideoListCsvService } from '../service/UploadFavoriteVideoListCsvService';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
-import { FavoriteVideoTransaction, Prisma, PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { NextFunction, Response } from 'express';
 import multer from "multer";
-import { parse } from "csv-parse/sync";
-import { RegisterVideoIdListModel } from '../model/RegisterVideoIdListModel';
-import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { CsvListModel } from '../model/CsvListModel';
+import { RegisterVideoIdListModel } from '../model/RegisterVideoIdListModel';
+import { UploadFavoriteVideoListCsvService } from '../service/UploadFavoriteVideoListCsvService';
 
 
 export class UploadFavoriteVideoListCsvController extends RouteController {
@@ -27,7 +24,10 @@ export class UploadFavoriteVideoListCsvController extends RouteController {
             HttpMethodType.POST,
             this.doExecute,
             ApiEndopoint.FAVORITE_VIDEO_CSV_UPLOAD,
-            [multer().single("file")]
+            [
+                multer().single("file"),
+                authMiddleware,
+            ]
         );
     }
 
@@ -37,12 +37,9 @@ export class UploadFavoriteVideoListCsvController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.uploadFavoriteVideoListCsvService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
-
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const file = req.file;
 
         if (!file) {

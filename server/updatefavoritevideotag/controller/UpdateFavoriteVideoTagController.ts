@@ -1,19 +1,18 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
-import { UpdateFavoriteVideoTagRequestType } from '../type/UpdateFavoriteVideoTagRequestType';
+import { NextFunction, Response } from 'express';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
-import { UpdateFavoriteVideoTagService } from '../service/UpdateFavoriteVideoTagService';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { UpdateFavoriteVideoTagRequestModel } from '../model/UpdateFavoriteVideoTagRequestModel';
 import { UpdateFavoriteVideoTagResponseModel } from '../model/UpdateFavoriteVideoTagResponseModel';
+import { UpdateFavoriteVideoTagService } from '../service/UpdateFavoriteVideoTagService';
+import { UpdateFavoriteVideoTagRequestType } from '../type/UpdateFavoriteVideoTagRequestType';
 
 
 export class UpdateFavoriteVideoTagController extends RouteController {
@@ -25,7 +24,8 @@ export class UpdateFavoriteVideoTagController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.PUT,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_TAG_ID
+            ApiEndopoint.FAVORITE_VIDEO_TAG_ID,
+            [authMiddleware]
         );
     }
 
@@ -35,8 +35,9 @@ export class UpdateFavoriteVideoTagController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {
@@ -47,10 +48,6 @@ export class UpdateFavoriteVideoTagController extends RouteController {
 
         // リクエストボディ
         const requestBody: UpdateFavoriteVideoTagRequestType = req.body;
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.updateFavoriteVideoTagService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // リクエストボディの型変換
         const updateFavoriteVideoTagRequestModel = new UpdateFavoriteVideoTagRequestModel(videoId, requestBody, frontUserIdModel);

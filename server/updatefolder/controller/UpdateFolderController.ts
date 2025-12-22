@@ -1,13 +1,14 @@
 import { Prisma } from '@prisma/client';
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FolderColorModel } from '../../internaldata/foldermaster/model/FolderColorModel';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
 import { FolderNameModel } from '../../internaldata/foldermaster/model/FolderNameModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { HTTP_STATUS_CONFLICT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
@@ -27,7 +28,8 @@ export class UpdateFolderController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.PUT,
             this.doExecute,
-            ApiEndopoint.FOLDER_ID
+            ApiEndopoint.FOLDER_ID,
+            [authMiddleware]
         );
     }
 
@@ -37,8 +39,9 @@ export class UpdateFolderController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         // パスパラメータのバリデーションチェック
         const pathValidateResult = PathParamSchema.safeParse(req.params);
 
@@ -65,10 +68,6 @@ export class UpdateFolderController extends RouteController {
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
         const folderNameModel = new FolderNameModel(requestBody.name);
         const folderColorModel = new FolderColorModel(requestBody.folderColor);
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.updateFolderService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {

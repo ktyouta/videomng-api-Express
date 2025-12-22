@@ -1,11 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { Request } from 'express';
-import { CookieModel } from "../../cookie/model/CookieModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FolderColorModel } from "../../internaldata/foldermaster/model/FolderColorModel";
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { SelectDuplicationFolderEntity } from "../entity/SelectDuplicationFolderEntity";
 import { SelectExistsFolderEntity } from "../entity/SelectExistsFolderEntity";
 import { UpdateFolderEntity } from "../entity/UpdateFolderEntity";
@@ -15,22 +12,6 @@ import { UpdateFolderRepositoryInterface } from "../repository/interface/UpdateF
 export class UpdateFolderService {
 
     constructor(private readonly updateFolderRepositoryInterface: UpdateFolderRepositoryInterface) { }
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`フォルダー更新時の認証エラー ERROR:${err}`);
-        }
-    }
 
     /**
      * フォルダの存在チェック

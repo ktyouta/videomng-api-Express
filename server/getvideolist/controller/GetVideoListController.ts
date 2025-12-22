@@ -88,10 +88,13 @@ export class GetVideoListController extends RouteController {
 
         // ログインしている場合はお気に入りチェックを実施
         if (token) {
-            const jsonWebTokenUserModel = await this.getVideoListService.checkJwtVerify(req);
 
-            // お気に入り登録チェック
-            convertedVideoList = await this.getVideoListService.checkFavorite(convertedVideoList, jsonWebTokenUserModel);
+            try {
+                const jsonWebTokenUserModel = await this.getVideoListService.checkJwtVerify(req);
+
+                // お気に入り登録チェック
+                convertedVideoList = await this.getVideoListService.checkFavorite(convertedVideoList, jsonWebTokenUserModel);
+            } catch (err) { }
         }
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, convertedVideoList);

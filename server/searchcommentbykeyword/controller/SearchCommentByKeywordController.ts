@@ -1,18 +1,15 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
+import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/SearchCommentByKeywordConst';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { VideoType, YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
-import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
-import { SearchCommentByKeywordService } from '../service/SearchCommentByKeywordService';
-import { SearchCommentByKeywordQueryParameterSchema } from '../model/SearchCommentByKeywordQueryParameterSchema';
-import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';
+import { SearchCommentByKeywordQueryParameterSchema } from '../model/SearchCommentByKeywordQueryParameterSchema';
+import { SearchCommentByKeywordService } from '../service/SearchCommentByKeywordService';
 
 
 export class SearchCommentByKeywordController extends RouteController {
@@ -80,26 +77,28 @@ export class SearchCommentByKeywordController extends RouteController {
         // ログインしている場合はお気に入りコメントと非表示コメントをチェック
         if (token) {
 
-            const jsonWebTokenUserModel = await this.searchCommentByKeywordService.checkJwtVerify(req);
-            const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
+            try {
+                const jsonWebTokenUserModel = await this.searchCommentByKeywordService.checkJwtVerify(req);
+                const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
 
-            // 非表示コメント取得
-            const blockCommentList = await this.searchCommentByKeywordService.getBlockComment(frontUserIdModel, videoIdModel);
+                // 非表示コメント取得
+                const blockCommentList = await this.searchCommentByKeywordService.getBlockComment(frontUserIdModel, videoIdModel);
 
-            // 非表示コメントでフィルター
-            const filterdCommentListByBlock = this.searchCommentByKeywordService.filterCommentByBlock(
-                filterdCommentList,
-                blockCommentList
-            );
+                // 非表示コメントでフィルター
+                const filterdCommentListByBlock = this.searchCommentByKeywordService.filterCommentByBlock(
+                    filterdCommentList,
+                    blockCommentList
+                );
 
-            // お気に入りコメント取得
-            const favoriteCommentList = await this.searchCommentByKeywordService.getFavoriteComment(frontUserIdModel, videoIdModel);
+                // お気に入りコメント取得
+                const favoriteCommentList = await this.searchCommentByKeywordService.getFavoriteComment(frontUserIdModel, videoIdModel);
 
-            // お気に入りステータスチェック
-            filterdCommentList = this.searchCommentByKeywordService.favoriteStatusCheck(
-                filterdCommentListByBlock,
-                favoriteCommentList,
-            );
+                // お気に入りステータスチェック
+                filterdCommentList = this.searchCommentByKeywordService.favoriteStatusCheck(
+                    filterdCommentListByBlock,
+                    favoriteCommentList,
+                );
+            } catch (err) { }
         }
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, filterdCommentList);

@@ -1,45 +1,19 @@
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
+import { FrontUserInfoMasterRepositorys } from "../../internaldata/frontuserinfomaster/repository/FrontUserInfoMasterRepositorys";
+import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
+import { FrontUserLoginMasterUpdateUserInfoEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateUserInfoEntity";
+import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
+import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
+import { RepositoryType } from "../../util/const/CommonConst";
+import { FrontUserInfoUpdateSelectEntity } from "../entity/FrontUserInfoUpdateSelectEntity";
 import { FrontUserInfoUpdateRequestModel } from "../model/FrontUserInfoUpdateRequestModel";
 import { FrontUserInfoUpdateRequestType } from "../model/FrontUserInfoUpdateRequestType";
-import { FLG, RepositoryType } from "../../util/const/CommonConst";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { FrontUserInfoUpdateResponseModel } from "../model/FrontUserInfoUpdateResponseModel";
-import { FrontUserLoginMasterInsertEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterInsertEntity";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
-import { FrontUserInfoMasterRepositorys } from "../../internaldata/frontuserinfomaster/repository/FrontUserInfoMasterRepositorys";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { FrontUserInfoUpdateSelectEntity } from "../entity/FrontUserInfoUpdateSelectEntity";
 import { FrontUserInfoUpdateRepositorys } from "../repository/FrontUserInfoUpdateRepositorys";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { Request } from 'express';
-import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
-import { FrontUserLoginMasterUpdateUserInfoEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateUserInfoEntity";
 
 
 export class UpdateFrontUserInfoService {
-
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param req 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画更新時の認証エラー ERROR:${err}`);
-        }
-    }
 
 
     /**

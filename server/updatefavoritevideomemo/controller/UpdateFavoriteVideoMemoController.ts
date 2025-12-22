@@ -1,21 +1,21 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { ZodIssue } from 'zod';
-import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
 import { Prisma } from '@prisma/client';
-import { UpdateFavoriteVideoMemoService } from '../service/UpdateFavoriteVideoMemoService';
-import { UpdateFavoriteVideoMemoRequestType } from '../Type/UpdateFavoriteVideoMemoRequestType';
-import { UpdateFavoriteVideoMemoRequestModelSchema } from '../model/UpdateFavoriteVideoMemoRequestModelSchema';
-import { UpdateFavoriteVideoMemoRequestModel } from '../model/UpdateFavoriteVideoMemoRequestModel';
-import { UpdateFavoriteVideoMemoResponseModel } from '../model/UpdateFavoriteVideoMemoResponseModel';
+import { NextFunction, Response } from 'express';
+import { ZodIssue } from 'zod';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { VideoMemoSeqModel } from '../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel';
+import { authMiddleware } from '../../middleware/authMiddleware';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
+import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { UpdateFavoriteVideoMemoRequestModel } from '../model/UpdateFavoriteVideoMemoRequestModel';
+import { UpdateFavoriteVideoMemoRequestModelSchema } from '../model/UpdateFavoriteVideoMemoRequestModelSchema';
+import { UpdateFavoriteVideoMemoResponseModel } from '../model/UpdateFavoriteVideoMemoResponseModel';
+import { UpdateFavoriteVideoMemoService } from '../service/UpdateFavoriteVideoMemoService';
+import { UpdateFavoriteVideoMemoRequestType } from '../Type/UpdateFavoriteVideoMemoRequestType';
 
 
 export class UpdateFavoriteVideoMemoController extends RouteController {
@@ -27,7 +27,8 @@ export class UpdateFavoriteVideoMemoController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.PUT,
             this.doExecute,
-            ApiEndopoint.FAVORITE_VIDEO_MEMO_ID
+            ApiEndopoint.FAVORITE_VIDEO_MEMO_ID,
+            [authMiddleware]
         );
     }
 
@@ -37,8 +38,9 @@ export class UpdateFavoriteVideoMemoController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         const videoId = req.params.videoId;
 
         if (!videoId) {
@@ -78,10 +80,6 @@ export class UpdateFavoriteVideoMemoController extends RouteController {
             videoIdModel,
             videoMemoSeqModel
         );
-
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.updateFavoriteVideoMemoService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {

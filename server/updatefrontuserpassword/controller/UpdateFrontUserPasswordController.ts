@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { ZodIssue } from "zod";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
@@ -7,9 +7,11 @@ import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
 import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { authMiddleware } from "../../middleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
 import { IS_ALLOW_USER_OPERATION } from "../../util/const/AllowUserOperationConst";
 import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
@@ -29,7 +31,8 @@ export class UpdateFrontUserPasswordController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.PUT,
             this.doExecute,
-            ApiEndopoint.FRONT_USER_PASSWORD_ID
+            ApiEndopoint.FRONT_USER_PASSWORD_ID,
+            [authMiddleware]
         );
     }
 
@@ -39,7 +42,7 @@ export class UpdateFrontUserPasswordController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
         if (!IS_ALLOW_USER_OPERATION) {
             return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `この機能は現在の環境では無効化されています。`);
@@ -75,9 +78,7 @@ export class UpdateFrontUserPasswordController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_BAD_REQUEST, `確認用パスワードが一致しません。`);
         }
 
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.updateFrontUserPasswordService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
 
         // パスパラメータのユーザーIDとtokenのユーザーIDを比較
         if (userIdModel.frontUserId !== frontUserIdModel.frontUserId) {

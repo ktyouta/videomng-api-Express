@@ -1,27 +1,24 @@
+import { Prisma } from "@prisma/client";
+import { NextFunction, Response } from 'express';
+import { ZodIssue } from "zod";
+import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
+import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
+import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
+import { authMiddleware } from "../../middleware/authMiddleware";
+import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RouteController } from "../../router/controller/RouteController";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
+import { IS_ALLOW_USER_OPERATION } from "../../util/const/AllowUserOperationConst";
 import { HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { ZodIssue } from "zod";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
-import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
 import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { UpdateFrontUserInfoService } from "../service/UpdateFrontUserInfoService";
-import { FrontUserInfoUpdateRequestType } from "../model/FrontUserInfoUpdateRequestType";
-import { FrontUserInfoUpdateRequestModelSchema } from "../model/FrontUserInfoUpdateRequestModelSchema";
 import { FrontUserInfoUpdateRequestModel } from "../model/FrontUserInfoUpdateRequestModel";
+import { FrontUserInfoUpdateRequestModelSchema } from "../model/FrontUserInfoUpdateRequestModelSchema";
+import { FrontUserInfoUpdateRequestType } from "../model/FrontUserInfoUpdateRequestType";
 import { FrontUserInfoUpdateResponseModel } from "../model/FrontUserInfoUpdateResponseModel";
-import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
-import { FrontUserLoginMasterUpdateUserInfoEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateUserInfoEntity";
-import { envConfig } from "../../util/const/EnvConfig";
-import { IS_ALLOW_USER_OPERATION } from "../../util/const/AllowUserOperationConst";
+import { UpdateFrontUserInfoService } from "../service/UpdateFrontUserInfoService";
 
 
 export class UpdateFrontUserInfoController extends RouteController {
@@ -33,7 +30,8 @@ export class UpdateFrontUserInfoController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.PUT,
             this.doExecute,
-            ApiEndopoint.FRONT_USER_INFO_ID
+            ApiEndopoint.FRONT_USER_INFO_ID,
+            [authMiddleware]
         );
     }
 
@@ -43,7 +41,7 @@ export class UpdateFrontUserInfoController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
         if (!IS_ALLOW_USER_OPERATION) {
             return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `この機能は現在の環境では無効化されています。`);
@@ -74,9 +72,7 @@ export class UpdateFrontUserInfoController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        // jwtの認証を実行する
-        const jsonWebTokenVerifyModel = await this.updateFrontUserInfoService.checkJwtVerify(req);
-        const frontUserIdModel: FrontUserIdModel = jsonWebTokenVerifyModel.frontUserIdModel;
+        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
 
         // パスパラメータのユーザーIDとtokenのユーザーIDを比較
         if (userIdModel.frontUserId !== frontUserIdModel.frontUserId) {

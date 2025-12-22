@@ -1,48 +1,23 @@
+import { Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
-import { RepositoryType } from "../../util/const/CommonConst";
-import { UpdateFavoriteVideoTagRequestModel } from "../model/UpdateFavoriteVideoTagRequestModel";
-import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
-import { VideoMemoSeqModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel";
-import { CookieModel } from "../../cookie/model/CookieModel";
-import { Request } from 'express';
-import { UpdateFavoriteVideoTagRepositorys } from "../repository/UpdateFavoriteVideoTagRepositorys";
-import { UpdateFavoriteVideoTagRepositoryInterface } from "../repository/interface/UpdateFavoriteVideoTagRepositoryInterface";
-import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
+import { TagIdModel } from "../../internaldata/common/properties/TagIdModel";
+import { FavoriteVideoTagTransactionInsertEntity } from "../../internaldata/favoritevideotagtransaction/entity/FavoriteVideoTagTransactionInsertEntity";
+import { FavoriteVideoTagTransactionRepositorys } from "../../internaldata/favoritevideotagtransaction/repository/FavoriteVideoTagTransactionRepositorys";
+import { FavoriteVideoTagTransactionRepositoryInterface } from "../../internaldata/favoritevideotagtransaction/repository/interface/FavoriteVideoTagTransactionRepositoryInterface";
+import { TagMasterInsertEntity } from "../../internaldata/tagmaster/entity/TagMasterInsertEntity";
+import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
 import { TagMasterRepositorys } from "../../internaldata/tagmaster/repository/TagMasterRepositorys";
 import { TagMasterRepositoryInterface } from "../../internaldata/tagmaster/repository/interface/TagMasterRepositoryInterface";
-import { FavoriteVideoTagTransactionRepositoryInterface } from "../../internaldata/favoritevideotagtransaction/repository/interface/FavoriteVideoTagTransactionRepositoryInterface";
-import { FavoriteVideoTagTransactionRepositorys } from "../../internaldata/favoritevideotagtransaction/repository/FavoriteVideoTagTransactionRepositorys";
-import { FavoriteVideoTagTransaction, Prisma } from "@prisma/client";
-import { FavoriteVideoTagTransactionInsertEntity } from "../../internaldata/favoritevideotagtransaction/entity/FavoriteVideoTagTransactionInsertEntity";
-import { UpdateFavoriteVideoTagResponseDataType } from "../type/UpdateFavoriteVideoTagResponseDataType";
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { TagIdModel } from "../../internaldata/common/properties/TagIdModel";
-import { UpdateFavoriteVideoTagType } from "../type/UpdateFavoriteVideoTagType";
+import { RepositoryType } from "../../util/const/CommonConst";
+import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
+import { UpdateFavoriteVideoTagRequestModel } from "../model/UpdateFavoriteVideoTagRequestModel";
+import { UpdateFavoriteVideoTagRepositorys } from "../repository/UpdateFavoriteVideoTagRepositorys";
+import { UpdateFavoriteVideoTagRepositoryInterface } from "../repository/interface/UpdateFavoriteVideoTagRepositoryInterface";
 import { UpdateFavoriteVideoTagModel } from "../type/UpdateFavoriteVideoTagModel";
-import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
-import { TagMasterInsertEntity } from "../../internaldata/tagmaster/entity/TagMasterInsertEntity";
+import { UpdateFavoriteVideoTagResponseDataType } from "../type/UpdateFavoriteVideoTagResponseDataType";
 
 
 export class UpdateFavoriteVideoTagService {
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param jwt 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画タグ更新時の認証エラー ERROR:${err}`);
-        }
-    }
-
 
     /**
      * お気に入り動画更新の永続ロジックを取得

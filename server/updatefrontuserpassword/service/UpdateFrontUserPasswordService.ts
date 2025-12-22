@@ -1,11 +1,8 @@
 import { FrontUserLoginMaster } from "@prisma/client";
-import { Request } from 'express';
-import { CookieModel } from "../../cookie/model/CookieModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserLoginMasterUpdateEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateEntity";
 import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { JsonWebTokenUserModel } from "../../jsonwebtoken/model/JsonWebTokenUserModel";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RepositoryType } from "../../util/const/CommonConst";
@@ -16,24 +13,6 @@ import { UpdateFrontUserPasswordRepositorys } from "../repository/UpdateFrontUse
 
 
 export class UpdateFrontUserPasswordService {
-
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param req 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`お気に入り動画更新時の認証エラー ERROR:${err}`);
-        }
-    }
 
 
     /**
