@@ -101,6 +101,9 @@ export class SearchCommentByKeywordController extends RouteController {
             } catch (err) { }
         }
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, filterdCommentList);
+        return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, {
+            totalCount: filterdCommentList.length,
+            items: filterdCommentList
+        });
     }
 }
