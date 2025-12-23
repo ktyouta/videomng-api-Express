@@ -1,5 +1,4 @@
 import { CookieModel } from "../../cookie/model/CookieModel";
-import { envConfig } from "../../util/const/EnvConfig";
 
 
 export class JsonWebTokenModel {
@@ -10,10 +9,6 @@ export class JsonWebTokenModel {
     static readonly KEY: string = `access_token`;
 
     constructor(cookieModel: CookieModel) {
-
-        if (!JsonWebTokenModel.KEY) {
-            throw Error(`設定ファイルにcookie(jwt)のキーが設定されていません。`);
-        }
 
         this._token = cookieModel.cookie[JsonWebTokenModel.KEY];
     }
