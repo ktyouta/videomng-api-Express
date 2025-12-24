@@ -14,4 +14,6 @@ export const envConfig = {
     allowUserOperation: process.env.ALLOW_USER_OPERATION,
     envProduction: process.env.ENV_PRODUCTION,
     accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES,
+    jwtRefreshKey: process.env.VIDEOMNG_JWT_REFRESH_KEY,
+    refreshTokenExpires: process.env.REFRESH_TOKEN_EXPIRES,
 };

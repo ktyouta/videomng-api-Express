@@ -29,18 +29,7 @@ DATABASE_URL=postgresql://<ユーザー名>:<パスワード>@<ホスト>:<ポ�
 
 
 ⑤プロジェクトのルートフォルダに.envファイルを作成して以下の設定を記載する
-DATABASE_URL=データベースのURL
-YOUTUBE_API_KEY=YouTube Data APIのキー
-VIDEOMNG_JWT_KEY=jwtのキー
-PORT=3001
-CORS_PROTOCOL=http://
-CORS_DOMAIN=localhost:
-CORS_PORT=5173
-TIMEOUT=10000
-ALLOW_USER_OPERATION=true
-ENV_PRODUCTION=false
-ACCESS_TOKEN_EXPIRES=1h
-
+※.env.sample参照
 ※CORS_PORTはフロントのポート番号を指定
 ※ALLOW_USER_OPERATION：デモ環境ではfalseを設定
 ※ENV_PRODUCTION：デモ環境ではtrueを設定
