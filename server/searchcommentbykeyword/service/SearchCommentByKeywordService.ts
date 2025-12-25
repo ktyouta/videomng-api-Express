@@ -1,4 +1,5 @@
 import { BlockCommentTransaction, FavoriteCommentTransaction } from '@prisma/client';
+import { Request } from 'express';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
@@ -6,23 +7,17 @@ import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedata
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { YouTubeDataApiCommentThreadItemType } from '../../external/youtubedataapi/videocomment/type/YouTubeDataApiCommentThreadItemType';
 import { YouTubeDataApiCommentThreadReplyCommentType } from '../../external/youtubedataapi/videocomment/type/YouTubeDataApiCommentThreadReplyCommentType';
-import { YouTubeDataApiVideoListEndPointModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListEndPointModel';
-import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListModel';
-import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
-import { YouTubeDataApiVideoListMaxResult } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListMaxResult';
-import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
 import { JsonWebTokenUserModel } from '../../jsonwebtoken/model/JsonWebTokenUserModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { FLG, RepositoryType } from '../../util/const/CommonConst';
+import { SearchCommentByKeywordBlockCommentSelectEntity } from '../entity/SearchCommentByKeywordBlockCommentSelectEntity';
 import { SearchCommentByKeywordFavoriteCommentSelectEntity } from '../entity/SearchCommentByKeywordFavoriteCommentSelectEntity';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';
-import { SearchCommentByKeywordResponseCommentType } from '../type/SearchCommentByKeywordResponseCommentType';
-import { Router, Request, Response, NextFunction } from 'express';
-import { SearchCommentByKeywordBlockCommentSelectEntity } from '../entity/SearchCommentByKeywordBlockCommentSelectEntity';
 import { SearchCommentByKeywordRepositorys } from '../repository/SearchCommentByKeywordRepositorys';
-import { FLG, RepositoryType } from '../../util/const/CommonConst';
+import { SearchCommentByKeywordResponseCommentType } from '../type/SearchCommentByKeywordResponseCommentType';
 
 
 export class SearchCommentByKeywordService {
@@ -114,6 +109,8 @@ export class SearchCommentByKeywordService {
                 const publishedAt = topLevelCommentSnippet.publishedAt;
                 // コメント投稿者の表示名
                 const authorDisplayName = topLevelCommentSnippet.authorDisplayName;
+                // コメント投稿者のプロフィール画像URL
+                const authorProfileImageUrl = e.snippet.topLevelComment.snippet.authorProfileImageUrl;
 
                 filterdCommentList = [...filterdCommentList, {
                     textOriginal: textOriginal,
@@ -121,6 +118,7 @@ export class SearchCommentByKeywordService {
                     authorDisplayName: authorDisplayName,
                     commentId: e.snippet.topLevelComment.id,
                     favoriteStatus: FLG.OFF,
+                    authorProfileImageUrl: authorProfileImageUrl,
                 }];
             }
 
@@ -143,6 +141,8 @@ export class SearchCommentByKeywordService {
                         const replyPublishedAt = replySnipet.publishedAt;
                         // コメント投稿者の表示名
                         const replyAuthorDisplayName = replySnipet.authorDisplayName;
+                        // コメント投稿者のプロフィール画像URL
+                        const authorProfileImageUrl = replySnipet.authorProfileImageUrl;
 
                         filterdCommentList = [...filterdCommentList, {
                             textOriginal: replyTextOriginal,
@@ -150,6 +150,7 @@ export class SearchCommentByKeywordService {
                             authorDisplayName: replyAuthorDisplayName,
                             commentId: e1.id,
                             favoriteStatus: FLG.OFF,
+                            authorProfileImageUrl: authorProfileImageUrl,
                         }];
                     }
                 });

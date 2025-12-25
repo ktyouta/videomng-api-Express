@@ -9,5 +9,6 @@ export type SearchCommentByKeywordResponseCommentType = {
     // コメントID
     readonly commentId: string;
     // お気に入りステータス
-    favoriteStatus: string,
+    favoriteStatus: string;
+    authorProfileImageUrl: string;
 }
