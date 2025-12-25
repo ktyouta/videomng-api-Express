@@ -91,7 +91,7 @@ export class GetFavoriteVideoListService {
 
         const videoIdList = favoriteVideoList.map((e) => {
             return e.videoId;
-        });
+        }).filter(Boolean);
 
         const videoIdcChunks: string[][] = [];
 
@@ -170,22 +170,33 @@ export class GetFavoriteVideoListService {
      */
     async getFavoriteVideoFolderThumbnail(folderList: FavoriteVideoFolderType[]): Promise<FavoriteVideoFolderThumbnailType[]> {
 
+        const videoIdcChunks: string[][] = [];
+
+        const videoIdList = folderList.map((e) => {
+            return e.latestVideoId;
+        }).filter(Boolean);
+
+        // 動画詳細取得APIの1回当たりの最大取得可能件数で分割
+        for (let i = 0; i < videoIdList.length; i += YouTubeDataApiVideoDetailMaxRequestModel.MAX_VIDEO_IDS_PER_REQUEST) {
+            videoIdcChunks.push(videoIdList.slice(i, i + YouTubeDataApiVideoDetailMaxRequestModel.MAX_VIDEO_IDS_PER_REQUEST));
+        }
+
+        const videoIdListModelList = videoIdcChunks.map((e) => {
+
+            const videoIdListModel = new VideoIdListModel();
+
+            e.forEach((e1) => {
+                videoIdListModel.add(new VideoIdModel(e1));
+            });
+
+            return videoIdListModel;
+        });
+
         // YouTube Data Apiから動画情報を取得
-        const folderThumbnailList = (await Promise.all(folderList.map(async (e) => {
+        const folderThumbnailList = (await Promise.all(videoIdListModelList.map(async (e) => {
 
-            if (!e.latestVideoId) {
-                return;
-            };
-
-            const videoId = new VideoIdModel(e.latestVideoId);
-
-            // YouTube Data APIのエンドポイント
-            const youTubeDataApiVideoDetailEndPointModel = new YouTubeDataApiVideoDetailEndPointModel(
-                videoId,
-            );
-
-            // YouTube Data APIデータ取得
-            const youtubeVideoDetailApi = await YouTubeDataApiVideoDetailModel.call(youTubeDataApiVideoDetailEndPointModel);
+            // API Call
+            const youtubeVideoDetailApi = await this.callYouTubeDataDetailApi(e);
 
             return youtubeVideoDetailApi.response.items;
         }))).filter((e) => !!e).flat();
@@ -207,7 +218,7 @@ export class GetFavoriteVideoListService {
             const thumbnails: ThumbnailType = apiData.snippet.thumbnails;
 
             return { ...e, thumbnails };
-        }).filter((e) => !!e);
+        }).filter((e) => e !== undefined);
 
         return folderListMergedList;
     }
