@@ -62,6 +62,26 @@ export class AccessTokenModel {
         return new AccessTokenModel(token);
     }
 
+    /**
+     * トークンチェック
+     * @returns 
+     */
+    verify() {
+
+        try {
+
+            const decoded = AccessTokenModel.jwt.verify(this.token, AccessTokenModel.JWT_KEY);
+
+            if (!decoded || typeof decoded !== `object`) {
+                throw Error(`アクセストークンが不正です。`);
+            }
+
+            return decoded;
+        } catch (err) {
+            throw Error(`アクセストークンの検証に失敗しました。${err}`);
+        }
+    }
+
     get token() {
         return this._token;
     }
