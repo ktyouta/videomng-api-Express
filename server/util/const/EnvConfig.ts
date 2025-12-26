@@ -13,7 +13,8 @@ export const envConfig = {
     timeout: process.env.TIMEOUT,
     allowUserOperation: process.env.ALLOW_USER_OPERATION,
     envProduction: process.env.ENV_PRODUCTION,
-    accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES,
-    jwtRefreshKey: process.env.VIDEOMNG_JWT_REFRESH_KEY,
+    refreshTokenJwtKey: process.env.REFRESH_TOKEN_JWT_KEY,
     refreshTokenExpires: process.env.REFRESH_TOKEN_EXPIRES,
+    accessTokenJwtKey: process.env.ACCESS_TOKEN_JWT_KEY,
+    accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES,
 };

@@ -7,7 +7,7 @@ import { IS_ENV_PRODUCTION } from '../../util/const/EnvProductionConst';
 
 export class RefreshTokenModel {
 
-    private readonly jwt = require("jsonwebtoken");
+    private static readonly jwt = require("jsonwebtoken");
     // トークン
     private readonly _token: string;
     // cookieのキー
@@ -19,7 +19,7 @@ export class RefreshTokenModel {
         sameSite: IS_ENV_PRODUCTION ? 'none' : 'lax',
     };
     // リフレッシュトークン用のjwtキー
-    private static readonly JWT_KEY = envConfig.jwtRefreshKey;
+    private static readonly JWT_KEY = envConfig.refreshTokenExpires;
     // リフレッシュトークン有効期間
     private static readonly REFRESH_TOKEN_EXPIRES = envConfig.refreshTokenExpires;
 
@@ -32,7 +32,7 @@ export class RefreshTokenModel {
      * @param cookieModel 
      * @returns 
      */
-    async get(cookieModel: CookieModel) {
+    static get(cookieModel: CookieModel) {
 
         const token = cookieModel.cookie[RefreshTokenModel.COOKIE_KEY];
 
@@ -40,15 +40,13 @@ export class RefreshTokenModel {
             throw Error(`トークンが存在しません。`);
         }
 
-        const jwtRefreshKey = envConfig.jwtRefreshKey;
-
-        if (!jwtRefreshKey) {
+        if (!RefreshTokenModel.JWT_KEY) {
             throw Error(`設定ファイルにjwtの秘密鍵が設定されていません。`);
         }
 
         try {
 
-            const decoded = this.jwt.verify(token, RefreshTokenModel.JWT_KEY);
+            const decoded = RefreshTokenModel.jwt.verify(token, RefreshTokenModel.JWT_KEY);
 
             if (!decoded || typeof decoded !== `object`) {
                 throw Error(`jwtから認証情報の取得に失敗しました。`);
@@ -71,7 +69,7 @@ export class RefreshTokenModel {
      * @param frontUserIdModel 
      * @returns 
      */
-    create(frontUserIdModel: FrontUserIdModel) {
+    static create(frontUserIdModel: FrontUserIdModel) {
 
         if (!RefreshTokenModel.JWT_KEY) {
             throw Error(`設定ファイルにjwt(リフレッシュ)の秘密鍵が設定されていません。`);
@@ -88,7 +86,7 @@ export class RefreshTokenModel {
         }
 
         const jwtStr = `${frontUserId}`;
-        const token = this.jwt.sign({ sub: jwtStr }, RefreshTokenModel.JWT_KEY, { expiresIn: RefreshTokenModel.REFRESH_TOKEN_EXPIRES });
+        const token = RefreshTokenModel.jwt.sign({ sub: jwtStr }, RefreshTokenModel.JWT_KEY, { expiresIn: RefreshTokenModel.REFRESH_TOKEN_EXPIRES });
 
         return new RefreshTokenModel(token);
     }
