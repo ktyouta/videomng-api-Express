@@ -36,6 +36,7 @@ import { GetVideoDetailController } from "../../getvideodetail/controller/GetVid
 import { GetVideoListController } from "../../getvideolist/controller/GetVideoListController";
 import { GetViewStatusListController } from "../../getviewstatuslist/controller/GetViewStatusListController";
 import { HealthController } from "../../health/controller/HealthController";
+import { RefreshController } from "../../refresh/controller/RefreshController";
 import { SearchCommentByKeywordController } from "../../searchcommentbykeyword/controller/SearchCommentByKeywordController";
 import { UpdateFavoriteVideoCustomController } from "../../updatefavoritevideocustom/controller/UpdateFavoriteVideoCustomController";
 import { UpdateFavoriteVideoMemoController } from "../../updatefavoritevideomemo/controller/UpdateFavoriteVideoMemoController";
@@ -142,4 +143,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetFolderListController(),
     // 別フォルダに登録された動画を取得
     new FolderShareVideosController(),
+    // トークンリフレッシュ
+    new RefreshController(),
 ]

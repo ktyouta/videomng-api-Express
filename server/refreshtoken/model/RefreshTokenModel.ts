@@ -1,4 +1,5 @@
 import { CookieOptions } from 'express';
+import { JwtPayload } from 'jsonwebtoken';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { envConfig } from '../../util/const/EnvConfig';
@@ -40,28 +41,7 @@ export class RefreshTokenModel {
             throw Error(`トークンが存在しません。`);
         }
 
-        if (!RefreshTokenModel.JWT_KEY) {
-            throw Error(`設定ファイルにjwtの秘密鍵が設定されていません。`);
-        }
-
-        try {
-
-            const decoded = RefreshTokenModel.jwt.verify(token, RefreshTokenModel.JWT_KEY);
-
-            if (!decoded || typeof decoded !== `object`) {
-                throw Error(`jwtから認証情報の取得に失敗しました。`);
-            }
-
-            const id: string = decoded.sub;
-
-            if (!id) {
-                throw Error(`jwtの認証情報が不正です。`);
-            }
-
-            return new RefreshTokenModel(token);
-        } catch (err) {
-            throw Error(`jwt認証中にエラーが発生しました。ERROR:${err}`);
-        }
+        return new RefreshTokenModel(token);
     }
 
     /**
@@ -89,6 +69,26 @@ export class RefreshTokenModel {
         const token = RefreshTokenModel.jwt.sign({ sub: jwtStr }, RefreshTokenModel.JWT_KEY, { expiresIn: RefreshTokenModel.REFRESH_TOKEN_EXPIRES });
 
         return new RefreshTokenModel(token);
+    }
+
+    /**
+     * トークンチェック
+     * @returns 
+     */
+    verify() {
+
+        try {
+
+            const decoded = RefreshTokenModel.jwt.verify(this.token, RefreshTokenModel.JWT_KEY) as JwtPayload;
+
+            if (!decoded || typeof decoded !== `object`) {
+                throw Error(`アクセストークンが不正です。`);
+            }
+
+            return decoded;
+        } catch (err) {
+            throw Error(`アクセストークンの検証に失敗しました。${err}`);
+        }
     }
 
     get token() {
