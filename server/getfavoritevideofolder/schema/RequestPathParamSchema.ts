@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const PathParamSchema = z.object({
+export const RequestPathParamSchema = z.object({
     folderId: z
         .string()
         .regex(/^\d+$/, "フォルダIDが不正です。(数値以外)")
@@ -8,4 +8,4 @@ export const PathParamSchema = z.object({
         .refine((val) => val > 0, "フォルダIDが不正です。(負の値)")
 });
 
-export type PathParamType = z.infer<typeof PathParamSchema>;
+export type RequestPathParamType = z.infer<typeof RequestPathParamSchema>;

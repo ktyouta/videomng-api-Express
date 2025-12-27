@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+import { ZodIssue } from 'zod';
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 import { authMiddleware } from '../../middleware/authMiddleware';
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
@@ -6,7 +7,7 @@ import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { RepositoryType } from "../../util/const/CommonConst";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
 import { GetFavoriteVideoFolderSelectEntity } from "../entity/GetFavoriteVideoFolderSelectEntity";
 import { GetFavoriteVideoFolderFavoriteLevelModel } from '../model/GetFavoriteVideoFolderFavoriteLevelModel';
@@ -17,7 +18,8 @@ import { GetFavoriteVideoFolderVideoCategoryModel } from '../model/GetFavoriteVi
 import { GetFavoriteVideoFolderViewStatusModel } from '../model/GetFavoriteVideoFolderViewStatusModel';
 import { GetFavoriteVideoFolderResponseModel } from "../model/GetFavoriteVideoListResponseModel";
 import { GetFavoriteVideoFolderRepositorys } from "../repository/GetFavoriteVideoFolderRepositorys";
-import { PathParamSchema } from "../schema/PathParamSchema";
+import { RequestPathParamSchema } from "../schema/RequestPathParamSchema";
+import { RequestQuerySchema } from '../schema/RequestQuerySchema';
 import { GetFavoriteVideoFolderService } from "../service/GetFavoriteVideoFolderService";
 
 
@@ -47,40 +49,43 @@ export class GetFavoriteVideoFolderController extends RouteController {
 
         const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
         // パスパラメータのバリデーションチェック
-        const pathValidateResult = PathParamSchema.safeParse(req.params);
+        const pathValidateResult = RequestPathParamSchema.safeParse(req.params);
 
         if (!pathValidateResult.success) {
             throw Error(`${pathValidateResult.error.message} endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
         }
 
+        // クエリパラメータのバリデーションチェック
+        const validateResult = RequestQuerySchema.safeParse(req.query);
+
+        // バリデーションエラー
+        if (!validateResult.success) {
+
+            // エラーメッセージを取得
+            const validatErrMessage = validateResult.error.errors.map((e: ZodIssue) => {
+                return e.message;
+            }).join(`,`);
+
+            return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
+        }
+
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
 
-        // クエリパラメータを取得
-        const query = req.query;
+        // クエリパラメータ
+        const query = validateResult.data;
 
         // 視聴状況
-        const viewStatus = query[`folderViewStatus`] as string;
-        const viewStatusModel = new GetFavoriteVideoFolderViewStatusModel(viewStatus);
-
+        const viewStatusModel = new GetFavoriteVideoFolderViewStatusModel(query.folderViewStatus);
         // 動画カテゴリ
-        const videoCategory = query[`folderVideoCategory`] as string;
-        const videoCategoryId = new GetFavoriteVideoFolderVideoCategoryModel(videoCategory);
-
+        const videoCategoryId = new GetFavoriteVideoFolderVideoCategoryModel(query.folderVideoCategory);
         // タグ
-        const videoTag = query[`folderVideoTag`] as string;
-        const tagNameModel = new GetFavoriteVideoFolderTagNameModel(videoTag);
-
+        const tagNameModel = new GetFavoriteVideoFolderTagNameModel(query.folderVideoTag);
         // お気に入り度
-        const favoriteLevel = query[`folderFavoriteLevel`] as string;
-        const favoriteLevelModel = new GetFavoriteVideoFolderFavoriteLevelModel(favoriteLevel);
-
+        const favoriteLevelModel = new GetFavoriteVideoFolderFavoriteLevelModel(query.folderFavoriteLevel);
         // ページ
-        const page = query[`folderPage`] as string;
-        const pageModel = new GetFavoriteVideoFolderPageModel(page);
-
+        const pageModel = new GetFavoriteVideoFolderPageModel(query.folderPage);
         // ソートキー
-        const sortId = query[`folderSortKey`] as string;
-        const sortIdModel = await GetFavoriteVideoFolderSortIdModel.set(sortId);
+        const sortIdModel = await GetFavoriteVideoFolderSortIdModel.set(query.folderSortKey);
 
         // お気に入り動画取得用Entity
         const getFavoriteVideoFolderSelectEntity = new GetFavoriteVideoFolderSelectEntity(

@@ -1,11 +1,12 @@
 import { NextFunction, Response } from 'express';
+import { ZodIssue } from 'zod';
 import { authMiddleware } from '../../middleware/authMiddleware';
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { RepositoryType } from "../../util/const/CommonConst";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
 import { ApiResponse } from "../../util/service/ApiResponse";
 import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
 import { FolderListModel } from "../model/FolderListModel";
@@ -17,6 +18,7 @@ import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListT
 import { GetFavoriteVideoListVideoCategoryModel } from "../model/GetFavoriteVideoListVideoCategoryModel";
 import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
 import { GetFavoriteVideoListRepositorys } from "../repository/GetFavoriteVideoListRepositorys";
+import { RequestQuerySchema } from '../schema/RequestQuerySchema';
 import { GetFavoriteVideoListService } from "../service/GetFavoriteVideoListService";
 
 
@@ -46,36 +48,37 @@ export class GetFavoriteVideoListController extends RouteController {
 
         const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
 
-        // クエリパラメータを取得
-        const query = req.query;
+        // クエリパラメータのバリデーションチェック
+        const validateResult = RequestQuerySchema.safeParse(req.query);
 
-        // 視聴状況を取得
-        const viewStatus = query[`viewStatus`] as string;
-        const viewStatusModel = new GetFavoriteVideoListViewStatusModel(viewStatus);
+        // バリデーションエラー
+        if (!validateResult.success) {
 
-        // 動画カテゴリを取得
-        const videoCategory = query[`videoCategory`] as string;
-        const videoCategoryId = new GetFavoriteVideoListVideoCategoryModel(videoCategory);
+            // エラーメッセージを取得
+            const validatErrMessage = validateResult.error.errors.map((e: ZodIssue) => {
+                return e.message;
+            }).join(`,`);
 
-        // タグを取得
-        const videoTag = query[`videoTag`] as string;
-        const tagNameModel = new GetFavoriteVideoListTagNameModel(videoTag);
+            return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
+        }
 
+        // クエリパラメータ
+        const query = validateResult.data;
+
+        // 視聴状況
+        const viewStatusModel = new GetFavoriteVideoListViewStatusModel(query.viewStatus);
+        // 動画カテゴリ
+        const videoCategoryId = new GetFavoriteVideoListVideoCategoryModel(query.videoCategory);
+        // タグ
+        const tagNameModel = new GetFavoriteVideoListTagNameModel(query.videoTag);
         // ソートID
-        const sortId = query[`sortKey`] as string;
-        const sortIdModel = await GetFavoriteVideoListSortIdModel.set(sortId);
-
+        const sortIdModel = await GetFavoriteVideoListSortIdModel.set(query.sortKey);
         // お気に入り度
-        const favoriteLevel = query[`favoriteLevel`] as string;
-        const favoriteLevelModel = new GetFavoriteVideoListFavoriteLevelModel(favoriteLevel);
-
+        const favoriteLevelModel = new GetFavoriteVideoListFavoriteLevelModel(query.favoriteLevel);
         // ページ
-        const page = query[`page`] as string;
-        const pageModel = new GetFavoriteVideoListPageModel(page);
-
+        const pageModel = new GetFavoriteVideoListPageModel(query.page);
         // フォルダ
-        const folder = query[`folder`] as string;
-        const folderListModel = new FolderListModel(folder);
+        const folderListModel = new FolderListModel(query.folder);
 
         // お気に入り動画取得用Entity
         const getFavoriteVideoListSelectEntity = new GetFavoriteVideoListSelectEntity(
