@@ -46,11 +46,11 @@ export class CsrfTokenModel {
         return new CsrfTokenModel(token);
     }
 
-    get value() {
+    get token() {
         return this._token;
     }
 
     equal(token: CsrfTokenModel) {
-        return this._token === token.value;
+        return this._token === token.token;
     }
 }

@@ -1,12 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { CsrfTokenModel } from '../../csrftoken/model/CsrfTokenModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { FrontUserSaltValueModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel';
 import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
@@ -106,6 +108,11 @@ export class FrontUserLoginController extends RouteController {
             const newJsonWebTokenModel =
                 await this.frontUserLoginService.createJsonWebToken(frontUserIdModel);
 
+            // リフレッシュトークンを発行
+            const refreshTokenModel = RefreshTokenModel.create(frontUserIdModel);
+            // CSRFトークンを発行
+            const csrfTokenModel = CsrfTokenModel.create();
+
             // レスポンスを作成
             const frontUserLoginCreateResponseModel = new FrontUserLoginCreateResponseModel(frontUser);
 
@@ -114,6 +121,8 @@ export class FrontUserLoginController extends RouteController {
 
             // cookieを返却
             res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
+            res.cookie(CsrfTokenModel.COOKIE_KEY, csrfTokenModel.token, CsrfTokenModel.COOKIE_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`, frontUserLoginCreateResponseModel.data);
         }, next);
