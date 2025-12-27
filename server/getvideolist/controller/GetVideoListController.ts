@@ -3,14 +3,14 @@ import { ZodIssue } from 'zod';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiVideoListVideoCategoryId } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId';
-import { VideoType, YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
+import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
-import { GetVideoListQueryParameterSchema } from '../model/GetVideoListQueryParameterSchema';
+import { RequestQuerySchema } from '../schema/RequestQuerySchema';
 import { GetVideoListService } from '../service/GetVideoListService';
 
 
@@ -36,11 +36,8 @@ export class GetVideoListController extends RouteController {
      */
     public async doExecute(req: Request, res: Response) {
 
-        // クエリパラメータを取得
-        const query = req.query;
-
         // クエリパラメータのバリデーションチェック
-        const validateResult = GetVideoListQueryParameterSchema.safeParse(query);
+        const validateResult = RequestQuerySchema.safeParse(req.query);
 
         // バリデーションエラー
         if (!validateResult.success) {
@@ -53,21 +50,17 @@ export class GetVideoListController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        // キーワードを取得
-        const keyword = query[`q`] as string;
-        const youTubeDataApiVideoListKeyword = new YouTubeDataApiVideoListKeyword(keyword);
+        // クエリパラメータ
+        const query = validateResult.data;
 
-        // 動画種別を取得
-        const videoType = query[`videoType`] as VideoType;
-        const youTubeDataApiVideoListVideoType = new YouTubeDataApiVideoListVideoType(videoType);
-
-        // 次データ取得用トークンを取得
-        const nextPageToken = query[`nextPageToken`] as string;
-        const youTubeDataApiVideoListNextPageToken = new YouTubeDataApiVideoListNextPageToken(nextPageToken);
-
-        // 動画カテゴリを取得
-        const videoCategory = query[`videoCategory`] as VideoType;
-        const youTubeDataApiVideoListVideoCategoryId = new YouTubeDataApiVideoListVideoCategoryId(videoCategory);
+        // キーワード
+        const youTubeDataApiVideoListKeyword = new YouTubeDataApiVideoListKeyword(query.q);
+        // 動画種別
+        const youTubeDataApiVideoListVideoType = new YouTubeDataApiVideoListVideoType(query.videoType);
+        // 次データ取得用トークン
+        const youTubeDataApiVideoListNextPageToken = new YouTubeDataApiVideoListNextPageToken(query.nextPageToken);
+        // 動画カテゴリ
+        const youTubeDataApiVideoListVideoCategoryId = new YouTubeDataApiVideoListVideoCategoryId(query.videoCategory);
 
         // YouTube Data Apiから動画を取得する
         const youTubeVideoListApi = await this.getVideoListService.callYouTubeDataListApi(

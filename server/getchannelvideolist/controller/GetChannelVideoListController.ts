@@ -1,20 +1,20 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
+import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { GetChannelVideoListService } from '../service/GetChannelVideoListService';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
 import { YouTubeDataApiChannelId } from '../../external/youtubedataapi/channel/properties/YouTubeDataApiChannelId';
+import { YouTubeDataApiPlaylistModel } from '../../external/youtubedataapi/playlist/model/YouTubeDataApiPlaylistModel';
 import { YouTubeDataApiPlaylistId } from '../../external/youtubedataapi/playlist/properties/YouTubeDataApiPlaylistId';
-import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiPlaylistNextPageToken } from '../../external/youtubedataapi/playlist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiPlaylistItemType } from '../../external/youtubedataapi/playlist/type/YouTubeDataApiPlaylistItemType';
-import { YouTubeDataApiPlaylistModel } from '../../external/youtubedataapi/playlist/model/YouTubeDataApiPlaylistModel';
 import { YouTubeDataApiPlaylistResponseType } from '../../external/youtubedataapi/playlist/type/YouTubeDataApiPlaylistResponseType';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { ApiResponse } from '../../util/service/ApiResponse';
+import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
+import { RequestPathParamSchema } from '../schema/RequestPathParamSchema';
+import { RequestQuerySchema } from '../schema/RequestQuerySchema';
+import { GetChannelVideoListService } from '../service/GetChannelVideoListService';
 import { GetChannelVideoListResponseType } from '../type/GetChannelVideoListResponseType';
 
 
@@ -40,21 +40,36 @@ export class GetChannelVideoListController extends RouteController {
      */
     public async doExecute(req: Request, res: Response) {
 
-        const id = req.params.id;
+        // パスパラメータのバリデーションチェック
+        const pathValidateResult = RequestPathParamSchema.safeParse(req.params);
 
-        if (!id) {
-            throw Error(`チャンネルIDが指定されていません。`);
+        if (!pathValidateResult.success) {
+            throw Error(`${pathValidateResult.error.message}`);
         }
 
-        // クエリパラメータを取得
-        const query = req.query;
+        // クエリパラメータのバリデーションチェック
+        const validateResult = RequestQuerySchema.safeParse(req.query);
 
-        // 次データ取得用トークンを取得
-        const nextPageToken = query[`nextpagetoken`] as string;
-        const nextPageTokenModel = new YouTubeDataApiPlaylistNextPageToken(nextPageToken);
+        // バリデーションエラー
+        if (!validateResult.success) {
 
+            // エラーメッセージを取得
+            const validatErrMessage = validateResult.error.errors.map((e: ZodIssue) => {
+                return e.message;
+            }).join(`,`);
+
+            return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
+        }
+
+        // パスパラメータ
+        const param = pathValidateResult.data;
+        // クエリパラメータ
+        const query = validateResult.data;
+
+        // 次データ取得用トークン
+        const nextPageTokenModel = new YouTubeDataApiPlaylistNextPageToken(query.nextpagetoken);
         // チャンネルID
-        const channelIdModel = new YouTubeDataApiChannelId(id);
+        const channelIdModel = new YouTubeDataApiChannelId(param.id);
 
         // YouTube Data Apiからチャンネル情報を取得する
         const channelVideoList = await this.getChannelVideoListService.callYouTubeDataChannelApi(channelIdModel);

@@ -48,6 +48,7 @@ export class GetFavoriteVideoFolderController extends RouteController {
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
         const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
+
         // パスパラメータのバリデーションチェック
         const pathValidateResult = RequestPathParamSchema.safeParse(req.params);
 
@@ -69,7 +70,9 @@ export class GetFavoriteVideoFolderController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
+        // パスパラメータ
+        const param = pathValidateResult.data;
+        const folderIdModel = new FolderIdModel(param.folderId);
 
         // クエリパラメータ
         const query = validateResult.data;

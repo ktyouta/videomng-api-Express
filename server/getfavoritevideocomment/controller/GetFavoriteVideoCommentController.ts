@@ -1,4 +1,5 @@
 import { Response } from 'express';
+import { ZodIssue } from 'zod';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware';
@@ -6,12 +7,14 @@ import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
-import { HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetFavoriteVideoCommentConst';
 import { FavoriteVideoCommentResponseDataModel } from '../model/FavoriteVideoCommentResponseDataModel2';
 import { FilterdBlockCommentModel } from '../model/FilterdBlockCommentModel';
 import { GetFavoriteVideoCommentResponseModel } from '../model/GetFavoriteVideoCommentResponseModel';
+import { RequestPathParamSchema } from '../schema/RequestPathParamSchema';
+import { RequestQuerySchema } from '../schema/RequestQuerySchema';
 import { GetFavoriteVideoCommentService } from '../service/GetFavoriteVideoCommentService';
 
 
@@ -39,20 +42,37 @@ export class GetFavoriteVideoCommentController extends RouteController {
     public async doExecute(req: AuthenticatedRequest, res: Response) {
 
         const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
-        const id = req.params.videoId;
 
-        if (!id) {
-            throw Error(`動画IDが指定されていません。`);
+        // パスパラメータのバリデーションチェック
+        const pathValidateResult = RequestPathParamSchema.safeParse(req.params);
+
+        if (!pathValidateResult.success) {
+            throw Error(`${pathValidateResult.error.message}`);
         }
 
-        const videoIdModel = new VideoIdModel(id);
+        // パスパラメータ
+        const param = pathValidateResult.data;
+        const videoIdModel = new VideoIdModel(param.videoId);
+
+        // クエリパラメータのバリデーションチェック
+        const validateResult = RequestQuerySchema.safeParse(req.query);
+
+        // バリデーションエラー
+        if (!validateResult.success) {
+
+            // エラーメッセージを取得
+            const validatErrMessage = validateResult.error.errors.map((e: ZodIssue) => {
+                return e.message;
+            }).join(`,`);
+
+            return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
+        }
 
         // クエリパラメータ
-        const query = req.query;
+        const query = validateResult.data;
 
         // 次コメント取得トークン
-        const nextPageToken = query[`nextpagetoken`] as string;
-        const nextPageTokenModel = new YouTubeDataApiCommentThreadNextPageToken(nextPageToken);
+        const nextPageTokenModel = new YouTubeDataApiCommentThreadNextPageToken(query.nextpagetoken);
 
         // YouTube Data Apiから動画コメントを取得する
         const youTubeFavoriteVideoCommentApi = await this.getFavoriteVideoCommentService.callYouTubeDataCommentApi(

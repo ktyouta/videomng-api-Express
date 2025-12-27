@@ -8,7 +8,8 @@ import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/con
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/SearchCommentByKeywordConst';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';
-import { SearchCommentByKeywordQueryParameterSchema } from '../model/SearchCommentByKeywordQueryParameterSchema';
+import { RequestPathParamSchema } from '../schema/RequestPathParamSchema';
+import { RequestQuerySchema } from '../schema/RequestQuerySchema';
 import { SearchCommentByKeywordService } from '../service/SearchCommentByKeywordService';
 
 
@@ -34,19 +35,19 @@ export class SearchCommentByKeywordController extends RouteController {
      */
     public async doExecute(req: Request, res: Response) {
 
-        const id = req.params.videoId;
+        // パスパラメータのバリデーションチェック
+        const pathValidateResult = RequestPathParamSchema.safeParse(req.params);
 
-        if (!id) {
-            throw Error(`動画IDが指定されていません。 endpoint:${ApiEndopoint.SEARCH_COMMENT_BY_KEYWORD} | method:${HttpMethodType.GET}`);
+        if (!pathValidateResult.success) {
+            throw Error(`${pathValidateResult.error.message} endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
         }
 
-        const videoIdModel = new VideoIdModel(id);
-
-        // クエリパラメータを取得
-        const query = req.query;
+        // パスパラメータ
+        const param = pathValidateResult.data;
+        const videoIdModel = new VideoIdModel(param.videoId);
 
         // クエリパラメータのバリデーションチェック
-        const validateResult = SearchCommentByKeywordQueryParameterSchema.safeParse(query);
+        const validateResult = RequestQuerySchema.safeParse(req.query);
 
         // バリデーションエラー
         if (!validateResult.success) {
@@ -59,9 +60,11 @@ export class SearchCommentByKeywordController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        // キーワードを取得
-        const keyword = query[`q`] as string;
-        const searchCommentByKeywordKeywordModel = new SearchCommentByKeywordKeywordModel(keyword);
+        // クエリパラメータ
+        const query = validateResult.data;
+
+        // キーワード
+        const searchCommentByKeywordKeywordModel = new SearchCommentByKeywordKeywordModel(query.q);
 
         // 動画コメントを取得
         const commentList = await this.searchCommentByKeywordService.getCommentList(
