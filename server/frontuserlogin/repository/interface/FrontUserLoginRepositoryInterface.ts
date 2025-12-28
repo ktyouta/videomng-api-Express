@@ -1,7 +1,8 @@
 import { FrontUserInfoMaster, FrontUserLoginMaster, Prisma } from "@prisma/client";
-import { FrontUserLoginSelectEntity } from "../../entity/FrontUserLoginSelectEntity";
 import { FrontUserInfoSelectEntity } from "../../entity/FrontUserInfoSelectEntity";
 import { FrontUserInfoUpdateLastLoginDateEntity } from "../../entity/FrontUserInfoUpdateLastLoginDateEntity";
+import { FrontUserInfoUpdatePasswordEntity } from "../../entity/FrontUserInfoUpdatePasswordEntity";
+import { FrontUserLoginSelectEntity } from "../../entity/FrontUserLoginSelectEntity";
 
 
 /**
@@ -24,4 +25,11 @@ export interface FrontUserLoginRepositoryInterface {
      */
     updateLastLoginDate(frontUserInfoUpdateLastLoginDateEntity: FrontUserInfoUpdateLastLoginDateEntity,
         tx: Prisma.TransactionClient): Promise<FrontUserInfoMaster>;
+
+    /**
+     * パスワードを更新
+     * @param entity 
+     * @param tx 
+     */
+    updatePassword(entity: FrontUserInfoUpdatePasswordEntity, tx: Prisma.TransactionClient): Promise<FrontUserLoginMaster>;
 }

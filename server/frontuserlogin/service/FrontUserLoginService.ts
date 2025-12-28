@@ -1,61 +1,49 @@
 import { Prisma } from '@prisma/client';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
+import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { RepositoryType } from '../../util/const/CommonConst';
 import { FrontUserInfoSelectEntity } from '../entity/FrontUserInfoSelectEntity';
 import { FrontUserInfoUpdateLastLoginDateEntity } from '../entity/FrontUserInfoUpdateLastLoginDateEntity';
+import { FrontUserInfoUpdatePasswordEntity } from '../entity/FrontUserInfoUpdatePasswordEntity';
 import { FrontUserLoginSelectEntity } from '../entity/FrontUserLoginSelectEntity';
-import { FrontUserLoginRepositorys } from '../repository/FrontUserLoginRepositorys';
 import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
 
 
 export class FrontUserLoginService {
 
-
-    /**
-     * 永続ロジック用オブジェクトを取得
-     */
-    public getFrontUserLoginMasterRepository(): FrontUserLoginRepositoryInterface {
-
-        return (new FrontUserLoginRepositorys()).get(RepositoryType.POSTGRESQL);
-    }
-
+    constructor(private readonly repository: FrontUserLoginRepositoryInterface) { }
 
     /**
      * ログインユーザーを取得
      * @param frontUserLoginRequestBody 
      */
-    public async getLoginUser(frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface,
-        userNameModel: FrontUserNameModel) {
+    public async getLoginUser(userNameModel: FrontUserNameModel) {
 
         const frontUserLoginSelectEntity = new FrontUserLoginSelectEntity(
             userNameModel
         );
 
-        const frontUserLoginList = await frontUserLoginMasterRepository.selectLoginUser(frontUserLoginSelectEntity);
+        const frontUserLoginList = await this.repository.selectLoginUser(frontUserLoginSelectEntity);
 
         return frontUserLoginList;
     }
-
 
     /**
      * ユーザーを情報
      * @param frontUserLoginRequestBody 
      */
-    public async getUserInfo(frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface,
-        inputFrontUserId: FrontUserIdModel) {
+    public async getUserInfo(inputFrontUserId: FrontUserIdModel) {
 
         const rontUserInfoSelectEntity = new FrontUserInfoSelectEntity(
             inputFrontUserId
         );
 
-        const frontUserList = await frontUserLoginMasterRepository.selectUserInfo(rontUserInfoSelectEntity);
+        const frontUserList = await this.repository.selectUserInfo(rontUserInfoSelectEntity);
 
         return frontUserList;
     }
-
 
     /**
      * jwtを作成する
@@ -74,20 +62,36 @@ export class FrontUserLoginService {
         }
     }
 
-
     /**
      * ユーザーの最終ログイン日時を更新する
      * @param frontUserIdModel 
      * @param tx 
      */
-    public async updateLastLoginDate(frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface,
+    public async updateLastLoginDate(
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient
     ) {
 
         const frontUserInfoUpdateLastLoginDateEntity = new FrontUserInfoUpdateLastLoginDateEntity(frontUserIdModel);
 
-        const frontUser = await frontUserLoginMasterRepository.updateLastLoginDate(frontUserInfoUpdateLastLoginDateEntity, tx);
+        const frontUser = await this.repository.updateLastLoginDate(frontUserInfoUpdateLastLoginDateEntity, tx);
+
+        return frontUser;
+    }
+
+    /**
+     * パスワードを更新する
+     * @param frontUserIdModel 
+     * @param tx 
+     */
+    public async updatePassword(frontUserIdModel: FrontUserIdModel,
+        passwordModel: FrontUserPasswordModel,
+        tx: Prisma.TransactionClient
+    ) {
+
+        const entity = new FrontUserInfoUpdatePasswordEntity(frontUserIdModel, passwordModel);
+
+        const frontUser = await this.repository.updatePassword(entity, tx);
 
         return frontUser;
     }

@@ -1,9 +1,10 @@
-import { FrontUserLoginRepositoryInterface } from "../interface/FrontUserLoginRepositoryInterface";
-import { FrontUserLoginSelectEntity } from "../../entity/FrontUserLoginSelectEntity";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { FrontUserInfoMaster, FrontUserLoginMaster, Prisma } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { FrontUserInfoSelectEntity } from "../../entity/FrontUserInfoSelectEntity";
 import { FrontUserInfoUpdateLastLoginDateEntity } from "../../entity/FrontUserInfoUpdateLastLoginDateEntity";
+import { FrontUserInfoUpdatePasswordEntity } from "../../entity/FrontUserInfoUpdatePasswordEntity";
+import { FrontUserLoginSelectEntity } from "../../entity/FrontUserLoginSelectEntity";
+import { FrontUserLoginRepositoryInterface } from "../interface/FrontUserLoginRepositoryInterface";
 
 
 
@@ -76,6 +77,29 @@ export class FrontUserLoginRepositoryPostgres implements FrontUserLoginRepositor
             data: {
                 updateDate: new Date(),
                 lastLoginDate: new Date(),
+            },
+        });
+
+        return userInfo;
+    }
+
+
+    /**
+     * パスワードを更新
+     * @param frontUserInfoUpdateLastLoginDateEntity 
+     * @param tx 
+     * @returns 
+     */
+    async updatePassword(entity: FrontUserInfoUpdatePasswordEntity, tx: Prisma.TransactionClient) {
+
+        const userId = entity.frontUserId;
+        const password = entity.password;
+
+        const userInfo = tx.frontUserLoginMaster.update({
+            where: { userId },
+            data: {
+                password,
+                updateDate: new Date(),
             },
         });
 

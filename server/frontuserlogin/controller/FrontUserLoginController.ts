@@ -8,10 +8,12 @@ import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/
 import { FrontUserSaltValueModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel';
 import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
 import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
+import { PepperModel } from '../../pepper/model/PepperModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { RepositoryType } from '../../util/const/CommonConst';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { PrismaTransaction } from '../../util/service/PrismaTransaction';
@@ -19,13 +21,13 @@ import { LOGIN_ERR_MESSAGE } from '../const/FrontUserLoginConst';
 import { FrontUserLoginRequestModelSchema } from '../model/FrontUserLoginRequestModelSchema';
 import { FrontUserLoginRequestType } from '../model/FrontUserLoginRequestType';
 import { FrontUserLoginCreateResponseModel } from '../model/FrontUserLoginResponseModel';
-import { FrontUserLoginRepositoryInterface } from '../repository/interface/FrontUserLoginRepositoryInterface';
+import { FrontUserLoginRepositorys } from '../repository/FrontUserLoginRepositorys';
 import { FrontUserLoginService } from '../service/FrontUserLoginService';
 
 
 export class FrontUserLoginController extends RouteController {
 
-    private frontUserLoginService = new FrontUserLoginService();
+    private frontUserLoginService = new FrontUserLoginService((new FrontUserLoginRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -66,12 +68,8 @@ export class FrontUserLoginController extends RouteController {
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
-            // 永続ロジックを取得する
-            const frontUserLoginMasterRepository: FrontUserLoginRepositoryInterface =
-                this.frontUserLoginService.getFrontUserLoginMasterRepository();
-
             // ログインユーザーを取得
-            const frontUserLoginList = await this.frontUserLoginService.getLoginUser(frontUserLoginMasterRepository, userNameModel);
+            const frontUserLoginList = await this.frontUserLoginService.getLoginUser(userNameModel);
 
             // ユーザーの取得に失敗
             if (frontUserLoginList.length === 0) {
@@ -86,16 +84,28 @@ export class FrontUserLoginController extends RouteController {
                 throw Error(`ソルト値を取得できませんでした。ユーザーID:${frontUserLogin.userId}`);
             }
 
-            // テーブルから取得したソルト値をもとに入力されたパスワードをハッシュ化する
+            // テーブルから取得したソルト値とペッパー値をもとに入力されたパスワードをハッシュ化する
             const saltModel = FrontUserSaltValueModel.reConstruct(salt);
-            const inputPasswordModel = FrontUserPasswordModel.hash(requestBody.password, saltModel);
+            const pepperModel = new PepperModel();
 
-            if (inputPasswordModel.frontUserPassword !== frontUserLogin.password) {
-                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
+            const secureInputPasswordModel = FrontUserPasswordModel.secureHash(requestBody.password, saltModel, pepperModel);
+
+            // salt + pepper認証に失敗
+            if (secureInputPasswordModel.frontUserPassword !== frontUserLogin.password) {
+
+                // salt認証
+                const inputPasswordModel = FrontUserPasswordModel.hash(requestBody.password, saltModel);
+
+                if (inputPasswordModel.frontUserPassword !== frontUserLogin.password) {
+                    return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, LOGIN_ERR_MESSAGE);
+                }
+
+                // パスワードをsalt + pepperハッシュで更新する
+                await this.frontUserLoginService.updatePassword(frontUserIdModel, secureInputPasswordModel, tx);
             }
 
             // ユーザー情報を取得
-            const frontUserList = await this.frontUserLoginService.getUserInfo(frontUserLoginMasterRepository, frontUserIdModel);
+            const frontUserList = await this.frontUserLoginService.getUserInfo(frontUserIdModel);
 
             // ユーザーの取得に失敗
             if (frontUserList.length === 0) {
@@ -117,7 +127,7 @@ export class FrontUserLoginController extends RouteController {
             const frontUserLoginCreateResponseModel = new FrontUserLoginCreateResponseModel(frontUser);
 
             // 最終ログイン日時を更新する
-            await this.frontUserLoginService.updateLastLoginDate(frontUserLoginMasterRepository, frontUserIdModel, tx);
+            await this.frontUserLoginService.updateLastLoginDate(frontUserIdModel, tx);
 
             // cookieを返却
             res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);

@@ -17,4 +17,5 @@ export const envConfig = {
     refreshTokenExpires: process.env.REFRESH_TOKEN_EXPIRES,
     accessTokenJwtKey: process.env.ACCESS_TOKEN_JWT_KEY,
     accessTokenExpires: process.env.ACCESS_TOKEN_EXPIRES,
+    pepper: process.env.PEPPER,
 };
