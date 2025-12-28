@@ -1,28 +1,19 @@
-import { FrontUserLoginMaster } from "@prisma/client";
+import { FrontUserLoginMaster, Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserLoginMasterUpdateEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateEntity";
-import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
+import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
+import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel";
 import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { PepperModel } from "../../pepper/model/PepperModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { UpdateFrontUserPasswordSelectEntity } from "../entity/UpdateFrontUserPasswordSelectEntity";
-import { UpdateFrontUserPasswordRequestModel } from "../model/UpdateFrontUserPasswordRequestModel";
 import { UpdateFrontUserPasswordRequestType } from "../model/UpdateFrontUserPasswordRequestType";
-import { UpdateFrontUserPasswordRepositorys } from "../repository/UpdateFrontUserPasswordRepositorys";
+import { UpdateFrontUserPasswordRepositoryInterface } from "../repository/interface/UpdateFrontUserPasswordRepositoryPostgres";
 
 
 export class UpdateFrontUserPasswordService {
 
-
-    /**
-     * リクエストボディの型変換
-     * @param requestBody 
-     */
-    public parseRequestBody(requestBody: UpdateFrontUserPasswordRequestType): UpdateFrontUserPasswordRequestModel {
-        return new UpdateFrontUserPasswordRequestModel(requestBody);
-    }
-
+    constructor(private readonly repository: UpdateFrontUserPasswordRepositoryInterface) { }
 
     /**
      * ユーザー情報取得
@@ -30,47 +21,14 @@ export class UpdateFrontUserPasswordService {
      */
     public async getUserInfo(userIdModel: FrontUserIdModel,): Promise<FrontUserLoginMaster[]> {
 
-        // 永続ロジック用オブジェクトを取得
-        const updateFrontUserPasswordRepositorys = new UpdateFrontUserPasswordRepositorys();
-        const updateFrontUserPasswordRepository = updateFrontUserPasswordRepositorys.get(RepositoryType.POSTGRESQL);
-
         // ユーザー情報取得用Entity
-        const updateFrontUserPasswordSelectEntity = new UpdateFrontUserPasswordSelectEntity(userIdModel);
+        const entity = new UpdateFrontUserPasswordSelectEntity(userIdModel);
 
         // ユーザー情報を取得
-        const userInfoList = await updateFrontUserPasswordRepository.select(updateFrontUserPasswordSelectEntity);
+        const userInfoList = await this.repository.select(entity);
 
         return userInfoList;
     }
-
-
-    /**
-     * ユーザーログインマスタ永続ロジック用オブジェクトを取得
-     * @returns 
-     */
-    public getFrontUserLoginMasterRepository(): FrontUserLoginMasterRepositoryInterface {
-
-        return (new FrontUserLoginMasterRepositorys()).get(RepositoryType.POSTGRESQL);
-    }
-
-
-    /**
-     * パスワード更新用データの作成
-     * @param title 
-     * @param publishedDate 
-     * @param description 
-     * @returns 
-     */
-    public updateUserLoginMasterUpdateBody(userId: FrontUserIdModel,
-        parsedRequestBody: UpdateFrontUserPasswordRequestModel): FrontUserLoginMasterUpdateEntity {
-
-        return new FrontUserLoginMasterUpdateEntity(
-            userId,
-            parsedRequestBody.newPasswordModel,
-            parsedRequestBody.frontUserSaltValueModel,
-        );
-    }
-
 
     /**
      * jwtを作成する
@@ -87,5 +45,33 @@ export class UpdateFrontUserPasswordService {
         } catch (err) {
             throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_PASSWORD_ID}`);
         }
+    }
+
+    /**
+     * パスワードを更新する
+     * @param userIdModel 
+     * @param frontUserInfoCreateRequestBody 
+     * @returns 
+     */
+    async update(requestBody: UpdateFrontUserPasswordRequestType,
+        userIdModel: FrontUserIdModel,
+        pepperModel: PepperModel,
+        tx: Prisma.TransactionClient,
+    ) {
+
+        // ソルト生成
+        const newSaltModel = FrontUserSaltValueModel.generate();
+        // 新パスワード
+        const newPasswordModel = FrontUserPasswordModel.secureHash(requestBody.newPassword, newSaltModel, pepperModel);
+
+        const entity = new FrontUserLoginMasterUpdateEntity(
+            userIdModel,
+            newPasswordModel,
+            newSaltModel
+        );
+
+        const result = await this.repository.update(entity, tx);
+
+        return result;
     }
 }

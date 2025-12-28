@@ -1,10 +1,8 @@
 import { Prisma } from "@prisma/client";
 import { FLG } from "../../../../util/const/CommonConst";
-import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
 import { FrontUserLoginMasterInsertEntity } from "../../entity/FrontUserLoginMasterInsertEntity";
-import { FrontUserLoginMasterUpdateEntity } from "../../entity/FrontUserLoginMasterUpdateEntity";
-import { FrontUserLoginMasterRepositoryInterface } from "../interface/FrontUserLoginMasterRepositoryInterface";
 import { FrontUserLoginMasterUpdateUserInfoEntity } from "../../entity/FrontUserLoginMasterUpdateUserInfoEntity";
+import { FrontUserLoginMasterRepositoryInterface } from "../interface/FrontUserLoginMasterRepositoryInterface";
 
 
 
@@ -43,29 +41,6 @@ export class FrontUserLoginMasterRepositoryPostgres implements FrontUserLoginMas
         });
 
         return newUserInfo;
-    }
-
-
-    /**
-     * フロントのユーザー情報を更新
-     */
-    async update(frontUserLoginMasterUpdateEntity: FrontUserLoginMasterUpdateEntity,
-        tx: Prisma.TransactionClient) {
-
-        const userId = frontUserLoginMasterUpdateEntity.frontUserId;
-        const password = frontUserLoginMasterUpdateEntity.frontUserPassword;
-        const salt = frontUserLoginMasterUpdateEntity.salt;
-
-        const userInfo = tx.frontUserLoginMaster.update({
-            where: { userId },
-            data: {
-                password,
-                salt,
-                updateDate: new Date(),
-            },
-        });
-
-        return userInfo;
     }
 
     /**

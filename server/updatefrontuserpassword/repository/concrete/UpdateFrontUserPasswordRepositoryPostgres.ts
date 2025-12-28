@@ -1,7 +1,8 @@
-import { UpdateFrontUserPasswordSelectEntity } from "../../entity/UpdateFrontUserPasswordSelectEntity";
+import { FrontUserLoginMaster, Prisma } from "@prisma/client";
+import { FrontUserLoginMasterUpdateEntity } from "../../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateEntity";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { UpdateFrontUserPasswordSelectEntity } from "../../entity/UpdateFrontUserPasswordSelectEntity";
 import { UpdateFrontUserPasswordRepositoryInterface } from "../interface/UpdateFrontUserPasswordRepositoryPostgres";
-import { FrontUserInfoMaster, FrontUserLoginMaster } from "@prisma/client";
 
 
 
@@ -32,4 +33,25 @@ export class UpdateFrontUserPasswordRepositoryPostgres implements UpdateFrontUse
         return frontUserList;
     }
 
+    /**
+     * フロントのユーザー情報を更新
+     */
+    async update(entity: FrontUserLoginMasterUpdateEntity,
+        tx: Prisma.TransactionClient) {
+
+        const userId = entity.frontUserId;
+        const password = entity.frontUserPassword;
+        const salt = entity.salt;
+
+        const userInfo = tx.frontUserLoginMaster.update({
+            where: { userId },
+            data: {
+                password,
+                salt,
+                updateDate: new Date(),
+            },
+        });
+
+        return userInfo;
+    }
 }

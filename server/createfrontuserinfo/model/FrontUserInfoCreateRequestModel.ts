@@ -2,6 +2,7 @@ import { FrontUserBirthdayModel } from "../../internaldata/frontuserinfomaster/p
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel";
+import { PepperModel } from "../../pepper/model/PepperModel";
 import { FrontUserInfoCreateRequestType } from "./FrontUserInfoCreateRequestType";
 
 export class FrontUserInfoCreateRequestModel {
@@ -16,9 +17,11 @@ export class FrontUserInfoCreateRequestModel {
 
         // ソルト値生成
         const salt = FrontUserSaltValueModel.generate();
+        // pepper
+        const pepperModel = new PepperModel();
 
         this._frontUserNameModel = new FrontUserNameModel(userInfoCreateBody.userName);
-        this._frontUserPasswordModel = FrontUserPasswordModel.hash(userInfoCreateBody.password, salt);
+        this._frontUserPasswordModel = FrontUserPasswordModel.secureHash(userInfoCreateBody.password, salt, pepperModel);
         this._frontUserBidthdayModel = new FrontUserBirthdayModel(userInfoCreateBody.userBirthday);
         this._frontUserSaltModel = salt;
     }

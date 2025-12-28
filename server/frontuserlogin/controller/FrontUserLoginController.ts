@@ -88,6 +88,7 @@ export class FrontUserLoginController extends RouteController {
             const saltModel = FrontUserSaltValueModel.reConstruct(salt);
             const pepperModel = new PepperModel();
 
+            // ハッシュパスワード(salt + pepper)
             const secureInputPasswordModel = FrontUserPasswordModel.secureHash(requestBody.password, saltModel, pepperModel);
 
             // salt + pepper認証に失敗
