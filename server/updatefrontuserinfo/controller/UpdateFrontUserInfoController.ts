@@ -75,7 +75,7 @@ export class UpdateFrontUserInfoController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
 
         // パスパラメータのユーザーIDとtokenのユーザーIDを比較
         if (userIdModel.frontUserId !== frontUserIdModel.frontUserId) {

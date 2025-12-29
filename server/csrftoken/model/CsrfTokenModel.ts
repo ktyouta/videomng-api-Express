@@ -11,7 +11,7 @@ export class CsrfTokenModel {
     // cookieのキー
     static readonly COOKIE_KEY: string = `csrf_token`;
     // ヘッダーのキー
-    static readonly HEADER_KEY: string = `csrf_token`;
+    static readonly HEADER_KEY: string = `X-CSRF-Token`;
     // cookieオプション
     static readonly COOKIE_OPTION: CookieOptions = {
         httpOnly: false,

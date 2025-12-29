@@ -1,6 +1,5 @@
-import { FrontUserLoginMaster } from "@prisma/client";
+import { FrontUserInfoType } from "../../../common/type/FrontUserInfoType";
 import { JsonWebTokenUserInfoSelectEntity } from "../../entity/JsonWebTokenUserInfoSelectEntity";
-import { FrontUserInfoType } from "../../type/FrontUserInfoType";
 
 
 /**

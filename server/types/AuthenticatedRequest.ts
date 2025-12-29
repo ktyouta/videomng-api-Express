@@ -1,8 +1,10 @@
 import { Request } from 'express';
+import { FrontUserInfoType } from '../common/type/FrontUserInfoType';
 import { FrontUserIdModel } from '../internaldata/common/properties/FrontUserIdModel';
-import { FrontUserInfoType } from '../middleware/authMiddleware/type/FrontUserInfoType';
 
 export type AuthenticatedRequest = {
-    frontUserIdModel: FrontUserIdModel,
-    frontUserInfo: FrontUserInfoType,
+    userInfo: {
+        frontUserIdModel: FrontUserIdModel,
+        frontUserInfo: FrontUserInfoType,
+    }
 } & Request;

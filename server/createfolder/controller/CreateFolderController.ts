@@ -39,7 +39,7 @@ export class CreateFolderController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
         // リクエストのバリデーションチェック
         const validateResult = CreateFolderRequestSchema.safeParse(req.body);
 

@@ -1,10 +1,10 @@
+import { FrontUserInfoType } from '../../common/type/FrontUserInfoType';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { envConfig } from '../../util/const/EnvConfig';
 import { JsonWebTokenUserInfoSelectEntity } from '../entity/JsonWebTokenUserInfoSelectEntity';
 import { JsonWebTokenUserInfoRepositorys } from '../repository/JsonWebTokenUserInfoRepositorys';
-import { FrontUserInfoType } from '../type/FrontUserInfoType';
 import { JsonWebTokenModel } from './JsonWebTokenModel';
 
 

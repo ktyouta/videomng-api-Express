@@ -36,7 +36,7 @@ export class DeleteFavoriteVideoController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
         const id = req.params.id;
 
         if (!id) {

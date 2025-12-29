@@ -39,7 +39,7 @@ export class UploadFavoriteVideoListCsvController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
         const file = req.file;
 
         if (!file) {

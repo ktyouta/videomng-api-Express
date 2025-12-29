@@ -37,7 +37,7 @@ export class UpdateFavoriteVideoCustomController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {

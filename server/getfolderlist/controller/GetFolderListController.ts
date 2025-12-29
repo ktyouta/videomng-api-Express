@@ -33,7 +33,7 @@ export class GetFolderListController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
 
         // フォルダリスト取得
         const result = await this.getFolderService.getFolderList(frontUserIdModel);

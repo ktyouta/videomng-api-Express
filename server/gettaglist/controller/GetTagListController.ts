@@ -32,7 +32,7 @@ export class GetTagListController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
 
         // 永続ロジック用オブジェクトを取得
         const getGetTagListRepository = this.getTagListService.getGetTagListRepository();

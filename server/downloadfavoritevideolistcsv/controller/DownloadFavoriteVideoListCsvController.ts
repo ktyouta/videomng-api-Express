@@ -35,7 +35,7 @@ export class DownloadFavoriteVideoListCsvController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
 
         // お気に入り動画リストを取得
         const favoriteVideoList = await this.downloadFavoriteVideoListCsvService.getFavoriteVideoList(

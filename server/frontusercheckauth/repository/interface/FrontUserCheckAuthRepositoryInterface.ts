@@ -1,4 +1,4 @@
-import { FrontUserInfoType } from "../../../jsonwebtoken/type/FrontUserInfoType";
+import { FrontUserInfoType } from "../../../common/type/FrontUserInfoType";
 import { UserSelectEntity } from "../../entity/UserSelectEntity";
 
 

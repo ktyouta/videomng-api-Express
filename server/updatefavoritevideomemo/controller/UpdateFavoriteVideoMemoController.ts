@@ -40,7 +40,7 @@ export class UpdateFavoriteVideoMemoController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
         const videoId = req.params.videoId;
 
         if (!videoId) {

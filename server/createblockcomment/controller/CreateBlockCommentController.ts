@@ -39,7 +39,7 @@ export class CreateBlockCommentController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel: FrontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel: FrontUserIdModel = req.userInfo.frontUserIdModel;
         const id = req.params.videoId;
 
         if (!id) {

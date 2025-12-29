@@ -1,6 +1,6 @@
+import { FrontUserInfoType } from "../../../common/type/FrontUserInfoType";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { JsonWebTokenUserInfoSelectEntity } from "../../entity/JsonWebTokenUserInfoSelectEntity";
-import { FrontUserInfoType } from "../../type/FrontUserInfoType";
 import { JsonWebTokenUserInfoRepositoryInterface } from "../interface/JsonWebTokenUserInfoRepositoryInterface";
 
 

@@ -41,7 +41,7 @@ export class GetFavoriteVideoCommentController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
 
         // パスパラメータのバリデーションチェック
         const pathValidateResult = RequestPathParamSchema.safeParse(req.params);

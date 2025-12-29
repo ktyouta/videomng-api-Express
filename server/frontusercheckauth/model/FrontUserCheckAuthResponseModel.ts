@@ -1,6 +1,6 @@
 import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
 import { AuthUserInfoType } from "../../common/type/AuthUserInfoType";
-import { FrontUserInfoType } from "../type/FrontUserInfoType";
+import { FrontUserInfoType } from "../../common/type/FrontUserInfoType";
 
 export class FrontUserCheckAuthResponseModel {
 

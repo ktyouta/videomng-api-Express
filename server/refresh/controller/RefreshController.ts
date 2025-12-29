@@ -42,13 +42,12 @@ export class RefreshController extends RouteController {
             const headerModel = new HeaderModel(req);
             // cookie
             const cookieModel = new CookieModel(req);
-
             // CSRFトークン
             const csrfTokenHeaderModel = CsrfTokenModel.fromHeader(headerModel);
             const csrfTokenCookieModel = CsrfTokenModel.fromCookie(cookieModel);
 
             // CSRFトークンの等価チェック
-            if (csrfTokenHeaderModel.equal(csrfTokenCookieModel)) {
+            if (!csrfTokenHeaderModel.equal(csrfTokenCookieModel)) {
                 return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証失敗`);
             }
 

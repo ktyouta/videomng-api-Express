@@ -47,7 +47,7 @@ export class GetFavoriteVideoFolderController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.frontUserIdModel;
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
 
         // パスパラメータのバリデーションチェック
         const pathValidateResult = RequestPathParamSchema.safeParse(req.params);

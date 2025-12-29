@@ -1,5 +1,5 @@
+import { FrontUserInfoType } from "../../../../common/type/FrontUserInfoType";
 import { SelectEntity } from "../../entity/SelectEntity";
-import { FrontUserInfoType } from "../../type/FrontUserInfoType";
 
 
 /**

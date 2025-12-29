@@ -1,5 +1,5 @@
+import { FrontUserInfoType } from "../../../common/type/FrontUserInfoType";
 import { RefreshSelectEntity } from "../../entity/RefreshSelectEntity";
-import { FrontUserInfoType } from "../../type/FrontUserInfoType";
 
 
 /**
