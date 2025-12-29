@@ -1,3 +1,4 @@
+import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
@@ -6,8 +7,6 @@ import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/front
 import { FrontUserLoginMasterInsertEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterInsertEntity";
 import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RepositoryType } from "../../util/const/CommonConst";
 import { FrontUserInfoCreateSelectEntity } from "../entity/FrontUserInfoCreateSelectEntity";
 import { FrontUserInfoCreateRequestModel } from "../model/FrontUserInfoCreateRequestModel";
@@ -77,31 +76,16 @@ export class CreateFrontUserInfoService {
 
 
     /**
-     * jwtを作成する
-     * @param userIdModel 
-     * @param frontUserInfoCreateRequestBody 
-     */
-    public createJsonWebToken(userIdModel: FrontUserIdModel) {
-
-        try {
-            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel);
-
-            return newJsonWebTokenModel;
-        } catch (err) {
-            throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_LOGIN}`);
-        }
-    }
-
-
-    /**
      * レスポンスを作成
      * @param frontUserInfoCreateRequestBody 
      * @param newJsonWebTokenModel 
      */
-    public createResponse(frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel, userIdModel: FrontUserIdModel)
+    public createResponse(frontUserInfoCreateRequestBody: FrontUserInfoCreateRequestModel,
+        userIdModel: FrontUserIdModel,
+        accessTokenModel: AccessTokenModel)
         : FrontUserInfoCreateResponseModel {
 
-        return new FrontUserInfoCreateResponseModel(frontUserInfoCreateRequestBody, userIdModel);
+        return new FrontUserInfoCreateResponseModel(frontUserInfoCreateRequestBody, userIdModel, accessTokenModel);
     }
 
 

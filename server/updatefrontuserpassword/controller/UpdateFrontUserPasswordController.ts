@@ -4,9 +4,7 @@ import { ZodIssue } from "zod";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel";
-import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { authMiddleware } from "../../middleware/authMiddleware";
+import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
 import { PepperModel } from "../../pepper/model/PepperModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
@@ -83,7 +81,7 @@ export class UpdateFrontUserPasswordController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_BAD_REQUEST, `確認用パスワードが一致しません。`);
         }
 
-        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
+        const frontUserIdModel = req.frontUserIdModel;
 
         // パスパラメータのユーザーIDとtokenのユーザーIDを比較
         if (userIdModel.frontUserId !== frontUserIdModel.frontUserId) {
@@ -133,12 +131,6 @@ export class UpdateFrontUserPasswordController extends RouteController {
                 pepperModel,
                 tx
             );
-
-            // jwtを作成
-            const newJsonWebTokenModel = await this.updateFrontUserPasswordService.createJsonWebToken(userIdModel);
-
-            // cookieを返却
-            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `パスワードの更新が完了しました。`);
         }, next);

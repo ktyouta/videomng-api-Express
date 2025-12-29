@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { ZodIssue } from 'zod';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
-import { authMiddleware } from '../../middleware/authMiddleware';
+import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
@@ -41,7 +41,7 @@ export class GetFavoriteVideoCommentController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response) {
 
-        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
+        const frontUserIdModel = req.frontUserIdModel;
 
         // パスパラメータのバリデーションチェック
         const pathValidateResult = RequestPathParamSchema.safeParse(req.params);

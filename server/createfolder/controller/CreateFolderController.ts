@@ -3,7 +3,7 @@ import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
 import { FolderColorModel } from '../../internaldata/foldermaster/model/FolderColorModel';
 import { FolderNameModel } from '../../internaldata/foldermaster/model/FolderNameModel';
-import { authMiddleware } from '../../middleware/authMiddleware';
+import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
@@ -39,7 +39,7 @@ export class CreateFolderController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
+        const frontUserIdModel = req.frontUserIdModel;
         // リクエストのバリデーションチェック
         const validateResult = CreateFolderRequestSchema.safeParse(req.body);
 

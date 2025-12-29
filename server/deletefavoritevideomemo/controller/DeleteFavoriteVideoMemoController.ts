@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { VideoMemoSeqModel } from '../../internaldata/favoritevideomemotransaction/properties/VideoMemoSeqModel';
-import { authMiddleware } from '../../middleware/authMiddleware';
+import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
@@ -37,7 +37,7 @@ export class DeleteFavoriteVideoMemoController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
+        const frontUserIdModel = req.frontUserIdModel;
         const videoId = req.params.videoId;
 
         if (!videoId) {

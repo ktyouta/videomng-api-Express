@@ -1,24 +1,39 @@
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { RefreshTokenModel } from "../../refreshtoken/model/RefreshTokenModel";
+import { UserSelectEntity } from "../entity/UserSelectEntity";
+import { FrontUserCheckAuthRepositoryInterface } from "../repository/interface/FrontUserCheckAuthRepositoryInterface";
 
 
 export class FrontUserCheckAuthService {
 
+    constructor(private readonly repository: FrontUserCheckAuthRepositoryInterface) { }
+
     /**
-     * jwtを作成する
-     * @param userIdModel 
-     * @param inputPasswordModel 
-     * @returns 
+     * 認証
+     * @param refreshTokenModel 
      */
-    public createJsonWebToken(userIdModel: FrontUserIdModel) {
+    verify(refreshTokenModel: RefreshTokenModel) {
 
-        try {
-            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel);
+        const decode = refreshTokenModel.verify();
+        const userId = Number(decode.sub);
 
-            return newJsonWebTokenModel;
-        } catch (err) {
-            throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_CHECK_AUTH}`);
+        if (Number.isNaN(userId)) {
+            throw new Error("ユーザーIDが不正です。");
         }
+
+        return FrontUserIdModel.reConstruct(userId);
+    }
+
+    /**
+     * ユーザー情報を取得
+     * @param userIdModel 
+     */
+    async getUser(userIdModel: FrontUserIdModel) {
+
+        const entity = new UserSelectEntity(userIdModel);
+
+        const frontUserLoginList = await this.repository.select(entity);
+
+        return frontUserLoginList;
     }
 }

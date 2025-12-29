@@ -1,20 +1,23 @@
 import { NextFunction, Response } from 'express';
-import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
-import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
-import { authMiddleware } from '../../middleware/authMiddleware';
+import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
+import { CookieModel } from '../../cookie/model/CookieModel';
+import { CsrfTokenModel } from '../../csrftoken/model/CsrfTokenModel';
+import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../util/const/HttpStatusConst';
+import { RepositoryType } from '../../util/const/CommonConst';
+import { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { FrontUserCheckAuthResponseModel } from '../model/FrontUserCheckAuthResponseModel';
+import { FrontUserCheckAuthRepositorys } from '../repository/FrontUserCheckAuthRepositorys';
 import { FrontUserCheckAuthService } from '../service/FrontUserCheckAuthService';
 
 
 export class FrontUserCheckAuthController extends RouteController {
 
-    private readonly frontUserCheckAuthService = new FrontUserCheckAuthService();
+    private readonly frontUserCheckAuthService = new FrontUserCheckAuthService((new FrontUserCheckAuthRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -22,7 +25,6 @@ export class FrontUserCheckAuthController extends RouteController {
             HttpMethodType.GET,
             this.doExecute,
             ApiEndopoint.FRONT_USER_CHECK_AUTH,
-            [authMiddleware]
         );
     }
 
@@ -36,25 +38,40 @@ export class FrontUserCheckAuthController extends RouteController {
 
         try {
 
-            const jsonWebTokenUserModel = req.jsonWebTokenUserModel;
-            const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
+            // cookie
+            const cookieModel = new CookieModel(req);
 
-            // jwtを作成
-            const newJsonWebTokenModel = await this.frontUserCheckAuthService.createJsonWebToken(frontUserIdModel);
+            // リフレッシュトークン
+            const refreshTokenModel = RefreshTokenModel.get(cookieModel);
 
-            // cookieを返却
-            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+            // 認証
+            const userIdModel = this.frontUserCheckAuthService.verify(refreshTokenModel);
+
+            // ユーザー情報取得
+            const userInfo = await this.frontUserCheckAuthService.getUser(userIdModel);
+
+            if (!userInfo || userInfo.length === 0) {
+
+                res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
+                res.clearCookie(CsrfTokenModel.COOKIE_KEY, CsrfTokenModel.COOKIE_OPTION);
+
+                return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
+            }
+
+            // アクセストークンを発行
+            const accessTokenModel = AccessTokenModel.create(userIdModel);
 
             // レスポンス
-            const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(jsonWebTokenUserModel);
+            const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(userInfo[0], accessTokenModel);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `認証成功`, frontUserCheckAuthResponseModel.data);
         } catch (e) {
 
             // エラー発生時はクッキーを削除する
-            res.clearCookie(JsonWebTokenModel.KEY, { httpOnly: true });
+            res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
+            res.clearCookie(CsrfTokenModel.COOKIE_KEY, CsrfTokenModel.COOKIE_OPTION);
 
-            return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証失敗`);
+            return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
         }
     }
 }

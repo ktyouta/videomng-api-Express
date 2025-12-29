@@ -1,12 +1,13 @@
 import { Prisma } from "@prisma/client";
 import { NextFunction, Request, Response } from 'express';
 import { ZodIssue } from "zod";
+import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
+import { CsrfTokenModel } from "../../csrftoken/model/CsrfTokenModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { JsonWebTokenModel } from "../../jsonwebtoken/model/JsonWebTokenModel";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
+import { RefreshTokenModel } from "../../refreshtoken/model/RefreshTokenModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
@@ -102,16 +103,22 @@ export class CreateFrontUserInfoController extends RouteController {
             // ユーザーログイン情報を追加する
             await frontUserLoginMasterRepository.insert(frontUserLoginMasterInsertEntity, tx);
 
-            // jwtを作成
-            const newJsonWebTokenModel =
-                await this.createFrontUserInfoService.createJsonWebToken(userIdModel);
+            // アクセストークンを発行
+            const accessTokenModel = AccessTokenModel.create(userIdModel);
+
+            // リフレッシュトークンを発行
+            const refreshTokenModel = RefreshTokenModel.create(userIdModel);
+
+            // CSRFトークンを発行
+            const csrfTokenModel = CsrfTokenModel.create();
 
             // レスポンスを作成
             const frontUserInfoCreateResponse: FrontUserInfoCreateResponseModel =
-                this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody, userIdModel);
+                this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody, userIdModel, accessTokenModel);
 
             // cookieを返却
-            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
+            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
+            res.cookie(CsrfTokenModel.COOKIE_KEY, csrfTokenModel.token, CsrfTokenModel.COOKIE_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の登録が完了しました。`, frontUserInfoCreateResponse.data);
         }, next);

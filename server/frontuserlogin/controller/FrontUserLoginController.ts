@@ -1,13 +1,12 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { CsrfTokenModel } from '../../csrftoken/model/CsrfTokenModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { FrontUserNameModel } from '../../internaldata/frontuserinfomaster/properties/FrontUserNameModel';
 import { FrontUserPasswordModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel';
 import { FrontUserSaltValueModel } from '../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel';
-import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
-import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 import { PepperModel } from '../../pepper/model/PepperModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
@@ -115,23 +114,22 @@ export class FrontUserLoginController extends RouteController {
 
             const frontUser = frontUserList[0];
 
-            // jwtを作成
-            const newJsonWebTokenModel =
-                await this.frontUserLoginService.createJsonWebToken(frontUserIdModel);
+            // アクセストークンを発行
+            const accessTokenModel = AccessTokenModel.create(frontUserIdModel);
 
             // リフレッシュトークンを発行
             const refreshTokenModel = RefreshTokenModel.create(frontUserIdModel);
+
             // CSRFトークンを発行
             const csrfTokenModel = CsrfTokenModel.create();
 
             // レスポンスを作成
-            const frontUserLoginCreateResponseModel = new FrontUserLoginCreateResponseModel(frontUser);
+            const frontUserLoginCreateResponseModel = new FrontUserLoginCreateResponseModel(frontUser, accessTokenModel);
 
             // 最終ログイン日時を更新する
             await this.frontUserLoginService.updateLastLoginDate(frontUserIdModel, tx);
 
             // cookieを返却
-            res.cookie(JsonWebTokenModel.KEY, newJsonWebTokenModel.token, NewJsonWebTokenModel.COOKIE_OPTION);
             res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
             res.cookie(CsrfTokenModel.COOKIE_KEY, csrfTokenModel.token, CsrfTokenModel.COOKIE_OPTION);
 

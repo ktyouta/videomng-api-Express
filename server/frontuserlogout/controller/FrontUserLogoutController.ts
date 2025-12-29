@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
 import { CsrfTokenModel } from '../../csrftoken/model/CsrfTokenModel';
-import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
-import { NewJsonWebTokenModel } from '../../jsonwebtoken/model/NewJsonWebTokenModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
@@ -30,7 +28,6 @@ export class FrontUserLogoutController extends RouteController {
     public async doExecute(req: Request, res: Response) {
 
         // cookieを削除
-        res.clearCookie(JsonWebTokenModel.KEY, NewJsonWebTokenModel.COOKIE_OPTION);
         res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
         res.clearCookie(CsrfTokenModel.COOKIE_KEY, CsrfTokenModel.COOKIE_OPTION);
 

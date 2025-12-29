@@ -33,5 +33,5 @@ export enum ApiEndopoint {
     FAVORITE_VIDEO_FOLDER = "/videomng/v1/folder/:folderId/favoritevideo",
     FAVORITE_VIDEO_FOLDER_ID = "/videomng/v1/folder/:folderId/favoritevideo/:videoId",
     FOLDER_SHARE_VIDEOS = "/videomng/v1/folder/:folderId/shared-videos",
-    REFRESH = "/videomng/v1/folder/refresh",
+    REFRESH = "/videomng/v1/refresh",
 }

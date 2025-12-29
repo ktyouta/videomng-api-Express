@@ -9,7 +9,7 @@ export class AccessTokenModel {
     // トークン
     private readonly _token: string;
     // ヘッダーのキー
-    static readonly HEADER_KEY: string = `access_token`;
+    static readonly HEADER_KEY: string = `Authorization`;
     // アクセストークン用のjwtキー
     private static readonly JWT_KEY = envConfig.accessTokenJwtKey;
     // アクセストークン有効期間

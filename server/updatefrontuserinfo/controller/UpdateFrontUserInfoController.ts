@@ -1,11 +1,14 @@
 import { Prisma } from "@prisma/client";
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from "zod";
+import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
+import { CsrfTokenModel } from "../../csrftoken/model/CsrfTokenModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
 import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { authMiddleware } from "../../middleware/authMiddleware";
+import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
+import { RefreshTokenModel } from "../../refreshtoken/model/RefreshTokenModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
@@ -72,7 +75,7 @@ export class UpdateFrontUserInfoController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_UNPROCESSABLE_ENTITY, validatErrMessage);
         }
 
-        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
+        const frontUserIdModel = req.frontUserIdModel;
 
         // パスパラメータのユーザーIDとtokenのユーザーIDを比較
         if (userIdModel.frontUserId !== frontUserIdModel.frontUserId) {
@@ -118,9 +121,22 @@ export class UpdateFrontUserInfoController extends RouteController {
             // ユーザーログイン情報を更新する
             await frontUserLoginMasterRepository.updateUserInfo(frontUserLoginMasterUpdateEntity, tx);
 
+            // アクセストークンを発行
+            const accessTokenModel = AccessTokenModel.create(userIdModel);
+
+            // リフレッシュトークンを発行
+            const refreshTokenModel = RefreshTokenModel.create(userIdModel);
+
+            // CSRFトークンを発行
+            const csrfTokenModel = CsrfTokenModel.create();
+
+            // cookieを返却
+            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
+            res.cookie(CsrfTokenModel.COOKIE_KEY, csrfTokenModel.token, CsrfTokenModel.COOKIE_OPTION);
+
             // レスポンスを作成
             const frontUserInfoUpdateResponse: FrontUserInfoUpdateResponseModel =
-                new FrontUserInfoUpdateResponseModel(frontUserInfoUpdateRequestBody, userIdModel);
+                new FrontUserInfoUpdateResponseModel(frontUserInfoUpdateRequestBody, userIdModel, accessTokenModel);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の更新が完了しました。`, frontUserInfoUpdateResponse.data);
         }, next);

@@ -1,5 +1,5 @@
-import { JwtPayload } from 'jsonwebtoken';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
+import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { RefreshSelectEntity } from '../entity/RefreshSelectEntity';
 import { RefreshRepositoryInterface } from '../repository/interface/RefreshRepositoryInterface';
 
@@ -12,9 +12,10 @@ export class RefreshService {
      * 認証
      * @param refreshTokenModel 
      */
-    public verify(decode: JwtPayload) {
+    verify(refreshTokenModel: RefreshTokenModel) {
 
-        const userId = Number(decode.id);
+        const decode = refreshTokenModel.verify();
+        const userId = Number(decode.sub);
 
         if (Number.isNaN(userId)) {
             throw new Error("ユーザーIDが不正です。");
@@ -27,7 +28,7 @@ export class RefreshService {
      * ユーザー情報を取得
      * @param userIdModel 
      */
-    public async getUser(userIdModel: FrontUserIdModel) {
+    async getUser(userIdModel: FrontUserIdModel) {
 
         const entity = new RefreshSelectEntity(userIdModel);
 
@@ -35,5 +36,4 @@ export class RefreshService {
 
         return frontUserLoginList;
     }
-
 }

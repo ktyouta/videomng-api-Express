@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { authMiddleware } from '../../middleware/authMiddleware';
+import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
@@ -33,7 +33,7 @@ export class GetFolderListController extends RouteController {
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
 
-        const frontUserIdModel = req.jsonWebTokenUserModel.frontUserIdModel;
+        const frontUserIdModel = req.frontUserIdModel;
 
         // フォルダリスト取得
         const result = await this.getFolderService.getFolderList(frontUserIdModel);

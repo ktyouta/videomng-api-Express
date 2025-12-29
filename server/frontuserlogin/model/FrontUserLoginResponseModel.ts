@@ -1,19 +1,22 @@
 import { FrontUserInfoMaster } from "@prisma/client";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
-import { FrontUserLoginResponseUserModel } from "./FrontUserLoginResponseUserModel";
+import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
 import { AuthUserInfoType } from "../../common/type/AuthUserInfoType";
 
 export class FrontUserLoginCreateResponseModel {
 
     private readonly _data: AuthUserInfoType;
 
-    constructor(frontUserInfoMaster: FrontUserInfoMaster) {
+    constructor(frontUserInfoMaster: FrontUserInfoMaster,
+        accessTokenModel: AccessTokenModel,
+    ) {
 
         this._data = {
-            userId: frontUserInfoMaster.userId,
-            userName: frontUserInfoMaster.userName,
-            birthday: frontUserInfoMaster.userBirthday,
+            accessToken: accessTokenModel.token,
+            userInfo: {
+                userId: frontUserInfoMaster.userId,
+                userName: frontUserInfoMaster.userName,
+                birthday: frontUserInfoMaster.userBirthday,
+            }
         };
     }
 

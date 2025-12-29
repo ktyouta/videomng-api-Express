@@ -1,9 +1,11 @@
-import { JsonWebTokenUserModel } from '../../jsonwebtoken/Model/JsonWebTokenUserModel';
 
 declare global {
     namespace Express {
         interface Request {
-            jsonWebTokenUserModel?: JsonWebTokenUserModel,
+            userInfo?: {
+                frontUserIdModel: FrontUserIdModel,
+                frontUserInfo: FrontUserInfoType
+            }
         }
     }
 }
