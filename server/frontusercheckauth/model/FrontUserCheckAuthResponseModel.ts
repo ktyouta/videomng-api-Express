@@ -1,17 +1,13 @@
-import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
-import { AuthUserInfoType } from "../../common/type/AuthUserInfoType";
-import { FrontUserInfoType } from "../../common/type/FrontUserInfoType";
+import { FrontUserCheckAuthUserResponseDataType } from "../type/FrontUserCheckAuthUserType";
+import { FrontUserInfoType } from "../type/FrontUserInfoType";
 
 export class FrontUserCheckAuthResponseModel {
 
-    private readonly _data: AuthUserInfoType;
+    private readonly _data: FrontUserCheckAuthUserResponseDataType;
 
-    constructor(userInfo: FrontUserInfoType,
-        accessTokenModel: AccessTokenModel
-    ) {
+    constructor(userInfo: FrontUserInfoType) {
 
         this._data = {
-            accessToken: accessTokenModel.token,
             userInfo: {
                 userId: userInfo.userId,
                 userName: userInfo.userName,

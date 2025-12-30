@@ -1,5 +1,4 @@
 import { NextFunction, Response } from 'express';
-import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { CsrfTokenModel } from '../../csrftoken/model/CsrfTokenModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
@@ -58,11 +57,8 @@ export class FrontUserCheckAuthController extends RouteController {
                 return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
             }
 
-            // アクセストークンを発行
-            const accessTokenModel = AccessTokenModel.create(userIdModel);
-
             // レスポンス
-            const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(userInfo[0], accessTokenModel);
+            const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(userInfo[0]);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `認証成功`, frontUserCheckAuthResponseModel.data);
         } catch (e) {

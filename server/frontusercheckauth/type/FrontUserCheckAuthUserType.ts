@@ -1,4 +1,5 @@
-export type FrontUserCheckAuthUserType = {
-    userId: number,
-    userName: string,
+import { FrontUserInfoType } from "./FrontUserInfoType";
+
+export type FrontUserCheckAuthUserResponseDataType = {
+    userInfo: FrontUserInfoType;
 }
