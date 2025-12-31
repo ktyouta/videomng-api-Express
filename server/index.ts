@@ -20,16 +20,25 @@ app.use(cookieParser());
 const corsProtocol = envConfig.corsProtocol ?? ``;
 const corsDomain = envConfig.corsDomain ?? ``;
 const corsPort = envConfig.corsPort ?? ``;
+const corsOrigin = `${corsProtocol}${corsDomain}${corsPort}`;
 
 // プロキシ信頼設定
 app.set('trust proxy', 1);
 
 // cors設定
 app.use(cors({
+    origin: corsOrigin,
     credentials: true,
-    origin: `${corsProtocol}${corsDomain}${corsPort}`
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+        "Origin",
+        "X-Requested-With",
+        "Content-Type",
+        "Accept",
+        "Authorization",
+        "X-CSRF-Token"
+    ]
 }));
-
 
 // エラーハンドリング
 process.on('unhandledRejection', (reason, promise) => {
