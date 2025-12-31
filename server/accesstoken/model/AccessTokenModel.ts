@@ -27,11 +27,7 @@ export class AccessTokenModel {
      */
     static get(headerModel: HeaderModel) {
 
-        const token = headerModel.get(AccessTokenModel.HEADER_KEY);
-
-        if (!token) {
-            throw new AccessTokenError("アクセストークンがヘッダーに存在しません。");
-        }
+        const token = headerModel.get(AccessTokenModel.HEADER_KEY) || ``;
 
         return new AccessTokenModel(token);
     }
