@@ -1,23 +1,18 @@
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { Router, Request, Response, NextFunction } from 'express';
-import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { NextFunction, Request, Response } from 'express';
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
-import { PrismaClientInstance } from "../../util/service/PrismaClientInstance";
-import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { RouteController } from "../../router/controller/RouteController";
-import { Prisma } from "@prisma/client";
-import { PrismaTransaction } from "../../util/service/PrismaTransaction";
-import { GetViewStatusListService } from "../service/GetViewStatusListService";
+import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
+import { RepositoryType } from "../../util/const/CommonConst";
+import { HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
+import { ApiResponse } from "../../util/service/ApiResponse";
 import { GetViewStatusListResponseModel } from "../model/GetViewStatusListResponseModel";
+import { GetViewStatusListRepositorys } from "../repository/GetViewStatusListRepositorys";
+import { GetViewStatusListService } from "../service/GetViewStatusListService";
 
 
 export class GetViewStatusListController extends RouteController {
 
-    private readonly getViewStatusListService = new GetViewStatusListService();
+    private readonly getViewStatusListService = new GetViewStatusListService((new GetViewStatusListRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 

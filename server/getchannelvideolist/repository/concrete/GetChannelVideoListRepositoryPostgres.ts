@@ -1,4 +1,4 @@
-import { FavoriteVideoCategoryTransaction, FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteVideoTransaction } from "@prisma/client";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { GetChannelVideoListSelectEntity } from "../../entity/GetChannelVideoListSelectEntity";
 import { GetChannelVideoListRepositoryInterface } from "../interface/GetChannelVideoListRepositoryInterface";
@@ -27,7 +27,7 @@ export class GetChannelVideoListRepositoryPostgres implements GetChannelVideoLis
             FROM 
                 "favorite_video_transaction" a
             WHERE 
-                a.user_id = ${frontUserId} AND
+                a.user_id = CAST(${frontUserId} AS INTEGER) AND
                 a.delete_flg = '0'
             `;
 

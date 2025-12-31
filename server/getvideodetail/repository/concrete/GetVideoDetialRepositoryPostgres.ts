@@ -1,7 +1,7 @@
-import { FavoriteVideoCategoryTransaction, FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteVideoTransaction } from "@prisma/client";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { GetVideoDetialRepositoryInterface } from "../interface/GetVideoDetialRepositoryInterface";
 import { GetVideoDetialSelectEntity } from "../../entity/GetVideoDetialSelectEntity";
+import { GetVideoDetialRepositoryInterface } from "../interface/GetVideoDetialRepositoryInterface";
 
 
 
@@ -28,7 +28,7 @@ export class GetVideoDetialRepositoryPostgres implements GetVideoDetialRepositor
             FROM 
                 "favorite_video_transaction" a
             WHERE 
-                a.user_id = ${frontUserId} AND
+                a.user_id = CAST(${frontUserId} AS INTEGER) AND
                 a.video_id = ${videoId} AND
                 a.delete_flg = '0'
             `;

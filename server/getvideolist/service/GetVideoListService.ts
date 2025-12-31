@@ -1,27 +1,28 @@
+import { FavoriteVideoTransaction } from '@prisma/client';
+import { Request } from 'express';
+import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { YouTubeDataApiVideoListEndPointModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListEndPointModel';
 import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListModel';
-import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListMaxResult } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListMaxResult';
-import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiVideoListVideoCategoryId } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId';
-import { YouTubeDataApiVideoListResponseType } from '../../external/youtubedataapi/videolist/type/YouTubeDataApiVideoListResponseType';
+import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoType';
 import { YouTubeDataApiVideoListItemType } from '../../external/youtubedataapi/videolist/type/YouTubeDataApiVideoListItemType';
-import { GetVideoListResponseType } from '../type/GetVideoListResponseType';
-import { FLG, RepositoryType } from '../../util/const/CommonConst';
-import { CookieModel } from '../../cookie/model/CookieModel';
-import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
-import { JsonWebTokenUserModel } from '../../jsonwebtoken/model/JsonWebTokenUserModel';
-import { Router, Request, Response, NextFunction } from 'express';
-import { GetVideoListRepositorys } from '../repository/GetVideoListRepositorys';
+import { YouTubeDataApiVideoListResponseType } from '../../external/youtubedataapi/videolist/type/YouTubeDataApiVideoListResponseType';
+import { HeaderModel } from '../../header/model/HeaderModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { FLG } from '../../util/const/CommonConst';
 import { GetVideoListSelectEntity } from '../entity/GetVideoListSelectEntity';
+import { GetVideoListRepositoryInterface } from '../repository/interface/GetVideoListRepositoryInterface';
 import { GetVideoListItemType } from '../type/GetVideoListItemType';
-import { FavoriteVideoTransaction } from '@prisma/client';
+import { GetVideoListResponseType } from '../type/GetVideoListResponseType';
 
 
 export class GetVideoListService {
 
+    constructor(private readonly repository: GetVideoListRepositoryInterface) { }
 
     /**
      * YouTube Data Apiを呼び出す
@@ -93,40 +94,6 @@ export class GetVideoListService {
         return convertedVideoList;
     }
 
-
-    /**
-     * jwtを取得
-     * @param req 
-     * @returns 
-     */
-    public getToken(req: Request) {
-
-        const cookieModel = new CookieModel(req);
-        const jsonWebTokenModel = new JsonWebTokenModel(cookieModel);
-
-        return jsonWebTokenModel.token;
-    }
-
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param req 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`動画一覧取得時の認証エラー ERROR:${err}`);
-        }
-    }
-
-
     /**
      * お気に入り動画チェック
      * @param convertedVideoList 
@@ -134,18 +101,16 @@ export class GetVideoListService {
      * @returns 
      */
     public async checkFavorite(convertedVideoList: GetVideoListResponseType,
-        jsonWebTokenUserModel: JsonWebTokenUserModel,
+        accessTokenModel: AccessTokenModel,
     ) {
 
-        // ユーザーID
-        const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
-        const getVideoListRepositorys = (new GetVideoListRepositorys()).get(RepositoryType.POSTGRESQL);
+        const userIdModel = FrontUserIdModel.fromHAccessToken(accessTokenModel);
 
         // お気に入り動画取得用Entity
-        const getVideoDetialSelectEntity = new GetVideoListSelectEntity(frontUserIdModel);
+        const getVideoDetialSelectEntity = new GetVideoListSelectEntity(userIdModel);
 
         // お気に入り動画を取得
-        const favoriteVideoList = await getVideoListRepositorys.selectVideo(getVideoDetialSelectEntity);
+        const favoriteVideoList = await this.repository.selectVideo(getVideoDetialSelectEntity);
 
         // お気に入り動画登録チェック
         const videoDetailItems: GetVideoListItemType[] = convertedVideoList.items.map((e: GetVideoListItemType) => {
@@ -167,5 +132,18 @@ export class GetVideoListService {
         }
 
         return videoDetail;
+    }
+
+    /**
+     * アクセストークン取得
+     * @param req 
+     * @returns 
+     */
+    getAccessToken(req: Request) {
+
+        const headerModel = new HeaderModel(req);
+        const accessTokenModel = AccessTokenModel.get(headerModel);
+
+        return accessTokenModel
     }
 }

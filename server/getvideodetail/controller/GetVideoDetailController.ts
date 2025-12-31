@@ -1,19 +1,19 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { Request, Response } from 'express';
+import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { ZodIssue } from 'zod';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { RepositoryType } from '../../util/const/CommonConst';
+import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetVideoDetailConst';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { GetVideoDetialRepositorys } from '../repository/GetVideoDetialRepositorys';
 import { GetVideoDetailService } from '../service/GetVideoDetailService';
-import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 
 
 export class GetVideoDetailController extends RouteController {
 
-    private getVideoDetailService = new GetVideoDetailService();
+    private readonly getVideoDetailService = new GetVideoDetailService((new GetVideoDetialRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -53,16 +53,18 @@ export class GetVideoDetailController extends RouteController {
         // レスポンス用に型を変換する
         let convertedVideoDetail = this.getVideoDetailService.convertVideoDetail(youTubeVideoDetailApi);
 
-        // jwt取得
-        const token = this.getVideoDetailService.getToken(req);
+        try {
 
-        // ログインしている場合はお気に入りチェックを実施
-        if (token) {
-            const jsonWebTokenUserModel = await this.getVideoDetailService.checkJwtVerify(req);
+            // アクセストークン取得
+            const accessTokenModel = this.getVideoDetailService.getAccessToken(req);
 
-            // お気に入り登録チェック
-            convertedVideoDetail = await this.getVideoDetailService.checkFavorite(convertedVideoDetail, jsonWebTokenUserModel);
-        }
+            // ログインしている場合はお気に入りチェックを実施
+            if (accessTokenModel.token) {
+
+                // お気に入り登録チェック
+                convertedVideoDetail = await this.getVideoDetailService.checkFavorite(convertedVideoDetail, accessTokenModel);
+            }
+        } catch (err) { }
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, convertedVideoDetail);
     }

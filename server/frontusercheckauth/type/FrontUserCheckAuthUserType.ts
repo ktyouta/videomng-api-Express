@@ -1,4 +1,4 @@
-import { FrontUserInfoType } from "./FrontUserInfoType";
+import { FrontUserInfoType } from "../../common/type/FrontUserInfoType";
 
 export type FrontUserCheckAuthUserResponseDataType = {
     userInfo: FrontUserInfoType;

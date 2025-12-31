@@ -1,32 +1,31 @@
 import { FavoriteVideoTransaction } from '@prisma/client';
-import { YouTubeDataApiChannelId } from '../../external/youtubedataapi/channel/properties/YouTubeDataApiChannelId';
+import { Request } from 'express';
+import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { YouTubeDataApiChannelEndPointModel } from '../../external/youtubedataapi/channel/model/YouTubeDataApiChannelEndPointModel';
 import { YouTubeDataApiChannelModel } from '../../external/youtubedataapi/channel/model/YouTubeDataApiChannelModel';
-import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { YouTubeDataApiChannelId } from '../../external/youtubedataapi/channel/properties/YouTubeDataApiChannelId';
+import { YouTubeDataApiChannelItemType } from '../../external/youtubedataapi/channel/type/YouTubeDataApiChannelItemType';
 import { YouTubeDataApiPlaylistEndPointModel } from '../../external/youtubedataapi/playlist/model/YouTubeDataApiPlaylistEndPointModel';
+import { YouTubeDataApiPlaylistModel } from '../../external/youtubedataapi/playlist/model/YouTubeDataApiPlaylistModel';
 import { YouTubeDataApiPlaylistId } from '../../external/youtubedataapi/playlist/properties/YouTubeDataApiPlaylistId';
-import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiPlaylistMaxResult } from '../../external/youtubedataapi/playlist/properties/YouTubeDataApiPlaylistMaxResult';
 import { YouTubeDataApiPlaylistNextPageToken } from '../../external/youtubedataapi/playlist/properties/YouTubeDataApiVideoListNextPageToken';
-import { YouTubeDataApiPlaylistModel } from '../../external/youtubedataapi/playlist/model/YouTubeDataApiPlaylistModel';
-import { YouTubeDataApiPlaylistResponseType } from '../../external/youtubedataapi/playlist/type/YouTubeDataApiPlaylistResponseType';
 import { YouTubeDataApiPlaylistItemType } from '../../external/youtubedataapi/playlist/type/YouTubeDataApiPlaylistItemType';
-import { Router, Request, Response, NextFunction } from 'express';
-import { CookieModel } from '../../cookie/model/CookieModel';
-import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
-import { JsonWebTokenUserModel } from '../../jsonwebtoken/model/JsonWebTokenUserModel';
-import { GetChannelVideoListResponseType } from '../type/GetChannelVideoListResponseType';
-import { FLG, RepositoryType } from '../../util/const/CommonConst';
-import { GetChannelVideoListItemType } from '../type/GetChannelVideoListItemType';
+import { YouTubeDataApiPlaylistResponseType } from '../../external/youtubedataapi/playlist/type/YouTubeDataApiPlaylistResponseType';
 import { YouTubeDataApiVideoListItemType } from '../../external/youtubedataapi/videolist/type/YouTubeDataApiVideoListItemType';
-import { GetChannelVideoListRepositorys } from '../repository/GetChannelVideoListRepositorys';
+import { HeaderModel } from '../../header/model/HeaderModel';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
+import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { FLG } from '../../util/const/CommonConst';
 import { GetChannelVideoListSelectEntity } from '../entity/GetChannelVideoListSelectEntity';
-import { YouTubeDataApiChannelResponseType } from '../../external/youtubedataapi/channel/type/YouTubeDataApiChannelResponseType';
-import { YouTubeDataApiChannelItemType } from '../../external/youtubedataapi/channel/type/YouTubeDataApiChannelItemType';
+import { GetChannelVideoListRepositoryInterface } from '../repository/interface/GetChannelVideoListRepositoryInterface';
+import { GetChannelVideoListItemType } from '../type/GetChannelVideoListItemType';
+import { GetChannelVideoListResponseType } from '../type/GetChannelVideoListResponseType';
 
 
 export class GetChannelVideoListService {
 
+    constructor(private readonly repository: GetChannelVideoListRepositoryInterface) { }
 
     /**
      * YouTube Data Api(チャンネル)を呼び出す
@@ -160,40 +159,6 @@ export class GetChannelVideoListService {
         return convertedChannelVideoList;
     }
 
-
-    /**
-     * jwtを取得
-     * @param req 
-     * @returns 
-     */
-    public getToken(req: Request) {
-
-        const cookieModel = new CookieModel(req);
-        const jsonWebTokenModel = new JsonWebTokenModel(cookieModel);
-
-        return jsonWebTokenModel.token;
-    }
-
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param req 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`動画一覧取得時の認証エラー ERROR:${err}`);
-        }
-    }
-
-
     /**
      * お気に入り動画チェック
      * @param convertedChannelVideoList 
@@ -201,18 +166,17 @@ export class GetChannelVideoListService {
      * @returns 
      */
     public async checkFavorite(convertedChannelVideoList: GetChannelVideoListResponseType,
-        jsonWebTokenUserModel: JsonWebTokenUserModel,
+        accessTokenModel: AccessTokenModel,
     ) {
 
         // ユーザーID
-        const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
-        const getChannelVideoListRepositorys = (new GetChannelVideoListRepositorys()).get(RepositoryType.POSTGRESQL);
+        const userIdModel = FrontUserIdModel.fromHAccessToken(accessTokenModel);
 
         // お気に入り動画取得用Entity
-        const getVideoDetialSelectEntity = new GetChannelVideoListSelectEntity(frontUserIdModel);
+        const getVideoDetialSelectEntity = new GetChannelVideoListSelectEntity(userIdModel);
 
         // お気に入り動画を取得
-        const favoriteChannelVideoList = await getChannelVideoListRepositorys.selectVideo(getVideoDetialSelectEntity);
+        const favoriteChannelVideoList = await this.repository.selectVideo(getVideoDetialSelectEntity);
 
         // お気に入り動画登録チェック
         const videoDetailItems: GetChannelVideoListItemType[] = convertedChannelVideoList.items.map((e: GetChannelVideoListItemType) => {
@@ -234,5 +198,18 @@ export class GetChannelVideoListService {
         }
 
         return videoDetail;
+    }
+
+    /**
+     * アクセストークン取得
+     * @param req 
+     * @returns 
+     */
+    getAccessToken(req: Request) {
+
+        const headerModel = new HeaderModel(req);
+        const accessTokenModel = AccessTokenModel.get(headerModel);
+
+        return accessTokenModel
     }
 }

@@ -9,9 +9,11 @@ import { YouTubeDataApiPlaylistResponseType } from '../../external/youtubedataap
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { RepositoryType } from '../../util/const/CommonConst';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
+import { GetChannelVideoListRepositorys } from '../repository/GetChannelVideoListRepositorys';
 import { RequestPathParamSchema } from '../schema/RequestPathParamSchema';
 import { RequestQuerySchema } from '../schema/RequestQuerySchema';
 import { GetChannelVideoListService } from '../service/GetChannelVideoListService';
@@ -20,7 +22,7 @@ import { GetChannelVideoListResponseType } from '../type/GetChannelVideoListResp
 
 export class GetChannelVideoListController extends RouteController {
 
-    private getChannelVideoListService = new GetChannelVideoListService();
+    private readonly getChannelVideoListService = new GetChannelVideoListService((new GetChannelVideoListRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -116,16 +118,18 @@ export class GetChannelVideoListController extends RouteController {
             channelResponse.items[0]
         );
 
-        // jwt取得
-        const token = this.getChannelVideoListService.getToken(req);
+        try {
 
-        // ログインしている場合はお気に入りチェックを実施
-        if (token) {
-            const jsonWebTokenUserModel = await this.getChannelVideoListService.checkJwtVerify(req);
+            // アクセストークン取得
+            const accessTokenModel = this.getChannelVideoListService.getAccessToken(req);
 
-            // お気に入り登録チェック
-            convertedChannelVideoList = await this.getChannelVideoListService.checkFavorite(convertedChannelVideoList, jsonWebTokenUserModel);
-        }
+            // ログインしている場合はお気に入りチェックを実施
+            if (accessTokenModel.token) {
+
+                // お気に入り登録チェック
+                convertedChannelVideoList = await this.getChannelVideoListService.checkFavorite(convertedChannelVideoList, accessTokenModel);
+            }
+        } catch (err) { }
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, convertedChannelVideoList);
     }

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
+import { AccessTokenModel } from "../../../accesstoken/model/AccessTokenModel";
 import { SeqIssue } from "../../../util/service/SeqIssue";
 import { SeqKeyModel } from "../../seqmaster/properties/SeqKeyModel";
 
@@ -36,11 +36,25 @@ export class FrontUserIdModel {
     }
 
     /**
-     * userIdをセット
+     * ユーザーIDをセット
      * @param userId 
      * @returns 
      */
     static reConstruct(userId: number) {
         return new FrontUserIdModel(userId);
+    }
+
+    /**
+     * アクセストークンからユーザーIDを取得
+     * @param accessTokenModel 
+     * @returns 
+     */
+    static fromHAccessToken(accessTokenModel: AccessTokenModel) {
+
+        // トークン検証
+        const decode = accessTokenModel.verify();
+        const userIdModel = FrontUserIdModel.reConstruct(decode.sub);
+
+        return userIdModel;
     }
 }

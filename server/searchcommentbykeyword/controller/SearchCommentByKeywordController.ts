@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
@@ -74,15 +75,15 @@ export class SearchCommentByKeywordController extends RouteController {
         // 取得したコメントをキーワードでフィルター
         let filterdCommentList = this.searchCommentByKeywordService.filterComment(commentList, searchCommentByKeywordKeywordModel);
 
-        // jwt取得
-        const token = this.searchCommentByKeywordService.getToken(req);
+        try {
 
-        // ログインしている場合はお気に入りコメントと非表示コメントをチェック
-        if (token) {
+            // アクセストークン取得
+            const accessTokenModel = this.searchCommentByKeywordService.getAccessToken(req);
 
-            try {
-                const jsonWebTokenUserModel = await this.searchCommentByKeywordService.checkJwtVerify(req);
-                const frontUserIdModel = jsonWebTokenUserModel.frontUserIdModel;
+            // ログインしている場合はお気に入りコメントと非表示コメントをチェック
+            if (accessTokenModel.token) {
+
+                const frontUserIdModel = FrontUserIdModel.fromHAccessToken(accessTokenModel);
 
                 // 非表示コメント取得
                 const blockCommentList = await this.searchCommentByKeywordService.getBlockComment(frontUserIdModel, videoIdModel);
@@ -101,8 +102,8 @@ export class SearchCommentByKeywordController extends RouteController {
                     filterdCommentListByBlock,
                     favoriteCommentList,
                 );
-            } catch (err) { }
-        }
+            }
+        } catch (err) { }
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, {
             totalCount: filterdCommentList.length,

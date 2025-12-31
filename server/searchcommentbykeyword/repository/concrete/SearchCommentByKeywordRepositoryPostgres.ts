@@ -1,8 +1,8 @@
-import { BlockCommentTransaction, FavoriteCommentTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { BlockCommentTransaction, FavoriteCommentTransaction } from "@prisma/client";
 import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { GetFavoriteVideoCommentRepositoryInterface } from "../interface/GetFavoriteVideoCommentRepositoryInterface";
 import { SearchCommentByKeywordBlockCommentSelectEntity } from "../../entity/SearchCommentByKeywordBlockCommentSelectEntity";
 import { SearchCommentByKeywordFavoriteCommentSelectEntity } from "../../entity/SearchCommentByKeywordFavoriteCommentSelectEntity";
+import { GetFavoriteVideoCommentRepositoryInterface } from "../interface/GetFavoriteVideoCommentRepositoryInterface";
 
 
 
@@ -29,7 +29,7 @@ export class SearchCommentByKeywordRepositoryPostgres implements GetFavoriteVide
                 comment_id as "commentId" 
             FROM "block_commnet_transaction" 
             WHERE 
-                "user_id" = ${frontUserId} AND
+                "user_id" = CAST(${frontUserId} AS INTEGER) AND
                 "video_id" = ${videoId} AND
                 "delete_flg" = '0'
             `;

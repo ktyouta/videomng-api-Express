@@ -1,16 +1,15 @@
 import { BlockCommentTransaction, FavoriteCommentTransaction } from '@prisma/client';
 import { Request } from 'express';
-import { CookieModel } from '../../cookie/model/CookieModel';
+import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { YouTubeDataApiCommentThreadItemType } from '../../external/youtubedataapi/videocomment/type/YouTubeDataApiCommentThreadItemType';
 import { YouTubeDataApiCommentThreadReplyCommentType } from '../../external/youtubedataapi/videocomment/type/YouTubeDataApiCommentThreadReplyCommentType';
+import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
-import { JsonWebTokenModel } from '../../jsonwebtoken/model/JsonWebTokenModel';
-import { JsonWebTokenUserModel } from '../../jsonwebtoken/model/JsonWebTokenUserModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { FLG, RepositoryType } from '../../util/const/CommonConst';
 import { SearchCommentByKeywordBlockCommentSelectEntity } from '../entity/SearchCommentByKeywordBlockCommentSelectEntity';
@@ -170,36 +169,6 @@ export class SearchCommentByKeywordService {
     }
 
     /**
-     * jwtを取得
-     */
-    public getToken(req: Request) {
-
-        const cookieModel = new CookieModel(req);
-        const jsonWebTokenModel = new JsonWebTokenModel(cookieModel);
-
-        return jsonWebTokenModel.token;
-    }
-
-
-    /**
-     * jwtからユーザー情報を取得
-     * @param req 
-     * @returns 
-     */
-    public checkJwtVerify(req: Request) {
-
-        try {
-
-            const cookieModel = new CookieModel(req);
-            const jsonWebTokenUserModel = JsonWebTokenUserModel.get(cookieModel);
-
-            return jsonWebTokenUserModel;
-        } catch (err) {
-            throw Error(`キーワード検索(コメント)処理中の認証エラー ERROR:${err}`);
-        }
-    }
-
-    /**
      * お気に入り動画ブロックコメント取得
      * @param getFavoriteVideoCommentRepository 
      * @param frontUserIdModel 
@@ -290,5 +259,18 @@ export class SearchCommentByKeywordService {
         });
 
         return checkedCommentList;
+    }
+
+    /**
+     * アクセストークン取得
+     * @param req 
+     * @returns 
+     */
+    getAccessToken(req: Request) {
+
+        const headerModel = new HeaderModel(req);
+        const accessTokenModel = AccessTokenModel.get(headerModel);
+
+        return accessTokenModel
     }
 }

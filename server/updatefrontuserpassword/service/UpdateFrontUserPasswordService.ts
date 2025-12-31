@@ -3,9 +3,7 @@ import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUser
 import { FrontUserLoginMasterUpdateEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateEntity";
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel";
-import { NewJsonWebTokenModel } from "../../jsonwebtoken/model/NewJsonWebTokenModel";
 import { PepperModel } from "../../pepper/model/PepperModel";
-import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { UpdateFrontUserPasswordSelectEntity } from "../entity/UpdateFrontUserPasswordSelectEntity";
 import { UpdateFrontUserPasswordRequestType } from "../model/UpdateFrontUserPasswordRequestType";
 import { UpdateFrontUserPasswordRepositoryInterface } from "../repository/interface/UpdateFrontUserPasswordRepositoryPostgres";
@@ -28,23 +26,6 @@ export class UpdateFrontUserPasswordService {
         const userInfoList = await this.repository.select(entity);
 
         return userInfoList;
-    }
-
-    /**
-     * jwtを作成する
-     * @param userIdModel 
-     * @param frontUserInfoCreateRequestBody 
-     * @returns 
-     */
-    public createJsonWebToken(userIdModel: FrontUserIdModel) {
-
-        try {
-            const newJsonWebTokenModel = new NewJsonWebTokenModel(userIdModel);
-
-            return newJsonWebTokenModel;
-        } catch (err) {
-            throw Error(`${err} endpoint:${ApiEndopoint.FRONT_USER_PASSWORD_ID}`);
-        }
     }
 
     /**

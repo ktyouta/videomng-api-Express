@@ -7,16 +7,18 @@ import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { RepositoryType } from '../../util/const/CommonConst';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
+import { GetVideoListRepositorys } from '../repository/GetVideoListRepositorys';
 import { RequestQuerySchema } from '../schema/RequestQuerySchema';
 import { GetVideoListService } from '../service/GetVideoListService';
 
 
 export class GetVideoListController extends RouteController {
 
-    private getVideoListService = new GetVideoListService();
+    private readonly getVideoListService = new GetVideoListService((new GetVideoListRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -76,19 +78,18 @@ export class GetVideoListController extends RouteController {
         // レスポンス用に型を変換する
         let convertedVideoList = this.getVideoListService.convertVideoList(filterdYouTubeVideoList);
 
-        // jwt取得
-        const token = this.getVideoListService.getToken(req);
+        try {
 
-        // ログインしている場合はお気に入りチェックを実施
-        if (token) {
+            // アクセストークン取得
+            const accessTokenModel = this.getVideoListService.getAccessToken(req);
 
-            try {
-                const jsonWebTokenUserModel = await this.getVideoListService.checkJwtVerify(req);
+            // ログインしている場合はお気に入りチェックを実施
+            if (accessTokenModel.token) {
 
                 // お気に入り登録チェック
-                convertedVideoList = await this.getVideoListService.checkFavorite(convertedVideoList, jsonWebTokenUserModel);
-            } catch (err) { }
-        }
+                convertedVideoList = await this.getVideoListService.checkFavorite(convertedVideoList, accessTokenModel);
+            }
+        } catch (err) { }
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, convertedVideoList);
     }

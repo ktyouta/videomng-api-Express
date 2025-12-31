@@ -4,13 +4,15 @@ import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
+import { RepositoryType } from '../../util/const/CommonConst';
 import { DateUtil } from "../../util/service/DateUtil";
+import { DownloadFavoriteVideoListRepositorys } from '../repository/DownloadFavoriteVideoListRepositorys';
 import { DownloadFavoriteVideoListCsvService } from "../service/DownloadFavoriteVideoListCsvService";
 
 
 export class DownloadFavoriteVideoListCsvController extends RouteController {
 
-    private readonly downloadFavoriteVideoListCsvService = new DownloadFavoriteVideoListCsvService();
+    private readonly downloadFavoriteVideoListCsvService = new DownloadFavoriteVideoListCsvService((new DownloadFavoriteVideoListRepositorys()).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
