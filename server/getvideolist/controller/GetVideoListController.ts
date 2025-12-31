@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiVideoListVideoCategoryId } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId';
@@ -8,7 +9,7 @@ import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { RepositoryType } from '../../util/const/CommonConst';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
 import { GetVideoListRepositorys } from '../repository/GetVideoListRepositorys';
@@ -89,7 +90,14 @@ export class GetVideoListController extends RouteController {
                 // お気に入り登録チェック
                 convertedVideoList = await this.getVideoListService.checkFavorite(convertedVideoList, accessTokenModel);
             }
-        } catch (err) { }
+        } catch (err) {
+
+            if (err instanceof AccessTokenError) {
+                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証エラー`);
+            }
+
+            throw Error(`${err}`);
+        }
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, convertedVideoList);
     }

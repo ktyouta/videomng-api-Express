@@ -53,7 +53,7 @@ export class SearchCommentByKeywordRepositoryPostgres implements GetFavoriteVide
                 comment_id as "commentId" 
             FROM "favorite_commnet_transaction" 
             WHERE 
-                "user_id" = ${frontUserId} AND
+                "user_id" = CAST(${frontUserId} AS INTEGER) AND
                 "video_id" = ${videoId} AND
                 "delete_flg" = '0'
             `;

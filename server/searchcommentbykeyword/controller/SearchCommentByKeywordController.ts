@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/SearchCommentByKeywordConst';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';
@@ -103,7 +104,14 @@ export class SearchCommentByKeywordController extends RouteController {
                     favoriteCommentList,
                 );
             }
-        } catch (err) { }
+        } catch (err: unknown) {
+
+            if (err instanceof AccessTokenError) {
+                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証エラー`);
+            }
+
+            throw Error(`${err}`);
+        }
 
         return ApiResponse.create(res, HTTP_STATUS_OK, SUCCESS_MESSAGE, {
             totalCount: filterdCommentList.length,

@@ -1,6 +1,7 @@
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { envConfig } from '../../util/const/EnvConfig';
+import { AccessTokenError } from './AccessTokenError';
 
 
 export class AccessTokenModel {
@@ -29,7 +30,7 @@ export class AccessTokenModel {
         const token = headerModel.get(AccessTokenModel.HEADER_KEY);
 
         if (!token) {
-            throw new Error("アクセストークンがヘッダーに存在しません。");
+            throw new AccessTokenError("アクセストークンがヘッダーに存在しません。");
         }
 
         return new AccessTokenModel(token);
@@ -73,12 +74,12 @@ export class AccessTokenModel {
             const decoded = AccessTokenModel.jwt.verify(this.token, AccessTokenModel.JWT_KEY);
 
             if (!decoded || typeof decoded !== `object`) {
-                throw Error(`アクセストークンが不正です。`);
+                throw new AccessTokenError(`アクセストークンが不正です。`);
             }
 
             return decoded;
         } catch (err) {
-            throw Error(`アクセストークンの検証に失敗しました。${err}`);
+            throw new AccessTokenError(`アクセストークンの検証に失敗しました。${err}`);
         }
     }
 
