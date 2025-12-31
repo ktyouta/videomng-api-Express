@@ -48,7 +48,7 @@ export class RefreshController extends RouteController {
 
             // CSRFトークンの等価チェック
             if (!csrfTokenHeaderModel.equal(csrfTokenCookieModel)) {
-                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証失敗`);
+                throw Error(`CSRFトークン認証エラー`);
             }
 
             // リフレッシュトークン
@@ -61,7 +61,7 @@ export class RefreshController extends RouteController {
             const userInfo = await this.refreshService.getUser(userIdModel);
 
             if (!userInfo || userInfo.length === 0) {
-                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証失敗`);
+                throw Error(`該当ユーザーなし`);
             }
 
             // アクセストークン発行
