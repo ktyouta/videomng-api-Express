@@ -68,6 +68,15 @@ export class RefreshController extends RouteController {
                 throw Error(`該当ユーザーなし`);
             }
 
+            // リフレッシュトークンの絶対期限チェック
+            if (refreshTokenModel.isAbsoluteExpired()) {
+                throw new Error('リフレッシュトークンの絶対期限切れ');
+            }
+
+            // リフレッシュトークン再発行
+            const newRefreshTokenModel = RefreshTokenModel.refresh(refreshTokenModel);
+            res.cookie(RefreshTokenModel.COOKIE_KEY, newRefreshTokenModel.token, RefreshTokenModel.COOKIE_SET_OPTION);
+
             // アクセストークン発行
             const accessTokenModel = AccessTokenModel.create(userIdModel);
 

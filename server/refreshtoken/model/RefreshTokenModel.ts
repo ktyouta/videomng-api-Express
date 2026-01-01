@@ -28,7 +28,7 @@ export class RefreshTokenModel {
     static readonly COOKIE_SET_OPTION: CookieOptions = {
         ...RefreshTokenModel.COOKIE_BASE_OPTION,
         maxAge: parseDuration(
-            RefreshTokenModel.REFRESH_TOKEN_EXPIRES || '7d'
+            RefreshTokenModel.REFRESH_TOKEN_EXPIRES
         ),
     };
     // cookieオプション(失効)
@@ -78,7 +78,42 @@ export class RefreshTokenModel {
         }
 
         const jwtStr = `${frontUserId}`;
-        const token = RefreshTokenModel.jwt.sign({ sub: jwtStr }, RefreshTokenModel.JWT_KEY, { expiresIn: RefreshTokenModel.REFRESH_TOKEN_EXPIRES });
+        const nowSec = Math.floor(Date.now() / 1000);
+
+        const token = RefreshTokenModel.jwt.sign(
+            {
+                sub: jwtStr,
+                iat: nowSec,
+                sessionStartedAt: nowSec,
+            },
+            RefreshTokenModel.JWT_KEY,
+            { expiresIn: RefreshTokenModel.REFRESH_TOKEN_EXPIRES },
+        );
+
+        return new RefreshTokenModel(token);
+    }
+
+    /**
+     * トークン再発行
+     */
+    static refresh(refreshTokenModel: RefreshTokenModel) {
+
+        const decoded = refreshTokenModel.verify();
+        const nowSec = Math.floor(Date.now() / 1000);
+
+        if (!decoded.sub || !decoded.iat) {
+            throw Error(`Claimの設定が不足しています。`);
+        }
+
+        const token = RefreshTokenModel.jwt.sign(
+            {
+                sub: decoded.sub,
+                iat: decoded.iat,
+                sessionStartedAt: nowSec,
+            },
+            RefreshTokenModel.JWT_KEY,
+            { expiresIn: RefreshTokenModel.REFRESH_TOKEN_EXPIRES },
+        );
 
         return new RefreshTokenModel(token);
     }
@@ -101,6 +136,23 @@ export class RefreshTokenModel {
         } catch (err) {
             throw Error(`アクセストークンの検証に失敗しました。${err}`);
         }
+    }
+
+    /**
+     * 絶対期限チェック
+     */
+    isAbsoluteExpired() {
+
+        const decode = this.verify();
+
+        if (!decode.iat) {
+            throw new Error('iat未設定');
+        }
+
+        const nowMs = Date.now();
+        const iatMs = decode.iat * 1000;
+
+        return nowMs - iatMs > parseDuration(RefreshTokenModel.REFRESH_TOKEN_EXPIRES);
     }
 
     get token() {
