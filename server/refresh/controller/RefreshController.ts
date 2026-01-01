@@ -77,7 +77,7 @@ export class RefreshController extends RouteController {
             Logger.warn(`Refresh failed:${e}`);
 
             // エラー発生時はトークンを削除する
-            res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
+            res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_CLEAR_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証失敗`);
         }

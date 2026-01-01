@@ -126,7 +126,7 @@ export class FrontUserLoginController extends RouteController {
             await this.frontUserLoginService.updateLastLoginDate(frontUserIdModel, tx);
 
             // cookieを返却
-            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
+            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_SET_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `ログイン成功`, frontUserLoginCreateResponseModel.data);
         }, next);

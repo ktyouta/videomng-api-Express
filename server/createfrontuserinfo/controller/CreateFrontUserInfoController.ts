@@ -113,7 +113,7 @@ export class CreateFrontUserInfoController extends RouteController {
                 this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody, userIdModel, accessTokenModel);
 
             // cookieを返却
-            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
+            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_SET_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の登録が完了しました。`, frontUserInfoCreateResponse.data);
         }, next);

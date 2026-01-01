@@ -127,7 +127,7 @@ export class UpdateFrontUserInfoController extends RouteController {
             const refreshTokenModel = RefreshTokenModel.create(userIdModel);
 
             // cookieを返却
-            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
+            res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_SET_OPTION);
 
             // レスポンスを作成
             const frontUserInfoUpdateResponse: FrontUserInfoUpdateResponseModel =

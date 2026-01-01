@@ -50,7 +50,7 @@ export class FrontUserCheckAuthController extends RouteController {
 
             if (!userInfo || userInfo.length === 0) {
 
-                res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
+                res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_CLEAR_OPTION);
 
                 return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
             }
@@ -62,7 +62,7 @@ export class FrontUserCheckAuthController extends RouteController {
         } catch (e) {
 
             // エラー発生時はクッキーを削除する
-            res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
+            res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_CLEAR_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
         }

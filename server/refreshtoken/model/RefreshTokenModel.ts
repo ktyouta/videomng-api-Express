@@ -4,6 +4,7 @@ import { CookieModel } from '../../cookie/model/CookieModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { envConfig } from '../../util/const/EnvConfig';
 import { IS_ENV_PRODUCTION } from '../../util/const/EnvProductionConst';
+import { parseDuration } from '../../util/service/parseDuration';
 
 
 export class RefreshTokenModel {
@@ -13,16 +14,27 @@ export class RefreshTokenModel {
     private readonly _token: string;
     // cookieのキー
     static readonly COOKIE_KEY: string = `refresh_token`;
-    // cookieオプション
-    static readonly COOKIE_OPTION: CookieOptions = {
-        httpOnly: true,
-        secure: IS_ENV_PRODUCTION,
-        sameSite: IS_ENV_PRODUCTION ? 'none' : 'lax',
-    };
     // リフレッシュトークン用のjwtキー
     private static readonly JWT_KEY = envConfig.refreshTokenExpires;
     // リフレッシュトークン有効期間
     private static readonly REFRESH_TOKEN_EXPIRES = envConfig.refreshTokenExpires;
+    // cookieオプション
+    private static readonly COOKIE_BASE_OPTION: CookieOptions = {
+        httpOnly: true,
+        secure: IS_ENV_PRODUCTION,
+        sameSite: IS_ENV_PRODUCTION ? 'none' : 'lax',
+    };
+    // cookieオプション(生成)
+    static readonly COOKIE_SET_OPTION: CookieOptions = {
+        ...RefreshTokenModel.COOKIE_BASE_OPTION,
+        maxAge: parseDuration(
+            RefreshTokenModel.REFRESH_TOKEN_EXPIRES || '7d'
+        ),
+    };
+    // cookieオプション(失効)
+    static readonly COOKIE_CLEAR_OPTION: CookieOptions = {
+        ...RefreshTokenModel.COOKIE_BASE_OPTION,
+    };
 
     private constructor(token: string) {
         this._token = token;
