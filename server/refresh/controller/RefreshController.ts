@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { CookieModel } from '../../cookie/model/CookieModel';
-import { CsrfTokenModel } from '../../csrftoken/model/CsrfTokenModel';
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { AUTH_ALLOWED_ORIGINS } from '../../util/const/AuthAllowedOrigins';
 import { RepositoryType } from '../../util/const/CommonConst';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../util/const/HttpStatusConst';
 import { ApiResponse } from '../../util/service/ApiResponse';
@@ -24,7 +24,7 @@ export class RefreshController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.POST,
             this.doExecute,
-            ApiEndopoint.REFRESH
+            ApiEndopoint.REFRESH,
         );
     }
 
@@ -34,21 +34,25 @@ export class RefreshController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: Request, res: Response, next: NextFunction) {
+    async doExecute(req: Request, res: Response, next: NextFunction) {
 
         try {
 
-            // ヘッダー
-            const headerModel = new HeaderModel(req);
             // cookie
             const cookieModel = new CookieModel(req);
-            // CSRFトークン
-            const csrfTokenHeaderModel = CsrfTokenModel.fromHeader(headerModel);
-            const csrfTokenCookieModel = CsrfTokenModel.fromCookie(cookieModel);
+            // ヘッダー
+            const headerModel = new HeaderModel(req);
+            const origin = headerModel.get(`origin`);
+            const customHeader = headerModel.get(`X-CSRF-Token`)
 
-            // CSRFトークンの等価チェック
-            if (!csrfTokenHeaderModel.equal(csrfTokenCookieModel)) {
-                throw Error(`CSRFトークン認証エラー`);
+            // 許可Originチェック
+            if (!origin || !AUTH_ALLOWED_ORIGINS.some(e => e === origin)) {
+                throw Error(`許可されていないOrigin`);
+            }
+
+            // カスタムヘッダチェック
+            if (customHeader !== `web`) {
+                throw Error(`カスタムヘッダが不正`);
             }
 
             // リフレッシュトークン
@@ -74,7 +78,6 @@ export class RefreshController extends RouteController {
 
             // エラー発生時はトークンを削除する
             res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
-            res.clearCookie(CsrfTokenModel.COOKIE_KEY, CsrfTokenModel.COOKIE_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証失敗`);
         }

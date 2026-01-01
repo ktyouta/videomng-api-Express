@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client";
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from "zod";
 import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
-import { CsrfTokenModel } from "../../csrftoken/model/CsrfTokenModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
 import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
@@ -127,12 +126,8 @@ export class UpdateFrontUserInfoController extends RouteController {
             // リフレッシュトークンを発行
             const refreshTokenModel = RefreshTokenModel.create(userIdModel);
 
-            // CSRFトークンを発行
-            const csrfTokenModel = CsrfTokenModel.create();
-
             // cookieを返却
             res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
-            res.cookie(CsrfTokenModel.COOKIE_KEY, csrfTokenModel.token, CsrfTokenModel.COOKIE_OPTION);
 
             // レスポンスを作成
             const frontUserInfoUpdateResponse: FrontUserInfoUpdateResponseModel =

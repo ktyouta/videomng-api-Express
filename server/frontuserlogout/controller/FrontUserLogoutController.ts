@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { CsrfTokenModel } from '../../csrftoken/model/CsrfTokenModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
@@ -29,7 +28,6 @@ export class FrontUserLogoutController extends RouteController {
 
         // cookieを削除
         res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
-        res.clearCookie(CsrfTokenModel.COOKIE_KEY, CsrfTokenModel.COOKIE_OPTION);
 
         return ApiResponse.create(res, HTTP_STATUS_OK, `ログアウトしました。`);
     }

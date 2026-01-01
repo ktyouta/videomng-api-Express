@@ -1,6 +1,5 @@
 import { NextFunction, Response } from 'express';
 import { CookieModel } from '../../cookie/model/CookieModel';
-import { CsrfTokenModel } from '../../csrftoken/model/CsrfTokenModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
@@ -52,7 +51,6 @@ export class FrontUserCheckAuthController extends RouteController {
             if (!userInfo || userInfo.length === 0) {
 
                 res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
-                res.clearCookie(CsrfTokenModel.COOKIE_KEY, CsrfTokenModel.COOKIE_OPTION);
 
                 return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
             }
@@ -65,7 +63,6 @@ export class FrontUserCheckAuthController extends RouteController {
 
             // エラー発生時はクッキーを削除する
             res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_OPTION);
-            res.clearCookie(CsrfTokenModel.COOKIE_KEY, CsrfTokenModel.COOKIE_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
         }

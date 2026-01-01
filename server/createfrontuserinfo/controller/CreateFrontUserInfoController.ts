@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client";
 import { NextFunction, Request, Response } from 'express';
 import { ZodIssue } from "zod";
 import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
-import { CsrfTokenModel } from "../../csrftoken/model/CsrfTokenModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
@@ -109,16 +108,12 @@ export class CreateFrontUserInfoController extends RouteController {
             // リフレッシュトークンを発行
             const refreshTokenModel = RefreshTokenModel.create(userIdModel);
 
-            // CSRFトークンを発行
-            const csrfTokenModel = CsrfTokenModel.create();
-
             // レスポンスを作成
             const frontUserInfoCreateResponse: FrontUserInfoCreateResponseModel =
                 this.createFrontUserInfoService.createResponse(frontUserInfoCreateRequestBody, userIdModel, accessTokenModel);
 
             // cookieを返却
             res.cookie(RefreshTokenModel.COOKIE_KEY, refreshTokenModel.token, RefreshTokenModel.COOKIE_OPTION);
-            res.cookie(CsrfTokenModel.COOKIE_KEY, csrfTokenModel.token, CsrfTokenModel.COOKIE_OPTION);
 
             return ApiResponse.create(res, HTTP_STATUS_CREATED, `ユーザー情報の登録が完了しました。`, frontUserInfoCreateResponse.data);
         }, next);
