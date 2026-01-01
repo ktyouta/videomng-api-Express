@@ -1,6 +1,7 @@
 import { FavoriteVideoTransaction } from '@prisma/client';
 import { Request } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
+import { FLG } from '../../common/const/CommonConst';
 import { YouTubeDataApiVideoListEndPointModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListEndPointModel';
 import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListModel';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
@@ -13,7 +14,6 @@ import { YouTubeDataApiVideoListResponseType } from '../../external/youtubedataa
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { FLG } from '../../util/const/CommonConst';
 import { GetVideoListSelectEntity } from '../entity/GetVideoListSelectEntity';
 import { GetVideoListRepositoryInterface } from '../repository/interface/GetVideoListRepositoryInterface';
 import { GetVideoListItemType } from '../type/GetVideoListItemType';

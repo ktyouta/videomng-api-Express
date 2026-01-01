@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { ZodIssue } from 'zod';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
@@ -7,8 +8,7 @@ import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
+import { ApiResponse } from '../../util/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetFavoriteVideoCommentConst';
 import { FavoriteVideoCommentResponseDataModel } from '../model/FavoriteVideoCommentResponseDataModel2';
 import { FilterdBlockCommentModel } from '../model/FilterdBlockCommentModel';

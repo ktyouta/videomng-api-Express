@@ -1,5 +1,5 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoListSelectEntity } from "../../entity/GetFavoriteVideoListSelectEntity";
 import { GetFolderListEntity } from "../../entity/GetFolderListEntity";
 import { FavoriteVideoFolderType } from "../../model/FavoriteVideoFolderType";

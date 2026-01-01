@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
 import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
+import { RepositoryType } from '../../common/const/CommonConst';
+import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { RepositoryType } from '../../util/const/CommonConst';
-import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
+import { ApiResponse } from '../../util/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetVideoDetailConst';
 import { GetVideoDetialRepositorys } from '../repository/GetVideoDetialRepositorys';
 import { GetVideoDetailService } from '../service/GetVideoDetailService';

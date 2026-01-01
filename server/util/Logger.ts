@@ -1,6 +1,4 @@
-import { ERROR_LOG_FILE, INFO_LOG_FILE, LOG_FILE_PATH, WARN_LOG_FILE } from "../const/FileInfoConst";
 import { DateUtil } from "./DateUtil";
-import { FileData } from "./FileData";
 import { LogError } from "./LogError";
 import { LogInfo } from "./LogInfo";
 import { LogInterface } from "./LogInterface";

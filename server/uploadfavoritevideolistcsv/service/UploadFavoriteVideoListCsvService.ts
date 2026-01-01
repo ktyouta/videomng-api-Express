@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { RegisteredVideoListEntity } from "../entity/RegisteredVideoListEntity";
 import { UpdateVideoListEntity } from "../entity/UpdateVideoListEntity";
 import { RegisterVideoIdListModel } from "../model/RegisterVideoIdListModel";

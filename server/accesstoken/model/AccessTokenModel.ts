@@ -1,6 +1,6 @@
+import { envConfig } from '../../common/const/EnvConfig';
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { envConfig } from '../../util/const/EnvConfig';
 import { AccessTokenError } from './AccessTokenError';
 
 

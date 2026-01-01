@@ -1,9 +1,4 @@
-import { FavoriteVideoFolderTransaction, FavoriteVideoTagTransaction, FavoriteVideoTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
-import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
-import { FLG } from "../../../util/const/CommonConst";
+import { Prisma } from "@prisma/client";
 import { DeleteFavoriteVideoFolderEntity } from "../../entity/DeleteFavoriteVideoFolderEntity";
 import { DeleteFavoriteVideoFolderInterface } from "../interface/DeleteFavoriteVideoFolderInterface";
 

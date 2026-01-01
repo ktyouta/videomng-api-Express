@@ -1,6 +1,6 @@
-import { FavoriteCommentTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteCommentTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteCommentListSelectEntity } from "../../entity/GetFavoriteCommentListSelectEntity";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { GetFavoriteCommentListRepositoryInterface } from "../interface/GetFavoriteCommentListRepositoryInterface";
 
 

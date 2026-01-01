@@ -1,14 +1,11 @@
-import { FavoriteVideoFolderTransaction, FavoriteVideoTagTransaction, FavoriteVideoTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { CreateFavoriteVideoFolderInterface } from "../interface/CreateFavoriteVideoFolderInterface";
-import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
-import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
-import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
-import { FLG } from "../../../util/const/CommonConst";
+import { FavoriteVideoFolderTransaction, FavoriteVideoTransaction, FolderMaster, Prisma } from "@prisma/client";
+import { FLG } from "../../../common/const/CommonConst";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { InsertFavoriteVideoFolderEntity } from "../../entity/InsertFavoriteVideoFolderEntity";
 import { SelectFavoriteVideoEntity } from "../../entity/SelectFavoriteVideoEntity";
 import { SelectFavoriteVideoFolderEntity } from "../../entity/SelectFavoriteVideoFolderEntity";
+import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
+import { CreateFavoriteVideoFolderInterface } from "../interface/CreateFavoriteVideoFolderInterface";
 
 
 

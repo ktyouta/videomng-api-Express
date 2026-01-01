@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../util/const/CommonConst";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FolderShareVideosRepositoryPostgres } from "./concrete/FolderShareVideosRepositoryPostgres";
 import { FolderShareVideosRepositoryInterface } from "./interface/FolderShareVideosRepositoryInterface";
 

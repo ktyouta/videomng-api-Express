@@ -1,5 +1,5 @@
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { GetTagListSelectEntity } from "../entity/GetTagListSelectEntity";
 import { GetTagListRepositorys } from "../repository/GetTagListRepositorys";
 import { GetTagListRepositoryInterface } from "../repository/interface/GetTagListRepositoryInterface";

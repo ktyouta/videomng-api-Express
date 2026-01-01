@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
 import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
+import { RepositoryType } from '../../common/const/CommonConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';
 import { YouTubeDataApiVideoListNextPageToken } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListNextPageToken';
 import { YouTubeDataApiVideoListVideoCategoryId } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId';
@@ -8,9 +10,7 @@ import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { RepositoryType } from '../../util/const/CommonConst';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
+import { ApiResponse } from '../../util/ApiResponse';
 import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
 import { GetVideoListRepositorys } from '../repository/GetVideoListRepositorys';
 import { RequestQuerySchema } from '../schema/RequestQuerySchema';

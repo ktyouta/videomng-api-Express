@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { CommentIdModel } from "../../internaldata/common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FavoriteCommentTransactionRepositorys } from "../../internaldata/favoritecommenttransaction/repository/FavoriteCommentTransactionRepositorys";
 import { FavoriteCommentTransactionRepositoryInterface } from "../../internaldata/favoritecommenttransaction/repository/interface/FavoriteCommentTransactionRepositoryInterface";
-import { RepositoryType } from "../../util/const/CommonConst";
 
 
 export class DeleteFavoriteCommentService {

@@ -1,7 +1,4 @@
-import { envConfig } from '../../../../util/const/EnvConfig';
-import { ApiClient } from '../../../../util/service/ApiClient';
-import { QueryBuilder } from '../../../../util/service/QueryBuilder';
-import { YouTubeDataApiBasePathModel } from '../../common/model/YouTubeDataApiBasePathModel';
+import { ApiClient } from '../../../../util/ApiClient';
 import { YouTubeDataApiVideoListResponseType } from '../type/YouTubeDataApiVideoListResponseType';
 import { YouTubeDataApiVideoListEndPointModel } from './YouTubeDataApiVideoListEndPointModel';
 

@@ -1,14 +1,13 @@
-import { FavoriteVideoCategoryTransaction, FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
-import { GetFavoriteVideoCustomRepositoryInterface } from "../interface/GetFavoriteVideoCustomRepositoryInterface";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { GetFavoriteVideoDetialSelectEntity } from "../../../getfavoritevideodetail/entity/GetFavoriteVideoDetialSelectEntity";
-import { FavoriteVideoDetailType } from "../../type/FavoriteVideoDetailType";
+import { FavoriteVideoMemoTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoCustomCategorySelectEntity } from "../../entity/GetFavoriteVideoCustomCategorySelectEntity";
-import { FavoriteVideoDetailCategoryType } from "../../type/FavoriteVideoDetailCategoryType";
 import { GetFavoriteVideoCustomMemoSelectEntity } from "../../entity/GetFavoriteVideoCustomMemoSelectEntity";
 import { GetFavoriteVideoCustomSelectEntity } from "../../entity/GetFavoriteVideoCustomSelectEntity";
 import { SelectTagListEntity } from "../../entity/SelectTagListEntity";
+import { FavoriteVideoDetailCategoryType } from "../../type/FavoriteVideoDetailCategoryType";
+import { FavoriteVideoDetailType } from "../../type/FavoriteVideoDetailType";
 import { FavoriteVideoTagType } from "../../type/FavoriteVideoTagType";
+import { GetFavoriteVideoCustomRepositoryInterface } from "../interface/GetFavoriteVideoCustomRepositoryInterface";
 
 
 /**

@@ -1,8 +1,5 @@
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { FrontUserBirthdayModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserBirthdayModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { FLG } from "../../util/const/CommonConst";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 
 
 

@@ -1,9 +1,4 @@
-import { VideoIdModel } from '../../../../internaldata/common/properties/VideoIdModel';
-import { envConfig } from '../../../../util/const/EnvConfig';
-import { ApiClient } from '../../../../util/service/ApiClient';
-import { QueryBuilder } from '../../../../util/service/QueryBuilder';
-import { YouTubeDataApiBasePathModel } from '../../common/model/YouTubeDataApiBasePathModel';
-import { YouTubeDataApiVideoListResponseType } from '../../videolist/type/YouTubeDataApiVideoListResponseType';
+import { ApiClient } from '../../../../util/ApiClient';
 import { YouTubeDataApiCommentDetailResponseType } from '../type/YouTubeDataApiCommentDetailResponseType';
 import { YouTubeDataApiCommentDetailEndPointModel } from './YouTubeDataApiCommentDetailEndPointModel';
 

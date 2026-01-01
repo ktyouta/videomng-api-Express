@@ -1,6 +1,5 @@
-import { FLG } from "../../../util/const/CommonConst";
-import { FrontUserBirthdayModel } from "../properties/FrontUserBirthdayModel";
 import { FrontUserIdModel } from "../../common/properties/FrontUserIdModel";
+import { FrontUserBirthdayModel } from "../properties/FrontUserBirthdayModel";
 import { FrontUserNameModel } from "../properties/FrontUserNameModel";
 
 

@@ -1,11 +1,11 @@
 import { FavoriteCommentTransaction } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { YouTubeDataApiCommentDetailEndPointModel } from "../../external/youtubedataapi/videocommentdetail/model/YouTubeDataApiCommentDetailEndPointModel";
 import { YouTubeDataApiCommentDetailModel } from "../../external/youtubedataapi/videocommentdetail/model/YouTubeDataApiCommentDetailModel";
 import { YouTubeDataApiCommentDetailCommentIdList } from "../../external/youtubedataapi/videocommentdetail/properties/YouTubeDataApiCommentDetailCommentIdList";
 import { CommentIdModel } from "../../internaldata/common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { GetFavoriteCommentListSelectEntity } from "../entity/GetFavoriteCommentListSelectEntity";
 import { GetFavoriteCommentListRepositorys } from "../repository/GetFavoriteCommentListRepositorys";
 import { GetFavoriteCommentListRepositoryInterface } from "../repository/interface/GetFavoriteCommentListRepositoryInterface";

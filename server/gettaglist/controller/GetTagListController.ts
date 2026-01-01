@@ -1,11 +1,11 @@
 import { NextFunction, Response } from 'express';
+import { HTTP_STATUS_CREATED } from "../../common/const/HttpStatusConst";
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
-import { HTTP_STATUS_CREATED } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
+import { ApiResponse } from "../../util/ApiResponse";
 import { GetTagListResponseModel } from "../model/GetTagListResponseModel";
 import { GetTagListService } from "../service/GetTagListService";
 

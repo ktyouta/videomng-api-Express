@@ -1,13 +1,13 @@
-import { QueryBuilder } from "../../../../util/service/QueryBuilder";
+import { QueryBuilder } from "../../../../util/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
-import { YouTubeDataApiVideoListNextPageToken } from "../properties/YouTubeDataApiVideoListNextPageToken";
 import { YouTubeDataApiVideoListKeyword } from "../properties/YouTubeDataApiVideoListKeyword";
 import { YouTubeDataApiVideoListMaxResult } from "../properties/YouTubeDataApiVideoListMaxResult";
+import { YouTubeDataApiVideoListNextPageToken } from "../properties/YouTubeDataApiVideoListNextPageToken";
 import { YouTubeDataApiVideoListPart } from "../properties/YouTubeDataApiVideoListPart";
 import { YouTubeDataApiVideoListType } from "../properties/YouTubeDataApiVideoListType";
-import { YouTubeDataApiVideoListVideoType } from "../properties/YouTubeDataApiVideoListVideoType";
 import { YouTubeDataApiVideoListVideoCategoryId } from "../properties/YouTubeDataApiVideoListVideoCategoryId";
+import { YouTubeDataApiVideoListVideoType } from "../properties/YouTubeDataApiVideoListVideoType";
 
 
 /**

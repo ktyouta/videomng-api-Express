@@ -1,14 +1,12 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_INTERNAL_SERVER_ERROR, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { RouteController } from '../../router/controller/RouteController';
-import { AsyncErrorHandler } from '../../router/service/AsyncErrorHandler';
-import { ZodIssue } from 'zod';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { SUCCESS_MESSAGE } from '../const/GetVideoCategoryConst';
-import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { Request, Response } from 'express';
+import { HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { GetVideoCategoryService } from '../service/GetVideoCategoryService';
+import { RouteController } from '../../router/controller/RouteController';
+import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { ApiResponse } from '../../util/ApiResponse';
+import { SUCCESS_MESSAGE } from '../const/GetVideoCategoryConst';
 import { GetVideoCategoryResponseModel } from '../model/GetVideoCategoryResponseModel';
+import { GetVideoCategoryService } from '../service/GetVideoCategoryService';
 
 
 export class GetVideoCategoryController extends RouteController {

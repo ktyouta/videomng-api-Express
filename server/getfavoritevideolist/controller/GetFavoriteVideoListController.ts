@@ -1,13 +1,13 @@
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { RepositoryType } from "../../common/const/CommonConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
-import { RepositoryType } from "../../util/const/CommonConst";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
+import { ApiResponse } from "../../util/ApiResponse";
 import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
 import { FolderListModel } from "../model/FolderListModel";
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";

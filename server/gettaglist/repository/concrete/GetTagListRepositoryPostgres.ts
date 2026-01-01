@@ -1,5 +1,5 @@
 import { TagMaster } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetTagListSelectEntity } from "../../entity/GetTagListSelectEntity";
 import { GetTagListRepositoryInterface } from "../interface/GetTagListRepositoryInterface";
 

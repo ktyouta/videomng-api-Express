@@ -1,8 +1,7 @@
-import { FavoriteVideoTagTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { GetFolderListRepositoryInterface } from "../interface/GetFolderListInterface";
+import { FolderMaster } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { SelectFolderListEntity } from "../../entity/SelectFolderListEntity";
+import { GetFolderListRepositoryInterface } from "../interface/GetFolderListInterface";
 
 
 /**

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
+import { HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
+import { ApiResponse } from '../../util/ApiResponse';
 
 
 export class FrontUserLogoutController extends RouteController {

@@ -1,5 +1,5 @@
 import { ViewStatusMaster } from "@prisma/client";
-import { RepositoryType } from "../../util/const/CommonConst";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { GetFavoriteVideoSortListRepositorys } from "../repository/GetFavoriteVideoSortListRepositorys";
 import { GetFavoriteVideoSortListRepositoryInterface } from "../repository/interface/GetFavoriteVideoSortListRepositoryInterface";
 

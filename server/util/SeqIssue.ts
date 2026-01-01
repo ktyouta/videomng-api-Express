@@ -1,9 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { SeqKeyModel } from "../../internaldata/seqmaster/properties/SeqKeyModel";
-import { SeqMasterRepositoryInterface } from "../../internaldata/seqmaster/repository/interface/SeqMasterRepositoryInterface";
-import { SeqMasterRepositorys } from "../../internaldata/seqmaster/repository/SeqMasterRepositorys";
-import { RepositoryType } from "../const/CommonConst";
-import { PrismaClientInstance } from "./PrismaClientInstance";
+import { RepositoryType } from "../common/const/CommonConst";
+import { SeqKeyModel } from "../internaldata/seqmaster/properties/SeqKeyModel";
+import { SeqMasterRepositoryInterface } from "../internaldata/seqmaster/repository/interface/SeqMasterRepositoryInterface";
+import { SeqMasterRepositorys } from "../internaldata/seqmaster/repository/SeqMasterRepositorys";
 
 export class SeqIssue {
 

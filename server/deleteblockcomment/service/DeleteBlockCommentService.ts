@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { BlockCommentTransactionRepositorys } from "../../internaldata/blockcommenttransaction/repository/BlockCommentTransactionRepositorys";
 import { BlockCommentTransactionRepositoryInterface } from "../../internaldata/blockcommenttransaction/repository/interface/BlockCommentTransactionRepositoryInterface";
 import { CommentIdModel } from "../../internaldata/common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { RepositoryType } from "../../util/const/CommonConst";
 
 
 export class DeleteBlockCommentService {

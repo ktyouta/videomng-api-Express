@@ -1,7 +1,5 @@
-import { Prisma } from "@prisma/client";
-import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../../util/PrismaClientInstance";
 import { ViewStatusMasterRepositoryInterface } from "../interface/ViewStatusMasterRepositoryInterface";
-import { ViewStatusModel } from "../../../common/properties/ViewStatusModel";
 
 
 

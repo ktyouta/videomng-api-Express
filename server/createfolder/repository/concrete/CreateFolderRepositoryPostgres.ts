@@ -1,6 +1,6 @@
 import { FolderMaster, Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { InsertFolderEntity } from "../../entity/InsertFolderEntity";
 import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
 import { FolderNextSeqType } from "../../type/FolderNextSeqType";

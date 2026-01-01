@@ -1,6 +1,4 @@
-import { CreateFavoriteVideoRepositoryPostgres } from "../../createfavoritevideo/repository/concrete/CreateFavoriteVideoRepositoryPostgres";
-import { CreateFavoriteVideoRepositoryInterface } from "../../createfavoritevideo/repository/interface/CreateFavoriteVideoRepositoryInterface";
-import { RepositoryType } from "../../util/const/CommonConst";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { UploadFavoriteVideoListCsvRepositoryPostgres } from "./concrete/UploadFavoriteVideoListCsvRepositoryPostgres";
 import { UploadFavoriteVideoListCsvRepositoryInterface } from "./interface/UploadFavoriteVideoListCsvRepositoryInterface";
 

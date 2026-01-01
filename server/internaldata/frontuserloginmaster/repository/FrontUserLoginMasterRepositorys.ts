@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../../util/const/CommonConst";
+import { RepositoryType } from "../../../common/const/CommonConst";
 import { FrontUserLoginMasterRepositoryPostgres } from "./concrete/FrontUserLoginMasterRepositoryPostgres";
 import { FrontUserLoginMasterRepositoryInterface } from "./interface/FrontUserLoginMasterRepositoryInterface";
 

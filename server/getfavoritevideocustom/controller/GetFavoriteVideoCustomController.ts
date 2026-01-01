@@ -1,13 +1,13 @@
 import { NextFunction, Response } from 'express';
+import { RepositoryType } from "../../common/const/CommonConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../common/const/HttpStatusConst";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { AuthenticatedRequest } from "../../types/AuthenticatedRequest";
-import { RepositoryType } from "../../util/const/CommonConst";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../util/const/HttpStatusConst";
-import { ApiResponse } from "../../util/service/ApiResponse";
+import { ApiResponse } from "../../util/ApiResponse";
 import { FavoriteVideoCustomMergedModel } from "../model/FavoriteVideoCustomMergedModel";
 import { GetFavoriteVideoCustomResponseModel } from "../model/GetFavoriteVideoCustomResponseModel";
 import { GetFavoriteVideoCustomRepositorys } from "../repository/GetFavoriteVideoCustomRepositorys";

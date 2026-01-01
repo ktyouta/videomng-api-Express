@@ -1,4 +1,4 @@
-import { QueryBuilder } from "../../../../util/service/QueryBuilder";
+import { QueryBuilder } from "../../../../util/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
 import { YouTubeDataApiChannelId } from "../properties/YouTubeDataApiChannelId";

@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FavoriteCommentTransactionInsertEntity } from "../../internaldata/favoritecommenttransaction/entity/FavoriteCommentTransactionInsertEntity";
 import { FavoriteCommentTransactionRepositorys } from "../../internaldata/favoritecommenttransaction/repository/FavoriteCommentTransactionRepositorys";
 import { FavoriteCommentTransactionRepositoryInterface } from "../../internaldata/favoritecommenttransaction/repository/interface/FavoriteCommentTransactionRepositoryInterface";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { CreateFavoriteCommentSelectEntity } from "../entity/CreateFavoriteCommentSelectEntity";
 import { CreateFavoriteCommentRequestModel } from "../model/CreateFavoriteCommentRequestModel";
 import { CreateFavoriteCommentRepositorys } from "../repository/CreateFavoriteCommentRepositorys";

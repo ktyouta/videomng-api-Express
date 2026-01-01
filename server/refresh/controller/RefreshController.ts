@@ -1,16 +1,16 @@
 import { NextFunction, Request, Response } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
+import { AUTH_ALLOWED_ORIGINS } from '../../common/const/AuthAllowedOrigins';
+import { RepositoryType } from '../../common/const/CommonConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { AUTH_ALLOWED_ORIGINS } from '../../util/const/AuthAllowedOrigins';
-import { RepositoryType } from '../../util/const/CommonConst';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { Logger } from '../../util/service/Logger';
+import { ApiResponse } from '../../util/ApiResponse';
+import { Logger } from '../../util/Logger';
 import { RefreshRepositorys } from '../repository/RefreshRepositorys';
 import { RefreshService } from '../service/RefreshService';
 

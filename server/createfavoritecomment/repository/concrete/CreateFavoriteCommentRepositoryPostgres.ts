@@ -1,7 +1,6 @@
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { CreateFavoriteCommentSelectEntity } from "../../entity/CreateFavoriteCommentSelectEntity";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { FavoriteCommentTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
+import { CreateFavoriteCommentSelectEntity } from "../../entity/CreateFavoriteCommentSelectEntity";
 import { CreateFavoriteCommentRepositoryInterface } from "../interface/CreateFavoriteCommentRepositoryInterface";
 
 

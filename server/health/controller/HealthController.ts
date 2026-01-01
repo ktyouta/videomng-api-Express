@@ -1,10 +1,10 @@
+import { NextFunction, Request, Response } from 'express';
+import { HTTP_STATUS_OK } from "../../common/const/HttpStatusConst";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
-import { DateUtil } from "../../util/service/DateUtil";
-import { ApiResponse } from "../../util/service/ApiResponse";
-import { HTTP_STATUS_OK } from "../../util/const/HttpStatusConst";
-import { Router, Request, Response, NextFunction } from 'express';
+import { ApiResponse } from "../../util/ApiResponse";
+import { DateUtil } from "../../util/DateUtil";
 
 
 export class HealthController extends RouteController {

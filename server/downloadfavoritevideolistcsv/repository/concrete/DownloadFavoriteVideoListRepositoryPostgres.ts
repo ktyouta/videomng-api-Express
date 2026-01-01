@@ -1,7 +1,7 @@
-import { FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
-import { GetFavoriteVideoListRepositoryInterface } from "../interface/DownloadFavoriteVideoListRepositoryInterface";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { FavoriteVideoTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { DownloadFavoriteVideoListCsvSelectEntity } from "../../entity/DownloadFavoriteVideoListCsvSelectEntity";
+import { GetFavoriteVideoListRepositoryInterface } from "../interface/DownloadFavoriteVideoListRepositoryInterface";
 
 
 
@@ -10,18 +10,18 @@ import { DownloadFavoriteVideoListCsvSelectEntity } from "../../entity/DownloadF
  */
 export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoListRepositoryInterface {
 
-    constructor() {
-    }
+  constructor() {
+  }
 
-    /**
-     * お気に入り動画取得
-     * @returns 
-     */
-    async selectFavoriteVideoList(downloadFavoriteVideoListCsvSelectEntity: DownloadFavoriteVideoListCsvSelectEntity): Promise<FavoriteVideoTransaction[]> {
+  /**
+   * お気に入り動画取得
+   * @returns 
+   */
+  async selectFavoriteVideoList(downloadFavoriteVideoListCsvSelectEntity: DownloadFavoriteVideoListCsvSelectEntity): Promise<FavoriteVideoTransaction[]> {
 
-        const frontUserId = downloadFavoriteVideoListCsvSelectEntity.frontUserId;
+    const frontUserId = downloadFavoriteVideoListCsvSelectEntity.frontUserId;
 
-        let sql = `
+    let sql = `
             SELECT
               user_id as "userId",
               video_id as "videoId"
@@ -31,12 +31,12 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
             ORDER BY a.update_date desc
           `;
 
-        const params = [];
-        params.push(frontUserId);
+    const params = [];
+    params.push(frontUserId);
 
-        const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
+    const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
 
-        return favoriteVideoList;
-    }
+    return favoriteVideoList;
+  }
 
 }

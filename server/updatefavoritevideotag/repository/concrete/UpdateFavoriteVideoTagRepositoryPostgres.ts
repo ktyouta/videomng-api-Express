@@ -1,11 +1,10 @@
 import { FavoriteVideoTagTransaction, Prisma, TagMaster } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
-import { UpdateFavoriteVideoTagRepositoryInterface } from "../interface/UpdateFavoriteVideoTagRepositoryInterface";
-import { UpdateFavoriteVideoTagNextSeqType } from "../../type/UpdateFavoriteVideoTagNextSeqType";
 import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
 import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
+import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
+import { UpdateFavoriteVideoTagNextSeqType } from "../../type/UpdateFavoriteVideoTagNextSeqType";
+import { UpdateFavoriteVideoTagRepositoryInterface } from "../interface/UpdateFavoriteVideoTagRepositoryInterface";
 
 
 

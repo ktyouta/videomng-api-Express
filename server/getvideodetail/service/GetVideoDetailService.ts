@@ -1,12 +1,12 @@
 import { Request } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
+import { FLG } from '../../common/const/CommonConst';
 import { YouTubeDataApiVideoDetailEndPointModel } from '../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel';
 import { YouTubeDataApiVideoDetailModel } from '../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel';
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { FLG } from '../../util/const/CommonConst';
 import { GetVideoDetialSelectEntity } from '../entity/GetVideoDetialSelectEntity';
 import { GetVideoDetialRepositoryInterface } from '../repository/interface/GetVideoDetialRepositoryInterface';
 import { GetVideoDetailResponseType } from '../type/GetVideoDetailResponseType';

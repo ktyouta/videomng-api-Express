@@ -1,8 +1,7 @@
-import { FavoriteVideoTagTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoTagListSelectEntity } from "../../entity/GetFavoriteVideoTagListSelectEntity";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { GetFavoriteVideoTagListRepositoryInterface } from "../interface/GetFavoriteVideoTagListRepositoryInterface";
 import { FavoriteVideoTagType } from "../../type/FavoriteVideoTagType";
+import { GetFavoriteVideoTagListRepositoryInterface } from "../interface/GetFavoriteVideoTagListRepositoryInterface";
 
 
 

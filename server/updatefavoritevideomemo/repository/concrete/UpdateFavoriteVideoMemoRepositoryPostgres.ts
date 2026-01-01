@@ -1,8 +1,7 @@
-import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { UpdateFavoriteVideoMemoRepositoryInterface } from "../interface/UpdateFavoriteVideoMemoRepositoryInterface";
+import { FavoriteVideoTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { UpdateFavoriteVideoDetailSelectEntity } from "../../entity/UpdateFavoriteVideoDetailSelectEntity";
+import { UpdateFavoriteVideoMemoRepositoryInterface } from "../interface/UpdateFavoriteVideoMemoRepositoryInterface";
 
 
 

@@ -1,3 +1,4 @@
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
 import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
@@ -6,7 +7,6 @@ import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/front
 import { FrontUserLoginMasterUpdateUserInfoEntity } from "../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateUserInfoEntity";
 import { FrontUserLoginMasterRepositorys } from "../../internaldata/frontuserloginmaster/repository/FrontUserLoginMasterRepositorys";
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { FrontUserInfoUpdateSelectEntity } from "../entity/FrontUserInfoUpdateSelectEntity";
 import { FrontUserInfoUpdateRequestModel } from "../model/FrontUserInfoUpdateRequestModel";
 import { FrontUserInfoUpdateRequestType } from "../model/FrontUserInfoUpdateRequestType";

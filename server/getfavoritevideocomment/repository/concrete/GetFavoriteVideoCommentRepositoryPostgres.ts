@@ -1,8 +1,8 @@
-import { BlockCommentTransaction, FavoriteCommentTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { GetFavoriteVideoCommentRepositoryInterface } from "../interface/GetFavoriteVideoCommentRepositoryInterface";
+import { BlockCommentTransaction, FavoriteCommentTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoBlockCommentSelectEntity } from "../../entity/GetFavoriteVideoBlockCommentSelectEntity";
 import { GetFavoriteVideoFavoriteCommentSelectEntity } from "../../entity/GetFavoriteVideoFavoriteCommentSelectEntity";
+import { GetFavoriteVideoCommentRepositoryInterface } from "../interface/GetFavoriteVideoCommentRepositoryInterface";
 
 
 

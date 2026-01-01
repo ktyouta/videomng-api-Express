@@ -1,5 +1,5 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { SelectShareVideoEntity } from "../../entity/SelectShareVideoEntity";
 import { FolderShareVideosRepositoryInterface } from "../interface/FolderShareVideosRepositoryInterface";
 

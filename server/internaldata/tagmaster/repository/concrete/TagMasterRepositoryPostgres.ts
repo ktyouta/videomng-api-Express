@@ -1,12 +1,9 @@
 import { Prisma } from "@prisma/client";
-import { FLG } from "../../../../util/const/CommonConst";
-import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
-import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
-import { TagMasterRepositoryInterface } from "../interface/TagMasterRepositoryInterface";
+import { FLG } from "../../../../common/const/CommonConst";
 import { TagMasterInsertEntity } from "../../entity/TagMasterInsertEntity";
-import { TagMasterUpdateEntity } from "../../entity/TagMasterUpdateEntity";
-import { VideoIdModel } from "../../../common/properties/VideoIdModel";
 import { TagMasterSoftDeleteEntity } from "../../entity/TagMasterSoftDeleteEntity";
+import { TagMasterUpdateEntity } from "../../entity/TagMasterUpdateEntity";
+import { TagMasterRepositoryInterface } from "../interface/TagMasterRepositoryInterface";
 
 
 

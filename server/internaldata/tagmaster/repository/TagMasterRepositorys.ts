@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../../util/const/CommonConst";
+import { RepositoryType } from "../../../common/const/CommonConst";
 import { TagMasterRepositoryPostgres } from "./concrete/TagMasterRepositoryPostgres";
 import { TagMasterRepositoryInterface } from "./interface/TagMasterRepositoryInterface";
 

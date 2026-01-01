@@ -1,8 +1,7 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { UpdateFavoriteVideoCustomRepositoryInterface } from "../interface/UpdateFavoriteVideoCustomRepositoryInterface";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { UpdateFavoriteVideoCustomSelectEntity } from "../../entity/UpdateFavoriteVideoCustomSelectEntity";
+import { UpdateFavoriteVideoCustomRepositoryInterface } from "../interface/UpdateFavoriteVideoCustomRepositoryInterface";
 
 
 

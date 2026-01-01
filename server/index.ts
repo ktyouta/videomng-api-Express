@@ -1,10 +1,10 @@
 import bodyParser from 'body-parser';
 import { NextFunction, Request, Response } from 'express';
+import { envConfig } from './common/const/EnvConfig';
+import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './common/const/HttpStatusConst';
 import { accessLogMiddleware } from './middleware/accessLogMiddleware';
 import { errorLogMiddleware } from './middleware/errorLogMiddleware';
 import { ROUTE_CONTROLLER_LIST } from './router/conf/RouteControllerList';
-import { envConfig } from './util/const/EnvConfig';
-import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './util/const/HttpStatusConst';
 
 
 const express = require('express');

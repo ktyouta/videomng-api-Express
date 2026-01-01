@@ -1,5 +1,5 @@
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { FavoriteVideoSortMaster, ViewStatusMaster } from "@prisma/client";
+import { FavoriteVideoSortMaster } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoSortListRepositoryInterface } from "../interface/GetFavoriteVideoSortListRepositoryInterface";
 
 

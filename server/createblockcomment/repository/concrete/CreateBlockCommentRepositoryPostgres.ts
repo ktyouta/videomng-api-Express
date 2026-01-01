@@ -1,8 +1,7 @@
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { CreateBlockCommentSelectEntity } from "../../entity/CreateBlockCommentSelectEntity";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { CreateBlockCommentRepositoryInterface } from "../interface/CreateBlockCommentRepositoryInterface";
 import { BlockCommentTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
+import { CreateBlockCommentSelectEntity } from "../../entity/CreateBlockCommentSelectEntity";
+import { CreateBlockCommentRepositoryInterface } from "../interface/CreateBlockCommentRepositoryInterface";
 
 
 

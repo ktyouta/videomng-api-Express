@@ -1,5 +1,5 @@
 import { FrontUserInfoMaster, FrontUserLoginMaster, Prisma } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { FrontUserInfoSelectEntity } from "../../entity/FrontUserInfoSelectEntity";
 import { FrontUserInfoUpdateLastLoginDateEntity } from "../../entity/FrontUserInfoUpdateLastLoginDateEntity";
 import { FrontUserInfoUpdatePasswordEntity } from "../../entity/FrontUserInfoUpdatePasswordEntity";

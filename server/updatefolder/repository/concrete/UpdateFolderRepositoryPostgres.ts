@@ -1,5 +1,5 @@
 import { FolderMaster, Prisma } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { SelectDuplicationFolderEntity } from "../../entity/SelectDuplicationFolderEntity";
 import { SelectExistsFolderEntity } from "../../entity/SelectExistsFolderEntity";
 import { UpdateFolderEntity } from "../../entity/UpdateFolderEntity";

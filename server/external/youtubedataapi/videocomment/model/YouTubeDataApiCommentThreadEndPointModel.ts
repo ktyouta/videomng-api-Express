@@ -1,5 +1,5 @@
 import { VideoIdModel } from "../../../../internaldata/common/properties/VideoIdModel";
-import { QueryBuilder } from "../../../../util/service/QueryBuilder";
+import { QueryBuilder } from "../../../../util/QueryBuilder";
 import { YouTubeDataApiBasePathModel } from "../../common/model/YouTubeDataApiBasePathModel";
 import { YouTubeDataApiApiKey } from "../../common/properties/YouTubeDataApiApiKey";
 import { YouTubeDataApiCommentThreadMaxResult } from "../properties/YouTubeDataApiCommentThreadMaxResult";

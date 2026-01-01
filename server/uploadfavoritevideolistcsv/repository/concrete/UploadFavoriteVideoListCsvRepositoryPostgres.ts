@@ -1,10 +1,8 @@
-import { FavoriteVideoTransaction, Prisma } from "@prisma/client";
-import { JsonFileData } from "../../../util/service/JsonFileData";
+import { Prisma } from "@prisma/client";
+import { FLG } from "../../../common/const/CommonConst";
 import { RegisteredVideoListEntity } from "../../entity/RegisteredVideoListEntity";
-import { UploadFavoriteVideoListCsvRepositoryInterface } from "../interface/UploadFavoriteVideoListCsvRepositoryInterface";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { FLG } from "../../../util/const/CommonConst";
 import { UpdateVideoListEntity } from "../../entity/UpdateVideoListEntity";
+import { UploadFavoriteVideoListCsvRepositoryInterface } from "../interface/UploadFavoriteVideoListCsvRepositoryInterface";
 
 
 

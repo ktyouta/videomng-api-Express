@@ -1,5 +1,5 @@
-import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { FavoriteVideoMemoTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoMemoSelectEntity } from "../../entity/GetFavoriteVideoMemoSelectEntity";
 import { GetFavoriteVideoMemoRepositoryInterface } from "../interface/GetFavoriteVideoMemoRepositoryInterface";
 

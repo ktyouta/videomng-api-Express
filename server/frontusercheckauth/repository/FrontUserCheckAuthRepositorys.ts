@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../util/const/CommonConst";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserCheckAuthRepositoryJson } from "./concrete/FrontUserCheckAuthRepositoryJson";
 import { FrontUserCheckAuthRepositoryInterface } from "./interface/FrontUserCheckAuthRepositoryInterface";
 

@@ -1,6 +1,6 @@
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { GetFavoriteVideoMemoSelectEntity } from "../entity/GetFavoriteVideoMemoSelectEntity";
 import { GetFavoriteVideoMemoRepositorys } from "../repository/GetFavoriteVideoMemoRepositorys";
 import { GetFavoriteVideoMemoRepositoryInterface } from "../repository/interface/GetFavoriteVideoMemoRepositoryInterface";

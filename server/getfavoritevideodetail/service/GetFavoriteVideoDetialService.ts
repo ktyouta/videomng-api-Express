@@ -1,10 +1,10 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
 import { YouTubeDataApiVideoDetailModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { GetFavoriteVideoDetialCategorySelectEntity } from "../entity/GetFavoriteVideoDetialCategorySelectEntity";
 import { GetFavoriteVideoDetialMemoSelectEntity } from "../entity/GetFavoriteVideoDetialMemoSelectEntity";
 import { GetFavoriteVideoDetialSelectEntity } from "../entity/GetFavoriteVideoDetialSelectEntity";

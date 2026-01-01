@@ -1,6 +1,6 @@
 import { FrontUserLoginMaster, Prisma } from "@prisma/client";
 import { FrontUserLoginMasterUpdateEntity } from "../../../internaldata/frontuserloginmaster/entity/FrontUserLoginMasterUpdateEntity";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { UpdateFrontUserPasswordSelectEntity } from "../../entity/UpdateFrontUserPasswordSelectEntity";
 import { UpdateFrontUserPasswordRepositoryInterface } from "../interface/UpdateFrontUserPasswordRepositoryPostgres";
 

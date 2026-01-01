@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { TagIdModel } from "../../internaldata/common/properties/TagIdModel";
 import { FavoriteVideoTagTransactionInsertEntity } from "../../internaldata/favoritevideotagtransaction/entity/FavoriteVideoTagTransactionInsertEntity";
@@ -8,7 +9,6 @@ import { TagMasterInsertEntity } from "../../internaldata/tagmaster/entity/TagMa
 import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
 import { TagMasterRepositorys } from "../../internaldata/tagmaster/repository/TagMasterRepositorys";
 import { TagMasterRepositoryInterface } from "../../internaldata/tagmaster/repository/interface/TagMasterRepositoryInterface";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { UpdateFavoriteVideoTagFavoriteVideoSelectEntity } from "../entity/UpdateFavoriteVideoTagFavoriteVideoSelectEntity";
 import { UpdateFavoriteVideoTagRequestModel } from "../model/UpdateFavoriteVideoTagRequestModel";
 import { UpdateFavoriteVideoTagRepositorys } from "../repository/UpdateFavoriteVideoTagRepositorys";

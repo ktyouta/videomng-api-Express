@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../../util/const/CommonConst";
+import { RepositoryType } from "../../../common/const/CommonConst";
 import { BlockCommentTransactionRepositoryPostgres } from "./concrete/BlockCommentTransactionRepositoryPostgres";
 import { BlockCommentTransactionRepositoryInterface } from "./interface/BlockCommentTransactionRepositoryInterface";
 

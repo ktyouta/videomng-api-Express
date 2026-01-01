@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
+import { RepositoryType } from '../../common/const/CommonConst';
+import { HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { RepositoryType } from '../../util/const/CommonConst';
-import { HTTP_STATUS_UNAUTHORIZED } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
+import { ApiResponse } from '../../util/ApiResponse';
 import { SelectEntity } from './entity/SelectEntity';
 import { Repositorys } from './repository/Repositorys';
 

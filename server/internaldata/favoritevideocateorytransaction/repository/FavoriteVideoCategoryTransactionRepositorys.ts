@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../../util/const/CommonConst";
+import { RepositoryType } from "../../../common/const/CommonConst";
 import { FavoriteVideoCategoryTransactionRepositoryPostgres } from "./concrete/FavoriteVideoCategoryTransactionRepositoryPostgres";
 import { FavoriteVideoCategoryTransactionRepositoryInterface } from "./interface/FavoriteVideoCategoryTransactionRepositoryInterface";
 

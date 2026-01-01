@@ -1,12 +1,6 @@
-import { JsonFileData } from "../../../util/service/JsonFileData";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
-import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
-import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
-import { FLG } from "../../../util/const/CommonConst";
-import { DeleteFavoriteVideoInterface } from "../interface/DeleteFavoriteVideoInterface";
-import { DeleteFavoriteVideoEntity } from "../../../deletefolder/entity/DeleteFavoriteVideoEntity";
 import { Prisma } from "@prisma/client";
 import { DeleteFavoriteVideoFolderEntity } from "../../entity/DeleteFavoriteVideoFolderEntity";
+import { DeleteFavoriteVideoInterface } from "../interface/DeleteFavoriteVideoInterface";
 
 
 

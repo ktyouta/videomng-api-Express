@@ -1,15 +1,15 @@
 import { FavoriteCommentTransaction, Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { ApiResponse } from '../../util/ApiResponse';
+import { PrismaTransaction } from '../../util/PrismaTransaction';
 import { CreateFavoriteCommentRequestModel } from '../model/CreateFavoriteCommentRequestModel';
 import { CreateFavoriteCommentRequestModelSchema } from '../model/CreateFavoriteCommentRequestModelSchema';
 import { CreateFavoriteCommentRequestType } from '../model/CreateFavoriteCommentRequestType';

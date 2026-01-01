@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { Logger } from '../util/service/Logger';
+import { Logger } from '../util/Logger';
 
 
 /**

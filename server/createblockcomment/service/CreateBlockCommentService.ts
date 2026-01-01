@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { BlockCommentTransactionInsertEntity } from "../../internaldata/blockcommenttransaction/entity/BlockCommentTransactionInsertEntity";
 import { BlockCommentTransactionRepositorys } from "../../internaldata/blockcommenttransaction/repository/BlockCommentTransactionRepositorys";
 import { BlockCommentTransactionRepositoryInterface } from "../../internaldata/blockcommenttransaction/repository/interface/BlockCommentTransactionRepositoryInterface";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { CreateBlockCommentSelectEntity } from "../entity/CreateBlockCommentSelectEntity";
 import { CreateBlockCommentRequestModel } from "../model/CreateBlockCommentRequestModel";
 import { CreateBlockCommentRepositorys } from "../repository/CreateBlockCommentRepositorys";

@@ -1,5 +1,4 @@
 import { Prisma } from "@prisma/client";
-import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
 import { SeqKeyModel } from "../../properties/SeqKeyModel";
 import { SeqMasterRepositoryInterface } from "../interface/SeqMasterRepositoryInterface";
 

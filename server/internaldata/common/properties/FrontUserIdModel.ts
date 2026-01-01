@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { AccessTokenModel } from "../../../accesstoken/model/AccessTokenModel";
-import { SeqIssue } from "../../../util/service/SeqIssue";
+import { SeqIssue } from "../../../util/SeqIssue";
 import { SeqKeyModel } from "../../seqmaster/properties/SeqKeyModel";
 
 

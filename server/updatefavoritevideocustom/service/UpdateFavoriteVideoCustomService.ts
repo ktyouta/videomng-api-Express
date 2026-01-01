@@ -1,4 +1,5 @@
 import { FavoriteVideoCategoryTransaction, Prisma } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FavoriteVideoCategoryTransactionInsertEntity } from "../../internaldata/favoritevideocateorytransaction/entity/FavoriteVideoCategoryTransactionInsertEntity";
 import { FavoriteVideoCategoryTransactionRepositorys } from "../../internaldata/favoritevideocateorytransaction/repository/FavoriteVideoCategoryTransactionRepositorys";
@@ -6,7 +7,6 @@ import { FavoriteVideoCategoryTransactionRepositoryInterface } from "../../inter
 import { FavoriteVideoTransactionUpdateEntity } from "../../internaldata/favoritevideotransaction/entity/FavoriteVideoTransactionUpdateEntity";
 import { FavoriteVideoTransactionRepositorys } from "../../internaldata/favoritevideotransaction/repository/FavoriteVideoTransactionRepositorys";
 import { FavoriteVideoTransactionRepositoryInterface } from "../../internaldata/favoritevideotransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { UpdateFavoriteVideoCustomSelectEntity } from "../entity/UpdateFavoriteVideoCustomSelectEntity";
 import { UpdateFavoriteVideoCustomRequestModel } from "../model/UpdateFavoriteVideoCustomRequestModel";
 import { UpdateFavoriteVideoCustomRepositorys } from "../repository/UpdateFavoriteVideoCustomRepositorys";

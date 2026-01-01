@@ -1,14 +1,14 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
+import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
-import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } from '../../util/const/HttpStatusConst';
-import { ApiResponse } from '../../util/service/ApiResponse';
-import { PrismaTransaction } from '../../util/service/PrismaTransaction';
+import { ApiResponse } from '../../util/ApiResponse';
+import { PrismaTransaction } from '../../util/PrismaTransaction';
 import { UpdateFavoriteVideoTagRequestModel } from '../model/UpdateFavoriteVideoTagRequestModel';
 import { UpdateFavoriteVideoTagResponseModel } from '../model/UpdateFavoriteVideoTagResponseModel';
 import { UpdateFavoriteVideoTagService } from '../service/UpdateFavoriteVideoTagService';

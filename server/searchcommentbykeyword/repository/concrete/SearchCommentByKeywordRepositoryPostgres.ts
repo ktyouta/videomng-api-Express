@@ -1,5 +1,5 @@
 import { BlockCommentTransaction, FavoriteCommentTransaction } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { SearchCommentByKeywordBlockCommentSelectEntity } from "../../entity/SearchCommentByKeywordBlockCommentSelectEntity";
 import { SearchCommentByKeywordFavoriteCommentSelectEntity } from "../../entity/SearchCommentByKeywordFavoriteCommentSelectEntity";
 import { GetFavoriteVideoCommentRepositoryInterface } from "../interface/GetFavoriteVideoCommentRepositoryInterface";

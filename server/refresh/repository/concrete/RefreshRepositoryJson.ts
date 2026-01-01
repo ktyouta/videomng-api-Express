@@ -1,5 +1,5 @@
 import { FrontUserInfoType } from "../../../common/type/FrontUserInfoType";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { RefreshSelectEntity } from "../../entity/RefreshSelectEntity";
 import { RefreshRepositoryInterface } from "../interface/RefreshRepositoryInterface";
 

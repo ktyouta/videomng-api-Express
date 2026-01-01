@@ -1,7 +1,7 @@
 import { FrontUserInfoMaster } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { FrontUserInfoCreateSelectEntity } from "../../entity/FrontUserInfoCreateSelectEntity";
 import { FrontUserInfoCreateRepositoryInterface } from "../interface/FrontUserInfoCreateRepositoryInterface";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 
 
 

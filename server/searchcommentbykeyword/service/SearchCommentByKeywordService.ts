@@ -1,6 +1,7 @@
 import { BlockCommentTransaction, FavoriteCommentTransaction } from '@prisma/client';
 import { Request } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
+import { FLG, RepositoryType } from '../../common/const/CommonConst';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
@@ -11,7 +12,6 @@ import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { FLG, RepositoryType } from '../../util/const/CommonConst';
 import { SearchCommentByKeywordBlockCommentSelectEntity } from '../entity/SearchCommentByKeywordBlockCommentSelectEntity';
 import { SearchCommentByKeywordFavoriteCommentSelectEntity } from '../entity/SearchCommentByKeywordFavoriteCommentSelectEntity';
 import { SearchCommentByKeywordKeywordModel } from '../model/SearchCommentByKeywordKeywordModel';

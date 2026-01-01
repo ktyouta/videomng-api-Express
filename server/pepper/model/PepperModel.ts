@@ -1,4 +1,4 @@
-import { envConfig } from "../../util/const/EnvConfig";
+import { envConfig } from "../../common/const/EnvConfig";
 
 export class PepperModel {
 

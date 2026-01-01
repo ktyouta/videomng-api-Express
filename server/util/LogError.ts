@@ -1,4 +1,4 @@
-import { ERROR_LOG_FILE, LOG_FILE_PATH } from "../const/FileInfoConst";
+import { ERROR_LOG_FILE, LOG_FILE_PATH } from "../common/const/FileInfoConst";
 import { FileData } from "./FileData";
 import { LogInterface } from "./LogInterface";
 

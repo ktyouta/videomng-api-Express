@@ -1,6 +1,6 @@
-import { BlockCommentTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { BlockCommentTransaction } from "@prisma/client";
+import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetBlockCommentListSelectEntity } from "../../entity/GetBlockCommentListSelectEntity";
-import { PrismaClientInstance } from "../../../util/service/PrismaClientInstance";
 import { GetBlockCommentListRepositoryInterface } from "../interface/GetBlockCommentListRepositoryInterface";
 
 

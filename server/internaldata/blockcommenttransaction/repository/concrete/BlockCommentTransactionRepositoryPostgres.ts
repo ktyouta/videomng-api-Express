@@ -1,11 +1,9 @@
 import { Prisma } from "@prisma/client";
-import { FLG } from "../../../../util/const/CommonConst";
-import { PrismaClientInstance } from "../../../../util/service/PrismaClientInstance";
-import { BlockCommentTransactionInsertEntity } from "../../entity/BlockCommentTransactionInsertEntity";
-import { BlockCommentTransactionUpdateEntity } from "../../entity/BlockCommentTransactionUpdateEntity";
-import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
-import { BlockCommentTransactionRepositoryInterface } from "../interface/BlockCommentTransactionRepositoryInterface";
+import { FLG } from "../../../../common/const/CommonConst";
 import { CommentIdModel } from "../../../common/properties/CommentIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
+import { BlockCommentTransactionInsertEntity } from "../../entity/BlockCommentTransactionInsertEntity";
+import { BlockCommentTransactionRepositoryInterface } from "../interface/BlockCommentTransactionRepositoryInterface";
 
 
 

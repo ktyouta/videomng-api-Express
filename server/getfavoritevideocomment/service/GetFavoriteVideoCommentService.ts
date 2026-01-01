@@ -1,4 +1,5 @@
 import { BlockCommentTransaction } from '@prisma/client';
+import { RepositoryType } from '../../common/const/CommonConst';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';
@@ -6,7 +7,6 @@ import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtube
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
-import { RepositoryType } from '../../util/const/CommonConst';
 import { GetFavoriteVideoBlockCommentSelectEntity } from '../entity/GetFavoriteVideoBlockCommentSelectEntity';
 import { GetFavoriteVideoFavoriteCommentSelectEntity } from '../entity/GetFavoriteVideoFavoriteCommentSelectEntity';
 import { GetFavoriteVideoCommentRepositorys } from '../repository/GetFavoriteVideoCommentRepositorys';

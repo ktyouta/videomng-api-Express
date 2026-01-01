@@ -1,10 +1,10 @@
 import { CookieOptions } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
+import { envConfig } from '../../common/const/EnvConfig';
+import { IS_ENV_PRODUCTION } from '../../common/const/EnvProductionConst';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
-import { envConfig } from '../../util/const/EnvConfig';
-import { IS_ENV_PRODUCTION } from '../../util/const/EnvProductionConst';
-import { parseDuration } from '../../util/service/parseDuration';
+import { parseDuration } from '../../util/ParseDuration';
 
 
 export class RefreshTokenModel {

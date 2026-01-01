@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
+import { RepositoryType } from "../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FavoriteVideoMemoTransactionSoftDeleteEntity } from "../../internaldata/favoritevideomemotransaction/entity/FavoriteVideoMemoTransactionSoftDeleteEntity";
 import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";
 import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideomemotransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
-import { RepositoryType } from "../../util/const/CommonConst";
 import { DeleteFavoriteVideoDetailSelectEntity } from "../entity/DeleteFavoriteVideoDetailSelectEntity";
 import { DeleteFavoriteVideoMemoRequestModel } from "../model/DeleteFavoriteVideoMemoRequestModel";
 import { DeleteFavoriteVideoMemoRepositorys } from "../repository/DeleteFavoriteVideoMemoRepositorys";
