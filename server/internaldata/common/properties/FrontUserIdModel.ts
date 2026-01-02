@@ -50,11 +50,6 @@ export class FrontUserIdModel {
      * @returns 
      */
     static fromHAccessToken(accessTokenModel: AccessTokenModel) {
-
-        // トークン検証
-        const decode = accessTokenModel.verify();
-        const userIdModel = FrontUserIdModel.reConstruct(decode.sub);
-
-        return userIdModel;
+        return accessTokenModel.getPalyload();
     }
 }

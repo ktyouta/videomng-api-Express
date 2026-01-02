@@ -27,8 +27,7 @@ export async function authMiddleware(
         const accessTokenModel = AccessTokenModel.get(headerModel);
 
         // トークン検証
-        const decode = accessTokenModel.verify();
-        const userIdModel = FrontUserIdModel.reConstruct(decode.sub);
+        const userIdModel = accessTokenModel.getPalyload();
 
         // ユーザー情報取得
         const entity = new SelectEntity(userIdModel);

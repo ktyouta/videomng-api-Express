@@ -63,7 +63,7 @@ export class AccessTokenModel {
      * トークンチェック
      * @returns 
      */
-    verify() {
+    private verify() {
 
         try {
 
@@ -77,6 +77,27 @@ export class AccessTokenModel {
         } catch (err) {
             throw new AccessTokenError(`アクセストークンの検証に失敗しました。${err}`);
         }
+    }
+
+    /**
+     * トークンのペイロードを取得
+     * @returns 
+     */
+    getPalyload() {
+
+        const decode = this.verify();
+
+        if (!decode.sub) {
+            throw new Error('subが設定されていません。');
+        }
+
+        const userId = Number(decode.sub);
+
+        if (Number.isNaN(userId)) {
+            throw new Error("ユーザーIDが不正です。");
+        }
+
+        return FrontUserIdModel.reConstruct(userId);
     }
 
     get token() {
