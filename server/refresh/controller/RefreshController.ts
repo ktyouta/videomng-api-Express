@@ -5,13 +5,13 @@ import { RepositoryType } from '../../common/const/CommonConst';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { HeaderModel } from '../../header/model/HeaderModel';
+import { Logger } from '../../logger/Logger';
 import { RefreshCustomHeaderModel } from '../../refreshcustomheader/model/RefreshCustomHeaderModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { ApiResponse } from '../../util/ApiResponse';
-import { Logger } from '../../util/Logger';
 import { RefreshRepositorys } from '../repository/RefreshRepositorys';
 import { RefreshService } from '../service/RefreshService';
 
@@ -67,7 +67,7 @@ export class RefreshController extends RouteController {
             const userInfo = await this.refreshService.getUser(userIdModel);
 
             if (!userInfo || userInfo.length === 0) {
-                throw Error(`該当ユーザーなし`);
+                throw Error(`リフレッシュトークンからユーザー情報を取得できませんでした`);
             }
 
             // リフレッシュトークンの絶対期限チェック
