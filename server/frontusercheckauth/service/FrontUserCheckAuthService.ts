@@ -1,5 +1,4 @@
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { RefreshTokenModel } from "../../refreshtoken/model/RefreshTokenModel";
 import { UserSelectEntity } from "../entity/UserSelectEntity";
 import { FrontUserCheckAuthRepositoryInterface } from "../repository/interface/FrontUserCheckAuthRepositoryInterface";
 
@@ -7,22 +6,6 @@ import { FrontUserCheckAuthRepositoryInterface } from "../repository/interface/F
 export class FrontUserCheckAuthService {
 
     constructor(private readonly repository: FrontUserCheckAuthRepositoryInterface) { }
-
-    /**
-     * 認証
-     * @param refreshTokenModel 
-     */
-    verify(refreshTokenModel: RefreshTokenModel) {
-
-        const decode = refreshTokenModel.verify();
-        const userId = Number(decode.sub);
-
-        if (Number.isNaN(userId)) {
-            throw new Error("ユーザーIDが不正です。");
-        }
-
-        return FrontUserIdModel.reConstruct(userId);
-    }
 
     /**
      * ユーザー情報を取得

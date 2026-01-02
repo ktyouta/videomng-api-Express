@@ -43,7 +43,7 @@ export class FrontUserCheckAuthController extends RouteController {
             const refreshTokenModel = RefreshTokenModel.get(cookieModel);
 
             // 認証
-            const userIdModel = this.frontUserCheckAuthService.verify(refreshTokenModel);
+            const userIdModel = refreshTokenModel.getPalyload();
 
             // ユーザー情報取得
             const userInfo = await this.frontUserCheckAuthService.getUser(userIdModel);

@@ -96,9 +96,9 @@ export class RefreshTokenModel {
     /**
      * トークン再発行
      */
-    static refresh(refreshTokenModel: RefreshTokenModel) {
+    refresh() {
 
-        const decoded = refreshTokenModel.verify();
+        const decoded = this.verify();
         const nowSec = Math.floor(Date.now() / 1000);
 
         if (!decoded.sub || !decoded.iat) {
@@ -122,7 +122,7 @@ export class RefreshTokenModel {
      * トークンチェック
      * @returns 
      */
-    verify() {
+    private verify() {
 
         try {
 
@@ -139,6 +139,27 @@ export class RefreshTokenModel {
     }
 
     /**
+     * トークンのペイロードを取得
+     * @returns 
+     */
+    getPalyload() {
+
+        const decode = this.verify();
+
+        if (!decode.sub) {
+            throw new Error('subが設定されていません。');
+        }
+
+        const userId = Number(decode.sub);
+
+        if (Number.isNaN(userId)) {
+            throw new Error("ユーザーIDが不正です。");
+        }
+
+        return FrontUserIdModel.reConstruct(userId);
+    }
+
+    /**
      * 絶対期限チェック
      */
     isAbsoluteExpired() {
@@ -146,7 +167,7 @@ export class RefreshTokenModel {
         const decode = this.verify();
 
         if (!decode.iat) {
-            throw new Error('iat未設定');
+            throw new Error('iatが設定されていません。');
         }
 
         const nowMs = Date.now();

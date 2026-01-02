@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
-import { AUTH_ALLOWED_ORIGINS } from '../../common/const/AuthAllowedOrigins';
+import { AuthOriginModel } from '../../authorigin/model/AuthOriginModel';
 import { RepositoryType } from '../../common/const/CommonConst';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { HeaderModel } from '../../header/model/HeaderModel';
+import { RefreshCustomHeaderModel } from '../../refreshcustomheader/model/RefreshCustomHeaderModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
@@ -42,16 +43,17 @@ export class RefreshController extends RouteController {
             const cookieModel = new CookieModel(req);
             // ヘッダー
             const headerModel = new HeaderModel(req);
-            const origin = headerModel.get(`origin`);
-            const customHeader = headerModel.get(`X-CSRF-Token`)
+            const authOriginModel = new AuthOriginModel(headerModel);
 
             // 許可Originチェック
-            if (!origin || !AUTH_ALLOWED_ORIGINS.some(e => e === origin)) {
+            if (!authOriginModel.isAllowed()) {
                 throw Error(`許可されていないOrigin`);
             }
 
+            const customHeader = new RefreshCustomHeaderModel(headerModel);
+
             // カスタムヘッダチェック
-            if (customHeader !== `web`) {
+            if (!customHeader.isValid()) {
                 throw Error(`カスタムヘッダが不正`);
             }
 
@@ -59,7 +61,7 @@ export class RefreshController extends RouteController {
             const refreshTokenModel = RefreshTokenModel.get(cookieModel);
 
             // 認証
-            const userIdModel = this.refreshService.verify(refreshTokenModel);
+            const userIdModel = refreshTokenModel.getPalyload();
 
             // ユーザー情報取得
             const userInfo = await this.refreshService.getUser(userIdModel);
@@ -74,7 +76,7 @@ export class RefreshController extends RouteController {
             }
 
             // リフレッシュトークン再発行
-            const newRefreshTokenModel = RefreshTokenModel.refresh(refreshTokenModel);
+            const newRefreshTokenModel = refreshTokenModel.refresh();
             res.cookie(RefreshTokenModel.COOKIE_KEY, newRefreshTokenModel.token, RefreshTokenModel.COOKIE_SET_OPTION);
 
             // アクセストークン発行
