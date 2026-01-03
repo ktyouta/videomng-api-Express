@@ -1,7 +1,10 @@
 import { NextFunction, Response } from 'express';
+import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
+import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { RepositoryType } from '../../common/const/CommonConst';
-import { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
+import { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
 import { CookieModel } from '../../cookie/model/CookieModel';
+import { HeaderModel } from '../../header/model/HeaderModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
@@ -55,11 +58,21 @@ export class FrontUserCheckAuthController extends RouteController {
                 return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
             }
 
+            const headerModel = new HeaderModel(req);
+            const accessTokenModel = AccessTokenModel.get(headerModel);
+
+            // アクセストークン検証
+            accessTokenModel.getPalyload();
+
             // レスポンス
             const frontUserCheckAuthResponseModel = new FrontUserCheckAuthResponseModel(userInfo[0]);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `認証成功`, frontUserCheckAuthResponseModel.data);
         } catch (e) {
+
+            if (e instanceof AccessTokenError) {
+                return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証エラー`);
+            }
 
             // エラー発生時はクッキーを削除する
             res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_CLEAR_OPTION);
