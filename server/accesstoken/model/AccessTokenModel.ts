@@ -11,6 +11,8 @@ export class AccessTokenModel {
     private readonly _token: string;
     // ヘッダーのキー
     static readonly HEADER_KEY: string = `Authorization`;
+    // 認証スキーム
+    static readonly SCHEME: string = `Bearer`;
     // アクセストークン用のjwtキー
     private static readonly JWT_KEY = envConfig.accessTokenJwtKey;
     // アクセストークン有効期間
@@ -27,9 +29,12 @@ export class AccessTokenModel {
      */
     static get(headerModel: HeaderModel) {
 
-        const token = headerModel.get(AccessTokenModel.HEADER_KEY) || ``;
+        const authHeader = headerModel.get(AccessTokenModel.HEADER_KEY) || ``;
+        const [scheme, token] = authHeader.split(` `);
 
-        return new AccessTokenModel(token);
+        const accessToken = scheme === AccessTokenModel.SCHEME && token ? token : ``;
+
+        return new AccessTokenModel(accessToken);
     }
 
     /**
