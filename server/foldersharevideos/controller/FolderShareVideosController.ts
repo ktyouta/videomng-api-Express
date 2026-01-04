@@ -8,7 +8,6 @@ import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { ApiResponse } from "../../util/ApiResponse";
-import { SelectShareVideoEntity } from "../entity/SelectShareVideoEntity";
 import { FolderShareVideosRepositorys } from "../repository/FolderShareVideosRepositorys";
 import { PathParamSchema } from "../schema/PathParamSchema";
 import { FolderShareVideosService } from "../service/FolderShareVideosService";
@@ -47,16 +46,21 @@ export class FolderShareVideosController extends RouteController {
 
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
 
-        // 動画取得用Entity
-        const getFavoriteVideoFolderSelectEntity = new SelectShareVideoEntity(
+        // 動画リストを取得
+        const videoList = await this.getFavoriteVideoFolderService.getFavoriteVideoFolder(
             frontUserIdModel,
             folderIdModel,
         );
 
-        // 動画リストを取得
-        const favoriteVideoList = await this.getFavoriteVideoFolderService.getFavoriteVideoFolder(
-            getFavoriteVideoFolderSelectEntity,
+        // フォルダ情報を取得
+        const folderVideoList = await this.getFavoriteVideoFolderService.getFolderInfo(
+            frontUserIdModel,
+            folderIdModel,
+            videoList,
         );
+
+        // 動画情報を取得
+        const favoriteVideoList = await this.getFavoriteVideoFolderService.getVideoInfo(folderVideoList);
 
         return ApiResponse.create(res, HTTP_STATUS_CREATED, `動画リストを取得しました。`, favoriteVideoList);
     }
