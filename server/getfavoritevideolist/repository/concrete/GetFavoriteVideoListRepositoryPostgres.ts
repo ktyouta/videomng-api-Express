@@ -43,7 +43,8 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
     private static readonly SELECT_LIST = `
               SELECT
                 user_id as "userId",
-                video_id as "videoId" 
+                video_id as "videoId",
+                is_visible_after_folder_add as "isVisibleAfterFolderAdd"
     `;
 
     constructor() {
