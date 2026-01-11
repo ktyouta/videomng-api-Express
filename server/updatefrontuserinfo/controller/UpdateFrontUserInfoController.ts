@@ -2,13 +2,13 @@ import { Prisma } from "@prisma/client";
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from "zod";
 import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
-import { IS_ALLOW_USER_OPERATION } from "../../common/const/AllowUserOperationConst";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
 import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
+import { userOperationGuardMiddleware } from "../../middleware/userOperationGuardMiddleware";
 import { RefreshTokenModel } from "../../refreshtoken/model/RefreshTokenModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
@@ -33,7 +33,10 @@ export class UpdateFrontUserInfoController extends RouteController {
             HttpMethodType.PUT,
             this.doExecute,
             ApiEndopoint.FRONT_USER_INFO_ID,
-            [authMiddleware]
+            [
+                userOperationGuardMiddleware,
+                authMiddleware
+            ],
         );
     }
 
@@ -44,10 +47,6 @@ export class UpdateFrontUserInfoController extends RouteController {
      * @returns 
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-
-        if (!IS_ALLOW_USER_OPERATION) {
-            return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `この機能は現在の環境では無効化されています。`);
-        }
 
         const id = req.params.id;
 

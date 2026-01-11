@@ -1,13 +1,13 @@
 import { Prisma } from "@prisma/client";
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from "zod";
-import { IS_ALLOW_USER_OPERATION } from "../../common/const/AllowUserOperationConst";
 import { RepositoryType } from "../../common/const/CommonConst";
-import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
+import { HTTP_STATUS_BAD_REQUEST, HTTP_STATUS_CREATED, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserPasswordModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserPasswordModel";
 import { FrontUserSaltValueModel } from "../../internaldata/frontuserloginmaster/properties/FrontUserSaltValueModel";
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
+import { userOperationGuardMiddleware } from "../../middleware/userOperationGuardMiddleware";
 import { PepperModel } from "../../pepper/model/PepperModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
@@ -32,7 +32,10 @@ export class UpdateFrontUserPasswordController extends RouteController {
             HttpMethodType.PUT,
             this.doExecute,
             ApiEndopoint.FRONT_USER_PASSWORD_ID,
-            [authMiddleware]
+            [
+                userOperationGuardMiddleware,
+                authMiddleware
+            ],
         );
     }
 
@@ -43,10 +46,6 @@ export class UpdateFrontUserPasswordController extends RouteController {
      * @returns 
      */
     public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-
-        if (!IS_ALLOW_USER_OPERATION) {
-            return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `この機能は現在の環境では無効化されています。`);
-        }
 
         // パスパラメータのバリデーションチェック
         const pathValidateResult = RequestPathParamSchema.safeParse(req.params);

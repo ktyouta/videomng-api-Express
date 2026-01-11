@@ -2,12 +2,12 @@ import { Prisma } from "@prisma/client";
 import { NextFunction, Request, Response } from 'express';
 import { ZodIssue } from "zod";
 import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
-import { IS_ALLOW_USER_OPERATION } from "../../common/const/AllowUserOperationConst";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_FORBIDDEN, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterInsertEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterInsertEntity";
 import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";
 import { FrontUserLoginMasterRepositoryInterface } from "../../internaldata/frontuserloginmaster/repository/interface/FrontUserLoginMasterRepositoryInterface";
+import { userOperationGuardMiddleware } from "../../middleware/userOperationGuardMiddleware";
 import { RefreshTokenModel } from "../../refreshtoken/model/RefreshTokenModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
@@ -30,7 +30,8 @@ export class CreateFrontUserInfoController extends RouteController {
         return new RouteSettingModel(
             HttpMethodType.POST,
             this.doExecute,
-            ApiEndopoint.FRONT_USER_INFO
+            ApiEndopoint.FRONT_USER_INFO,
+            [userOperationGuardMiddleware],
         );
     }
 
@@ -41,10 +42,6 @@ export class CreateFrontUserInfoController extends RouteController {
      * @returns 
      */
     public doExecute(req: Request, res: Response, next: NextFunction) {
-
-        if (!IS_ALLOW_USER_OPERATION) {
-            return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `この機能は現在の環境では無効化されています。`);
-        }
 
         // リクエストボディ
         const requestBody: FrontUserInfoCreateRequestType = req.body;
