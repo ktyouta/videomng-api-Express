@@ -2,4 +2,5 @@
 export type UpdateFavoriteVideoTagType = {
     readonly id?: number,
     readonly name: string,
+    readonly tagColor: string,
 }

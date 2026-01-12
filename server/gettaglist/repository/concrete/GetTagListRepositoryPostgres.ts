@@ -26,6 +26,7 @@ export class GetTagListRepositoryPostgres implements GetTagListRepositoryInterfa
                 user_id as "userId",
                 tag_id as "tagId",
                 tag_name as "tagName",
+                tag_color as "tagColor",
                 create_date as "createDate",
                 update_date as "updateDate"
             FROM "tag_master" 

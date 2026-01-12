@@ -143,6 +143,7 @@ model TagMaster {
   userId      Int   @map("user_id")
   tagId    Int   @map("tag_id")
   tagName    String  @db.Text  @map("tag_name")
+  tagColor      String?   @db.VarChar(255) @map("tag_color")
   createDate  DateTime @db.Timestamptz @map("create_date")
   updateDate  DateTime @db.Timestamptz @map("update_date")
   deleteFlg   String   @db.Char(1)  @map("delete_flg")

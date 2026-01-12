@@ -6,6 +6,8 @@ import { FavoriteVideoTagTransactionInsertEntity } from "../../internaldata/favo
 import { FavoriteVideoTagTransactionRepositorys } from "../../internaldata/favoritevideotagtransaction/repository/FavoriteVideoTagTransactionRepositorys";
 import { FavoriteVideoTagTransactionRepositoryInterface } from "../../internaldata/favoritevideotagtransaction/repository/interface/FavoriteVideoTagTransactionRepositoryInterface";
 import { TagMasterInsertEntity } from "../../internaldata/tagmaster/entity/TagMasterInsertEntity";
+import { TagMasterUpdateEntity } from "../../internaldata/tagmaster/entity/TagMasterUpdateEntity";
+import { TagColorModel } from "../../internaldata/tagmaster/properties/TagColorModel";
 import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
 import { TagMasterRepositorys } from "../../internaldata/tagmaster/repository/TagMasterRepositorys";
 import { TagMasterRepositoryInterface } from "../../internaldata/tagmaster/repository/interface/TagMasterRepositoryInterface";
@@ -135,12 +137,20 @@ export class UpdateFavoriteVideoTagService {
 
             const tagNameModel = new TagNameModel(tag.name);
             const tagList = await getUpdateFavoriteVideoTagRepository.selectTagMaster(tagNameModel, userIdModel);
+            const tagColor = new TagColorModel(tag.tagColor);
 
             // タグマスタに登録済み
             if (tagList && tagList.length > 0) {
                 const tagInfo = tagList[0];
                 const tagIdModel = new TagIdModel(tagInfo.tagId);
                 const tagModel = new UpdateFavoriteVideoTagModel(tagIdModel, tagNameModel);
+                const nowTagColor = tagInfo.tagColor;
+
+                // タグカラーが変更されている場合はタグ情報を更新する
+                if (tagColor.value !== nowTagColor) {
+                    const tagMasterUpdateEntity = new TagMasterUpdateEntity(userIdModel, tagIdModel, tagNameModel, tagColor);
+                    await tagMasterRepository.update(tagMasterUpdateEntity, tx);
+                }
 
                 updateTagList.push(tagModel);
                 continue;
@@ -150,7 +160,7 @@ export class UpdateFavoriteVideoTagService {
             const tagIdModel = new TagIdModel(nextTagId);
 
             // 登録
-            const tagMasterInsertEntity = new TagMasterInsertEntity(userIdModel, tagIdModel, tagNameModel);
+            const tagMasterInsertEntity = new TagMasterInsertEntity(userIdModel, tagIdModel, tagNameModel, tagColor);
             await tagMasterRepository.insert(tagMasterInsertEntity, tx);
 
             const tagModel = new UpdateFavoriteVideoTagModel(tagIdModel, tagNameModel);

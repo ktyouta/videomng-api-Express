@@ -27,12 +27,14 @@ export class TagMasterRepositoryPostgres implements TagMasterRepositoryInterface
         const userId = tagMasterInsertEntity.frontUserId;
         const tagId = tagMasterInsertEntity.tagId;
         const tagName = tagMasterInsertEntity.tagName;
+        const tagColor = tagMasterInsertEntity.tagColor;
 
         const tag = await tx.tagMaster.create({
             data: {
                 userId,
                 tagId,
                 tagName,
+                tagColor,
                 createDate: new Date(),
                 updateDate: new Date(),
                 deleteFlg: FLG.OFF,
@@ -52,7 +54,7 @@ export class TagMasterRepositoryPostgres implements TagMasterRepositoryInterface
 
         const userId = tagMasterUpdateEntity.frontUserId;
         const tagId = tagMasterUpdateEntity.tagId;
-        const tagName = tagMasterUpdateEntity.tagName;
+        const tagColor = tagMasterUpdateEntity.tagColor;
 
         const tag = await tx.tagMaster.update({
             where: {
@@ -62,7 +64,7 @@ export class TagMasterRepositoryPostgres implements TagMasterRepositoryInterface
                 },
             },
             data: {
-                tagName,
+                tagColor,
                 updateDate: new Date(),
             },
         });
@@ -80,7 +82,6 @@ export class TagMasterRepositoryPostgres implements TagMasterRepositoryInterface
 
         const userId = tagMasterSoftDeleteEntity.frontUserId;
         const tagId = tagMasterSoftDeleteEntity.tagId;
-        const tagName = tagMasterSoftDeleteEntity.tagName;
 
         const tag = await tx.tagMaster.update({
             where: {

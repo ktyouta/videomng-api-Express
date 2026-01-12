@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
-import { PrismaClientInstance } from "./PrismaClientInstance";
 import { NextFunction } from "express";
+import { PrismaClientInstance } from "./PrismaClientInstance";
 
 export class PrismaTransaction {
 
