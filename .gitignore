@@ -29,3 +29,9 @@ yarn-error.log*
 /public/log/error.log
 
 dist
+
+.claude/**
+!.claude/commands/
+!.claude/commands/**
+
+tmpclaude-*

@@ -15,7 +15,7 @@ export class RefreshTokenModel {
     // cookieのキー
     static readonly COOKIE_KEY: string = `refresh_token`;
     // リフレッシュトークン用のjwtキー
-    private static readonly JWT_KEY = envConfig.refreshTokenExpires;
+    private static readonly JWT_KEY = envConfig.refreshTokenJwtKey;
     // リフレッシュトークン有効期間
     private static readonly REFRESH_TOKEN_EXPIRES = envConfig.refreshTokenExpires;
     // cookieオプション

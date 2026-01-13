@@ -4,15 +4,15 @@ export class PepperModel {
 
     private readonly _value: string;
     // ペッパー値(環境変数設定値)
-    private readonly ACCESS_TOKEN_EXPIRES = envConfig.pepper;
+    private readonly PEPPER_VALUE = envConfig.pepper;
 
     constructor() {
 
-        if (!this.ACCESS_TOKEN_EXPIRES) {
+        if (!this.PEPPER_VALUE) {
             throw Error(`環境変数にpepperが設定されていません。`);
         }
 
-        this._value = this.ACCESS_TOKEN_EXPIRES;
+        this._value = this.PEPPER_VALUE;
     }
 
     get value() {

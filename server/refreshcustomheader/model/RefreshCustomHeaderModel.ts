@@ -11,7 +11,6 @@ export class RefreshCustomHeaderModel {
 
     constructor(headerModel: HeaderModel) {
 
-
         const value = headerModel.get(RefreshCustomHeaderModel.HEADER_KEY);
 
         if (!value) {
