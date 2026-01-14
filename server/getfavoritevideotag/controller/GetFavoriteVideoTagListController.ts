@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { HTTP_STATUS_NO_CONTENT, HTTP_STATUS_OK } from "../../common/const/HttpStatusConst";
+import { HTTP_STATUS_OK } from "../../common/const/HttpStatusConst";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
@@ -47,7 +47,7 @@ export class GetFavoriteVideoTagListController extends RouteController {
 
         // ユーザーのお気に入り動画タグリストが存在しない
         if (favoriteVideoTagList.length === 0) {
-            return ApiResponse.create(res, HTTP_STATUS_NO_CONTENT, `お気に入り動画タグリストが登録されていません。`);
+            return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画タグリストが登録されていません。`, []);
         }
 
         // レスポンスを作成
