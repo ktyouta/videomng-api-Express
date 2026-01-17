@@ -58,12 +58,14 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         const videoTag = getFavoriteVideoListSelectEntity.tagName;
         const sortId = getFavoriteVideoListSelectEntity.sortId;
         const favoriteLevel = getFavoriteVideoListSelectEntity.favoriteLevel;
+        const mode = getFavoriteVideoListSelectEntity.mode;
 
         let sql = `
             FROM favorite_video_transaction a
             WHERE user_id = $1
               AND delete_flg = '0'
               AND (
+                ${mode} = '2' OR
                 is_visible_after_folder_add = '1' OR 
                 NOT EXISTS(
                     SELECT 

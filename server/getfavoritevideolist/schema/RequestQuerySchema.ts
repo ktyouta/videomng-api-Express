@@ -8,6 +8,7 @@ export const RequestQuerySchema = z.object({
   favoriteLevel: z.string().optional().default(""),
   page: z.string().optional().default(""),
   folder: z.string().optional().default(""),
+  mode: z.string().optional().default(""),
 });
 
 export type RequestQueryType =

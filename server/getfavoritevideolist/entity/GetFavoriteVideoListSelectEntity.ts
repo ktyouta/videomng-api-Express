@@ -1,13 +1,11 @@
-import { YouTubeDataApiVideoListVideoCategoryId } from "../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListVideoCategoryId";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FrontUserNameModel } from "../../internaldata/frontuserinfomaster/properties/FrontUserNameModel";
-import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
 import { GetFavoriteVideoListFavoriteLevelModel } from "../model/GetFavoriteVideoListFavoriteLevelModel";
 import { GetFavoriteVideoListPageModel } from "../model/GetFavoriteVideoListPageModel";
 import { GetFavoriteVideoListSortIdModel } from "../model/GetFavoriteVideoListSortIdModel";
 import { GetFavoriteVideoListTagNameModel } from "../model/GetFavoriteVideoListTagNameModel";
 import { GetFavoriteVideoListVideoCategoryModel } from "../model/GetFavoriteVideoListVideoCategoryModel";
 import { GetFavoriteVideoListViewStatusModel } from "../model/GetFavoriteVideoListViewStatusModel";
+import { ModeModel } from "../model/ModeModel";
 
 
 
@@ -27,6 +25,8 @@ export class GetFavoriteVideoListSelectEntity {
     private readonly _favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel;
     // ページ
     private readonly _pageModel: GetFavoriteVideoListPageModel;
+    // モード
+    private readonly _modeModel: ModeModel;
 
 
     constructor(frontUserIdModel: FrontUserIdModel,
@@ -35,7 +35,9 @@ export class GetFavoriteVideoListSelectEntity {
         tagNameModel: GetFavoriteVideoListTagNameModel,
         sortKeyModel: GetFavoriteVideoListSortIdModel,
         favoriteLevelModel: GetFavoriteVideoListFavoriteLevelModel,
-        pageModel: GetFavoriteVideoListPageModel) {
+        pageModel: GetFavoriteVideoListPageModel,
+        modeModel: ModeModel
+    ) {
 
         this._frontUserIdModel = frontUserIdModel;
         this._viewStatusModel = viewStatusModel;
@@ -44,6 +46,7 @@ export class GetFavoriteVideoListSelectEntity {
         this._sortKeyModel = sortKeyModel;
         this._favoriteLevelModel = favoriteLevelModel;
         this._pageModel = pageModel;
+        this._modeModel = modeModel;
     }
 
     public get frontUserIdModel() {
@@ -80,5 +83,9 @@ export class GetFavoriteVideoListSelectEntity {
 
     public get page() {
         return this._pageModel.page;
+    }
+
+    public get mode() {
+        return this._modeModel.value;
     }
 }
