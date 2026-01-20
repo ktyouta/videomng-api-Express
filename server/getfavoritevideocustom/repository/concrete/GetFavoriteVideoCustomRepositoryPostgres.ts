@@ -114,7 +114,8 @@ export class GetFavoriteVideoCustomRepositoryPostgres implements GetFavoriteVide
                 a.user_id as "userId",
                 a.video_id as "videoId",
                 a.tag_id as "tagId",
-                b.tag_name as "tagName"
+                b.tag_name as "tagName",
+                b.tag_color as "tagColor"
             FROM "favorite_video_tag_transaction" a
             INNER JOIN "tag_master" b 
             ON a.user_id = b.user_id AND
