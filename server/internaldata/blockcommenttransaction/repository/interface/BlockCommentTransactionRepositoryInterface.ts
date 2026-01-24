@@ -1,8 +1,8 @@
-import { BlockCommentTransactionUpdateEntity } from "../../entity/BlockCommentTransactionUpdateEntity";
-import { BlockCommentTransactionInsertEntity } from "../../entity/BlockCommentTransactionInsertEntity";
 import { BlockCommentTransaction, Prisma } from "@prisma/client";
-import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { CommentIdModel } from "../../../common/properties/CommentIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../../common/properties/VideoIdModel";
+import { BlockCommentTransactionInsertEntity } from "../../entity/BlockCommentTransactionInsertEntity";
 
 
 /**
@@ -24,13 +24,23 @@ export interface BlockCommentTransactionRepositoryInterface {
         tx: Prisma.TransactionClient): Promise<BlockCommentTransaction>;
 
     /**
-     * お気に入り動画を論理削除
+     * お気に入り動画を削除
      * @param userId 
      * @param videoIdModel 
      * @param tx 
      */
-    softDelete(userId: FrontUserIdModel,
+    delete(userId: FrontUserIdModel,
         commentIdModel: CommentIdModel,
         tx: Prisma.TransactionClient): Promise<BlockCommentTransaction>;
+
+    /**
+     * お気に入り動画を削除
+     * @param userId 
+     * @param videoIdModel 
+     * @param tx 
+     */
+    deleteMany(videoIdModel: VideoIdModel,
+        userId: FrontUserIdModel,
+        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
 }
 

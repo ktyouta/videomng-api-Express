@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 import { FLG } from "../../../../common/const/CommonConst";
 import { CommentIdModel } from "../../../common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../../common/properties/VideoIdModel";
 import { FavoriteCommentTransactionInsertEntity } from "../../entity/FavoriteCommentTransactionInsertEntity";
 import { FavoriteCommentTransactionRepositoryInterface } from "../interface/FavoriteCommentTransactionRepositoryInterface";
 
@@ -42,55 +43,43 @@ export class FavoriteCommentTransactionRepositoryPostgres implements FavoriteCom
         return favoriteComment;
     }
 
-
     /**
-     * 削除お気に入りコメントの復元
+     * お気に入りコメントを削除
      */
-    async recovery(userIdModel: FrontUserIdModel,
+    async delete(userIdModel: FrontUserIdModel,
         commentIdModel: CommentIdModel,
         tx: Prisma.TransactionClient) {
 
         const userId = userIdModel.frontUserId;
         const commentId = commentIdModel.commentId;
 
-        const favoriteComment = await tx.favoriteCommentTransaction.update({
+        const favoriteComment = await tx.favoriteCommentTransaction.delete({
             where: {
                 userId_commentId: {
                     userId,
                     commentId
                 }
-            },
-            data: {
-                deleteFlg: FLG.OFF,
-                updateDate: new Date(),
-            },
+            }
         });
 
         return favoriteComment;
     }
 
-
     /**
-     * お気に入りコメントを論理削除
+     * お気に入りコメントを削除
      */
-    async softDelete(userIdModel: FrontUserIdModel,
-        commentIdModel: CommentIdModel,
+    async deleteMany(videoIdModel: VideoIdModel,
+        userIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
         const userId = userIdModel.frontUserId;
-        const commentId = commentIdModel.commentId;
+        const videoId = videoIdModel.videoId;
 
-        const favoriteComment = await tx.favoriteCommentTransaction.update({
+        const favoriteComment = await tx.favoriteCommentTransaction.deleteMany({
             where: {
-                userId_commentId: {
-                    userId,
-                    commentId
-                }
-            },
-            data: {
-                deleteFlg: FLG.ON,
-                updateDate: new Date(),
-            },
+                userId,
+                videoId,
+            }
         });
 
         return favoriteComment;

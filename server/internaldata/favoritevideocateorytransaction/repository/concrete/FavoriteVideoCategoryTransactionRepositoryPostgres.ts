@@ -3,7 +3,6 @@ import { FLG } from "../../../../common/const/CommonConst";
 import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../../common/properties/VideoIdModel";
 import { FavoriteVideoCategoryTransactionInsertEntity } from "../../entity/FavoriteVideoCategoryTransactionInsertEntity";
-import { FavoriteVideoCategoryTransactionSoftDeleteEntity } from "../../entity/FavoriteVideoCategoryTransactionSoftDeleteEntity";
 import { FavoriteVideoCategoryTransactionUpdateEntity } from "../../entity/FavoriteVideoCategoryTransactionUpdateEntity";
 import { FavoriteVideoCategoryTransactionRepositoryInterface } from "../interface/FavoriteVideoCategoryTransactionRepositoryInterface";
 
@@ -90,84 +89,5 @@ export class FavoriteVideoCategoryTransactionRepositoryPostgres implements Favor
                 videoId,
             }
         });
-    }
-
-
-    /**
-     * 削除メモの復元
-     */
-    async recovery(userIdModel: FrontUserIdModel,
-        videoIdModel: VideoIdModel,
-        tx: Prisma.TransactionClient) {
-
-        const userId = userIdModel.frontUserId;
-        const videoId = videoIdModel.videoId;
-
-        const favoriteVideoCategory = await tx.favoriteVideoCategoryTransaction.updateMany({
-            where: {
-                userId,
-                videoId,
-            },
-            data: {
-                deleteFlg: FLG.OFF,
-                updateDate: new Date(),
-            },
-        });
-
-        return favoriteVideoCategory;
-    }
-
-
-    /**
-     * 対象ユーザーのお気に入り動画カテゴリを論理削除
-     */
-    async softDeleteUserCategory(userIdModel: FrontUserIdModel,
-        videoIdModel: VideoIdModel,
-        tx: Prisma.TransactionClient) {
-
-        const userId = userIdModel.frontUserId;
-        const videoId = videoIdModel.videoId;
-
-        const favoriteVideoCategory = await tx.favoriteVideoCategoryTransaction.updateMany({
-            where: {
-                userId,
-                videoId,
-            },
-            data: {
-                deleteFlg: FLG.ON,
-                updateDate: new Date(),
-            },
-        });
-
-        return favoriteVideoCategory;
-    }
-
-
-    /**
-     * お気に入り動画カテゴリを論理削除
-     */
-    async softDelete(favoriteVideoCategoryTransactionSoftDeleteEntity: FavoriteVideoCategoryTransactionSoftDeleteEntity,
-        tx: Prisma.TransactionClient
-    ) {
-
-        const userId = favoriteVideoCategoryTransactionSoftDeleteEntity.frontUserId;
-        const videoId = favoriteVideoCategoryTransactionSoftDeleteEntity.videoId;
-        const categoryId = favoriteVideoCategoryTransactionSoftDeleteEntity.categoryId;
-
-        const favoriteVideoCategory = await tx.favoriteVideoCategoryTransaction.update({
-            where: {
-                userId_videoId_categoryId: {
-                    userId,
-                    videoId,
-                    categoryId,
-                },
-            },
-            data: {
-                deleteFlg: FLG.ON,
-                updateDate: new Date(),
-            },
-        });
-
-        return favoriteVideoCategory;
     }
 }

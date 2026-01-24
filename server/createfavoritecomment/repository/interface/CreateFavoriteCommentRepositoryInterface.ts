@@ -1,5 +1,3 @@
-import { FavoriteCommentTransaction } from "@prisma/client";
-import { CreateFavoriteCommentSelectEntity } from "../../entity/CreateFavoriteCommentSelectEntity";
 
 
 /**
@@ -7,9 +5,4 @@ import { CreateFavoriteCommentSelectEntity } from "../../entity/CreateFavoriteCo
  */
 export interface CreateFavoriteCommentRepositoryInterface {
 
-    /**
-     * お気に入りコメント情報取得
-     * @param favoriteCommentInsertEntity 
-     */
-    select(createFavoriteCommentSelectEntity: CreateFavoriteCommentSelectEntity): Promise<FavoriteCommentTransaction[]>;
 }

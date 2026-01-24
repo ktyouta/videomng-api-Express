@@ -52,6 +52,12 @@ export class DeleteFavoriteVideoController extends RouteController {
             const favoriteVideoRepository = this.deleteFavoriteVideoService.getFavoriteVideoRepository();
             // お気に入り動画コメントの永続ロジックを取得
             const favoriteVideoMemoRepository = this.deleteFavoriteVideoService.getFavoriteVideoMemoRepository();
+            // お気に入りコメントの永続ロジックを取得
+            const favoriteCommentRepository = this.deleteFavoriteVideoService.getFavoriteCommentRepository();
+            // ブロックコメントの永続ロジックを取得
+            const blockCommentRepository = this.deleteFavoriteVideoService.getBlockCommentRepository();
+            // お気に入り動画タグの永続ロジックを取得
+            const favoriteVideoTagRepository = this.deleteFavoriteVideoService.getFavoriteVideoTagRepository();
 
             // お気に入り動画を削除
             await this.deleteFavoriteVideoService.deleteVideo(
@@ -65,6 +71,33 @@ export class DeleteFavoriteVideoController extends RouteController {
             await this.deleteFavoriteVideoService.deleteMemo(
                 favoriteVideoMemoRepository,
                 videoId,
+                frontUserIdModel,
+                tx
+            );
+
+            // お気に入りコメントを削除
+            await favoriteCommentRepository.deleteMany(
+                videoId,
+                frontUserIdModel,
+                tx
+            );
+
+            // ブロックコメントを削除
+            await blockCommentRepository.deleteMany(
+                videoId,
+                frontUserIdModel,
+                tx
+            );
+
+            // タグを削除
+            await favoriteVideoTagRepository.delete(
+                frontUserIdModel,
+                videoId,
+                tx,
+            );
+
+            // 未使用のタグをマスタから削除
+            await this.deleteFavoriteVideoService.deleteTagMaster(
                 frontUserIdModel,
                 tx
             );

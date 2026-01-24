@@ -1,4 +1,4 @@
-import { FavoriteCommentTransaction, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
@@ -75,30 +75,13 @@ export class CreateFavoriteCommentController extends RouteController {
 
             // お気に入りコメントの永続ロジックを取得
             const favoriteCommentRepository = this.createFavoriteCommentService.getFavoriteCommentRepository();
-            // お気に入りコメントの重複チェック
-            const isExistFavoriteComment = await this.createFavoriteCommentService.checkDupulicateFavoriteComment(
-                createFavoriteCommentRequestModel, frontUserIdModel);
 
-            let favoriteComment: FavoriteCommentTransaction;
-
-            // 重複している場合はお気に入りコメントを復元する
-            if (isExistFavoriteComment) {
-
-                // お気に入りコメントを復元
-                favoriteComment = await this.createFavoriteCommentService.recovery(
-                    favoriteCommentRepository,
-                    createFavoriteCommentRequestModel,
-                    frontUserIdModel,
-                    tx);
-            }
-            else {
-                // お気に入りコメントを追加
-                favoriteComment = await this.createFavoriteCommentService.insert(
-                    favoriteCommentRepository,
-                    createFavoriteCommentRequestModel,
-                    frontUserIdModel,
-                    tx);
-            }
+            // お気に入りコメントを追加
+            const favoriteComment = await this.createFavoriteCommentService.insert(
+                favoriteCommentRepository,
+                createFavoriteCommentRequestModel,
+                frontUserIdModel,
+                tx);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入りリストに登録しました。`, favoriteComment);
         }, next);

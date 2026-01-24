@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { FLG } from "../../../../common/const/CommonConst";
 import { TagMasterInsertEntity } from "../../entity/TagMasterInsertEntity";
-import { TagMasterSoftDeleteEntity } from "../../entity/TagMasterSoftDeleteEntity";
 import { TagMasterUpdateEntity } from "../../entity/TagMasterUpdateEntity";
 import { TagMasterRepositoryInterface } from "../interface/TagMasterRepositoryInterface";
 
@@ -65,33 +64,6 @@ export class TagMasterRepositoryPostgres implements TagMasterRepositoryInterface
             },
             data: {
                 tagColor,
-                updateDate: new Date(),
-            },
-        });
-
-        return tag;
-    }
-
-
-    /**
-     * タグ情報を論理削除
-     */
-    async softDelete(tagMasterSoftDeleteEntity: TagMasterSoftDeleteEntity,
-        tx: Prisma.TransactionClient
-    ) {
-
-        const userId = tagMasterSoftDeleteEntity.frontUserId;
-        const tagId = tagMasterSoftDeleteEntity.tagId;
-
-        const tag = await tx.tagMaster.update({
-            where: {
-                userId_tagId: {
-                    userId,
-                    tagId,
-                },
-            },
-            data: {
-                deleteFlg: FLG.ON,
                 updateDate: new Date(),
             },
         });

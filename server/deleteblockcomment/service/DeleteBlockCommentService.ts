@@ -22,13 +22,13 @@ export class DeleteBlockCommentService {
      * @param deleteBlockCommentRequestModel 
      * @param frontUserIdModel 
      */
-    public async softDelete(blockCommentRepository: BlockCommentTransactionRepositoryInterface,
+    public async delete(blockCommentRepository: BlockCommentTransactionRepositoryInterface,
         commentIdModel: CommentIdModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
         // ブロックコメント削除
-        const blockComment = await blockCommentRepository.softDelete(frontUserIdModel, commentIdModel, tx);
+        const blockComment = await blockCommentRepository.delete(frontUserIdModel, commentIdModel, tx);
 
         return blockComment;
     }

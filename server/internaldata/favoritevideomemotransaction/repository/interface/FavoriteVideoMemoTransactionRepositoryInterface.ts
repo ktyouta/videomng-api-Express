@@ -1,9 +1,9 @@
 import { FavoriteVideoMemoTransaction, Prisma } from "@prisma/client";
-import { FavoriteVideoMemoTransactionInsertEntity } from "../../entity/FavoriteVideoMemoTransactionInsertEntity";
-import { FavoriteVideoMemoTransactionUpdateEntity } from "../../entity/FavoriteVideoMemoTransactionUpdateEntity";
 import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../../common/properties/VideoIdModel";
+import { FavoriteVideoMemoTransactionInsertEntity } from "../../entity/FavoriteVideoMemoTransactionInsertEntity";
 import { FavoriteVideoMemoTransactionSoftDeleteEntity } from "../../entity/FavoriteVideoMemoTransactionSoftDeleteEntity";
+import { FavoriteVideoMemoTransactionUpdateEntity } from "../../entity/FavoriteVideoMemoTransactionUpdateEntity";
 
 
 /**
@@ -44,9 +44,9 @@ export interface FavoriteVideoMemoTransactionRepositoryInterface {
         tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
 
     /**
-     * 対象ユーザーのお気に入り動画メモ情報を論理削除
+     * 対象ユーザーのお気に入り動画メモ情報を削除
      */
-    softDeleteUserMemo(frontUserIdModel: FrontUserIdModel,
+    deleteUserMemo(frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel,
         tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
 

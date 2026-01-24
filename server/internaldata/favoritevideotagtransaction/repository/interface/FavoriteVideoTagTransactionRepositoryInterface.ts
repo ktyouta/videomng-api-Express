@@ -1,9 +1,7 @@
 import { FavoriteVideoTagTransaction, Prisma } from "@prisma/client";
-import { FavoriteVideoTagTransactionInsertEntity } from "../../entity/FavoriteVideoTagTransactionInsertEntity";
-import { FavoriteVideoTagTransactionUpdateEntity } from "../../entity/FavoriteVideoTagTransactionUpdateEntity";
 import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../../common/properties/VideoIdModel";
-import { FavoriteVideoTagTransactionSoftDeleteEntity } from "../../entity/FavoriteVideoTagTransactionSoftDeleteEntity";
+import { FavoriteVideoTagTransactionInsertEntity } from "../../entity/FavoriteVideoTagTransactionInsertEntity";
 
 
 /**
@@ -25,29 +23,5 @@ export interface FavoriteVideoTagTransactionRepositoryInterface {
     delete(frontUserIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel,
         tx: Prisma.TransactionClient): Promise<void>;
-
-    /**
-     * お気に入り動画タグを復元
-     * @param userIdModel 
-     * @param videoIdModel 
-     * @param tx 
-     */
-    recovery(userIdModel: FrontUserIdModel,
-        videoIdModel: VideoIdModel,
-        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
-
-    /**
-     * 対象ユーザーのお気に入り動画タグを論理削除
-     */
-    softDeleteUserTag(frontUserIdModel: FrontUserIdModel,
-        videoIdModel: VideoIdModel,
-        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
-
-    /**
-     * お気に入り動画タグを論理削除
-     */
-    softDelete(favoriteVideoTagTransactionSoftDeleteEntity: FavoriteVideoTagTransactionSoftDeleteEntity,
-        tx: Prisma.TransactionClient
-    ): Promise<FavoriteVideoTagTransaction>;
 }
 

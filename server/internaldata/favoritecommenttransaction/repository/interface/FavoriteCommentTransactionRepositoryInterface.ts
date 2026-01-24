@@ -1,8 +1,8 @@
-import { FavoriteCommentTransactionUpdateEntity } from "../../entity/FavoriteCommentTransactionUpdateEntity";
-import { FavoriteCommentTransactionInsertEntity } from "../../entity/FavoriteCommentTransactionInsertEntity";
 import { FavoriteCommentTransaction, Prisma } from "@prisma/client";
-import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { CommentIdModel } from "../../../common/properties/CommentIdModel";
+import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../../common/properties/VideoIdModel";
+import { FavoriteCommentTransactionInsertEntity } from "../../entity/FavoriteCommentTransactionInsertEntity";
 
 
 /**
@@ -17,20 +17,23 @@ export interface FavoriteCommentTransactionRepositoryInterface {
         tx: Prisma.TransactionClient): Promise<FavoriteCommentTransaction>;
 
     /**
-     * 削除お気に入りコメントの復元
-     */
-    recovery(userId: FrontUserIdModel,
-        commentIdModel: CommentIdModel,
-        tx: Prisma.TransactionClient): Promise<FavoriteCommentTransaction>;
-
-    /**
-     * お気に入りコメントを論理削除
+     * お気に入りコメントを削除
      * @param userId 
      * @param videoIdModel 
      * @param tx 
      */
-    softDelete(userId: FrontUserIdModel,
+    delete(userId: FrontUserIdModel,
         commentIdModel: CommentIdModel,
         tx: Prisma.TransactionClient): Promise<FavoriteCommentTransaction>;
+
+    /**
+     * お気に入りコメントを削除
+     * @param userId 
+     * @param videoIdModel 
+     * @param tx 
+     */
+    deleteMany(videoIdModel: VideoIdModel,
+        userId: FrontUserIdModel,
+        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
 }
 

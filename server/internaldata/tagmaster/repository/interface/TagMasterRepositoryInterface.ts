@@ -1,9 +1,6 @@
-import { TagMaster, Prisma } from "@prisma/client";
+import { Prisma, TagMaster } from "@prisma/client";
 import { TagMasterInsertEntity } from "../../entity/TagMasterInsertEntity";
 import { TagMasterUpdateEntity } from "../../entity/TagMasterUpdateEntity";
-import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
-import { VideoIdModel } from "../../../common/properties/VideoIdModel";
-import { TagMasterSoftDeleteEntity } from "../../entity/TagMasterSoftDeleteEntity";
 
 
 /**
@@ -23,12 +20,4 @@ export interface TagMasterRepositoryInterface {
     update(tagMasterUpdateEntity: TagMasterUpdateEntity,
         tx: Prisma.TransactionClient
     ): Promise<TagMaster>;
-
-    /**
-     * タグ情報を論理削除
-     */
-    softDelete(tagMasterSoftDeleteEntity: TagMasterSoftDeleteEntity,
-        tx: Prisma.TransactionClient
-    ): Promise<TagMaster>;
 }
-

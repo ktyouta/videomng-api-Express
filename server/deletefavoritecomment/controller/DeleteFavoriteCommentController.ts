@@ -57,7 +57,7 @@ export class DeleteFavoriteCommentController extends RouteController {
             const favoriteCommentRepository = this.deleteFavoriteCommentService.getFavoriteCommentRepository();
 
             // お気に入りコメントを削除
-            const favoriteComment = await this.deleteFavoriteCommentService.softDelete(
+            const favoriteComment = await this.deleteFavoriteCommentService.delete(
                 favoriteCommentRepository,
                 commentIdModel,
                 frontUserIdModel,

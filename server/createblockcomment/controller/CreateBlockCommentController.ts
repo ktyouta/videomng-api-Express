@@ -1,4 +1,4 @@
-import { BlockCommentTransaction, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
@@ -73,30 +73,13 @@ export class CreateBlockCommentController extends RouteController {
 
             // ブロックコメントの永続ロジックを取得
             const blockCommentRepository = this.createBlockCommentService.getBlockCommentRepository();
-            // ブロックコメントの重複チェック
-            const isExistBlockComment = await this.createBlockCommentService.checkDupulicateBlockComment(
-                createBlockCommentRequestModel, frontUserIdModel);
 
-            let blockCommnet: BlockCommentTransaction;
-
-            // 重複している場合はブロックコメントを復元する
-            if (isExistBlockComment) {
-
-                // ブロックコメントを復元
-                blockCommnet = await this.createBlockCommentService.recovery(
-                    blockCommentRepository,
-                    createBlockCommentRequestModel,
-                    frontUserIdModel,
-                    tx);
-            }
-            else {
-                // ブロックコメントを追加
-                blockCommnet = await this.createBlockCommentService.insert(
-                    blockCommentRepository,
-                    createBlockCommentRequestModel,
-                    frontUserIdModel,
-                    tx);
-            }
+            // ブロックコメントを追加
+            const blockCommnet = await this.createBlockCommentService.insert(
+                blockCommentRepository,
+                createBlockCommentRequestModel,
+                frontUserIdModel,
+                tx);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `ブロックリストに登録しました。`, blockCommnet);
         }, next);

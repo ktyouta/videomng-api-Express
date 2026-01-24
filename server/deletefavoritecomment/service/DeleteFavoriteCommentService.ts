@@ -23,13 +23,13 @@ export class DeleteFavoriteCommentService {
      * @param deleteFavoriteCommentRequestModel 
      * @param frontUserIdModel 
      */
-    public async softDelete(favoriteCommentRepository: FavoriteCommentTransactionRepositoryInterface,
+    public async delete(favoriteCommentRepository: FavoriteCommentTransactionRepositoryInterface,
         commentIdModel: CommentIdModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
         // お気に入りコメント削除
-        const favoriteComment = await favoriteCommentRepository.softDelete(frontUserIdModel, commentIdModel, tx);
+        const favoriteComment = await favoriteCommentRepository.delete(frontUserIdModel, commentIdModel, tx);
 
         return favoriteComment;
     }

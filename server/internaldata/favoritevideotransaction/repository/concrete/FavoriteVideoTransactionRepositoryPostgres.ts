@@ -107,26 +107,22 @@ export class FavoriteVideoTransactionRepositoryPostgres implements FavoriteVideo
 
 
     /**
-     * お気に入り動画を論理削除
+     * お気に入り動画を削除
      */
-    async softDelete(userIdModel: FrontUserIdModel,
+    async delete(userIdModel: FrontUserIdModel,
         videoIdModel: VideoIdModel,
         tx: Prisma.TransactionClient) {
 
         const userId = userIdModel.frontUserId;
         const videoId = videoIdModel.videoId;
 
-        const favoriteVideo = await tx.favoriteVideoTransaction.update({
+        const favoriteVideo = await tx.favoriteVideoTransaction.delete({
             where: {
                 userId_videoId: {
                     userId,
                     videoId
                 }
-            },
-            data: {
-                deleteFlg: FLG.ON,
-                updateDate: new Date(),
-            },
+            }
         });
 
         return favoriteVideo;

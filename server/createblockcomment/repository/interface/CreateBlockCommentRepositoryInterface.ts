@@ -1,5 +1,3 @@
-import { BlockCommentTransaction } from "@prisma/client";
-import { CreateBlockCommentSelectEntity } from "../../entity/CreateBlockCommentSelectEntity";
 
 
 /**
@@ -7,9 +5,4 @@ import { CreateBlockCommentSelectEntity } from "../../entity/CreateBlockCommentS
  */
 export interface CreateBlockCommentRepositoryInterface {
 
-    /**
-     * ブロックコメント情報取得
-     * @param blockCommentInsertEntity 
-     */
-    select(createBlockCommentSelectEntity: CreateBlockCommentSelectEntity): Promise<BlockCommentTransaction[]>;
 }

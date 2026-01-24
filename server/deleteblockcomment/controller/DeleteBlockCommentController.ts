@@ -57,7 +57,7 @@ export class DeleteBlockCommentController extends RouteController {
             const blockCommentRepository = this.deleteBlockCommentService.getBlockCommentRepository();
 
             // ブロックコメントを削除
-            const blockComment = await this.deleteBlockCommentService.softDelete(
+            const blockComment = await this.deleteBlockCommentService.delete(
                 blockCommentRepository,
                 commentIdModel,
                 frontUserIdModel,

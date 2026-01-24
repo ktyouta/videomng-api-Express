@@ -1,8 +1,4 @@
-import { FavoriteCommentTransaction } from "@prisma/client";
-import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
-import { CreateFavoriteCommentSelectEntity } from "../../entity/CreateFavoriteCommentSelectEntity";
 import { CreateFavoriteCommentRepositoryInterface } from "../interface/CreateFavoriteCommentRepositoryInterface";
-
 
 
 /**
@@ -12,26 +8,4 @@ export class CreateFavoriteCommentRepositoryPostgres implements CreateFavoriteCo
 
     constructor() {
     }
-
-
-    /**
-     * お気に入りコメント情報取得
-     * @param frontFavoriteCommentInfoMasterModel 
-     * @returns 
-     */
-    public async select(createFavoriteCommentSelectEntity: CreateFavoriteCommentSelectEntity): Promise<FavoriteCommentTransaction[]> {
-
-        const userId = createFavoriteCommentSelectEntity.frontUserId;
-        const commentId = createFavoriteCommentSelectEntity.commentId;
-
-        const favoriteCommentList = await PrismaClientInstance.getInstance().$queryRaw<FavoriteCommentTransaction[]>`
-            SELECT * 
-            FROM "favorite_commnet_transaction" 
-            WHERE user_id = CAST(${userId} AS INTEGER) AND
-            comment_id = ${commentId}
-        `;
-
-        return favoriteCommentList;
-    }
-
 }
