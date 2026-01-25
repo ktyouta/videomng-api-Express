@@ -9,6 +9,7 @@ import { GetFavoriteVideoCustomMemoSelectEntity } from "../entity/GetFavoriteVid
 import { GetFavoriteVideoCustomSelectEntity } from "../entity/GetFavoriteVideoCustomSelectEntity";
 import { SelectTagListEntity } from "../entity/SelectTagListEntity";
 import { GetFavoriteVideoCustomRepositoryInterface } from "../repository/interface/GetFavoriteVideoCustomRepositoryInterface";
+import { FavoriteVideoFolderType } from "../type/FavoriteVideoFolderType";
 import { FavoriteVideoTagType } from "../type/FavoriteVideoTagType";
 
 
@@ -79,6 +80,17 @@ export class GetFavoriteVideoCustomService {
         const favoriteVideoTagList = await this.getGetFavoriteVideoCustomRepository.selectVideoTag(entity);
 
         return favoriteVideoTagList;
+    }
+
+    /**
+     * お気に入り動画フォルダリスト取得
+     * @param userNameModel 
+     */
+    public async getFavoriteVideoFolderList(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,): Promise<FavoriteVideoFolderType[]> {
+
+        const result = await this.getGetFavoriteVideoCustomRepository.selectFavoriteVideoFolder(frontUserIdModel, videoIdModel);
+        return result;
     }
 
     /**

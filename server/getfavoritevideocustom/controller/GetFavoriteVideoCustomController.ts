@@ -70,12 +70,18 @@ export class GetFavoriteVideoCustomController extends RouteController {
             frontUserIdModel,
             videoIdModel);
 
+        // お気に入り動画フォルダを取得する
+        const favoriteVideoFolderList = await this.getFavoriteVideoCustomService.getFavoriteVideoFolderList(
+            frontUserIdModel,
+            videoIdModel);
+
         // 取得したデータをマージ
         const favoriteVideoCustomMergedModel = new FavoriteVideoCustomMergedModel(
             favoriteVideoList,
             favoriteVideoMemoList,
             favoriteVideoCategoryList,
             favoriteVideoTagList,
+            favoriteVideoFolderList,
         );
 
         // レスポンスを作成

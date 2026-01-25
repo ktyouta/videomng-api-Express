@@ -1,6 +1,6 @@
 import { FavoriteVideoMemoTransaction, FavoriteVideoTransaction } from "@prisma/client";
-import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi/videodetail/type/YouTubeDataApiVideoDetailItemType";
 import { FavoriteVideoDetailCategoryType } from "../type/FavoriteVideoDetailCategoryType";
+import { FavoriteVideoFolderType } from "../type/FavoriteVideoFolderType";
 import { FavoriteVideoTagType } from "../type/FavoriteVideoTagType";
 
 export class FavoriteVideoCustomMergedModel {
@@ -9,11 +9,13 @@ export class FavoriteVideoCustomMergedModel {
     private readonly memos: FavoriteVideoMemoTransaction[];
     private readonly categorys: FavoriteVideoDetailCategoryType[];
     private readonly tags: FavoriteVideoTagType[];
+    private readonly folders: FavoriteVideoFolderType[];
 
     constructor(favoriteVideoList: FavoriteVideoTransaction[],
         favoriteVideoMemoList: FavoriteVideoMemoTransaction[],
         favoriteVideoCategoryList: FavoriteVideoDetailCategoryType[],
-        favoriteVideoTagList: FavoriteVideoTagType[]
+        favoriteVideoTagList: FavoriteVideoTagType[],
+        favoriteVideoFolderList: FavoriteVideoFolderType[],
     ) {
 
         if (favoriteVideoList.length === 0) {
@@ -24,5 +26,6 @@ export class FavoriteVideoCustomMergedModel {
         this.memos = favoriteVideoMemoList;
         this.categorys = favoriteVideoCategoryList;
         this.tags = favoriteVideoTagList;
+        this.folders = favoriteVideoFolderList;
     }
 }

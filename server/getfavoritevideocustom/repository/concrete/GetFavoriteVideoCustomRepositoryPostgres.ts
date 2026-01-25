@@ -1,4 +1,6 @@
 import { FavoriteVideoMemoTransaction } from "@prisma/client";
+import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../../internaldata/common/properties/VideoIdModel";
 import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoCustomCategorySelectEntity } from "../../entity/GetFavoriteVideoCustomCategorySelectEntity";
 import { GetFavoriteVideoCustomMemoSelectEntity } from "../../entity/GetFavoriteVideoCustomMemoSelectEntity";
@@ -6,6 +8,7 @@ import { GetFavoriteVideoCustomSelectEntity } from "../../entity/GetFavoriteVide
 import { SelectTagListEntity } from "../../entity/SelectTagListEntity";
 import { FavoriteVideoDetailCategoryType } from "../../type/FavoriteVideoDetailCategoryType";
 import { FavoriteVideoDetailType } from "../../type/FavoriteVideoDetailType";
+import { FavoriteVideoFolderType } from "../../type/FavoriteVideoFolderType";
 import { FavoriteVideoTagType } from "../../type/FavoriteVideoTagType";
 import { GetFavoriteVideoCustomRepositoryInterface } from "../interface/GetFavoriteVideoCustomRepositoryInterface";
 
@@ -126,5 +129,35 @@ export class GetFavoriteVideoCustomRepositoryPostgres implements GetFavoriteVide
             `;
 
         return favoriteVideoTag;
+    }
+
+    /**
+     * お気に入り動画フォルダ取得
+     * @returns 
+     */
+    async selectFavoriteVideoFolder(userIdModel: FrontUserIdModel, videoIdModel: VideoIdModel): Promise<FavoriteVideoFolderType[]> {
+
+        const frontUserId = userIdModel.frontUserId;
+        const videoId = videoIdModel.videoId;
+
+        const result = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoFolderType[]>`
+            SELECT
+                a.user_id as "userId",
+                a.video_id as "videoId",
+                a.folder_id as "folderId",
+                b.name as "folderName"
+            FROM 
+                "favorite_video_folder_transaction" a
+            INNER JOIN 
+                "folder_master" b 
+            ON
+                a.user_id = b.user_id AND
+                a.folder_id = b.folder_id
+            WHERE 
+                a.user_id = ${frontUserId} AND
+                a.video_id = ${videoId}
+            `;
+
+        return result;
     }
 }
