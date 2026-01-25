@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { FavoriteVideoFolderTransaction, Prisma } from "@prisma/client";
 import { DeleteFavoriteVideoFolderEntity } from "../../entity/DeleteFavoriteVideoFolderEntity";
 import { DeleteFavoriteVideoFolderInterface } from "../interface/DeleteFavoriteVideoFolderInterface";
 
@@ -16,17 +16,19 @@ export class DeleteFavoriteVideoFolderRepositoryPostgres implements DeleteFavori
      * お気に入り動画フォルダから削除
      */
     async delete(insertFolderEntity: DeleteFavoriteVideoFolderEntity,
-        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload> {
+        tx: Prisma.TransactionClient): Promise<FavoriteVideoFolderTransaction> {
 
         const userId = insertFolderEntity.frontUserId;
         const folderId = insertFolderEntity.folderId;
         const videoId = insertFolderEntity.videoId;
 
-        const result = await tx.favoriteVideoFolderTransaction.deleteMany({
+        const result = await tx.favoriteVideoFolderTransaction.delete({
             where: {
-                userId,
-                folderId,
-                videoId,
+                userId_folderId_videoId: {
+                    userId,
+                    folderId,
+                    videoId,
+                }
             },
         });
 

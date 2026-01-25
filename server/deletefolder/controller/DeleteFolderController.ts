@@ -72,13 +72,30 @@ export class DeleteFolderController extends RouteController {
             // フォルダ削除
             const result = await this.deleteFolderService.deleteFolder(folderIdModel, frontUserIdModel, tx);
 
-            if (result && result.count > 1) {
-                throw Error(`フォルダ削除処理で想定外の削除件数が発生しました。（ユーザーID=${frontUserIdModel.frontUserId}, フォルダID=${folderIdModel.id},  件数=${result.count}）`);
+            if (!result) {
+                throw Error(`フォルダ削除処理に失敗しました。（ユーザーID=${frontUserIdModel.frontUserId}, フォルダID=${folderIdModel.id}）`);
             }
 
             // フォルダ内の動画も削除する
             if (requestBody.deleteVideos) {
+
+                // お気に入り動画削除
                 await this.deleteFolderService.deleteFavoriteVideo(folderIdModel, frontUserIdModel, tx);
+
+                // メモ削除
+                await this.deleteFolderService.deleteFavoriteVideoMemo(folderIdModel, frontUserIdModel, tx);
+
+                // お気に入りコメント削除
+                await this.deleteFolderService.deleteFavoriteComment(folderIdModel, frontUserIdModel, tx);
+
+                // ブロックコメント削除
+                await this.deleteFolderService.deleteBlockComment(folderIdModel, frontUserIdModel, tx);
+
+                // タグ削除
+                await this.deleteFolderService.deleteFavoriteVideoTag(folderIdModel, frontUserIdModel, tx);
+
+                // 未使用のタグをマスタから削除
+                await this.deleteFolderService.deleteTagMaster(frontUserIdModel, tx);
             }
 
             // お気に入り動画フォルダ削除

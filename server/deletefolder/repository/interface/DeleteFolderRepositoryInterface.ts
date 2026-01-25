@@ -1,7 +1,9 @@
-import { FavoriteVideoTagTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
+import { FolderMaster, Prisma } from "@prisma/client";
+import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
+import { FolderIdModel } from "../../../internaldata/foldermaster/model/FolderIdModel";
+import { DeleteFavoriteVideoEntity } from "../../entity/DeleteFavoriteVideoEntity";
 import { DeleteFavoriteVideoFolderEntity } from "../../entity/DeleteFavoriteVideoFolderEntity";
 import { DeleteFolderEntity } from "../../entity/DeleteFolderEntity";
-import { DeleteFavoriteVideoEntity } from "../../entity/DeleteFavoriteVideoEntity";
 
 
 /**
@@ -12,7 +14,7 @@ export interface DeleteFolderRepositoryInterface {
     /**
      * フォルダ削除
      */
-    deleteFolder(entity: DeleteFolderEntity, tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
+    deleteFolder(entity: DeleteFolderEntity, tx: Prisma.TransactionClient): Promise<FolderMaster>;
 
     /**
      * お気に入り動画フォルダ削除
@@ -23,4 +25,29 @@ export interface DeleteFolderRepositoryInterface {
      * お気に入り動画削除
      */
     deleteFavoriteVideo(entity: DeleteFavoriteVideoEntity, tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
+     * お気に入り動画メモ削除
+     */
+    deleteFavoriteVideoMemo(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel, tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
+     * お気に入りコメント削除
+     */
+    deleteFavoriteComment(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel, tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
+     * ブロックコメント削除
+     */
+    deleteBlockComment(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel, tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
+     * お気に入り動画タグ削除
+     */
+    deleteFavoriteVideoTag(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel, tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
+     * タグマスタ削除
+     */
+    deleteTagMaster(userIdModel: FrontUserIdModel, tx: Prisma.TransactionClient): Promise<void>;
 }
