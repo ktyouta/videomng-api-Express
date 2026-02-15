@@ -24,11 +24,13 @@ export class CreateFolderRepositoryPostgres implements CreateFolderRepositoryInt
 
         const userId = selectFolderEntity.frontUserId;
         const folderName = selectFolderEntity.folderName;
+        const parentFolderId = selectFolderEntity.parentFolderId;
 
         const folderList = await PrismaClientInstance.getInstance().folderMaster.findMany({
             where: {
                 userId,
-                name: folderName
+                name: folderName,
+                parentId: parentFolderId,
             },
         });
 
@@ -44,12 +46,14 @@ export class CreateFolderRepositoryPostgres implements CreateFolderRepositoryInt
         const userId = insertFolderEntity.frontUserId;
         const folderName = insertFolderEntity.folderName;
         const folderColor = insertFolderEntity.folderColor;
+        const parentFolderId = insertFolderEntity.parentFolderId;
 
         const folder = await tx.folderMaster.create({
             data: {
                 userId,
                 name: folderName,
                 folderColor,
+                parentId: parentFolderId,
                 createDate: new Date(),
                 updateDate: new Date(),
             },

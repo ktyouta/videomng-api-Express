@@ -1,6 +1,9 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
+import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
+import { FolderIdModel } from "../../../internaldata/foldermaster/model/FolderIdModel";
 import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoFolderSelectEntity } from "../../entity/GetFavoriteVideoFolderSelectEntity";
+import { FavoriteVideoFolderType } from "../../model/FavoriteVideoFolderType";
 import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
 import { GetFavoriteVideoFolderRepositoryInterface } from "../interface/GetFavoriteVideoFolderRepositoryInterface";
 
@@ -222,4 +225,68 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
 
         return countResult;
     }
+
+    /**
+     * フォルダリスト取得
+     * @param insertFolderEntity 
+     * @param tx 
+     * @returns 
+     */
+    async selectFolderList(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel): Promise<FavoriteVideoFolderType[]> {
+
+        const userId = userIdModel.frontUserId;
+        const folderId = folderIdModel.id;
+
+        const params = [];
+        params.push(userId);
+        params.push(folderId);
+
+        let sql = `
+                SELECT
+                    a.user_id as "userId",
+                    a.id as "folderId",
+                    a.name as "name",
+                    a.folder_color as "folderColor",
+                    a.create_date as "createDate",
+                    a.update_date as "updateDate",
+                    (
+                        SELECT
+                            d.video_id
+                        FROM(
+                            SELECT
+                                c.video_id as video_id,
+                                c.update_date as update_date,
+                                row_number() OVER(partition by d.user_id,b.folder_master_id ORDER BY c.update_date DESC) as row_number
+                            FROM
+                                favorite_video_folder_transaction b
+                            INNER JOIN
+                                folder_master d
+                            ON
+                                b.folder_master_id = d.id
+                            INNER JOIN
+                                favorite_video_transaction c
+                            ON
+                                b.video_id = c.video_id
+                                AND d.user_id = c.user_id
+                            WHERE
+                                d.user_id = a.user_id
+                                AND b.folder_master_id = a.id
+                        ) d
+                        WHERE
+                            d.row_number = 1
+                    ) as "latestVideoId"
+                FROM 
+                    "folder_master" a
+                WHERE 
+                    a.user_id = $1 AND
+                    a.parent_id = $2
+        `;
+
+        sql += ` ORDER BY a.update_date DESC`;
+
+        const result = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoFolderType[]>(sql, ...params);
+
+        return result;
+    };
+
 }

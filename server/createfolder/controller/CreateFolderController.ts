@@ -5,6 +5,7 @@ import { RepositoryType } from '../../common/const/CommonConst';
 import { HTTP_STATUS_CONFLICT, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
 import { FolderColorModel } from '../../internaldata/foldermaster/model/FolderColorModel';
 import { FolderNameModel } from '../../internaldata/foldermaster/model/FolderNameModel';
+import { ParentFolderIdModel } from '../../internaldata/foldermaster/model/ParentFolderIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
@@ -58,19 +59,20 @@ export class CreateFolderController extends RouteController {
         const requestBody: CreateFolderRequestType = validateResult.data;
         const folderNameModel = new FolderNameModel(requestBody.name);
         const folderColorModel = new FolderColorModel(requestBody.folderColor);
+        const parentFolderId = new ParentFolderIdModel(requestBody.parentFolderId);
 
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
             // フォルダの重複チェック
-            const folderList = await this.createFolderService.getFolder(folderNameModel, frontUserIdModel);
+            const folderList = await this.createFolderService.getFolder(folderNameModel, frontUserIdModel, parentFolderId);
 
             if (folderList && folderList.length > 0) {
                 return ApiResponse.create(res, HTTP_STATUS_CONFLICT, `同じ名前のフォルダが既に存在します。`,);
             }
 
             // フォルダ作成
-            const folder = await this.createFolderService.createFolder(frontUserIdModel, folderNameModel, folderColorModel, tx);
+            const folder = await this.createFolderService.createFolder(frontUserIdModel, folderNameModel, folderColorModel, parentFolderId, tx);
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダを作成しました。`, folder);
         }, next);

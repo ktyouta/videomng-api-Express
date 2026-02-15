@@ -108,14 +108,21 @@ export class GetFavoriteVideoFolderController extends RouteController {
             GetFavoriteVideoFolderController.DEFAULT_LIST_LIMIT
         );
 
+        // フォルダリストを取得
+        const folderList = await this.getFavoriteVideoFolderService.getFolderList(
+            frontUserIdModel,
+            folderIdModel
+        );
+
         // ユーザーのお気に入り動画が存在しない
-        if (favoriteVideoList.length === 0) {
+        if (favoriteVideoList.length === 0 && folderList.length === 0) {
 
             // レスポンスを作成
             const getFavoriteVideoFolderResponse: GetFavoriteVideoFolderResponseModel = this.getFavoriteVideoFolderService.createResponse(
                 [],
                 0,
                 GetFavoriteVideoFolderController.DEFAULT_LIST_LIMIT,
+                [],
             );
             return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画が存在しません。`, getFavoriteVideoFolderResponse.data)
         }
@@ -126,11 +133,15 @@ export class GetFavoriteVideoFolderController extends RouteController {
         // お気に入り動画リストからYouTube Data Apiの情報を取得してマージする
         const favoriteVideoListMergedList = await this.getFavoriteVideoFolderService.mergeYouTubeDataList(favoriteVideoList);
 
+        // フォルダに表示するサムネを取得
+        const folderListMergedList = await this.getFavoriteVideoFolderService.getFavoriteVideoFolderThumbnail(folderList);
+
         // レスポンスを作成
         const getFavoriteVideoFolderResponse: GetFavoriteVideoFolderResponseModel = this.getFavoriteVideoFolderService.createResponse(
             favoriteVideoListMergedList,
             total,
             GetFavoriteVideoFolderController.DEFAULT_LIST_LIMIT,
+            folderListMergedList,
         );
 
         return ApiResponse.create(res, HTTP_STATUS_CREATED, `お気に入り動画リストを取得しました。`, getFavoriteVideoFolderResponse.data);
