@@ -178,9 +178,11 @@ model FavoriteVideoSortMaster {
 
 // フォルダマスタ
 model FolderMaster {
+  id BigInt @default(autoincrement()) @unique
   userId      Int   @map("user_id")
   folderId    Int   @map("folder_id")
   name      String   @db.VarChar(255)
+  parentId BigInt?  @map("parent_id")
   folderColor      String?   @db.VarChar(255) @map("folder_color")
   createDate  DateTime @db.Timestamptz @map("create_date")
   updateDate  DateTime @db.Timestamptz @map("update_date")
@@ -188,8 +190,10 @@ model FolderMaster {
   @@map("folder_master") 
 }
 
+
 // お気に入り動画フォルダ
 model FavoriteVideoFolderTransaction {
+  folderMasterId BigInt?  @map("folder_master_id")
   userId      Int   @map("user_id")
   folderId    Int   @map("folder_id")
   videoId    String   @db.VarChar(255)  @map("video_id")

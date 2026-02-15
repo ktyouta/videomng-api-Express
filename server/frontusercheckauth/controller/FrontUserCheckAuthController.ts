@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { Response } from 'express';
 import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { RepositoryType } from '../../common/const/CommonConst';
@@ -35,7 +35,7 @@ export class FrontUserCheckAuthController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response) {
 
         try {
 
@@ -52,9 +52,7 @@ export class FrontUserCheckAuthController extends RouteController {
             const userInfo = await this.frontUserCheckAuthService.getUser(userIdModel);
 
             if (!userInfo || userInfo.length === 0) {
-
                 res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_CLEAR_OPTION);
-
                 return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
             }
 
@@ -76,7 +74,6 @@ export class FrontUserCheckAuthController extends RouteController {
 
             // エラー発生時はクッキーを削除する
             res.clearCookie(RefreshTokenModel.COOKIE_KEY, RefreshTokenModel.COOKIE_CLEAR_OPTION);
-
             return ApiResponse.create(res, HTTP_STATUS_FORBIDDEN, `認証失敗`);
         }
     }
