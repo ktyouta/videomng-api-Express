@@ -6,8 +6,7 @@ BEGIN
   SET 
     update_date = NOW() 
   WHERE 
-    user_id = COALESCE(NEW.user_id, OLD.user_id)
-    AND folder_id = COALESCE(NEW.folder_id, OLD.folder_id);
+    id = COALESCE(NEW.folder_master_id, OLD.folder_master_id);
   RETURN COALESCE(NEW, OLD);
 END;
 ' LANGUAGE plpgsql;

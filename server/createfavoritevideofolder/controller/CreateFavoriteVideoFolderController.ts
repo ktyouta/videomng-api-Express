@@ -91,7 +91,7 @@ export class CreateFavoriteVideoFolderController extends RouteController {
                 folderIdModel,
             );
 
-            if (existFavoriteVideoFolder) {
+            if (existFavoriteVideoFolder && existFavoriteVideoFolder.length > 0) {
                 return ApiResponse.create(res, HTTP_STATUS_CONFLICT, `既に登録されています。`);
             }
 

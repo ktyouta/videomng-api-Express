@@ -142,19 +142,18 @@ export class GetFavoriteVideoCustomRepositoryPostgres implements GetFavoriteVide
 
         const result = await PrismaClientInstance.getInstance().$queryRaw<FavoriteVideoFolderType[]>`
             SELECT
-                a.user_id as "userId",
+                b.user_id as "userId",
                 a.video_id as "videoId",
-                a.folder_id as "folderId",
+                a.folder_master_id as "folderId",
                 b.name as "folderName"
             FROM 
                 "favorite_video_folder_transaction" a
             INNER JOIN 
                 "folder_master" b 
             ON
-                a.user_id = b.user_id AND
-                a.folder_id = b.folder_id
+                a.folder_master_id = b.id
             WHERE 
-                a.user_id = ${frontUserId} AND
+                b.user_id = ${frontUserId} AND
                 a.video_id = ${videoId}
             `;
 

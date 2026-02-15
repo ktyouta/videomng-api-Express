@@ -24,10 +24,8 @@ export class GetFolderRepositoryPostgres implements GetFolderRepositoryInterface
 
         const folder = await PrismaClientInstance.getInstance().folderMaster.findUnique({
             where: {
-                userId_folderId: {
-                    userId,
-                    folderId,
-                },
+                userId,
+                id: folderId,
             }
         });
 

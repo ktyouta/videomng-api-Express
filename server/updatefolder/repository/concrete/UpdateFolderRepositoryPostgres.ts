@@ -28,7 +28,7 @@ export class UpdateFolderRepositoryPostgres implements UpdateFolderRepositoryInt
         const folderList = await PrismaClientInstance.getInstance().folderMaster.findMany({
             where: {
                 userId,
-                folderId
+                id: folderId
             },
         });
 
@@ -68,10 +68,8 @@ export class UpdateFolderRepositoryPostgres implements UpdateFolderRepositoryInt
 
         const folder = tx.folderMaster.update({
             where: {
-                userId_folderId: {
-                    userId,
-                    folderId
-                }
+                userId,
+                id: folderId
             },
             data: {
                 name: folderName,

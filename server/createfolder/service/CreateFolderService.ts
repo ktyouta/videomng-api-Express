@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FolderColorModel } from "../../internaldata/foldermaster/model/FolderColorModel";
-import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 import { FolderNameModel } from "../../internaldata/foldermaster/model/FolderNameModel";
 import { InsertFolderEntity } from "../entity/InsertFolderEntity";
 import { SelectFolderEntity } from "../entity/SelectFolderEntity";
@@ -42,12 +41,7 @@ export class CreateFolderService {
         folderColorModel: FolderColorModel,
         tx: Prisma.TransactionClient) {
 
-        // フォルダIDを取得
-        const nextTagIdList = await this.createFolderRepositoryInterface.getFolderNextSeq(frontUserIdModel);
-        const nextTagId = nextTagIdList[0].nextSeq;
-
         const insertFolderEntity = new InsertFolderEntity(
-            new FolderIdModel(nextTagId),
             folderNameModel,
             frontUserIdModel,
             folderColorModel,

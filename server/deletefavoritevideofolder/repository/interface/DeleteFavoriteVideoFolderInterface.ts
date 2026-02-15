@@ -1,4 +1,4 @@
-import { FavoriteVideoFolderTransaction, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { DeleteFavoriteVideoFolderEntity } from "../../entity/DeleteFavoriteVideoFolderEntity";
 
 
@@ -10,5 +10,5 @@ export interface DeleteFavoriteVideoFolderInterface {
     /**
      * お気に入り動画フォルダから削除
      */
-    delete(insertFolderEntity: DeleteFavoriteVideoFolderEntity, tx: Prisma.TransactionClient): Promise<FavoriteVideoFolderTransaction>;
+    delete(insertFolderEntity: DeleteFavoriteVideoFolderEntity, tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
 }

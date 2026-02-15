@@ -40,7 +40,7 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
 
     private static readonly SELECT_LIST = `
               SELECT
-                a.user_id as "userId",
+                b.user_id as "userId",
                 a.video_id as "videoId" 
     `;
 
@@ -57,13 +57,15 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
         const favoriteLevel = getFavoriteVideoFolderSelectEntity.favoriteLevel;
 
         let sql = `
-            FROM favorite_video_folder_transaction a
-            INNER JOIN favorite_video_transaction b
-            ON a.user_id = $1 
-            AND folder_id = $2
-            AND a.user_id = b.user_id
-            AND a.video_id = b.video_id
-            AND b.delete_flg = '0'
+            FROM 
+                favorite_video_folder_transaction a
+            INNER JOIN 
+                favorite_video_transaction b
+            ON 
+                b.user_id = $1 
+                AND a.folder_master_id = $2
+                AND a.video_id = b.video_id
+                AND b.delete_flg = '0'
           `;
 
         const params = [];

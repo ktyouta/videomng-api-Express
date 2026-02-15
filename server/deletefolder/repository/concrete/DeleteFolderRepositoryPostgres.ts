@@ -26,10 +26,8 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
 
         const result = tx.folderMaster.delete({
             where: {
-                userId_folderId: {
-                    userId,
-                    folderId
-                }
+                userId,
+                id: folderId
             }
         });
 
@@ -42,13 +40,11 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
     async deleteVideoFolder(entity: DeleteFavoriteVideoFolderEntity,
         tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload> {
 
-        const userId = entity.frontUserId;
         const folderId = entity.folderId;
 
         const result = tx.favoriteVideoFolderTransaction.deleteMany({
             where: {
-                userId,
-                folderId
+                folderMasterId: folderId
             }
         });
 
@@ -76,8 +72,7 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
                     FROM
                         favorite_video_folder_transaction b
                     WHERE
-                        b.user_id = ${userId} AND
-                        b.folder_id = ${folderId} AND
+                        b.folder_master_id = ${folderId} AND
                         b.video_id = a.video_id
             )
         `;
@@ -106,8 +101,7 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
                     FROM
                         favorite_video_folder_transaction b
                     WHERE
-                        b.user_id = ${userId} AND
-                        b.folder_id = ${folderId} AND
+                        b.folder_master_id = ${folderId} AND
                         b.video_id = a.video_id
                 )
         `;
@@ -136,8 +130,7 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
                     FROM
                         favorite_video_folder_transaction b
                     WHERE
-                        b.user_id = ${userId} AND
-                        b.folder_id = ${folderId} AND
+                        b.folder_master_id = ${folderId} AND
                         b.video_id = a.video_id
                 )
         `;
@@ -166,8 +159,7 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
                     FROM
                         favorite_video_folder_transaction b
                     WHERE
-                        b.user_id = ${userId} AND
-                        b.folder_id = ${folderId} AND
+                        b.folder_master_id = ${folderId} AND
                         b.video_id = a.video_id
                 )
         `;
@@ -196,8 +188,7 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
                     FROM
                         favorite_video_folder_transaction b
                     WHERE
-                        b.user_id = ${userId} AND
-                        b.folder_id = ${folderId} AND
+                        b.folder_master_id = ${folderId} AND
                         b.video_id = a.video_id
                 )
         `;

@@ -72,8 +72,12 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                         1
                     FROM
                         favorite_video_folder_transaction b
+                    INNER JOIN
+                        folder_master c
+                    ON
+                        b.folder_master_id = c.id
                     WHERE 
-                        b.user_id = $1 AND 
+                        c.user_id = $1 AND 
                         b.video_id = a.video_id 
                 )
               )
@@ -97,8 +101,12 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                     1
                 FROM
                     favorite_video_category_transaction b
+                INNER JOIN
+                    folder_master c
+                ON
+                    b.folder_master_id = c.id
                 WHERE 
-                    b.user_id = $1 AND 
+                    c.user_id = $1 AND 
                     b.video_id = a.video_id AND 
                     b.category_id = ANY($${paramIndex})
             )`;
@@ -249,7 +257,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
         let sql = `
                 SELECT
                     a.user_id as "userId",
-                    a.folder_id as "folderId",
+                    a.id as "folderId",
                     a.name as "name",
                     a.folder_color as "folderColor",
                     a.create_date as "createDate",
@@ -261,17 +269,21 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                             SELECT
                                 c.video_id as video_id,
                                 c.update_date as update_date,
-                                row_number() OVER(partition by c.user_id,b.folder_id ORDER BY c.update_date DESC) as row_number
+                                row_number() OVER(partition by d.user_id,b.folder_master_id ORDER BY c.update_date DESC) as row_number
                             FROM
                                 favorite_video_folder_transaction b
+                            INNER JOIN
+                                folder_master d
+                            ON
+                                b.folder_master_id = d.id
                             INNER JOIN
                                 favorite_video_transaction c
                             ON
                                 b.video_id = c.video_id
-                                AND b.user_id = c.user_id
+                                AND d.user_id = c.user_id
                             WHERE
-                                b.user_id = a.user_id
-                                AND b.folder_id = a.folder_id
+                                d.user_id = a.user_id
+                                AND b.folder_master_id = a.id
                         ) d
                         WHERE
                             d.row_number = 1
@@ -284,7 +296,7 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
 
         // フォルダID
         if (folderList && folderList.length > 0) {
-            sql += ` AND a.folder_id = ANY($${paramIndex})`;
+            sql += ` AND a.id = ANY($${paramIndex})`;
             paramIndex++;
             params.push(folderList);
         }

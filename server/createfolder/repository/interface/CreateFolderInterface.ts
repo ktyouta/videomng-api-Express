@@ -1,9 +1,6 @@
-import { FavoriteVideoTagTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
-import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
-import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
-import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
-import { FolderNextSeqType } from "../../type/FolderNextSeqType";
+import { FolderMaster, Prisma } from "@prisma/client";
 import { InsertFolderEntity } from "../../entity/InsertFolderEntity";
+import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
 
 
 /**
@@ -16,12 +13,6 @@ export interface CreateFolderRepositoryInterface {
      * @param favoriteVideoTagInsertEntity 
      */
     selectFolder(updateFavoriteVideoTagSelectEntity: SelectFolderEntity): Promise<FolderMaster[]>;
-
-    /**
-     * フォルダーマスタのシーケンス番号取得
-     * @param frontUserIdModel 
-     */
-    getFolderNextSeq(frontUserIdModel: FrontUserIdModel): Promise<FolderNextSeqType[]>;
 
     /**
      * フォルダを作成

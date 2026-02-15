@@ -178,27 +178,28 @@ model FavoriteVideoSortMaster {
 
 // フォルダマスタ
 model FolderMaster {
-  id BigInt @default(autoincrement()) @unique
+  id Int @id @default(autoincrement())
   userId      Int   @map("user_id")
-  folderId    Int   @map("folder_id")
   name      String   @db.VarChar(255)
-  parentId BigInt?  @map("parent_id")
+  parentId Int?  @map("parent_id")
+  parent   FolderMaster? @relation("FolderHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children FolderMaster[] @relation("FolderHierarchy")
+  favoriteVideoFolderTransactions FavoriteVideoFolderTransaction[]
   folderColor      String?   @db.VarChar(255) @map("folder_color")
   createDate  DateTime @db.Timestamptz @map("create_date")
   updateDate  DateTime @db.Timestamptz @map("update_date")
-  @@id([userId, folderId])
+  @@unique([userId, parentId, name])
   @@map("folder_master") 
 }
 
 
 // お気に入り動画フォルダ
 model FavoriteVideoFolderTransaction {
-  folderMasterId BigInt?  @map("folder_master_id")
-  userId      Int   @map("user_id")
-  folderId    Int   @map("folder_id")
+  folderMasterId Int  @map("folder_master_id")
+  folderMaster   FolderMaster @relation(fields: [folderMasterId], references: [id], onDelete: Cascade)
   videoId    String   @db.VarChar(255)  @map("video_id")
   createDate  DateTime @db.Timestamptz @map("create_date")
   updateDate  DateTime @db.Timestamptz @map("update_date")
-  @@id([userId, folderId,videoId])
+  @@id([folderMasterId, videoId])
   @@map("favorite_video_folder_transaction") 
 }

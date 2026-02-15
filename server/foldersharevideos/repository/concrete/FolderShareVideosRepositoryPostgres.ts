@@ -26,27 +26,31 @@ export class FolderShareVideosRepositoryPostgres implements FolderShareVideosRep
         let sql = `
             SELECT
                 a.video_id as "videoId",
-                a.folder_id as "folderId"
+                a.folder_master_id as "folderId"
             FROM 
                 favorite_video_folder_transaction a
+            INNER JOIN
+                folder_master c
+            ON
+                c.id = a.folder_master_id
             INNER JOIN 
                 favorite_video_transaction b
             ON
-                a.user_id = b.user_id
+                a.user_id = c.user_id
                 AND a.video_id = b.video_id
                 AND b.delete_flg = '0'
             WHERE
-                a.user_id = $1 
-                AND a.folder_id = $2
+                c.user_id = $1 
+                AND a.folder_master_id = $2
                 AND EXISTS (
                     SELECT 
                         1
                     FROM 
-                        favorite_video_folder_transaction c
+                        favorite_video_folder_transaction d
                     WHERE
-                        c.user_id = a.user_id
-                        AND c.video_id = a.video_id
-                        AND c.folder_id <> $2
+                        c.user_id = d.user_id
+                        AND d.video_id = a.video_id
+                        AND d.folder_master_id <> $2
                 );
           `;
 
@@ -78,11 +82,11 @@ export class FolderShareVideosRepositoryPostgres implements FolderShareVideosRep
                 folder_master b
             ON 
                 a.user_id = b.user_id
-                AND a.folder_id = b.folder_id
+                AND a.folder_master_id = b.id
             WHERE
-                a.user_id = $1
+                b.user_id = $1
                 AND a.video_id = $2
-                AND a.folder_id <> $3
+                AND a.folder_master_id <> $3
           `;
 
         const params = [];

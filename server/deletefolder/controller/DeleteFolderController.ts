@@ -69,13 +69,6 @@ export class DeleteFolderController extends RouteController {
         // トランザクション開始
         PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
 
-            // フォルダ削除
-            const result = await this.deleteFolderService.deleteFolder(folderIdModel, frontUserIdModel, tx);
-
-            if (!result) {
-                throw Error(`フォルダ削除処理に失敗しました。（ユーザーID=${frontUserIdModel.frontUserId}, フォルダID=${folderIdModel.id}）`);
-            }
-
             // フォルダ内の動画も削除する
             if (requestBody.deleteVideos) {
 
@@ -98,8 +91,12 @@ export class DeleteFolderController extends RouteController {
                 await this.deleteFolderService.deleteTagMaster(frontUserIdModel, tx);
             }
 
-            // お気に入り動画フォルダ削除
-            await this.deleteFolderService.deleteFavoriteVideoFolder(folderIdModel, frontUserIdModel, tx);
+            // フォルダ削除
+            const result = await this.deleteFolderService.deleteFolder(folderIdModel, frontUserIdModel, tx);
+
+            if (!result) {
+                throw Error(`フォルダ削除処理に失敗しました。（ユーザーID=${frontUserIdModel.frontUserId}, フォルダID=${folderIdModel.id}）`);
+            }
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダを削除しました。`);
         }, next);

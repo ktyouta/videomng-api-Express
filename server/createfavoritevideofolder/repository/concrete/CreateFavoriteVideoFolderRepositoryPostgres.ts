@@ -30,10 +30,8 @@ export class CreateFavoriteVideoFolderRepositoryPostgres implements CreateFavori
 
         const folderList = await PrismaClientInstance.getInstance().folderMaster.findUnique({
             where: {
-                userId_folderId: {
-                    userId,
-                    folderId
-                }
+                userId,
+                id: folderId
             },
         });
 
@@ -69,14 +67,12 @@ export class CreateFavoriteVideoFolderRepositoryPostgres implements CreateFavori
     async insert(insertFolderEntity: InsertFavoriteVideoFolderEntity,
         tx: Prisma.TransactionClient): Promise<FavoriteVideoFolderTransaction> {
 
-        const userId = insertFolderEntity.frontUserId;
         const folderId = insertFolderEntity.folderId;
         const videoId = insertFolderEntity.videoId;
 
         const data = await tx.favoriteVideoFolderTransaction.create({
             data: {
-                userId,
-                folderId,
+                folderMasterId: folderId,
                 videoId,
                 createDate: new Date(),
                 updateDate: new Date(),
@@ -91,19 +87,15 @@ export class CreateFavoriteVideoFolderRepositoryPostgres implements CreateFavori
      * @param frontFavoriteVideoTagInfoMasterModel 
      * @returns 
      */
-    async selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoFolderTransaction | null> {
+    async selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoFolderTransaction[]> {
 
-        const userId = selectFavoriteVideoFolderEntity.frontUserId;
         const folderId = selectFavoriteVideoFolderEntity.folderId;
         const videoId = selectFavoriteVideoFolderEntity.videoId;
 
-        const video = await PrismaClientInstance.getInstance().favoriteVideoFolderTransaction.findUnique({
+        const video = await PrismaClientInstance.getInstance().favoriteVideoFolderTransaction.findMany({
             where: {
-                userId_folderId_videoId: {
-                    userId,
-                    videoId,
-                    folderId,
-                },
+                videoId,
+                folderMasterId: folderId,
             },
         });
 

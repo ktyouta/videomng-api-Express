@@ -1,10 +1,8 @@
-import { FavoriteVideoFolderTransaction, FavoriteVideoTagTransaction, FavoriteVideoTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
-import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
-import { TagNameModel } from "../../../internaldata/tagmaster/properties/TagNameModel";
-import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
+import { FavoriteVideoFolderTransaction, FavoriteVideoTransaction, FolderMaster, Prisma } from "@prisma/client";
 import { InsertFavoriteVideoFolderEntity } from "../../entity/InsertFavoriteVideoFolderEntity";
 import { SelectFavoriteVideoEntity } from "../../entity/SelectFavoriteVideoEntity";
 import { SelectFavoriteVideoFolderEntity } from "../../entity/SelectFavoriteVideoFolderEntity";
+import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
 
 
 /**
@@ -32,5 +30,5 @@ export interface CreateFavoriteVideoFolderInterface {
      * フォルダ内のお気に入り動画取得
      * @param selectFavoriteVideoFolderEntity 
      */
-    selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoFolderTransaction | null>;
+    selectFavoriteVideoFolder(selectFavoriteVideoFolderEntity: SelectFavoriteVideoFolderEntity): Promise<FavoriteVideoFolderTransaction[]>;
 }

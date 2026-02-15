@@ -24,8 +24,10 @@ export class DeleteFavoriteVideoRepositoryPostgres implements DeleteFavoriteVide
 
         const result = await tx.favoriteVideoFolderTransaction.deleteMany({
             where: {
-                userId,
                 videoId,
+                folderMaster: {
+                    userId: userId
+                }
             },
         });
 
