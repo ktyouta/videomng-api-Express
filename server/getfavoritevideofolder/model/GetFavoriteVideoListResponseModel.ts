@@ -16,7 +16,7 @@ export class GetFavoriteVideoFolderResponseModel {
             total,
             page: Math.ceil(total / defaultListLimit),
             item: favoriteVideoListMergedList,
-            folderList: folderList,
+            folder: folderList,
         };
     }
 

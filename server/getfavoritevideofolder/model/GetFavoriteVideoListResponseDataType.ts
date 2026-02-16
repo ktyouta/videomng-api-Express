@@ -5,5 +5,5 @@ export type GetFavoriteVideoFolderResponseDataType = {
     item: FavoriteVideoListMergedType[],
     total: number,
     page: number,
-    folderList: FavoriteVideoFolderThumbnailType[],
+    folder: FavoriteVideoFolderThumbnailType[],
 }

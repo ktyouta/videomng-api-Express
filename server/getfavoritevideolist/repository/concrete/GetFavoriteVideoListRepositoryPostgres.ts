@@ -291,7 +291,8 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                 FROM 
                     "folder_master" a
                 WHERE 
-                    a.user_id = $1
+                    a.user_id = $1 AND
+                    a.parent_id IS NULL
         `;
 
         // フォルダID
