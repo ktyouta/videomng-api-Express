@@ -58,6 +58,7 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
         const videoCategory = getFavoriteVideoFolderSelectEntity.videoCategoryId;
         const videoTag = getFavoriteVideoFolderSelectEntity.tagName;
         const favoriteLevel = getFavoriteVideoFolderSelectEntity.favoriteLevel;
+        const mode = getFavoriteVideoFolderSelectEntity.mode;
 
         let sql = `
             FROM 

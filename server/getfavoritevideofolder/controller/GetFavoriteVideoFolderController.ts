@@ -17,6 +17,7 @@ import { GetFavoriteVideoFolderTagNameModel } from '../model/GetFavoriteVideoFol
 import { GetFavoriteVideoFolderVideoCategoryModel } from '../model/GetFavoriteVideoFolderVideoCategoryModel';
 import { GetFavoriteVideoFolderViewStatusModel } from '../model/GetFavoriteVideoFolderViewStatusModel';
 import { GetFavoriteVideoFolderResponseModel } from "../model/GetFavoriteVideoListResponseModel";
+import { ModeModel } from '../model/ModeModel';
 import { GetFavoriteVideoFolderRepositorys } from "../repository/GetFavoriteVideoFolderRepositorys";
 import { RequestPathParamSchema } from "../schema/RequestPathParamSchema";
 import { RequestQuerySchema } from '../schema/RequestQuerySchema';
@@ -89,6 +90,8 @@ export class GetFavoriteVideoFolderController extends RouteController {
         const pageModel = new GetFavoriteVideoFolderPageModel(query.folderPage);
         // ソートキー
         const sortIdModel = await GetFavoriteVideoFolderSortIdModel.set(query.folderSortKey);
+        // モード
+        const modeModel = new ModeModel(query.folderMode);
 
         // お気に入り動画取得用Entity
         const getFavoriteVideoFolderSelectEntity = new GetFavoriteVideoFolderSelectEntity(
@@ -100,6 +103,7 @@ export class GetFavoriteVideoFolderController extends RouteController {
             videoCategoryId,
             tagNameModel,
             favoriteLevelModel,
+            modeModel,
         );
 
         // お気に入り動画リストを取得
@@ -109,10 +113,10 @@ export class GetFavoriteVideoFolderController extends RouteController {
         );
 
         // フォルダリストを取得
-        const folderList = await this.getFavoriteVideoFolderService.getFolderList(
+        const folderList = modeModel.isFolderMode() ? await this.getFavoriteVideoFolderService.getFolderList(
             frontUserIdModel,
             folderIdModel
-        );
+        ) : [];
 
         // ユーザーのお気に入り動画が存在しない
         if (favoriteVideoList.length === 0 && folderList.length === 0) {

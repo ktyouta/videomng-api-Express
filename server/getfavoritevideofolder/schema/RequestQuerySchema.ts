@@ -7,6 +7,7 @@ export const RequestQuerySchema = z.object({
   folderFavoriteLevel: z.string().optional().default(""),
   folderPage: z.string().optional().default(""),
   folderSortKey: z.string().optional().default(""),
+  folderMode: z.string().optional().default(""),
 });
 
 export type RequestQueryType =

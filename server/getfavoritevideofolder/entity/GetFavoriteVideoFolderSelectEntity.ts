@@ -6,6 +6,7 @@ import { GetFavoriteVideoFolderSortIdModel } from "../model/GetFavoriteVideoFold
 import { GetFavoriteVideoFolderTagNameModel } from "../model/GetFavoriteVideoFolderTagNameModel";
 import { GetFavoriteVideoFolderVideoCategoryModel } from "../model/GetFavoriteVideoFolderVideoCategoryModel";
 import { GetFavoriteVideoFolderViewStatusModel } from "../model/GetFavoriteVideoFolderViewStatusModel";
+import { ModeModel } from "../model/ModeModel";
 
 
 export class GetFavoriteVideoFolderSelectEntity {
@@ -26,6 +27,8 @@ export class GetFavoriteVideoFolderSelectEntity {
     private readonly _tagNameModel: GetFavoriteVideoFolderTagNameModel;
     // お気に入り度
     private readonly _favoriteLevelModel: GetFavoriteVideoFolderFavoriteLevelModel;
+    // モード
+    private readonly _modeModel: ModeModel;
 
 
     constructor(frontUserIdModel: FrontUserIdModel,
@@ -36,6 +39,7 @@ export class GetFavoriteVideoFolderSelectEntity {
         videoCategoryId: GetFavoriteVideoFolderVideoCategoryModel,
         tagNameModel: GetFavoriteVideoFolderTagNameModel,
         favoriteLevelModel: GetFavoriteVideoFolderFavoriteLevelModel,
+        modeModel: ModeModel,
     ) {
 
         this._frontUserIdModel = frontUserIdModel;
@@ -46,7 +50,7 @@ export class GetFavoriteVideoFolderSelectEntity {
         this._videoCategoryId = videoCategoryId;
         this._tagNameModel = tagNameModel;
         this._favoriteLevelModel = favoriteLevelModel;
-
+        this._modeModel = modeModel;
     }
 
     get frontUserId() {
@@ -65,23 +69,27 @@ export class GetFavoriteVideoFolderSelectEntity {
         return this._sortIdModel.sortId;
     }
 
-    public get viewStatus() {
+    get viewStatus() {
         return this._viewStatusModel.viewStatus;
     }
 
-    public get videoCategoryId() {
+    get videoCategoryId() {
         return this._videoCategoryId.videoCategory;
     }
 
-    public get tagNameModel() {
+    get tagNameModel() {
         return this._tagNameModel;
     }
 
-    public get tagName() {
+    get tagName() {
         return this._tagNameModel.tagName;
     }
 
-    public get favoriteLevel() {
+    get favoriteLevel() {
         return this._favoriteLevelModel.favoriteLevel;
+    }
+
+    get mode() {
+        return this._modeModel.value;
     }
 }
