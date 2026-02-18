@@ -42,6 +42,28 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
                 )`;
 
     private static readonly SELECT_LIST = `
+            WITH RECURSIVE folder_tree AS (
+                SELECT 
+                    id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = $1 AND
+                    id = $2
+
+                UNION ALL
+
+                SELECT 
+                    f.id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    folder_tree ft
+                ON 
+                    f.user_id = $1 AND
+                    f.parent_id = ft.id
+            )
+                    
               SELECT
                 b.user_id as "userId",
                 a.video_id as "videoId" 
@@ -60,6 +82,11 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
         const favoriteLevel = getFavoriteVideoFolderSelectEntity.favoriteLevel;
         const mode = getFavoriteVideoFolderSelectEntity.mode;
 
+        const params = [];
+        params.push(frontUserId);
+        params.push(folderId);
+        let paramIndex = 3;
+
         let sql = `
             FROM 
                 favorite_video_folder_transaction a
@@ -67,15 +94,8 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
                 favorite_video_transaction b
             ON 
                 b.user_id = $1 
-                AND a.folder_master_id = $2
                 AND a.video_id = b.video_id
-                AND b.delete_flg = '0'
           `;
-
-        const params = [];
-        params.push(frontUserId);
-        params.push(folderId);
-        let paramIndex = 3;
 
         // 視聴状況
         if (viewStatus && viewStatus.length > 0) {
@@ -130,6 +150,11 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
             paramIndex++;
             params.push(favoriteLevel);
         }
+
+        sql += ` WHERE
+                    b.delete_flg = '0' AND
+                    a.folder_master_id IN (SELECT id FROM folder_tree)
+        `;
 
         return {
             query: sql,
