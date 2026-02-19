@@ -153,7 +153,39 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
 
         sql += ` WHERE
                     b.delete_flg = '0' AND
-                    a.folder_master_id IN (SELECT id FROM folder_tree)
+                    (
+                        (
+                            ${mode} = '1' AND
+                            (
+                                (
+                                    a.folder_master_id = $2 AND
+                                    NOT EXISTS(
+                                        SELECT
+                                            1
+                                        FROM
+                                            folder_tree tmp_ft
+                                        INNER JOIN
+                                            favorite_video_folder_transaction tmp_fvft
+                                        ON
+                                            tmp_ft.id = tmp_fvft.folder_master_id AND
+                                            tmp_ft.id <> $2
+                                        WHERE
+                                            tmp_fvft.video_id = a.video_id
+                                    )   
+                                )
+                                    OR
+                                (
+                                    a.folder_master_id IN (SELECT id FROM folder_tree) AND
+                                    b.is_visible_after_folder_add = '1'
+                                )
+                            )
+                        )
+                            OR
+                        (
+                            ${mode} = '2' AND 
+                            a.folder_master_id = $2
+                        )
+                    )
         `;
 
         return {
