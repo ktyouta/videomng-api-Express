@@ -1,5 +1,5 @@
-import { FavoriteVideoTagTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
 import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
+import { FolderListType } from "../../types/FolderListType";
 
 
 /**
@@ -11,5 +11,5 @@ export interface GetFolderRepositoryInterface {
      * フォルダ取得
      * @param favoriteVideoTagInsertEntity 
      */
-    selectFolder(entity: SelectFolderEntity): Promise<FolderMaster | null>;
+    selectFolder(entity: SelectFolderEntity): Promise<FolderListType[]>;
 }

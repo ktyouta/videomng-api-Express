@@ -46,12 +46,12 @@ export class GetFolderController extends RouteController {
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
 
         // フォルダ取得
-        const folder = await this.getFolderService.getFolder(folderIdModel, frontUserIdModel);
+        const folderList = await this.getFolderService.getFolder(folderIdModel, frontUserIdModel);
 
-        if (!folder) {
+        if (!folderList || folderList.length === 0) {
             throw Error(`フォルダが存在しません。フォルダID：${folderIdModel.id}`);
         }
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダを取得しました。`, folder);
+        return ApiResponse.create(res, HTTP_STATUS_OK, `フォルダを取得しました。`, folderList);
     }
 }
