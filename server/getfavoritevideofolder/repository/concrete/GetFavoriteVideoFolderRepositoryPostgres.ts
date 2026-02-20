@@ -175,7 +175,7 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
                                 )
                                     OR
                                 (
-                                    a.folder_master_id IN (SELECT id FROM folder_tree) AND
+                                    a.folder_master_id = $2 AND
                                     b.is_visible_after_folder_add = '1'
                                 )
                             )

@@ -2,7 +2,6 @@ import { FolderMaster, Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
 import { FolderIdModel } from "../../../internaldata/foldermaster/model/FolderIdModel";
 import { DeleteFavoriteVideoEntity } from "../../entity/DeleteFavoriteVideoEntity";
-import { DeleteFavoriteVideoFolderEntity } from "../../entity/DeleteFavoriteVideoFolderEntity";
 import { DeleteFolderEntity } from "../../entity/DeleteFolderEntity";
 import { DeleteFolderRepositoryInterface } from "../interface/DeleteFolderRepositoryInterface";
 
@@ -28,23 +27,6 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
             where: {
                 userId,
                 id: folderId
-            }
-        });
-
-        return result;
-    };
-
-    /**
-     * お気に入り動画フォルダを削除
-     */
-    async deleteVideoFolder(entity: DeleteFavoriteVideoFolderEntity,
-        tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload> {
-
-        const folderId = entity.folderId;
-
-        const result = tx.favoriteVideoFolderTransaction.deleteMany({
-            where: {
-                folderMasterId: folderId
             }
         });
 
