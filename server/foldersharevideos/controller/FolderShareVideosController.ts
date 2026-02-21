@@ -46,21 +46,17 @@ export class FolderShareVideosController extends RouteController {
 
         const folderIdModel = new FolderIdModel(pathValidateResult.data.folderId);
 
-        // 動画リストを取得
-        const videoList = await this.getFavoriteVideoFolderService.getFavoriteVideoFolder(
+        // フォルダ動画リストを取得
+        const videoFolderList = await this.getFavoriteVideoFolderService.getFavoriteVideoFolder(
             frontUserIdModel,
             folderIdModel,
         );
 
         // フォルダ情報を取得
-        const folderVideoList = await this.getFavoriteVideoFolderService.getFolderInfo(
-            frontUserIdModel,
-            folderIdModel,
-            videoList,
-        );
+        const folderList = this.getFavoriteVideoFolderService.convertFolderInfo(videoFolderList);
 
         // 動画情報を取得
-        const favoriteVideoList = await this.getFavoriteVideoFolderService.getVideoInfo(folderVideoList);
+        const favoriteVideoList = await this.getFavoriteVideoFolderService.getVideoInfo(folderList);
 
         return ApiResponse.create(res, HTTP_STATUS_CREATED, `動画リストを取得しました。`, favoriteVideoList);
     }

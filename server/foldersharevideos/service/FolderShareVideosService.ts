@@ -1,4 +1,3 @@
-import { FavoriteVideoTransaction } from "@prisma/client";
 import { VideoIdListModel } from "../../external/youtubedataapi/videodetail/model/VideoIdListModel";
 import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
 import { YouTubeDataApiVideoDetailMaxRequestModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailMaxRequestModel";
@@ -8,11 +7,11 @@ import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUser
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
-import { SelectFolderEntity } from "../entity/SelectFolderEntity";
 import { SelectShareVideoEntity } from "../entity/SelectShareVideoEntity";
 import { FolderShareVideosRepositoryInterface } from "../repository/interface/FolderShareVideosRepositoryInterface";
+import { ConvertVideoFolderType } from "../type/ConvertVideoFolderType";
 import { FolderShareVideosResponseType } from "../type/FolderShareVideosResponseType";
-import { FolderVideoType } from "../type/FolderVideoType";
+import { TargetVideoFolderType } from "../type/TargetVideoFolderType";
 
 
 export class FolderShareVideosService {
@@ -24,7 +23,7 @@ export class FolderShareVideosService {
      * @param userNameModel 
      */
     async getFavoriteVideoFolder(frontUserIdModel: FrontUserIdModel,
-        folderIdModel: FolderIdModel): Promise<FavoriteVideoTransaction[]> {
+        folderIdModel: FolderIdModel): Promise<TargetVideoFolderType[]> {
 
         // 動画取得用Entity
         const getFavoriteVideoFolderSelectEntity = new SelectShareVideoEntity(
@@ -39,37 +38,36 @@ export class FolderShareVideosService {
     }
 
     /**
-     * フォルダ情報を取得
+     * フォルダ情報を変換
      * @param videoList 
      */
-    async getFolderInfo(frontUserIdModel: FrontUserIdModel,
-        folderIdModel: FolderIdModel,
-        videoList: FavoriteVideoTransaction[]): Promise<FolderVideoType[]> {
+    convertFolderInfo(videoFolderList: TargetVideoFolderType[]) {
 
-        const folderVideoList = (await Promise.all(videoList.map(async (e: FavoriteVideoTransaction) => {
+        const map = new Map<string, ConvertVideoFolderType>();
 
-            const entity = new SelectFolderEntity(
-                frontUserIdModel,
-                folderIdModel,
-                new VideoIdModel(e.videoId),
-            );
+        for (const item of videoFolderList) {
 
-            const result = await this.repository.selectFolderList(entity);
+            const existing = map.get(item.videoId);
 
-            return {
-                ...e,
-                folder: result
-            };
-        }))).filter((e) => !!e);
+            if (existing) {
+                existing.folder.push({ folderName: item.folderName });
+            }
+            else {
+                map.set(item.videoId, {
+                    videoId: item.videoId,
+                    folder: [{ folderName: item.folderName }],
+                });
+            }
+        }
 
-        return folderVideoList;
+        return Array.from(map.values());
     }
 
     /**
      * 動画情報を取得
      * @param videoList 
      */
-    async getVideoInfo(folderVideoList: FolderVideoType[]): Promise<FolderShareVideosResponseType[]> {
+    async getVideoInfo(folderVideoList: ConvertVideoFolderType[]): Promise<FolderShareVideosResponseType[]> {
 
         const videoIdcChunks: string[][] = [];
 
@@ -107,7 +105,7 @@ export class FolderShareVideosService {
         );
 
         // フォルダーリストとYouTube Data Apiの動画詳細のマージ
-        const folderVideoMergedList = folderVideoList.map((e: FolderVideoType) => {
+        const folderVideoMergedList = folderVideoList.map((e: ConvertVideoFolderType) => {
 
             const apiData = videoMap.get(e.videoId);
 

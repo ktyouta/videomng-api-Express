@@ -57,7 +57,8 @@ export class GetFolderRepositoryPostgres implements GetFolderRepositoryInterface
             SELECT
                 id,
                 name,
-                folder_color as "folderColor"
+                folder_color as "folderColor",
+                parent_id as "parentId"
             FROM
                 folder_tree
             ORDER BY

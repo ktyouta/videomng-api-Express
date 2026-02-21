@@ -56,6 +56,7 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
                 FROM 
                     folder_master
                 WHERE 
+                    user_id = ${userId} AND
                     id = ${folderId}
 
                 UNION ALL
@@ -77,6 +78,7 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
                 FROM 
                     folder_master
                 WHERE 
+                    user_id = ${userId} AND
                     id = ${folderId}
 
                 UNION ALL

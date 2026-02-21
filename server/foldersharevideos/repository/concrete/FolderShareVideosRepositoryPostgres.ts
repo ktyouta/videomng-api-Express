@@ -1,8 +1,6 @@
-import { FavoriteVideoTransaction } from "@prisma/client";
 import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
-import { SelectFolderEntity } from "../../entity/SelectFolderEntity";
 import { SelectShareVideoEntity } from "../../entity/SelectShareVideoEntity";
-import { FolderInfoType } from "../../type/FolderInfoType";
+import { TargetVideoFolderType } from "../../type/TargetVideoFolderType";
 import { FolderShareVideosRepositoryInterface } from "../interface/FolderShareVideosRepositoryInterface";
 
 
@@ -18,83 +16,120 @@ export class FolderShareVideosRepositoryPostgres implements FolderShareVideosRep
      * 別フォルダ内の動画取得
      * @returns 
      */
-    async selectFavoriteVideoList(entity: SelectShareVideoEntity): Promise<FavoriteVideoTransaction[]> {
+    async selectFavoriteVideoList(entity: SelectShareVideoEntity): Promise<TargetVideoFolderType[]> {
 
         const frontUserId = entity.frontUserId;
         const folderId = entity.folderId;
 
         let sql = `
-            SELECT
-                a.video_id as "videoId",
-                a.folder_master_id as "folderId"
-            FROM 
-                favorite_video_folder_transaction a
-            INNER JOIN
-                folder_master c
-            ON
-                c.id = a.folder_master_id
-            INNER JOIN 
-                favorite_video_transaction b
-            ON
-                a.user_id = c.user_id
-                AND a.video_id = b.video_id
-                AND b.delete_flg = '0'
-            WHERE
-                c.user_id = $1 
-                AND a.folder_master_id = $2
-                AND EXISTS (
+            WITH RECURSIVE target_tree AS (
+                SELECT 
+                    id, 
+                    parent_id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = $1 AND
+                    id = $2
+
+                UNION ALL
+
+                SELECT 
+                    f.id,
+                    f.parent_id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    target_tree t 
+                ON 
+                    f.parent_id = t.id
+            ),
+            ancestors AS (
+                SELECT 
+                    id, 
+                    parent_id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = $1 AND
+                    id = $2
+
+                UNION ALL
+
+                SELECT 
+                    f.id, 
+                    f.parent_id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    ancestors a 
+                ON 
+                    a.parent_id = f.id
+            ),
+            all_targets_folder_id AS (
+                SELECT DISTINCT 
+                    id 
+                FROM (
                     SELECT 
-                        1
+                        id 
+                    FROM target_tree
+                    UNION ALL
+                    SELECT 
+                        id 
                     FROM 
-                        favorite_video_folder_transaction d
-                    WHERE
-                        c.user_id = d.user_id
-                        AND d.video_id = a.video_id
-                        AND d.folder_master_id <> $2
-                );
-          `;
+                        ancestors
+                ) t
+            ),
+            target_videos AS (
+                SELECT DISTINCT 
+                    video_id
+                FROM 
+                    favorite_video_folder_transaction
+                WHERE 
+                    folder_master_id IN (
+                        SELECT 
+                            id 
+                        FROM 
+                            target_tree
+                    )
+            )
 
-        const params = [];
-        params.push(frontUserId);
-        params.push(folderId);
-
-        const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoTransaction[]>(sql, ...params);
-
-        return favoriteVideoList;
-    }
-
-    /**
-     * 対象動画のフォルダ情報を取得
-     * @returns 
-     */
-    async selectFolderList(entity: SelectFolderEntity): Promise<FolderInfoType[]> {
-
-        const frontUserId = entity.frontUserId;
-        const videoId = entity.videoId;
-        const folderId = entity.folderId;
-
-        let sql = `
             SELECT
-                b.name as "folderName"
+                fvft.video_id as "videoId",
+                fm.name as "folderName"
             FROM 
-                favorite_video_folder_transaction a
+                favorite_video_folder_transaction fvft
+            INNER JOIN
+                folder_master fm
+            ON
+                fm.id = fvft.folder_master_id
             INNER JOIN 
-                folder_master b
-            ON 
-                a.user_id = b.user_id
-                AND a.folder_master_id = b.id
+                favorite_video_transaction fvt
+            ON
+                fvt.user_id = fm.user_id
+                AND fvt.video_id = fvft.video_id
+                AND fvt.delete_flg = '0'
             WHERE
-                b.user_id = $1
-                AND a.video_id = $2
-                AND a.folder_master_id <> $3
+                fm.user_id = $1 
+                AND fvft.folder_master_id NOT IN(
+                    SELECT
+                        id
+                    FROM
+                        all_targets_folder_id
+                )
+                AND fvft.video_id IN(
+                    SELECT
+                        video_id
+                    FROM
+                        target_videos
+                )
           `;
 
         const params = [];
         params.push(frontUserId);
-        params.push(videoId);
         params.push(folderId);
 
-        const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FolderInfoType[]>(sql, ...params);
+        const favoriteVideoList = await PrismaClientInstance.getInstance().$queryRawUnsafe<TargetVideoFolderType[]>(sql, ...params);
 
         return favoriteVideoList;
     }
