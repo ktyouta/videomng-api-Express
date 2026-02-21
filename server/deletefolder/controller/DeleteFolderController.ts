@@ -91,6 +91,9 @@ export class DeleteFolderController extends RouteController {
                 await this.deleteFolderService.deleteTagMaster(frontUserIdModel, tx);
             }
 
+            // お気に入り動画フォルダ削除
+            await this.deleteFolderService.deleteFavoriteVideoFolder(folderIdModel, frontUserIdModel, tx);
+
             // フォルダ削除
             const result = await this.deleteFolderService.deleteFolder(folderIdModel, frontUserIdModel, tx);
 

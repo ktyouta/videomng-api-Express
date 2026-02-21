@@ -30,6 +30,17 @@ export class DeleteFolderService {
     }
 
     /**
+     * お気に入り動画フォルダを削除する
+     * @returns 
+     */
+    async deleteFavoriteVideoFolder(folderIdModel: FolderIdModel,
+        frontUserIdModel: FrontUserIdModel,
+        tx: Prisma.TransactionClient) {
+        // 削除
+        await this.deleteFolderRepositoryInterface.deleteFavoriteVideoFolder(frontUserIdModel, folderIdModel, tx);
+    }
+
+    /**
      * お気に入り動画を削除する
      * @returns 
      */

@@ -16,6 +16,11 @@ export interface DeleteFolderRepositoryInterface {
     deleteFolder(entity: DeleteFolderEntity, tx: Prisma.TransactionClient): Promise<FolderMaster>;
 
     /**
+     * お気に入り動画フォルダ削除
+     */
+    deleteFavoriteVideoFolder(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel, tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
      * お気に入り動画削除
      */
     deleteFavoriteVideo(entity: DeleteFavoriteVideoEntity, tx: Prisma.TransactionClient): Promise<void>;
