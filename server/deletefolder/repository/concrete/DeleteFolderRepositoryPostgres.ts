@@ -152,20 +152,53 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
         const folderId = entity.folderId;
 
         await tx.$queryRaw`
+            WITH RECURSIVE target_tree AS (
+                SELECT 
+                    id, 
+                    parent_id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = ${userId} AND
+                    id = ${folderId}
+
+                UNION ALL
+
+                SELECT 
+                    f.id,
+                    f.parent_id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    target_tree t 
+                ON 
+                    f.parent_id = t.id
+            ),
+            target_videos AS (
+                SELECT DISTINCT 
+                    video_id
+                FROM 
+                    favorite_video_folder_transaction
+                WHERE 
+                    folder_master_id IN (
+                        SELECT 
+                            id 
+                        FROM 
+                            target_tree
+                    )
+            )
+
             DELETE
             FROM
-                favorite_video_transaction a
+                favorite_video_transaction
             WHERE 
-                a.user_id = ${userId} AND
-                EXISTS(
-                    SELECT 
-                        1
+                user_id = ${userId} AND
+                video_id IN (
+                    SELECT
+                        video_id
                     FROM
-                        favorite_video_folder_transaction b
-                    WHERE
-                        b.folder_master_id = ${folderId} AND
-                        b.video_id = a.video_id
-            )
+                        target_videos
+                )
         `;
     };
 
@@ -180,20 +213,52 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
         const folderId = folderIdModel.id;
 
         await tx.$queryRaw`
+            WITH RECURSIVE target_tree AS (
+                SELECT 
+                    id, 
+                    parent_id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = ${userId} AND
+                    id = ${folderId}
+
+                UNION ALL
+
+                SELECT 
+                    f.id,
+                    f.parent_id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    target_tree t 
+                ON 
+                    f.parent_id = t.id
+            ),
+            target_videos AS (
+                SELECT DISTINCT 
+                    video_id
+                FROM 
+                    favorite_video_folder_transaction
+                WHERE 
+                    folder_master_id IN (
+                        SELECT 
+                            id 
+                        FROM 
+                            target_tree
+                    )
+            )
+
             DELETE
             FROM
-                favorite_video_memo_transaction a
+                favorite_video_memo_transaction
             WHERE 
-                a.user_id = ${userId} AND
-                a.video_id = 
-                (
-                    SELECT 
-                        b.video_id
+                user_id = ${userId} AND
+                video_id IN (
+                    SELECT
+                        video_id
                     FROM
-                        favorite_video_folder_transaction b
-                    WHERE
-                        b.folder_master_id = ${folderId} AND
-                        b.video_id = a.video_id
+                        target_videos
                 )
         `;
     };
@@ -209,20 +274,52 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
         const folderId = folderIdModel.id;
 
         await tx.$queryRaw`
+            WITH RECURSIVE target_tree AS (
+                SELECT 
+                    id, 
+                    parent_id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = ${userId} AND
+                    id = ${folderId}
+
+                UNION ALL
+
+                SELECT 
+                    f.id,
+                    f.parent_id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    target_tree t 
+                ON 
+                    f.parent_id = t.id
+            ),
+            target_videos AS (
+                SELECT DISTINCT 
+                    video_id
+                FROM 
+                    favorite_video_folder_transaction
+                WHERE 
+                    folder_master_id IN (
+                        SELECT 
+                            id 
+                        FROM 
+                            target_tree
+                    )
+            )
+
             DELETE
             FROM
-                favorite_commnet_transaction a
+                favorite_commnet_transaction
             WHERE 
-                a.user_id = ${userId} AND
-                a.video_id = 
-                (
-                    SELECT 
-                        b.video_id
+                user_id = ${userId} AND
+                video_id IN (
+                    SELECT
+                        video_id
                     FROM
-                        favorite_video_folder_transaction b
-                    WHERE
-                        b.folder_master_id = ${folderId} AND
-                        b.video_id = a.video_id
+                        target_videos
                 )
         `;
     };
@@ -238,20 +335,52 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
         const folderId = folderIdModel.id;
 
         await tx.$queryRaw`
+            WITH RECURSIVE target_tree AS (
+                SELECT 
+                    id, 
+                    parent_id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = ${userId} AND
+                    id = ${folderId}
+
+                UNION ALL
+
+                SELECT 
+                    f.id,
+                    f.parent_id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    target_tree t 
+                ON 
+                    f.parent_id = t.id
+            ),
+            target_videos AS (
+                SELECT DISTINCT 
+                    video_id
+                FROM 
+                    favorite_video_folder_transaction
+                WHERE 
+                    folder_master_id IN (
+                        SELECT 
+                            id 
+                        FROM 
+                            target_tree
+                    )
+            )
+
             DELETE
             FROM
-                block_commnet_transaction a
+                block_commnet_transaction
             WHERE 
-                a.user_id = ${userId} AND
-                a.video_id = 
-                (
-                    SELECT 
-                        b.video_id
+                user_id = ${userId} AND
+                video_id IN (
+                    SELECT
+                        video_id
                     FROM
-                        favorite_video_folder_transaction b
-                    WHERE
-                        b.folder_master_id = ${folderId} AND
-                        b.video_id = a.video_id
+                        target_videos
                 )
         `;
     };
@@ -267,20 +396,52 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
         const folderId = folderIdModel.id;
 
         await tx.$queryRaw`
+            WITH RECURSIVE target_tree AS (
+                SELECT 
+                    id, 
+                    parent_id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = ${userId} AND
+                    id = ${folderId}
+
+                UNION ALL
+
+                SELECT 
+                    f.id,
+                    f.parent_id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    target_tree t 
+                ON 
+                    f.parent_id = t.id
+            ),
+            target_videos AS (
+                SELECT DISTINCT 
+                    video_id
+                FROM 
+                    favorite_video_folder_transaction
+                WHERE 
+                    folder_master_id IN (
+                        SELECT 
+                            id 
+                        FROM 
+                            target_tree
+                    )
+            )
+
             DELETE
             FROM
-                favorite_video_tag_transaction a
+                favorite_video_tag_transaction
             WHERE 
-                a.user_id = ${userId} AND
-                a.video_id = 
-                (
-                    SELECT 
-                        b.video_id
+                user_id = ${userId} AND
+                video_id IN (
+                    SELECT
+                        video_id
                     FROM
-                        favorite_video_folder_transaction b
-                    WHERE
-                        b.folder_master_id = ${folderId} AND
-                        b.video_id = a.video_id
+                        target_videos
                 )
         `;
     };
