@@ -10,5 +10,5 @@ export interface DeleteFavoriteVideoFolderInterface {
     /**
      * お気に入り動画フォルダから削除
      */
-    delete(insertFolderEntity: DeleteFavoriteVideoFolderEntity, tx: Prisma.TransactionClient): Promise<Prisma.BatchPayload>;
+    delete(insertFolderEntity: DeleteFavoriteVideoFolderEntity, tx: Prisma.TransactionClient): Promise<void>;
 }

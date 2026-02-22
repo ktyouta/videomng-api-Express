@@ -13,6 +13,7 @@ import { GetFavoriteVideoFolderSelectEntity } from "../entity/GetFavoriteVideoFo
 import { FavoriteVideoFolderThumbnailType } from "../model/FavoriteVideoFolderThumbnailType";
 import { FavoriteVideoFolderType } from "../model/FavoriteVideoFolderType";
 import { FavoriteVideoListMergedType } from "../model/FavoriteVideoListMergedType";
+import { FolderListModel } from "../model/FolderListModel";
 import { GetFavoriteVideoFolderResponseModel } from "../model/GetFavoriteVideoListResponseModel";
 import { GetFavoriteVideoFolderRepositoryInterface } from "../repository/interface/GetFavoriteVideoFolderRepositoryInterface";
 
@@ -150,9 +151,16 @@ export class GetFavoriteVideoFolderService {
      * フォルダリスト取得
      * @param userNameModel 
      */
-    async getFolderList(frontUserIdModel: FrontUserIdModel, folderIdModel: FolderIdModel): Promise<FavoriteVideoFolderType[]> {
+    async getFolderList(
+        frontUserIdModel: FrontUserIdModel,
+        folderIdModel: FolderIdModel,
+        folderListModel: FolderListModel): Promise<FavoriteVideoFolderType[]> {
         // お気に入り動画取得
-        const favoriteVideos = await this.getFavoriteVideoFolderRepository.selectFolderList(frontUserIdModel, folderIdModel);
+        const favoriteVideos = await this.getFavoriteVideoFolderRepository.selectFolderList(
+            frontUserIdModel,
+            folderIdModel,
+            folderListModel
+        );
         return favoriteVideos;
     }
 

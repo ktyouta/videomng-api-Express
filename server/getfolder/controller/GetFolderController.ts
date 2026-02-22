@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { Response } from 'express';
 import { RepositoryType } from '../../common/const/CommonConst';
 import { HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
@@ -33,7 +33,7 @@ export class GetFolderController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response) {
 
         const frontUserIdModel = req.userInfo.frontUserIdModel;
         // パスパラメータのバリデーションチェック

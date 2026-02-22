@@ -1,6 +1,7 @@
 import { FolderMaster } from "@prisma/client";
+import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
+import { ParentFolderIdModel } from "../../../internaldata/foldermaster/model/ParentFolderIdModel";
 import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
-import { SelectFolderListEntity } from "../../entity/SelectFolderListEntity";
 import { GetFolderListRepositoryInterface } from "../interface/GetFolderListInterface";
 
 
@@ -17,13 +18,15 @@ export class GetFolderListRepositoryPostgres implements GetFolderListRepositoryI
      * @param frontFavoriteVideoTagInfoMasterModel 
      * @returns 
      */
-    async selectFolderList(entity: SelectFolderListEntity): Promise<FolderMaster[]> {
+    async selectFolderList(frontUserIdModel: FrontUserIdModel, parentFolderId: ParentFolderIdModel): Promise<FolderMaster[]> {
 
-        const userId = entity.frontUserId;
+        const userId = frontUserIdModel.frontUserId;
+        const parentId = parentFolderId.id;
 
         const result = await PrismaClientInstance.getInstance().folderMaster.findMany({
             where: {
-                userId
+                userId,
+                parentId: parentId || null,
             }
         });
 

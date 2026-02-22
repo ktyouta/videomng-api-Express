@@ -5,6 +5,7 @@ import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { GetFavoriteVideoFolderSelectEntity } from "../../entity/GetFavoriteVideoFolderSelectEntity";
 import { FavoriteVideoFolderType } from "../../model/FavoriteVideoFolderType";
 import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
+import { FolderListModel } from "../../model/FolderListModel";
 import { GetFavoriteVideoFolderRepositoryInterface } from "../interface/GetFavoriteVideoFolderRepositoryInterface";
 
 type queryType = {
@@ -290,14 +291,16 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
      * @param tx 
      * @returns 
      */
-    async selectFolderList(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel): Promise<FavoriteVideoFolderType[]> {
+    async selectFolderList(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel, folderListModel: FolderListModel): Promise<FavoriteVideoFolderType[]> {
 
         const userId = userIdModel.frontUserId;
         const folderId = folderIdModel.id;
+        const folderList = folderListModel.value;
 
         const params = [];
         params.push(userId);
         params.push(folderId);
+        let paramIndex = 3;
 
         let sql = `
                 SELECT
@@ -339,6 +342,13 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
                     a.user_id = $1 AND
                     a.parent_id = $2
         `;
+
+        // フォルダID
+        if (folderList && folderList.length > 0) {
+            sql += ` AND a.id = ANY($${paramIndex})`;
+            paramIndex++;
+            params.push(folderList);
+        }
 
         sql += ` ORDER BY a.update_date DESC`;
 

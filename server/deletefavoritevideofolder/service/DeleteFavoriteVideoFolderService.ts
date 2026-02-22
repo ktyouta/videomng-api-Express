@@ -18,12 +18,8 @@ export class DeleteFavoriteVideoFolderService {
         videoIdModel: VideoIdModel,
         folderIdModel: FolderIdModel,
         tx: Prisma.TransactionClient) {
-
         const entity = new DeleteFavoriteVideoFolderEntity(folderIdModel, videoIdModel, frontUserIdModel);
-
         // 削除
-        const result = await this.deleteFavoriteVideoFolderInterface.delete(entity, tx);
-
-        return result;
+        await this.deleteFavoriteVideoFolderInterface.delete(entity, tx);
     }
 }

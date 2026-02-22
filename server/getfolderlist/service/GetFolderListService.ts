@@ -1,5 +1,5 @@
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { SelectFolderListEntity } from "../entity/SelectFolderListEntity";
+import { ParentFolderIdModel } from "../../internaldata/foldermaster/model/ParentFolderIdModel";
 import { GetFolderListRepositoryInterface } from "../repository/interface/GetFolderListInterface";
 
 
@@ -14,13 +14,8 @@ export class GetFolderService {
      * @param frontUserIdModel 
      * @returns 
      */
-    async getFolderList(userIdModel: FrontUserIdModel) {
-
-        // フォルダ取得Entity
-        const entity = new SelectFolderListEntity(userIdModel);
-
-        const result = await this.getFolderRepositoryInterface.selectFolderList(entity);
-
+    async getFolderList(userIdModel: FrontUserIdModel, parentFolderId: ParentFolderIdModel) {
+        const result = await this.getFolderRepositoryInterface.selectFolderList(userIdModel, parentFolderId);
         return result;
     }
 }

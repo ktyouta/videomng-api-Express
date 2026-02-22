@@ -10,6 +10,7 @@ import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSetti
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { ApiResponse } from "../../util/ApiResponse";
 import { GetFavoriteVideoFolderSelectEntity } from "../entity/GetFavoriteVideoFolderSelectEntity";
+import { FolderListModel } from '../model/FolderListModel';
 import { GetFavoriteVideoFolderFavoriteLevelModel } from '../model/GetFavoriteVideoFolderFavoriteLevelModel';
 import { GetFavoriteVideoFolderPageModel } from "../model/GetFavoriteVideoFolderPageModel";
 import { GetFavoriteVideoFolderSortIdModel } from '../model/GetFavoriteVideoFolderSortIdModel';
@@ -79,19 +80,21 @@ export class GetFavoriteVideoFolderController extends RouteController {
         const query = validateResult.data;
 
         // 視聴状況
-        const viewStatusModel = new GetFavoriteVideoFolderViewStatusModel(query.folderViewStatus);
+        const viewStatusModel = new GetFavoriteVideoFolderViewStatusModel(query.viewStatus);
         // 動画カテゴリ
-        const videoCategoryId = new GetFavoriteVideoFolderVideoCategoryModel(query.folderVideoCategory);
+        const videoCategoryId = new GetFavoriteVideoFolderVideoCategoryModel(query.videoCategory);
         // タグ
-        const tagNameModel = new GetFavoriteVideoFolderTagNameModel(query.folderVideoTag);
+        const tagNameModel = new GetFavoriteVideoFolderTagNameModel(query.videoTag);
         // お気に入り度
-        const favoriteLevelModel = new GetFavoriteVideoFolderFavoriteLevelModel(query.folderFavoriteLevel);
+        const favoriteLevelModel = new GetFavoriteVideoFolderFavoriteLevelModel(query.favoriteLevel);
         // ページ
-        const pageModel = new GetFavoriteVideoFolderPageModel(query.folderPage);
+        const pageModel = new GetFavoriteVideoFolderPageModel(query.page);
         // ソートキー
-        const sortIdModel = await GetFavoriteVideoFolderSortIdModel.set(query.folderSortKey);
+        const sortIdModel = await GetFavoriteVideoFolderSortIdModel.set(query.sortKey);
+        // フォルダ
+        const folderListModel = new FolderListModel(query.folder);
         // モード
-        const modeModel = new ModeModel(query.folderMode);
+        const modeModel = new ModeModel(query.mode);
 
         // お気に入り動画取得用Entity
         const getFavoriteVideoFolderSelectEntity = new GetFavoriteVideoFolderSelectEntity(
@@ -115,7 +118,8 @@ export class GetFavoriteVideoFolderController extends RouteController {
         // フォルダリストを取得
         const folderList = modeModel.isFolderMode() ? await this.getFavoriteVideoFolderService.getFolderList(
             frontUserIdModel,
-            folderIdModel
+            folderIdModel,
+            folderListModel,
         ) : [];
 
         // ユーザーのお気に入り動画が存在しない

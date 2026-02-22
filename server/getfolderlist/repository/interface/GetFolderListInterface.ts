@@ -1,5 +1,6 @@
-import { FavoriteVideoTagTransaction, FolderMaster, Prisma, TagMaster } from "@prisma/client";
-import { SelectFolderListEntity } from "../../entity/SelectFolderListEntity";
+import { FolderMaster } from "@prisma/client";
+import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
+import { ParentFolderIdModel } from "../../../internaldata/foldermaster/model/ParentFolderIdModel";
 
 
 /**
@@ -9,7 +10,6 @@ export interface GetFolderListRepositoryInterface {
 
     /**
      * フォルダ取得
-     * @param favoriteVideoTagInsertEntity 
      */
-    selectFolderList(entity: SelectFolderListEntity): Promise<FolderMaster[]>;
+    selectFolderList(frontUserIdModel: FrontUserIdModel, parentFolderId: ParentFolderIdModel): Promise<FolderMaster[]>;
 }

@@ -4,6 +4,7 @@ import { FolderIdModel } from "../../../internaldata/foldermaster/model/FolderId
 import { GetFavoriteVideoFolderSelectEntity } from "../../entity/GetFavoriteVideoFolderSelectEntity";
 import { FavoriteVideoFolderType } from "../../model/FavoriteVideoFolderType";
 import { FavoriteVideoListCountType } from "../../model/FavoriteVideoListCountType";
+import { FolderListModel } from "../../model/FolderListModel";
 
 
 /**
@@ -25,5 +26,5 @@ export interface GetFavoriteVideoFolderRepositoryInterface {
      * フォルダリスト取得
      * @param userId 
      */
-    selectFolderList(userId: FrontUserIdModel, folderIdModel: FolderIdModel): Promise<FavoriteVideoFolderType[]>;
+    selectFolderList(userId: FrontUserIdModel, folderIdModel: FolderIdModel, folderListModel: FolderListModel): Promise<FavoriteVideoFolderType[]>;
 }
