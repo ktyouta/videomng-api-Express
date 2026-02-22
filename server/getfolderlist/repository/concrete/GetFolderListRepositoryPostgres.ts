@@ -26,7 +26,7 @@ export class GetFolderListRepositoryPostgres implements GetFolderListRepositoryI
         const result = await PrismaClientInstance.getInstance().folderMaster.findMany({
             where: {
                 userId,
-                parentId: parentId || null,
+                parentId: parentId,
             }
         });
 

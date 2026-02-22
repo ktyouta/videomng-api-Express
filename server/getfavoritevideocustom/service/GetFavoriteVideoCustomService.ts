@@ -87,10 +87,30 @@ export class GetFavoriteVideoCustomService {
      * @param userNameModel 
      */
     public async getFavoriteVideoFolderList(frontUserIdModel: FrontUserIdModel,
-        videoIdModel: VideoIdModel,): Promise<FavoriteVideoFolderType[]> {
+        videoIdModel: VideoIdModel): Promise<FavoriteVideoFolderType[][]> {
 
         const result = await this.getGetFavoriteVideoCustomRepository.selectFavoriteVideoFolder(frontUserIdModel, videoIdModel);
-        return result;
+
+        const response: FavoriteVideoFolderType[][] = [];
+        result.forEach((e: FavoriteVideoFolderType) => {
+            const parentId = e.parentId;
+
+            if (!parentId) {
+                response.push([e]);
+                return;
+            }
+
+            response.forEach((e1: FavoriteVideoFolderType[], index) => {
+                const folder = e1.find((e2) => parentId === e2.folderMasterId);
+
+                if (folder) {
+                    response[index].push(e);
+                    return;
+                }
+            });
+        });
+
+        return response;
     }
 
     /**

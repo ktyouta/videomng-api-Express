@@ -144,8 +144,9 @@ export class GetFavoriteVideoCustomRepositoryPostgres implements GetFavoriteVide
             SELECT
                 b.user_id as "userId",
                 a.video_id as "videoId",
-                a.folder_master_id as "folderId",
-                b.name as "folderName"
+                a.folder_master_id as "folderMasterId",
+                b.name as "folderName",
+                b.parent_id as "parentId"
             FROM 
                 "favorite_video_folder_transaction" a
             INNER JOIN 
@@ -155,6 +156,8 @@ export class GetFavoriteVideoCustomRepositoryPostgres implements GetFavoriteVide
             WHERE 
                 b.user_id = ${frontUserId} AND
                 a.video_id = ${videoId}
+            ORDER BY
+                a.folder_master_id
             `;
 
         return result;

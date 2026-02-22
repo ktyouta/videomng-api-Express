@@ -9,13 +9,13 @@ export class FavoriteVideoCustomMergedModel {
     private readonly memos: FavoriteVideoMemoTransaction[];
     private readonly categorys: FavoriteVideoDetailCategoryType[];
     private readonly tags: FavoriteVideoTagType[];
-    private readonly folders: FavoriteVideoFolderType[];
+    private readonly folders: FavoriteVideoFolderType[][];
 
     constructor(favoriteVideoList: FavoriteVideoTransaction[],
         favoriteVideoMemoList: FavoriteVideoMemoTransaction[],
         favoriteVideoCategoryList: FavoriteVideoDetailCategoryType[],
         favoriteVideoTagList: FavoriteVideoTagType[],
-        favoriteVideoFolderList: FavoriteVideoFolderType[],
+        favoriteVideoFolderList: FavoriteVideoFolderType[][],
     ) {
 
         if (favoriteVideoList.length === 0) {

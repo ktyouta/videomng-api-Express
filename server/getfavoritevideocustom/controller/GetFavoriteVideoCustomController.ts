@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { Response } from 'express';
 import { RepositoryType } from "../../common/const/CommonConst";
 import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../common/const/HttpStatusConst";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
@@ -34,7 +34,7 @@ export class GetFavoriteVideoCustomController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+    public async doExecute(req: AuthenticatedRequest, res: Response) {
 
         const frontUserIdModel = req.userInfo.frontUserIdModel;
         const id = req.params.videoId;
