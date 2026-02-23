@@ -1,8 +1,7 @@
-import { FolderMaster, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
 import { FolderIdModel } from "../../../internaldata/foldermaster/model/FolderIdModel";
 import { DeleteFavoriteVideoEntity } from "../../entity/DeleteFavoriteVideoEntity";
-import { DeleteFolderEntity } from "../../entity/DeleteFolderEntity";
 import { DeleteFolderRepositoryInterface } from "../interface/DeleteFolderRepositoryInterface";
 
 
@@ -15,23 +14,55 @@ export class DeleteFolderRepositoryPostgres implements DeleteFolderRepositoryInt
     }
 
     /**
-     * フォルダを削除
+     * フォルダ削除
+     * @param userIdModel 
+     * @param folderIdModel 
+     * @param tx 
      */
-    async deleteFolder(entity: DeleteFolderEntity,
-        tx: Prisma.TransactionClient): Promise<FolderMaster> {
+    async deleteFolder(
+        userIdModel: FrontUserIdModel,
+        folderIdModel: FolderIdModel,
+        tx: Prisma.TransactionClient
+    ) {
 
-        const userId = entity.frontUserId;
-        const folderId = entity.folderId;
+        const folderId = folderIdModel.id;
+        const userId = userIdModel.frontUserId;
 
-        const result = tx.folderMaster.delete({
-            where: {
-                userId,
-                id: folderId
-            }
-        });
+        await tx.$queryRaw`
+            WITH RECURSIVE target_tree AS (
+                SELECT 
+                    id, 
+                    parent_id
+                FROM 
+                    folder_master
+                WHERE 
+                    user_id = ${userId} AND
+                    id = ${folderId}
 
-        return result;
-    };
+                UNION ALL
+
+                SELECT 
+                    f.id,
+                    f.parent_id
+                FROM 
+                    folder_master f
+                INNER JOIN 
+                    target_tree t 
+                ON 
+                    f.parent_id = t.id
+            )
+            DELETE FROM 
+                folder_master
+            WHERE 
+                user_id = ${userId} AND
+                id IN (
+                    SELECT 
+                        id 
+                    FROM 
+                        target_tree
+                )
+        `;
+    }
 
     /**
      * お気に入り動画フォルダ削除

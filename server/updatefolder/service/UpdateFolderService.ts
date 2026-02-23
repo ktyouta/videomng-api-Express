@@ -42,12 +42,15 @@ export class UpdateFolderService {
      * @returns 
      */
     async getDuplicationFolder(folderNameModel: FolderNameModel,
-        frontUserIdModel: FrontUserIdModel) {
+        frontUserIdModel: FrontUserIdModel,
+        folderIdModel: FolderIdModel,
+    ) {
 
         // フォルダ取得Entity
         const entity = new SelectDuplicationFolderEntity(
             folderNameModel,
-            frontUserIdModel
+            frontUserIdModel,
+            folderIdModel
         );
 
         const folderList = await this.updateFolderRepositoryInterface.selectDuplicationFolder(entity);

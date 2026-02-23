@@ -2,7 +2,6 @@ import { Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 import { DeleteFavoriteVideoEntity } from "../entity/DeleteFavoriteVideoEntity";
-import { DeleteFolderEntity } from "../entity/DeleteFolderEntity";
 import { DeleteFolderRepositoryInterface } from "../repository/interface/DeleteFolderRepositoryInterface";
 
 
@@ -17,16 +16,7 @@ export class DeleteFolderService {
     async deleteFolder(folderIdModel: FolderIdModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
-
-        const entity = new DeleteFolderEntity(
-            folderIdModel,
-            frontUserIdModel,
-        );
-
-        // 削除
-        const folder = await this.deleteFolderRepositoryInterface.deleteFolder(entity, tx);
-
-        return folder;
+        await this.deleteFolderRepositoryInterface.deleteFolder(frontUserIdModel, folderIdModel, tx);
     }
 
     /**

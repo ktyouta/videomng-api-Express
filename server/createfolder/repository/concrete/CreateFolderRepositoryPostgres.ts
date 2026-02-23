@@ -20,19 +20,44 @@ export class CreateFolderRepositoryPostgres implements CreateFolderRepositoryInt
      * @param frontFavoriteVideoTagInfoMasterModel 
      * @returns 
      */
-    async selectFolder(selectFolderEntity: SelectFolderEntity): Promise<FolderMaster[]> {
+    async selectFolder(entity: SelectFolderEntity): Promise<FolderMaster[]> {
 
-        const userId = selectFolderEntity.frontUserId;
-        const folderName = selectFolderEntity.folderName;
-        const parentFolderId = selectFolderEntity.parentFolderId;
+        const userId = entity.frontUserId;
+        const folderName = entity.folderName;
+        const parentFolderId = entity.parentFolderId;
 
-        const folderList = await PrismaClientInstance.getInstance().folderMaster.findMany({
-            where: {
-                userId,
-                name: folderName,
-                parentId: parentFolderId,
-            },
-        });
+        const folderList = await PrismaClientInstance.getInstance().$queryRaw<FolderMaster[]>`
+            SELECT
+                id,
+                name,
+                parent_id as "parentId",
+                user_id as "userId",
+                folder_color as "folderColor"
+            FROM
+                folder_master fm
+            WHERE
+                fm.user_id = ${userId} AND
+                fm.name = ${folderName} AND
+                (
+                    (
+                        ${parentFolderId}::integer IS NULL AND
+                        fm.parent_id IS NULL
+                    )    
+                        OR
+                    (
+                        fm.parent_id = ${parentFolderId} AND
+                        EXISTS(
+                            SELECT
+                                1
+                            FROM
+                                folder_master tmp_fm
+                            WHERE
+                                tmp_fm.user_id = ${userId} AND
+                                tmp_fm.id = ${parentFolderId}
+                        )
+                    )
+                )
+        `;
 
         return folderList;
     }

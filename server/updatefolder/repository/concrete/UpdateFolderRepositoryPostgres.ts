@@ -42,16 +42,42 @@ export class UpdateFolderRepositoryPostgres implements UpdateFolderRepositoryInt
      */
     async selectDuplicationFolder(entity: SelectDuplicationFolderEntity): Promise<FolderMaster[]> {
 
-        const userId = entity.frontUserId;
-        const folderName = entity.folderName;
+        const params = [];
+        params.push(entity.frontUserId);
+        params.push(entity.folderName);
+        params.push(entity.folderId);
 
-        const folderList = await PrismaClientInstance.getInstance().folderMaster.findMany({
-            where: {
-                userId,
-                name: folderName
-            },
-        });
+        let sql = `
+            SELECT
+                id,
+                name,
+                parent_id as "parentId",
+                user_id as "userId",
+                folder_color as "folderColor"
+            FROM 
+                folder_master fm
+            WHERE 
+                fm.user_id = $1 AND
+                (
+                    fm.id = $3
+                        OR
+                    (
+                        fm.name = $2 
+                            AND
+                        fm.parent_id = (
+                            SELECT
+                                tmp_fm.parent_id
+                            FROM
+                                folder_master tmp_fm
+                            WHERE
+                                tmp_fm.id = $3 AND
+                                tmp_fm.user_id = $1
+                        )
+                    )
+                )
+        `;
 
+        const folderList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FolderMaster[]>(sql, ...params);
         return folderList;
     }
 

@@ -1,8 +1,7 @@
-import { FolderMaster, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
 import { FolderIdModel } from "../../../internaldata/foldermaster/model/FolderIdModel";
 import { DeleteFavoriteVideoEntity } from "../../entity/DeleteFavoriteVideoEntity";
-import { DeleteFolderEntity } from "../../entity/DeleteFolderEntity";
 
 
 /**
@@ -13,7 +12,7 @@ export interface DeleteFolderRepositoryInterface {
     /**
      * フォルダ削除
      */
-    deleteFolder(entity: DeleteFolderEntity, tx: Prisma.TransactionClient): Promise<FolderMaster>;
+    deleteFolder(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel, tx: Prisma.TransactionClient): Promise<void>;
 
     /**
      * お気に入り動画フォルダ削除
