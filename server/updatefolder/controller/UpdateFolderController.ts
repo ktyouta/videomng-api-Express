@@ -82,7 +82,7 @@ export class UpdateFolderController extends RouteController {
             // フォルダの重複チェック
             const duplicationFolder = await this.updateFolderService.getDuplicationFolder(folderNameModel, frontUserIdModel, folderIdModel);
 
-            if (duplicationFolder && duplicationFolder.length > 1) {
+            if (duplicationFolder && duplicationFolder.length > 0) {
                 return ApiResponse.create(res, HTTP_STATUS_CONFLICT, `同じ名前のフォルダが既に存在します。`,);
             }
 

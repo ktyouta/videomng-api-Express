@@ -49,32 +49,30 @@ export class UpdateFolderRepositoryPostgres implements UpdateFolderRepositoryInt
 
         let sql = `
             SELECT
-                id,
-                name,
-                parent_id as "parentId",
-                user_id as "userId",
-                folder_color as "folderColor"
+                fm.id,
+                fm.name,
+                fm.parent_id as "parentId",
+                fm.user_id as "userId",
+                fm.folder_color as "folderColor"
             FROM 
                 folder_master fm
+            INNER JOIN
+                folder_master tmp_fm
+            ON
+                fm.user_id = tmp_fm.user_id AND
+                (
+                    (
+                        fm.parent_id IS NULL AND 
+                        tmp_fm.parent_id IS NULL
+                    )
+                        OR
+                    fm.parent_id = tmp_fm.parent_id
+                )
             WHERE 
                 fm.user_id = $1 AND
-                (
-                    fm.id = $3
-                        OR
-                    (
-                        fm.name = $2 
-                            AND
-                        fm.parent_id = (
-                            SELECT
-                                tmp_fm.parent_id
-                            FROM
-                                folder_master tmp_fm
-                            WHERE
-                                tmp_fm.id = $3 AND
-                                tmp_fm.user_id = $1
-                        )
-                    )
-                )
+                tmp_fm.name = $2 AND
+                fm.id = $3 AND
+                fm.id <> tmp_fm.id
         `;
 
         const folderList = await PrismaClientInstance.getInstance().$queryRawUnsafe<FolderMaster[]>(sql, ...params);
