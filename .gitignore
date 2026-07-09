@@ -33,5 +33,11 @@ dist
 .claude/**
 !.claude/commands/
 !.claude/commands/**
+!.claude/agents/
+!.claude/agents/**
+!.claude/skills/
+!.claude/skills/**
+!.claude/incidents-template.md
+**/.claude/settings.local.json
 
 tmpclaude-*
