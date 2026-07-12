@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
+import { RepositoryType } from '../../constant/CommonConst';
 import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../constant/HttpStatusConst';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
@@ -12,12 +13,13 @@ import { PrismaTransaction } from '../../util/PrismaTransaction';
 import { CreateFavoriteVideoRequestModel } from '../model/CreateFavoriteVideoRequestModel';
 import { CreateFavoriteVideoRequestModelSchema } from '../model/CreateFavoriteVideoRequestModelSchema';
 import { CreateFavoriteVideoRequestType } from '../model/CreateFavoriteVideoRequestType';
+import { CreateFavoriteVideoRepositorys } from '../repository/CreateFavoriteVideoRepositorys';
 import { CreateFavoriteVideoService } from '../service/CreateFavoriteVideoService';
 
 
 export class CreateFavoriteVideoController extends RouteController {
 
-    private readonly createFavoriteVideoService = new CreateFavoriteVideoService();
+    private readonly createFavoriteVideoService = new CreateFavoriteVideoService((new CreateFavoriteVideoRepositorys).get(RepositoryType.POSTGRESQL));
 
     protected getRouteSettingModel(): RouteSettingModel {
 
@@ -65,15 +67,51 @@ export class CreateFavoriteVideoController extends RouteController {
             const favoriteVideoRepository = this.createFavoriteVideoService.getFavoriteVideoRepository();
 
             // お気に入り動画に動画を追加
-            await this.createFavoriteVideoService.insert(
+            await this.createFavoriteVideoService.insertFavoriteVideo(
                 favoriteVideoRepository,
                 createFavoriteVideoRequestModel,
                 frontUserIdModel,
                 tx);
 
-            // フォルダ登録
+            // タグリスト
+            const tagList = createFavoriteVideoRequestModel.tagList;
+
+            if (tagList.length > 0) {
+
+                // タグのマスタ存在チェック
+                const missingTagIdList = await this.createFavoriteVideoService.checkTagListExists(tagList, frontUserIdModel);
+
+                if (missingTagIdList.length > 0) {
+                    throw Error(`存在しないタグIDが含まれています。tagId:${missingTagIdList.join(`,`)} endpoint:${ApiEndopoint.FAVORITE_VIDEO}`);
+                }
+            }
 
             // タグ登録
+            await this.createFavoriteVideoService.insertVideoTag(
+                createFavoriteVideoRequestModel,
+                frontUserIdModel,
+                tx
+            );
+
+            // フォルダ登録
+            const folderIdModel = createFavoriteVideoRequestModel.folderIdModel;
+            if (folderIdModel) {
+
+                // フォルダのマスタ存在チェック
+                const folder = await this.createFavoriteVideoService.getFolder(folderIdModel, frontUserIdModel);
+
+                if (!folder) {
+                    throw Error(`フォルダが存在しません。 endpoint:${ApiEndopoint.FAVORITE_VIDEO_FOLDER}`);
+                }
+
+                // お気に入りフォルダに登録
+                await this.createFavoriteVideoService.insertFavoriteVideoFolder(
+                    frontUserIdModel,
+                    createFavoriteVideoRequestModel.videoIdModel,
+                    folderIdModel,
+                    tx
+                );
+            }
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画に登録しました。`);
         }, next);

@@ -1,20 +1,14 @@
-import { VideoMemoModel } from "../../internaldata/favoritevideomemotransaction/properties/VideoMemoModel";
-import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
-import { UpdateFavoriteVideoTagRequestType } from "../type/UpdateFavoriteVideoTagRequestType";
-import { SummaryModel } from "../../internaldata/favoritevideotransaction/properties/SummaryModel";
-import { ViewStatusModel } from "../../internaldata/common/properties/ViewStatusModel";
-import { CategoryIdModel } from "../../internaldata/favoritevideocateorytransaction/properties/CategoryIdModel";
-import { UpdateFavoriteVideoTagType } from "../type/UpdateFavoriteVideoTagType";
-import { TagIdModel } from "../../internaldata/common/properties/TagIdModel";
-import { TagNameModel } from "../../internaldata/tagmaster/properties/TagNameModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
+import { FavoriteVideoTagInputType } from "../type/FavoriteVideoTagInputType";
+import { UpdateFavoriteVideoTagRequestType } from "../type/UpdateFavoriteVideoTagRequestType";
 
 export class UpdateFavoriteVideoTagRequestModel {
 
     // 動画ID
     private readonly _videoIdModel: VideoIdModel;
     // タグ
-    private readonly _tagList: UpdateFavoriteVideoTagType[];
+    private readonly _tagList: FavoriteVideoTagInputType[];
     // ユーザーID
     private readonly _frontUserIdModel: FrontUserIdModel;
 

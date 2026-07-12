@@ -10,7 +10,6 @@ export class SelectFolderEntity {
     private readonly _frontUserIdModel: FrontUserIdModel;
 
     constructor(folderIdModel: FolderIdModel, frontUserIdModel: FrontUserIdModel) {
-
         this._folderIdModel = folderIdModel;
         this._frontUserIdModel = frontUserIdModel;
     }

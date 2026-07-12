@@ -1,44 +1,24 @@
 import { Prisma } from "@prisma/client";
 import { RepositoryType } from "../../constant/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
-import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";
-import { FavoriteVideoMemoTransactionRepositoryInterface } from "../../internaldata/favoritevideomemotransaction/repository/interface/FavoriteVideoMemoTransactionRepositoryInterface";
+import { TagIdModel } from "../../internaldata/common/properties/TagIdModel";
+import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { FavoriteVideoTransactionInsertEntity } from "../../internaldata/favoritevideotransaction/entity/FavoriteVideoTransactionInsertEntity";
 import { FavoriteVideoTransactionRepositorys } from "../../internaldata/favoritevideotransaction/repository/FavoriteVideoTransactionRepositorys";
 import { FavoriteVideoTransactionRepositoryInterface } from "../../internaldata/favoritevideotransaction/repository/interface/FavoriteVideoTransactionRepositoryInterface";
-import { CreateFavoriteVideoSelectEntity } from "../entity/CreateFavoriteVideoSelectEntity";
+import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
+import { InsertFavoriteVideoFolderEntity } from "../entity/InsertFavoriteVideoFolderEntity";
+import { InsertFavoriteVideoTagEntity } from "../entity/InsertFavoriteVideoTagEntity";
+import { SelectFolderEntity } from "../entity/SelectFolderEntity";
+import { SelectTagMasterEntity } from "../entity/SelectTagMasterEntity";
 import { CreateFavoriteVideoRequestModel } from "../model/CreateFavoriteVideoRequestModel";
-import { CreateFavoriteVideoRepositorys } from "../repository/CreateFavoriteVideoRepositorys";
 import { CreateFavoriteVideoRepositoryInterface } from "../repository/interface/CreateFavoriteVideoRepositoryInterface";
 
 
 export class CreateFavoriteVideoService {
 
 
-    /**
-     * お気に入り動画の重複チェック
-     * @param createFavoriteVideoRequestModel 
-     * @param frontUserIdModel 
-     * @returns 
-     */
-    public async checkDupulicateFavoriteVideo(createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel,
-        frontUserIdModel: FrontUserIdModel
-    ) {
-
-        // 永続ロジックを取得
-        const createFavoriteVideoRepository: CreateFavoriteVideoRepositoryInterface =
-            (new CreateFavoriteVideoRepositorys()).get(RepositoryType.POSTGRESQL);
-
-        // お気に入り動画取得Entity
-        const createFavoriteVideoSelectEntity = new CreateFavoriteVideoSelectEntity(
-            frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel);
-
-        // お気に入り動画を取得
-        const favoriteVideoList = await createFavoriteVideoRepository.select(createFavoriteVideoSelectEntity);
-
-        return favoriteVideoList.length > 0
-    }
-
+    constructor(private readonly createFavoriteVideoRepositoryInterface: CreateFavoriteVideoRepositoryInterface) { }
 
     /**
      * お気に入り動画の永続ロジックを取得
@@ -48,22 +28,13 @@ export class CreateFavoriteVideoService {
         return (new FavoriteVideoTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
     }
 
-
-    /**
-     * お気に入り動画コメントの永続ロジックを取得
-     * @returns 
-     */
-    public getFavoriteVideoMemoRepository(): FavoriteVideoMemoTransactionRepositoryInterface {
-        return (new FavoriteVideoMemoTransactionRepositorys()).get(RepositoryType.POSTGRESQL);
-    }
-
     /**
      * お気に入り動画に動画を追加する
      * @param favoriteVideoRepository 
      * @param createFavoriteVideoRequestModel 
      * @param frontUserIdModel 
      */
-    public async insert(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
+    public async insertFavoriteVideo(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
         createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
@@ -76,32 +47,79 @@ export class CreateFavoriteVideoService {
     }
 
     /**
-     * 削除動画を復元する
-     * @param favoriteVideoRepository 
-     * @param createFavoriteVideoRequestModel 
-     * @param frontUserIdModel 
+     * タグの存在チェック
+     * @param tagList
+     * @param frontUserIdModel
+     * @returns 存在しないタグIDのリスト
      */
-    public async recoveryVideo(favoriteVideoRepository: FavoriteVideoTransactionRepositoryInterface,
-        createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel,
-        frontUserIdModel: FrontUserIdModel,
-        tx: Prisma.TransactionClient) {
+    public async checkTagListExists(tagList: TagIdModel[],
+        frontUserIdModel: FrontUserIdModel): Promise<number[]> {
 
-        await favoriteVideoRepository.recovery(frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel, tx);
+        const entity = new SelectTagMasterEntity(tagList, frontUserIdModel);
+
+        const tagMasterList = await this.createFavoriteVideoRepositoryInterface.selectTagMaster(entity);
+
+        const existTagIdSet = new Set(tagMasterList.map((e) => e.tagId));
+        const missingTagIdList = entity.tagIdList.filter((tagId) => !existTagIdSet.has(tagId));
+
+        return missingTagIdList;
     }
 
-
     /**
-     * 削除コメントを復元する
-     * @param favoriteVideoRepository 
-     * @param createFavoriteVideoRequestModel 
-     * @param frontUserIdModel 
-     * @param tx 
+     * お気に入り動画タグを登録
+     * @param requestBody
+     * @param frontUserIdModel
+     * @param tx
      */
-    public async recoveryMemo(favoriteVideoMemoRepository: FavoriteVideoMemoTransactionRepositoryInterface,
-        createFavoriteVideoRequestModel: CreateFavoriteVideoRequestModel,
+    public async insertVideoTag(requestBody: CreateFavoriteVideoRequestModel,
         frontUserIdModel: FrontUserIdModel,
         tx: Prisma.TransactionClient) {
 
-        await favoriteVideoMemoRepository.recovery(frontUserIdModel, createFavoriteVideoRequestModel.videoIdModel, tx);
+        await Promise.all(requestBody.tagList.map(async (e) => {
+            await this.createFavoriteVideoRepositoryInterface.insertVideoTag(
+                new InsertFavoriteVideoTagEntity(
+                    frontUserIdModel,
+                    requestBody.videoIdModel,
+                    e,
+                ), tx);
+        }));
+    }
+
+    /**
+     * フォルダの存在チェック
+     * @param getUpdateFavoriteVideoTagRepository 
+     * @param updateFavoriteVideoTagRequestModel 
+     * @param frontUserIdModel 
+     * @returns 
+     */
+    async getFolder(folderIdModel: FolderIdModel,
+        frontUserIdModel: FrontUserIdModel) {
+
+        // フォルダ取得Entity
+        const entity = new SelectFolderEntity(
+            folderIdModel,
+            frontUserIdModel
+        );
+
+        const folderList = await this.createFavoriteVideoRepositoryInterface.selectFolder(entity);
+
+        return folderList;
+    }
+
+    /**
+     * お気に入り動画フォルダ登録
+     * @param userNameModel 
+     */
+    async insertFavoriteVideoFolder(frontUserIdModel: FrontUserIdModel,
+        videoIdModel: VideoIdModel,
+        folderIdModel: FolderIdModel,
+        tx: Prisma.TransactionClient) {
+
+        const entity = new InsertFavoriteVideoFolderEntity(folderIdModel, videoIdModel, frontUserIdModel);
+
+        // お気に入り動画フォルダ登録
+        const data = await this.createFavoriteVideoRepositoryInterface.insertFavoriteFolder(entity, tx);
+
+        return data;
     }
 }

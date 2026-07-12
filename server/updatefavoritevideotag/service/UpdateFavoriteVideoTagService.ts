@@ -77,7 +77,7 @@ export class UpdateFavoriteVideoTagService {
         updateFavoriteVideoTagRequestModel: UpdateFavoriteVideoTagRequestModel,
         tx: Prisma.TransactionClient) {
 
-        const categoryList: UpdateFavoriteVideoTagResponseDataType[] = await Promise.all(updateTagMasterList.map(async (e) => {
+        const tagList: UpdateFavoriteVideoTagResponseDataType[] = await Promise.all(updateTagMasterList.map(async (e) => {
 
             const insertTag = await favoriteVideoTagCategoryRepository.insert(
                 new FavoriteVideoTagTransactionInsertEntity(
@@ -89,7 +89,7 @@ export class UpdateFavoriteVideoTagService {
             return { ...insertTag, tagName: e.tagNameModel.tagName }
         }));
 
-        return categoryList;
+        return tagList;
     }
 
 
