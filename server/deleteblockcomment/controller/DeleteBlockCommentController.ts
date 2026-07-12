@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
-import { HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
+import { HTTP_STATUS_OK } from '../../constant/HttpStatusConst';
 import { CommentIdModel } from '../../internaldata/common/properties/CommentIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';

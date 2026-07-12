@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../../common/const/CommonConst";
+import { RepositoryType } from "../../../constant/CommonConst";
 import { SeqMasterRepositoryPostgres } from "./concrete/SeqMasterRepositoryPostgres";
 import { SeqMasterRepositoryInterface } from "./interface/SeqMasterRepositoryInterface";
 

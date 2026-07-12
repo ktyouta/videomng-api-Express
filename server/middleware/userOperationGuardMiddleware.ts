@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { IS_ALLOW_USER_OPERATION } from "../common/const/AllowUserOperationConst";
-import { HTTP_STATUS_FORBIDDEN } from "../common/const/HttpStatusConst";
+import { IS_ALLOW_USER_OPERATION } from "../constant/AllowUserOperationConst";
+import { HTTP_STATUS_FORBIDDEN } from "../constant/HttpStatusConst";
 import { ApiResponse } from "../util/ApiResponse";
 
 export function userOperationGuardMiddleware(

@@ -2,7 +2,7 @@ import { Prisma } from "@prisma/client";
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from "zod";
 import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../constant/HttpStatusConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FrontUserInfoMasterUpdateEntity } from "../../internaldata/frontuserinfomaster/entity/FrontUserInfoMasterUpdateEntity";
 import { FrontUserInfoMasterRepositoryInterface } from "../../internaldata/frontuserinfomaster/repository/interface/FrontUserInfoMasterRepositoryInterface";

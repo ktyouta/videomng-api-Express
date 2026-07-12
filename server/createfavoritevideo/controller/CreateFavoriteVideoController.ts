@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../constant/HttpStatusConst';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
@@ -63,36 +63,17 @@ export class CreateFavoriteVideoController extends RouteController {
 
             // お気に入り動画の永続ロジックを取得
             const favoriteVideoRepository = this.createFavoriteVideoService.getFavoriteVideoRepository();
-            // 動画の重複チェック
-            const isExistFavoriteVideo = await this.createFavoriteVideoService.checkDupulicateFavoriteVideo(createFavoriteVideoRequestModel, frontUserIdModel);
 
-            // 重複している場合は削除動画を復元する
-            if (isExistFavoriteVideo) {
-                // お気に入り動画コメントの永続ロジックを取得
-                const favoriteVideoMemoRepository = this.createFavoriteVideoService.getFavoriteVideoMemoRepository();
+            // お気に入り動画に動画を追加
+            await this.createFavoriteVideoService.insert(
+                favoriteVideoRepository,
+                createFavoriteVideoRequestModel,
+                frontUserIdModel,
+                tx);
 
-                // 削除動画を復元
-                await this.createFavoriteVideoService.recoveryVideo(
-                    favoriteVideoRepository,
-                    createFavoriteVideoRequestModel,
-                    frontUserIdModel,
-                    tx);
+            // フォルダ登録
 
-                // 削除コメントを復元
-                await this.createFavoriteVideoService.recoveryMemo(
-                    favoriteVideoMemoRepository,
-                    createFavoriteVideoRequestModel,
-                    frontUserIdModel,
-                    tx);
-            }
-            else {
-                // お気に入り動画に動画を追加
-                await this.createFavoriteVideoService.insert(
-                    favoriteVideoRepository,
-                    createFavoriteVideoRequestModel,
-                    frontUserIdModel,
-                    tx);
-            }
+            // タグ登録
 
             return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画に登録しました。`);
         }, next);

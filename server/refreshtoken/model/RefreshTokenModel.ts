@@ -1,7 +1,7 @@
 import { CookieOptions } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
-import { envConfig } from '../../common/const/EnvConfig';
-import { IS_ENV_PRODUCTION } from '../../common/const/EnvProductionConst';
+import { envConfig } from '../../constant/EnvConfig';
+import { IS_ENV_PRODUCTION } from '../../constant/EnvProductionConst';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { parseDuration } from '../../util/ParseDuration';

@@ -1,6 +1,6 @@
 import { Response } from 'express';
 import { ZodIssue } from 'zod';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../constant/HttpStatusConst';
 import { YouTubeDataApiCommentThreadNextPageToken } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadNextPageToken';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';

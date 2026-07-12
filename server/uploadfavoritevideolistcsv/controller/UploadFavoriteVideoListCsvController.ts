@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import multer from "multer";
-import { HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
+import { HTTP_STATUS_OK } from '../../constant/HttpStatusConst';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';

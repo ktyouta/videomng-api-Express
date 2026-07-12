@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { FLG } from "../../../../common/const/CommonConst";
+import { FLG } from "../../../../constant/CommonConst";
 import { TagMasterInsertEntity } from "../../entity/TagMasterInsertEntity";
 import { TagMasterUpdateEntity } from "../../entity/TagMasterUpdateEntity";
 import { TagMasterRepositoryInterface } from "../interface/TagMasterRepositoryInterface";

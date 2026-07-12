@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
-import { RepositoryType } from '../../common/const/CommonConst';
-import { HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
+import { RepositoryType } from '../../constant/CommonConst';
+import { HTTP_STATUS_UNAUTHORIZED } from '../../constant/HttpStatusConst';
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { ApiResponse } from '../../util/ApiResponse';

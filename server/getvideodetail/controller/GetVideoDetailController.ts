@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
-import { RepositoryType } from '../../common/const/CommonConst';
-import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
+import { RepositoryType } from '../../constant/CommonConst';
+import { HTTP_STATUS_NOT_FOUND, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../constant/HttpStatusConst';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';

@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
-import { RepositoryType } from "../../common/const/CommonConst";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../common/const/HttpStatusConst";
+import { RepositoryType } from "../../constant/CommonConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from "../../constant/HttpStatusConst";
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";

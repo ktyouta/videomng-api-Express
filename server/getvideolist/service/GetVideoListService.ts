@@ -1,7 +1,7 @@
 import { FavoriteVideoTransaction } from '@prisma/client';
 import { Request } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
-import { FLG } from '../../common/const/CommonConst';
+import { FLG } from '../../constant/CommonConst';
 import { YouTubeDataApiVideoListEndPointModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListEndPointModel';
 import { YouTubeDataApiVideoListModel } from '../../external/youtubedataapi/videolist/model/YouTubeDataApiVideoListModel';
 import { YouTubeDataApiVideoListKeyword } from '../../external/youtubedataapi/videolist/properties/YouTubeDataApiVideoListKeyword';

@@ -1,8 +1,8 @@
 import { Response } from 'express';
 import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
-import { RepositoryType } from '../../common/const/CommonConst';
-import { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
+import { RepositoryType } from '../../constant/CommonConst';
+import { HTTP_STATUS_FORBIDDEN, HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../constant/HttpStatusConst';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';

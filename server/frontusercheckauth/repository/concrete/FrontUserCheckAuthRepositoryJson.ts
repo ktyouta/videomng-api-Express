@@ -1,4 +1,4 @@
-import { FrontUserInfoType } from "../../../common/type/FrontUserInfoType";
+import { FrontUserInfoType } from "../../../types/FrontUserInfoType";
 import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { UserSelectEntity } from "../../entity/UserSelectEntity";
 import { FrontUserCheckAuthRepositoryInterface } from "../interface/FrontUserCheckAuthRepositoryInterface";

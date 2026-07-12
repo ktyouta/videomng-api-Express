@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../../common/const/CommonConst";
+import { RepositoryType } from "../../../constant/CommonConst";
 import { RepositoryJson } from "./concrete/RepositoryJson";
 import { RepositoryInterface } from "./interface/RepositoryInterface";
 

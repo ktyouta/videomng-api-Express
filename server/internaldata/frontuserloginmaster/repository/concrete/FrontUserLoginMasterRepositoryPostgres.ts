@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { FLG } from "../../../../common/const/CommonConst";
+import { FLG } from "../../../../constant/CommonConst";
 import { FrontUserLoginMasterInsertEntity } from "../../entity/FrontUserLoginMasterInsertEntity";
 import { FrontUserLoginMasterUpdateUserInfoEntity } from "../../entity/FrontUserLoginMasterUpdateUserInfoEntity";
 import { FrontUserLoginMasterRepositoryInterface } from "../interface/FrontUserLoginMasterRepositoryInterface";

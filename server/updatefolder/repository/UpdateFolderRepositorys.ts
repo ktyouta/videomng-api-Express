@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../common/const/CommonConst";
+import { RepositoryType } from "../../constant/CommonConst";
 import { UpdateFolderRepositoryPostgres } from "./concrete/UpdateFolderRepositoryPostgres";
 import { UpdateFolderRepositoryInterface } from "./interface/UpdateFolderInterface";
 

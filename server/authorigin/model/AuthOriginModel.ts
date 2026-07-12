@@ -1,4 +1,4 @@
-import { AUTH_ALLOWED_ORIGINS } from '../../common/const/AuthAllowedOrigins';
+import { AUTH_ALLOWED_ORIGINS } from '../../constant/AuthAllowedOrigins';
 import { HeaderModel } from '../../header/model/HeaderModel';
 
 

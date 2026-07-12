@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { RepositoryType } from "../../common/const/CommonConst";
+import { RepositoryType } from "../../constant/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FavoriteVideoMemoTransactionSoftDeleteEntity } from "../../internaldata/favoritevideomemotransaction/entity/FavoriteVideoMemoTransactionSoftDeleteEntity";
 import { FavoriteVideoMemoTransactionRepositorys } from "../../internaldata/favoritevideomemotransaction/repository/FavoriteVideoMemoTransactionRepositorys";

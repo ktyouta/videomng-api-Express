@@ -1,7 +1,7 @@
 import { BlockCommentTransaction, FavoriteCommentTransaction } from '@prisma/client';
 import { Request } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
-import { FLG, RepositoryType } from '../../common/const/CommonConst';
+import { FLG, RepositoryType } from '../../constant/CommonConst';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';

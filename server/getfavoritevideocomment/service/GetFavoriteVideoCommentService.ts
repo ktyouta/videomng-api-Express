@@ -1,5 +1,5 @@
 import { BlockCommentTransaction } from '@prisma/client';
-import { RepositoryType } from '../../common/const/CommonConst';
+import { RepositoryType } from '../../constant/CommonConst';
 import { YouTubeDataApiCommentThreadEndPointModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadEndPointModel';
 import { YouTubeDataApiCommentThreadModel } from '../../external/youtubedataapi/videocomment/model/YouTubeDataApiCommentThreadModel';
 import { YouTubeDataApiCommentThreadMaxResult } from '../../external/youtubedataapi/videocomment/properties/YouTubeDataApiCommentThreadMaxResult';

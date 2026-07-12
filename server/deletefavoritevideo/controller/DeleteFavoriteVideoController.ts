@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
-import { RepositoryType } from '../../common/const/CommonConst';
-import { HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
+import { RepositoryType } from '../../constant/CommonConst';
+import { HTTP_STATUS_OK } from '../../constant/HttpStatusConst';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';

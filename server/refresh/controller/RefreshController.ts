@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
 import { AuthOriginModel } from '../../authorigin/model/AuthOriginModel';
-import { RepositoryType } from '../../common/const/CommonConst';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../common/const/HttpStatusConst';
+import { RepositoryType } from '../../constant/CommonConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED } from '../../constant/HttpStatusConst';
 import { CookieModel } from '../../cookie/model/CookieModel';
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { Logger } from '../../logger/Logger';

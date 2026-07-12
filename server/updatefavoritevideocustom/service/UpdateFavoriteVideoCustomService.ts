@@ -1,5 +1,5 @@
 import { FavoriteVideoCategoryTransaction, Prisma } from "@prisma/client";
-import { RepositoryType } from "../../common/const/CommonConst";
+import { RepositoryType } from "../../constant/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FavoriteVideoCategoryTransactionInsertEntity } from "../../internaldata/favoritevideocateorytransaction/entity/FavoriteVideoCategoryTransactionInsertEntity";
 import { FavoriteVideoCategoryTransactionRepositorys } from "../../internaldata/favoritevideocateorytransaction/repository/FavoriteVideoCategoryTransactionRepositorys";

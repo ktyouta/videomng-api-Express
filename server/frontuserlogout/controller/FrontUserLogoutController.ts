@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
+import { HTTP_STATUS_OK } from '../../constant/HttpStatusConst';
 import { RefreshTokenModel } from '../../refreshtoken/model/RefreshTokenModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';

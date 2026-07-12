@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { RepositoryType } from '../../common/const/CommonConst';
+import { RepositoryType } from '../../constant/CommonConst';
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";

@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { AccessTokenModel } from '../../accesstoken/model/AccessTokenModel';
-import { FLG } from '../../common/const/CommonConst';
+import { FLG } from '../../constant/CommonConst';
 import { YouTubeDataApiVideoDetailEndPointModel } from '../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel';
 import { YouTubeDataApiVideoDetailModel } from '../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailModel';
 import { HeaderModel } from '../../header/model/HeaderModel';

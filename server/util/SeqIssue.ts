@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { RepositoryType } from "../common/const/CommonConst";
+import { RepositoryType } from "../constant/CommonConst";
 import { SeqKeyModel } from "../internaldata/seqmaster/properties/SeqKeyModel";
 import { SeqMasterRepositoryInterface } from "../internaldata/seqmaster/repository/interface/SeqMasterRepositoryInterface";
 import { SeqMasterRepositorys } from "../internaldata/seqmaster/repository/SeqMasterRepositorys";

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { FLG } from "../../../../common/const/CommonConst";
+import { FLG } from "../../../../constant/CommonConst";
 import { CommentIdModel } from "../../../common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../../common/properties/VideoIdModel";

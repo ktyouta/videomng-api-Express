@@ -1,6 +1,6 @@
 import { Response } from 'express';
-import { RepositoryType } from "../../common/const/CommonConst";
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../common/const/HttpStatusConst";
+import { RepositoryType } from "../../constant/CommonConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../constant/HttpStatusConst";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";

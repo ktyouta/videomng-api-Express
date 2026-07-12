@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
-import { RepositoryType } from "../../common/const/CommonConst";
-import { HTTP_STATUS_CREATED } from "../../common/const/HttpStatusConst";
+import { RepositoryType } from "../../constant/CommonConst";
+import { HTTP_STATUS_CREATED } from "../../constant/HttpStatusConst";
 import { FolderIdModel } from "../../internaldata/foldermaster/model/FolderIdModel";
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";

@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../common/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED, HTTP_STATUS_NO_CONTENT } from "../../constant/HttpStatusConst";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";

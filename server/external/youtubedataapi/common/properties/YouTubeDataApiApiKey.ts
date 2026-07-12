@@ -1,4 +1,4 @@
-import { envConfig } from "../../../../common/const/EnvConfig";
+import { envConfig } from "../../../../constant/EnvConfig";
 
 export class YouTubeDataApiApiKey {
 

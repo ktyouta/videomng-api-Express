@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
-import { RepositoryType } from '../../common/const/CommonConst';
-import { HTTP_STATUS_CONFLICT, HTTP_STATUS_OK } from '../../common/const/HttpStatusConst';
+import { RepositoryType } from '../../constant/CommonConst';
+import { HTTP_STATUS_CONFLICT, HTTP_STATUS_OK } from '../../constant/HttpStatusConst';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { FolderIdModel } from '../../internaldata/foldermaster/model/FolderIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';

@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { FLG } from "../../../../common/const/CommonConst";
+import { FLG } from "../../../../constant/CommonConst";
 import { FrontUserIdModel } from "../../../common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../../common/properties/VideoIdModel";
 import { FavoriteVideoCategoryTransactionInsertEntity } from "../../entity/FavoriteVideoCategoryTransactionInsertEntity";

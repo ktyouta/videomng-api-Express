@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../../common/const/CommonConst";
+import { RepositoryType } from "../../../constant/CommonConst";
 import { ViewStatusMasterRepositoryPostgres } from "./concrete/ViewStatusMasterRepositoryPostgres";
 import { ViewStatusMasterRepositoryInterface } from "./interface/ViewStatusMasterRepositoryInterface";
 

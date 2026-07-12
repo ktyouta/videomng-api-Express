@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../../common/const/CommonConst";
+import { RepositoryType } from "../../../constant/CommonConst";
 import { ViewStatusMasterRepositoryInterface } from "../../viewstatusmaster/repository/interface/ViewStatusMasterRepositoryInterface";
 import { ViewStatusMasterRepositorys } from "../../viewstatusmaster/repository/ViewStatusMasterRepositorys";
 

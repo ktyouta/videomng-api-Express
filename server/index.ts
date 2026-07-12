@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser';
 import { NextFunction, Request, Response } from 'express';
-import { envConfig } from './common/const/EnvConfig';
-import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './common/const/HttpStatusConst';
+import { envConfig } from './constant/EnvConfig';
+import { HTTP_STATUS_INTERNAL_SERVER_ERROR } from './constant/HttpStatusConst';
 import { logConfig } from './logger/LogConfig';
 import { accessLogMiddleware } from './middleware/accessLogMiddleware';
 import { errorLogMiddleware } from './middleware/errorLogMiddleware';

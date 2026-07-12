@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { HTTP_STATUS_OK } from "../../common/const/HttpStatusConst";
+import { HTTP_STATUS_OK } from "../../constant/HttpStatusConst";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";
 import { HttpMethodType, RouteSettingModel } from "../../router/model/RouteSettingModel";

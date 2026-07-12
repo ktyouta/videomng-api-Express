@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express';
-import { HTTP_STATUS_CREATED } from "../../common/const/HttpStatusConst";
+import { HTTP_STATUS_CREATED } from "../../constant/HttpStatusConst";
 import { authMiddleware } from "../../middleware/authMiddleware/authMiddleware";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
 import { RouteController } from "../../router/controller/RouteController";

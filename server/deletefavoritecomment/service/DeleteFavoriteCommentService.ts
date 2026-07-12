@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { RepositoryType } from "../../common/const/CommonConst";
+import { RepositoryType } from "../../constant/CommonConst";
 import { CommentIdModel } from "../../internaldata/common/properties/CommentIdModel";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { FavoriteCommentTransactionRepositorys } from "../../internaldata/favoritecommenttransaction/repository/FavoriteCommentTransactionRepositorys";

@@ -1,5 +1,4 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
-import { ThumbnailType } from "../../common/type/ThumbnailType";
 import { VideoIdListModel } from "../../external/youtubedataapi/videodetail/model/VideoIdListModel";
 import { YouTubeDataApiVideoDetailEndPointModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailEndPointModel";
 import { YouTubeDataApiVideoDetailMaxRequestModel } from "../../external/youtubedataapi/videodetail/model/YouTubeDataApiVideoDetailMaxRequestModel";
@@ -8,6 +7,7 @@ import { YouTubeDataApiVideoDetailItemType } from "../../external/youtubedataapi
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { VideoIdModel } from "../../internaldata/common/properties/VideoIdModel";
 import { ApiEndopoint } from "../../router/conf/ApiEndpoint";
+import { ThumbnailType } from "../../types/ThumbnailType";
 import { GetFavoriteVideoListSelectEntity } from "../entity/GetFavoriteVideoListSelectEntity";
 import { GetFolderListEntity } from "../entity/GetFolderListEntity";
 import { FavoriteVideoFolderThumbnailType } from "../model/FavoriteVideoFolderThumbnailType";

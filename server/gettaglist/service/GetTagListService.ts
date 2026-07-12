@@ -1,4 +1,4 @@
-import { RepositoryType } from "../../common/const/CommonConst";
+import { RepositoryType } from "../../constant/CommonConst";
 import { FrontUserIdModel } from "../../internaldata/common/properties/FrontUserIdModel";
 import { GetTagListSelectEntity } from "../entity/GetTagListSelectEntity";
 import { GetTagListRepositorys } from "../repository/GetTagListRepositorys";

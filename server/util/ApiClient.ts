@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
-import { envConfig } from '../common/const/EnvConfig';
+import { envConfig } from '../constant/EnvConfig';
 
 export class ApiClient {
     private client: AxiosInstance;

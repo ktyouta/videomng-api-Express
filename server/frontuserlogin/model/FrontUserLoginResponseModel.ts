@@ -1,6 +1,6 @@
 import { FrontUserInfoMaster } from "@prisma/client";
 import { AccessTokenModel } from "../../accesstoken/model/AccessTokenModel";
-import { AuthUserInfoType } from "../../common/type/AuthUserInfoType";
+import { AuthUserInfoType } from "../../types/AuthUserInfoType";
 
 export class FrontUserLoginCreateResponseModel {
 

@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client';
 import { NextFunction, Response } from 'express';
 import { ZodIssue } from 'zod';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../constant/HttpStatusConst';
 import { VideoIdModel } from '../../internaldata/common/properties/VideoIdModel';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';

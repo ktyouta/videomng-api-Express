@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import { FrontUserInfoType } from '../common/type/FrontUserInfoType';
 import { FrontUserIdModel } from '../internaldata/common/properties/FrontUserIdModel';
+import { FrontUserInfoType } from './FrontUserInfoType';
 
 export type AuthenticatedRequest = {
     userInfo: {

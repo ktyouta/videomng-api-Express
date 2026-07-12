@@ -1,4 +1,4 @@
-import { FrontUserInfoType } from "../../common/type/FrontUserInfoType";
+import { FrontUserInfoType } from "../../types/FrontUserInfoType";
 import { FrontUserCheckAuthUserResponseDataType } from "../type/FrontUserCheckAuthUserType";
 
 export class FrontUserCheckAuthResponseModel {

@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { CONFIDENTIIAL_FIELDS } from '../common/const/ConfidentialFields';
+import { CONFIDENTIIAL_FIELDS } from '../constant/ConfidentialFields';
 import { Logger } from '../logger/Logger';
 
 

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
 import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
-import { RepositoryType } from '../../common/const/CommonConst';
-import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../common/const/HttpStatusConst';
+import { RepositoryType } from '../../constant/CommonConst';
+import { HTTP_STATUS_OK, HTTP_STATUS_UNAUTHORIZED, HTTP_STATUS_UNPROCESSABLE_ENTITY } from '../../constant/HttpStatusConst';
 import { YouTubeDataApiChannelId } from '../../external/youtubedataapi/channel/properties/YouTubeDataApiChannelId';
 import { YouTubeDataApiPlaylistModel } from '../../external/youtubedataapi/playlist/model/YouTubeDataApiPlaylistModel';
 import { YouTubeDataApiPlaylistId } from '../../external/youtubedataapi/playlist/properties/YouTubeDataApiPlaylistId';

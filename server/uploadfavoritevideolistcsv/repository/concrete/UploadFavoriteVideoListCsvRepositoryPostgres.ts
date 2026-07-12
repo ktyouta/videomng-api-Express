@@ -1,5 +1,5 @@
 import { Prisma } from "@prisma/client";
-import { FLG } from "../../../common/const/CommonConst";
+import { FLG } from "../../../constant/CommonConst";
 import { RegisteredVideoListEntity } from "../../entity/RegisteredVideoListEntity";
 import { UpdateVideoListEntity } from "../../entity/UpdateVideoListEntity";
 import { UploadFavoriteVideoListCsvRepositoryInterface } from "../interface/UploadFavoriteVideoListCsvRepositoryInterface";

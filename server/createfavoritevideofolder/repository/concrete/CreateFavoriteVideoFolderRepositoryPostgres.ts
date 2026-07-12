@@ -1,5 +1,5 @@
 import { FavoriteVideoFolderTransaction, FavoriteVideoTransaction, FolderMaster, Prisma } from "@prisma/client";
-import { FLG } from "../../../common/const/CommonConst";
+import { FLG } from "../../../constant/CommonConst";
 import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { InsertFavoriteVideoFolderEntity } from "../../entity/InsertFavoriteVideoFolderEntity";
 import { SelectFavoriteVideoEntity } from "../../entity/SelectFavoriteVideoEntity";
