@@ -126,7 +126,7 @@ export class GetFavoriteVideoListController extends RouteController {
         const favoriteVideoListMergedList = await this.getFavoriteVideoListService.mergeYouTubeDataList(favoriteVideoList);
 
         // フォルダに表示するサムネを取得
-        const folderListMergedList = await this.getFavoriteVideoListService.getFavoriteVideoFolderThumbnail(folderList);
+        const folderListMergedList = await this.getFavoriteVideoListService.getFolderThumbnail(folderList);
 
         // レスポンスを作成
         const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel = this.getFavoriteVideoListService.createResponse(
