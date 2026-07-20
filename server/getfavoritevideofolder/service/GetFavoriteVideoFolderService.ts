@@ -284,12 +284,15 @@ export class GetFavoriteVideoFolderService {
             const youtubeVideoDetailApi = await this.callYouTubeDataDetailApi(e);
             return youtubeVideoDetailApi.response.items;
         }))).filter((e) => !!e).flat();
+        const newFolderThumbnailMap = new Set<string>(newFolderThumbnailList.map((e) => {
+            return e.id;
+        }));
 
         // サムネの取得に成功したフォルダ情報をMapから削除
         videoIdList.forEach((e) => {
             const folderId = e.folderId;
             const videoId = e.videoId;
-            const folderThumbnail = newFolderThumbnailList.find((e1) => e1.id === videoId);
+            const folderThumbnail = newFolderThumbnailMap.has(videoId);
             if (folderThumbnail) {
                 videoFolderMap.delete(folderId);
                 resultVideoFolderMap.set(folderId, videoId);
