@@ -1,6 +1,9 @@
-import { FolderMaster } from "@prisma/client";
 
-export type FavoriteVideoFolderType = FolderMaster & {
-    latestVideoId: string,
+export type FavoriteVideoFolderType = {
+    folderId: number;
+    name: string;
+    folderColor: string;
+    updateDate: string;
+    videoId: string,
 }
 

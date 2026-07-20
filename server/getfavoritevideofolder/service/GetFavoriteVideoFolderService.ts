@@ -166,15 +166,103 @@ export class GetFavoriteVideoFolderService {
 
     /**
      * フォルダに表示するサムネを取得
-     * @param folder 
+     * 最新動画がYouTube側で削除/非公開等により情報取得できない場合があるため、
+     * 取得できるまで次に新しい動画を順に試す（getVideoInfoRecursive参照）
+     * @param folder
      */
     async getFavoriteVideoFolderThumbnail(folderList: FavoriteVideoFolderType[]): Promise<FavoriteVideoFolderThumbnailType[]> {
 
-        const videoIdcChunks: string[][] = [];
+        const videoFolderMap = new Map<number, Set<string>>();
+        const resultVideoFolderMap = new Map<number, string | null>();
+        const folderMap = new Map<number, Omit<FavoriteVideoFolderType, "videoId">>();
 
-        const videoIdList = folderList.map((e) => {
-            return e.latestVideoId;
-        }).filter(Boolean);
+        // フォルダに属する動画をグルーピング & フォルダ情報を取得
+        folderList.forEach((e) => {
+            const folderId = e.folderId;
+            if (!videoFolderMap.has(folderId)) {
+                videoFolderMap.set(folderId, new Set());
+            }
+
+            if (!folderMap.has(folderId)) {
+                folderMap.set(folderId, {
+                    folderId,
+                    name: e.name,
+                    folderColor: e.folderColor,
+                    updateDate: e.updateDate
+                });
+            }
+
+            const videoIdList = videoFolderMap.get(folderId);
+            if (videoIdList) {
+                videoIdList.add(e.videoId);
+            }
+        });
+
+        // 動画情報を取得
+        const result = await this.getVideoInfoRecursive(videoFolderMap, [], resultVideoFolderMap);
+        const videoMap = new Map<string, YouTubeDataApiVideoDetailItemType>(
+            result.folderThumbnailList.map(item => [item.id, item])
+        );
+
+        // フォルダーリストとYouTube Data Apiの動画詳細のマージ
+        const folderListMergedList: FavoriteVideoFolderThumbnailType[] = [];
+        for (const [folderId, videoId] of result.resultVideoFolderMap) {
+            const folder = folderMap.get(folderId);
+            if (!folder) {
+                continue;
+            }
+
+            if (!videoId) {
+                folderListMergedList.push(folder);
+                continue;
+            }
+
+            const apiData = videoMap.get(videoId);
+            // APIから動画情報の取得に失敗
+            if (!apiData) {
+                folderListMergedList.push(folder);
+                continue;
+            }
+
+            const thumbnails: ThumbnailType = apiData.snippet.thumbnails;
+            folderListMergedList.push({
+                ...folder,
+                thumbnails
+            });
+        }
+
+        return folderListMergedList;
+    }
+
+    /**
+     * サムネ情報を再帰的に取得
+     * @param videoFolderMap
+     * @returns
+     */
+    async getVideoInfoRecursive(videoFolderMap: Map<number, Set<string>>,
+        folderThumbnailList: YouTubeDataApiVideoDetailItemType[],
+        resultVideoFolderMap: Map<number, string | null>
+    ): Promise<{ folderThumbnailList: YouTubeDataApiVideoDetailItemType[], resultVideoFolderMap: Map<number, string | null> }> {
+        if (videoFolderMap.size === 0) {
+            return {
+                folderThumbnailList,
+                resultVideoFolderMap
+            };
+        }
+
+        const videoIdList: { folderId: number, videoId: string }[] = [];
+        const videoIdcChunks: { folderId: number, videoId: string }[][] = [];
+
+        for (const [key, videoIds] of videoFolderMap.entries()) {
+            // 各フォルダの最新の動画IDを取得
+            const videoId = videoIds.values().next().value;
+            if (videoId) {
+                videoIdList.push({
+                    folderId: key,
+                    videoId
+                });
+            }
+        }
 
         // 動画詳細取得APIの1回当たりの最大取得可能件数で分割
         for (let i = 0; i < videoIdList.length; i += YouTubeDataApiVideoDetailMaxRequestModel.MAX_VIDEO_IDS_PER_REQUEST) {
@@ -182,44 +270,44 @@ export class GetFavoriteVideoFolderService {
         }
 
         const videoIdListModelList = videoIdcChunks.map((e) => {
-
             const videoIdListModel = new VideoIdListModel();
-
             e.forEach((e1) => {
-                videoIdListModel.add(new VideoIdModel(e1));
+                videoIdListModel.add(new VideoIdModel(e1.videoId));
             });
 
             return videoIdListModel;
         });
 
         // YouTube Data Apiから動画情報を取得
-        const folderThumbnailList = (await Promise.all(videoIdListModelList.map(async (e) => {
-
+        const newFolderThumbnailList = (await Promise.all(videoIdListModelList.map(async (e) => {
             // API Call
             const youtubeVideoDetailApi = await this.callYouTubeDataDetailApi(e);
-
             return youtubeVideoDetailApi.response.items;
         }))).filter((e) => !!e).flat();
 
-        const videoMap = new Map<string, YouTubeDataApiVideoDetailItemType>(
-            folderThumbnailList.map(item => [item.id, item])
-        );
-
-        // フォルダーリストとYouTube Data Apiの動画詳細のマージ
-        const folderListMergedList = folderList.map((e) => {
-
-            const apiData = videoMap.get(e.latestVideoId);
-
-            // APIから動画情報の取得に失敗
-            if (!apiData) {
-                return { ...e };
+        // サムネの取得に成功したフォルダ情報をMapから削除
+        videoIdList.forEach((e) => {
+            const folderId = e.folderId;
+            const videoId = e.videoId;
+            const folderThumbnail = newFolderThumbnailList.find((e1) => e1.id === videoId);
+            if (folderThumbnail) {
+                videoFolderMap.delete(folderId);
+                resultVideoFolderMap.set(folderId, videoId);
+                return;
             }
 
-            const thumbnails: ThumbnailType = apiData.snippet.thumbnails;
+            const videoIdSet = videoFolderMap.get(folderId);
+            if (videoIdSet) {
+                videoIdSet.delete(videoId);
+                // フォルダ内の動画全てに対して探索が完了
+                if (videoIdSet.size === 0) {
+                    videoFolderMap.delete(folderId);
+                    resultVideoFolderMap.set(folderId, null);
+                }
+            }
+        });
 
-            return { ...e, thumbnails };
-        }).filter((e) => e !== undefined);
-
-        return folderListMergedList;
+        // YouTube側で動画が削除/非公開等のため取得に失敗した場合、次に新しい動画で再取得を試みる
+        return await this.getVideoInfoRecursive(videoFolderMap, [...folderThumbnailList, ...newFolderThumbnailList], resultVideoFolderMap);
     }
 }

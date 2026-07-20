@@ -287,9 +287,11 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
 
     /**
      * フォルダリスト取得
-     * @param insertFolderEntity 
-     * @param tx 
-     * @returns 
+     * 最新動画1件ではなく、フォルダに紐づく動画を全件返す。
+     * （最新動画がYouTube側で削除/非公開の場合に備え、サムネ取得を次点の動画にフォールバックできるようにするため）
+     * @param userIdModel
+     * @param folderIdModel
+     * @param folderListModel
      */
     async selectFolderList(userIdModel: FrontUserIdModel, folderIdModel: FolderIdModel, folderListModel: FolderListModel): Promise<FavoriteVideoFolderType[]> {
 
@@ -310,35 +312,14 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
                     a.folder_color as "folderColor",
                     a.create_date as "createDate",
                     a.update_date as "updateDate",
-                    (
-                        SELECT
-                            d.video_id
-                        FROM(
-                            SELECT
-                                c.video_id as video_id,
-                                c.update_date as update_date,
-                                row_number() OVER(partition by d.user_id,b.folder_master_id ORDER BY c.update_date DESC) as row_number
-                            FROM
-                                favorite_video_folder_transaction b
-                            INNER JOIN
-                                folder_master d
-                            ON
-                                b.folder_master_id = d.id
-                            INNER JOIN
-                                favorite_video_transaction c
-                            ON
-                                b.video_id = c.video_id
-                                AND d.user_id = c.user_id
-                            WHERE
-                                d.user_id = a.user_id
-                                AND b.folder_master_id = a.id
-                        ) d
-                        WHERE
-                            d.row_number = 1
-                    ) as "latestVideoId"
-                FROM 
+                    b.video_id as "videoId"
+                FROM
                     "folder_master" a
-                WHERE 
+                INNER JOIN
+                    "favorite_video_folder_transaction" b
+                ON
+                    b.folder_master_id = a.id
+                WHERE
                     a.user_id = $1 AND
                     a.parent_id = $2
         `;
@@ -350,7 +331,8 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
             params.push(folderList);
         }
 
-        sql += ` ORDER BY a.update_date DESC`;
+        // b.update_date DESC: フォルダ内の動画を新しい順に並べる（getVideoInfoRecursiveがこの順でフォールバックするため）
+        sql += ` ORDER BY a.update_date DESC, b.update_date DESC`;
 
         const result = await PrismaClientInstance.getInstance().$queryRawUnsafe<FavoriteVideoFolderType[]>(sql, ...params);
 
