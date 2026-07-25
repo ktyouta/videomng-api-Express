@@ -95,14 +95,14 @@ export class GetFavoriteVideoListController extends RouteController {
             modeModel,
         );
 
-        // お気に入り動画リストを取得
-        const favoriteVideoList = await this.getFavoriteVideoListService.getFavoriteVideoList(
-            getFavoriteVideoListSelectEntity,
-            GetFavoriteVideoListController.DEFAULT_LIST_LIMIT
-        );
-
-        // フォルダリストを取得
-        const folderList = modeModel.isFolderMode() ? await this.getFavoriteVideoListService.getFolderList(frontUserIdModel, folderListModel) : [];
+        // お気に入り動画リストとフォルダリストを取得（互いに依存しないため並列実行する）
+        const [favoriteVideoList, folderList] = await Promise.all([
+            this.getFavoriteVideoListService.getFavoriteVideoList(
+                getFavoriteVideoListSelectEntity,
+                GetFavoriteVideoListController.DEFAULT_LIST_LIMIT
+            ),
+            modeModel.isFolderMode() ? this.getFavoriteVideoListService.getFolderList(frontUserIdModel, folderListModel) : Promise.resolve([]),
+        ]);
 
         // ユーザーのお気に入り動画が存在しない
         if (favoriteVideoList.length === 0 && folderList.length === 0) {
@@ -119,14 +119,12 @@ export class GetFavoriteVideoListController extends RouteController {
             return;
         }
 
-        // お気に入り動画件数を取得
-        const total = await this.getFavoriteVideoListService.getFavoriteVideoListCount(getFavoriteVideoListSelectEntity);
-
-        // お気に入り動画リストからYouTube Data Apiの情報を取得してマージする
-        const favoriteVideoListMergedList = await this.getFavoriteVideoListService.mergeYouTubeDataList(favoriteVideoList);
-
-        // フォルダに表示するサムネを取得
-        const folderListMergedList = await this.getFavoriteVideoListService.getFolderThumbnail(folderList);
+        // お気に入り動画件数の取得・YouTube Data Apiからの情報付与を並列実行する（互いに依存しないため）
+        const [total, favoriteVideoListMergedList, folderListMergedList] = await Promise.all([
+            this.getFavoriteVideoListService.getFavoriteVideoListCount(getFavoriteVideoListSelectEntity),
+            this.getFavoriteVideoListService.mergeYouTubeDataList(favoriteVideoList),
+            this.getFavoriteVideoListService.getFolderThumbnail(folderList),
+        ]);
 
         // レスポンスを作成
         const getFavoriteVideoListResponse: GetFavoriteVideoListResponseModel = this.getFavoriteVideoListService.createResponse(
