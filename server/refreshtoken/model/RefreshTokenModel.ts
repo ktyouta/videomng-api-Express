@@ -22,7 +22,7 @@ export class RefreshTokenModel {
     private static readonly COOKIE_BASE_OPTION: CookieOptions = {
         httpOnly: true,
         secure: IS_ENV_PRODUCTION,
-        sameSite: IS_ENV_PRODUCTION ? 'none' : 'lax',
+        sameSite: 'lax',
     };
     // cookieオプション(生成)
     static readonly COOKIE_SET_OPTION: CookieOptions = {
