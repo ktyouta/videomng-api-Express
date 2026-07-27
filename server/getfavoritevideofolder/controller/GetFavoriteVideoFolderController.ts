@@ -109,18 +109,18 @@ export class GetFavoriteVideoFolderController extends RouteController {
             modeModel,
         );
 
-        // お気に入り動画リストを取得
-        const favoriteVideoList = await this.getFavoriteVideoFolderService.getFavoriteVideoFolder(
-            getFavoriteVideoFolderSelectEntity,
-            GetFavoriteVideoFolderController.DEFAULT_LIST_LIMIT
-        );
-
-        // フォルダリストを取得
-        const folderList = modeModel.isFolderMode() ? await this.getFavoriteVideoFolderService.getFolderList(
-            frontUserIdModel,
-            folderIdModel,
-            folderListModel,
-        ) : [];
+        // お気に入り動画リストとフォルダリストを取得
+        const [favoriteVideoList, folderList] = await Promise.all([
+            this.getFavoriteVideoFolderService.getFavoriteVideoFolder(
+                getFavoriteVideoFolderSelectEntity,
+                GetFavoriteVideoFolderController.DEFAULT_LIST_LIMIT
+            ),
+            modeModel.isFolderMode() ? this.getFavoriteVideoFolderService.getFolderList(
+                frontUserIdModel,
+                folderIdModel,
+                folderListModel,
+            ) : Promise.resolve([]),
+        ]);
 
         // ユーザーのお気に入り動画が存在しない
         if (favoriteVideoList.length === 0 && folderList.length === 0) {
@@ -135,14 +135,12 @@ export class GetFavoriteVideoFolderController extends RouteController {
             return ApiResponse.create(res, HTTP_STATUS_OK, `お気に入り動画が存在しません。`, getFavoriteVideoFolderResponse.data)
         }
 
-        // お気に入り動画件数を取得
-        const total = await this.getFavoriteVideoFolderService.getFavoriteVideoFolderCount(getFavoriteVideoFolderSelectEntity);
-
-        // お気に入り動画リストからYouTube Data Apiの情報を取得してマージする
-        const favoriteVideoListMergedList = await this.getFavoriteVideoFolderService.mergeYouTubeDataList(favoriteVideoList);
-
-        // フォルダに表示するサムネを取得
-        const folderListMergedList = await this.getFavoriteVideoFolderService.getFavoriteVideoFolderThumbnail(folderList);
+        // お気に入り動画件数の取得・YouTube Data Apiからの情報付与を並列実行
+        const [total, favoriteVideoListMergedList, folderListMergedList] = await Promise.all([
+            this.getFavoriteVideoFolderService.getFavoriteVideoFolderCount(getFavoriteVideoFolderSelectEntity),
+            this.getFavoriteVideoFolderService.mergeYouTubeDataList(favoriteVideoList),
+            this.getFavoriteVideoFolderService.getFavoriteVideoFolderThumbnail(folderList),
+        ]);
 
         // レスポンスを作成
         const getFavoriteVideoFolderResponse: GetFavoriteVideoFolderResponseModel = this.getFavoriteVideoFolderService.createResponse(

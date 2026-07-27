@@ -187,7 +187,7 @@ export class GetFavoriteVideoListService {
 
             const videoIdList = videoFolderMap.get(folderId);
             if (videoIdList) {
-                videoIdList.add(e.videoId);
+                videoIdList.add(e.videoId ?? "");
             }
         });
 
@@ -250,7 +250,7 @@ export class GetFavoriteVideoListService {
         for (const [key, videoIds] of videoFolderMap.entries()) {
             // 各フォルダの最新の動画IDを取得
             const videoId = videoIds.values().next().value;
-            if (videoId) {
+            if (videoId !== undefined) {
                 videoIdList.push({
                     folderId: key,
                     videoId
@@ -266,7 +266,10 @@ export class GetFavoriteVideoListService {
         const videoIdListModelList = videoIdcChunks.map((e) => {
             const videoIdListModel = new VideoIdListModel();
             e.forEach((e1) => {
-                videoIdListModel.add(new VideoIdModel(e1.videoId));
+                const videoId = e1.videoId;
+                if (videoId) {
+                    videoIdListModel.add(new VideoIdModel(videoId));
+                }
             });
 
             return videoIdListModel;

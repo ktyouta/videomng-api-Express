@@ -95,7 +95,7 @@ export class GetFavoriteVideoListController extends RouteController {
             modeModel,
         );
 
-        // お気に入り動画リストとフォルダリストを取得（互いに依存しないため並列実行する）
+        // お気に入り動画リストとフォルダリストを取得
         const [favoriteVideoList, folderList] = await Promise.all([
             this.getFavoriteVideoListService.getFavoriteVideoList(
                 getFavoriteVideoListSelectEntity,
@@ -119,7 +119,7 @@ export class GetFavoriteVideoListController extends RouteController {
             return;
         }
 
-        // お気に入り動画件数の取得・YouTube Data Apiからの情報付与を並列実行する（互いに依存しないため）
+        // お気に入り動画件数の取得・YouTube Data Apiからの情報付与を並列実行
         const [total, favoriteVideoListMergedList, folderListMergedList] = await Promise.all([
             this.getFavoriteVideoListService.getFavoriteVideoListCount(getFavoriteVideoListSelectEntity),
             this.getFavoriteVideoListService.mergeYouTubeDataList(favoriteVideoList),

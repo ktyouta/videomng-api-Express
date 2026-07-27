@@ -315,7 +315,7 @@ export class GetFavoriteVideoFolderRepositoryPostgres implements GetFavoriteVide
                     b.video_id as "videoId"
                 FROM
                     "folder_master" a
-                INNER JOIN
+                LEFT JOIN
                     "favorite_video_folder_transaction" b
                 ON
                     b.folder_master_id = a.id

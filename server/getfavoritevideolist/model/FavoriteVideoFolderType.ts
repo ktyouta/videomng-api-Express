@@ -4,6 +4,6 @@ export type FavoriteVideoFolderType = {
     name: string;
     folderColor: string;
     updateDate: string;
-    videoId: string,
+    videoId: string | null,
 }
 
