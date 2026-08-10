@@ -1,9 +1,8 @@
 import { FavoriteVideoTransaction } from "@prisma/client";
 import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
+import { CreateSearchWordEntity } from "../../entity/CreateSearchWordEntity";
 import { GetVideoListSelectEntity } from "../../entity/GetVideoListSelectEntity";
 import { GetVideoListRepositoryInterface } from "../interface/GetVideoListRepositoryInterface";
-
-
 
 /**
  * 永続ロジック用クラス
@@ -33,4 +32,34 @@ export class GetVideoListRepositoryPostgres implements GetVideoListRepositoryInt
 
         return favoriteVideoList;
     }
+
+    /**
+     * 検索実績登録（存在すれば検索回数を加算、なければ新規登録）
+     */
+    async upsertSearchWord(entity: CreateSearchWordEntity): Promise<void> {
+
+        const now = new Date();
+
+        // (user_id, word) の一意制約を利用したアトミックな upsert。
+        // 存在すれば search_count を +1、なければ search_count = 1 で新規作成する。
+        await PrismaClientInstance.getInstance().searchWordTransaction.upsert({
+            where: {
+                userId_word: {
+                    userId: entity.frontUserId,
+                    word: entity.word,
+                },
+            },
+            update: {
+                searchCount: { increment: 1 },
+                updateDate: now,
+            },
+            create: {
+                userId: entity.frontUserId,
+                word: entity.word,
+                searchCount: 1,
+                createDate: now,
+                updateDate: now,
+            },
+        });
+    };
 }

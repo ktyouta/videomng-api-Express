@@ -86,16 +86,22 @@ export class GetVideoListController extends RouteController {
 
             // ログインしている場合はお気に入りチェックを実施
             if (accessTokenModel.token) {
-
                 // お気に入り登録チェック
                 convertedVideoList = await this.getVideoListService.checkFavorite(convertedVideoList, accessTokenModel);
+
+                // 検索実績登録（副次処理のため、失敗しても動画リスト返却は継続する）
+                try {
+                    await this.getVideoListService.upsertSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword);
+                } catch (err) {
+                    if (err instanceof Error) {
+                        console.error(`検索実績の登録に失敗しました。err:${err.message}`);
+                    }
+                }
             }
         } catch (err) {
-
             if (err instanceof AccessTokenError) {
                 return ApiResponse.create(res, HTTP_STATUS_UNAUTHORIZED, `認証エラー`);
             }
-
             throw Error(`${err}`);
         }
 

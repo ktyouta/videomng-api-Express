@@ -6,11 +6,11 @@ export class YouTubeDataApiVideoListKeyword {
 
     constructor(keyword: string) {
 
-        if (!keyword) {
+        if (!keyword || !keyword.trim()) {
             throw Error(`YoutubeDataApiの呼び出しにはキーワードが必須です。`);
         }
 
-        this._keyword = keyword;
+        this._keyword = keyword.trim();
     }
 
     get keywrod() {

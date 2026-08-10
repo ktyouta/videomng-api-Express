@@ -1,4 +1,5 @@
-import { FavoriteVideoCategoryTransaction, FavoriteVideoMemoTransaction, FavoriteVideoTransaction, FrontUserInfoMaster } from "@prisma/client";
+import { FavoriteVideoTransaction } from "@prisma/client";
+import { CreateSearchWordEntity } from "../../entity/CreateSearchWordEntity";
 import { GetVideoListSelectEntity } from "../../entity/GetVideoListSelectEntity";
 
 
@@ -12,4 +13,9 @@ export interface GetVideoListRepositoryInterface {
      */
     selectVideo(getVideoListSelectEntity: GetVideoListSelectEntity): Promise<FavoriteVideoTransaction[]>;
 
+    /**
+     * 検索実績登録（存在すれば検索回数を加算、なければ新規登録）
+     * @param entity
+     */
+    upsertSearchWord(entity: CreateSearchWordEntity): Promise<void>;
 }

@@ -14,6 +14,7 @@ import { YouTubeDataApiVideoListResponseType } from '../../external/youtubedataa
 import { HeaderModel } from '../../header/model/HeaderModel';
 import { FrontUserIdModel } from '../../internaldata/common/properties/FrontUserIdModel';
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
+import { CreateSearchWordEntity } from '../entity/CreateSearchWordEntity';
 import { GetVideoListSelectEntity } from '../entity/GetVideoListSelectEntity';
 import { GetVideoListRepositoryInterface } from '../repository/interface/GetVideoListRepositoryInterface';
 import { GetVideoListItemType } from '../type/GetVideoListItemType';
@@ -145,5 +146,21 @@ export class GetVideoListService {
         const accessTokenModel = AccessTokenModel.get(headerModel);
 
         return accessTokenModel
+    }
+
+    /**
+     * 検索実績登録
+     * @param accessTokenModel
+     * @param keyword
+     */
+    async upsertSearchWord(accessTokenModel: AccessTokenModel, keyword: YouTubeDataApiVideoListKeyword) {
+
+        const userIdModel = FrontUserIdModel.fromHAccessToken(accessTokenModel);
+
+        // 検索実績登録用Entity
+        const createSearchWordEntity = new CreateSearchWordEntity(userIdModel, keyword);
+
+        // 検索実績を登録（存在すれば検索回数を加算）
+        await this.repository.upsertSearchWord(createSearchWordEntity);
     }
 }
