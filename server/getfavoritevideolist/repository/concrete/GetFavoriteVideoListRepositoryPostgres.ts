@@ -101,12 +101,8 @@ export class GetFavoriteVideoListRepositoryPostgres implements GetFavoriteVideoL
                     1
                 FROM
                     favorite_video_category_transaction b
-                INNER JOIN
-                    folder_master c
-                ON
-                    b.folder_master_id = c.id
                 WHERE 
-                    c.user_id = $1 AND 
+                    b.user_id = $1 AND 
                     b.video_id = a.video_id AND 
                     b.category_id = ANY($${paramIndex})
             )`;
