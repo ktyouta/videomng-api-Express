@@ -10,7 +10,9 @@ import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
+import { Prisma } from '@prisma/client';
 import { ApiResponse } from '../../util/ApiResponse';
+import { PrismaClientInstance } from '../../util/PrismaClientInstance';
 import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
 import { GetVideoListRepositorys } from '../repository/GetVideoListRepositorys';
 import { RequestQuerySchema } from '../schema/RequestQuerySchema';
@@ -91,7 +93,13 @@ export class GetVideoListController extends RouteController {
 
                 // 検索実績登録（副次処理のため、失敗しても動画リスト返却は継続する）
                 try {
-                    await this.getVideoListService.upsertSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword);
+                    // 登録と超過分削除を同一トランザクションで実行する
+                    await PrismaClientInstance.getInstance().$transaction(async (tx: Prisma.TransactionClient) => {
+                        // 検索実績を登録
+                        await this.getVideoListService.upsertSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword, tx);
+                        // 保持上限を超えた検索実績を削除
+                        await this.getVideoListService.deleteExcessSearchWord(accessTokenModel, tx);
+                    });
                 } catch (err) {
                     if (err instanceof Error) {
                         console.error(`検索実績の登録に失敗しました。err:${err.message}`);
