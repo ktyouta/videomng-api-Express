@@ -172,7 +172,8 @@ export class GetFavoriteVideoListService {
         // フォルダに属する動画をグルーピング & フォルダ情報を取得
         folderList.forEach((e) => {
             const folderId = e.folderId;
-            if (!videoFolderMap.has(folderId)) {
+            const videoId = e.videoId;
+            if (!videoFolderMap.has(folderId) && videoId) {
                 videoFolderMap.set(folderId, new Set());
             }
 
@@ -186,8 +187,8 @@ export class GetFavoriteVideoListService {
             }
 
             const videoIdList = videoFolderMap.get(folderId);
-            if (videoIdList) {
-                videoIdList.add(e.videoId ?? "");
+            if (videoIdList && videoId) {
+                videoIdList.add(videoId);
             }
         });
 
@@ -199,11 +200,8 @@ export class GetFavoriteVideoListService {
 
         // フォルダーリストとYouTube Data Apiの動画詳細のマージ
         const folderListMergedList: FavoriteVideoFolderThumbnailType[] = [];
-        for (const [folderId, videoId] of result.resultVideoFolderMap) {
-            const folder = folderMap.get(folderId);
-            if (!folder) {
-                continue;
-            }
+        for (const [folderId, folder] of folderMap) {
+            const videoId = result.resultVideoFolderMap.get(folderId);
 
             // APIから動画情報の取得に失敗
             if (!videoId) {
