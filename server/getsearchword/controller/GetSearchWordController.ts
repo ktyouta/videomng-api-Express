@@ -1,5 +1,4 @@
-import { Prisma } from '@prisma/client';
-import { NextFunction, Response } from 'express';
+import { Response } from 'express';
 import { RepositoryType } from '../../constant/CommonConst';
 import { HTTP_STATUS_OK } from '../../constant/HttpStatusConst';
 import { authMiddleware } from '../../middleware/authMiddleware/authMiddleware';
@@ -8,7 +7,7 @@ import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
 import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { ApiResponse } from '../../util/ApiResponse';
-import { PrismaTransaction } from '../../util/PrismaTransaction';
+import { GetSearchWordResponseModel } from '../model/GetSearchWordResponseModel';
 import { GetSearchWordRepositorys } from '../repository/GetSearchWordRepositorys';
 import { GetSearchWordService } from '../service/GetSearchWordService';
 
@@ -33,17 +32,15 @@ export class GetSearchWordController extends RouteController {
      * @param res 
      * @returns 
      */
-    public async doExecute(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-        // トランザクション開始
-        PrismaTransaction.start(async (tx: Prisma.TransactionClient) => {
-            const frontUserIdModel = req.userInfo.frontUserIdModel;
+    public async doExecute(req: AuthenticatedRequest, res: Response) {
+        const frontUserIdModel = req.userInfo.frontUserIdModel;
 
-            // 検索実績取得
-            const folderList = await this.getSearchWordService.getSearchWord(frontUserIdModel);
+        // 最近の検索実績取得
+        const recentSearchWord = await this.getSearchWordService.getRecentSearchWord(frontUserIdModel);
 
-            return ApiResponse.create(res, HTTP_STATUS_OK, `検索実績を取得しました。`, folderList);
+        // よく検索するワード取得
+        const frequentlySearchWord = await this.getSearchWordService.getFrequentlySearchWord(frontUserIdModel);
 
-        }, next);
-
+        return ApiResponse.create(res, HTTP_STATUS_OK, `検索実績を取得しました。`, new GetSearchWordResponseModel(recentSearchWord, frequentlySearchWord));
     }
 }

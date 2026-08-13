@@ -8,8 +8,14 @@ import { SearchWordType } from "../../types/SearchWordType";
 export interface GetSearchWordRepositoryInterface {
 
     /**
-     * 検索実績取得
-     * @param favoriteVideoTagInsertEntity 
+     * 最近の検索実績取得
+     * @param frontUserIdModel
      */
-    selectSearchWord(frontUserIdModel: FrontUserIdModel): Promise<SearchWordType[]>;
+    getRecentSearchWord(frontUserIdModel: FrontUserIdModel): Promise<SearchWordType[]>;
+
+    /**
+     * よく検索するワードを取得
+     * @param frontUserIdModel
+     */
+    getFrequentlySearchWord(frontUserIdModel: FrontUserIdModel): Promise<SearchWordType[]>;
 }

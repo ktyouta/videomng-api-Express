@@ -7,14 +7,20 @@ export class GetSearchWordService {
     constructor(private readonly getSearchWordRepositoryInterface: GetSearchWordRepositoryInterface) { }
 
     /**
-     * 検索実績を取得
-     * @param getUpdateFavoriteVideoTagRepository 
-     * @param updateFavoriteVideoTagRequestModel 
+     * 最近の検索実績を取得
+     * @param frontUserIdModel
+     * @returns
+     */
+    async getRecentSearchWord(frontUserIdModel: FrontUserIdModel) {
+        return await this.getSearchWordRepositoryInterface.getRecentSearchWord(frontUserIdModel);
+    }
+
+    /**
+     * よく検索するワードを取得
      * @param frontUserIdModel 
      * @returns 
      */
-    async getSearchWord(frontUserIdModel: FrontUserIdModel) {
-        const folderList = await this.getSearchWordRepositoryInterface.selectSearchWord(frontUserIdModel);
-        return folderList;
+    async getFrequentlySearchWord(frontUserIdModel: FrontUserIdModel) {
+        return await this.getSearchWordRepositoryInterface.getFrequentlySearchWord(frontUserIdModel);
     }
 }

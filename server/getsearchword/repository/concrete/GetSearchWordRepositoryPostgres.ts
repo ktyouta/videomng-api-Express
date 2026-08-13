@@ -1,3 +1,4 @@
+import { SEARCH_WORD_FETCH_LIMIT } from "../../const/GetSearchWordConst";
 import { FrontUserIdModel } from "../../../internaldata/common/properties/FrontUserIdModel";
 import { PrismaClientInstance } from "../../../util/PrismaClientInstance";
 import { SearchWordType } from "../../types/SearchWordType";
@@ -5,7 +6,7 @@ import { GetSearchWordRepositoryInterface } from "../interface/GetSearchWordInte
 
 
 /**
- * json形式の永続ロジック用クラス
+ * 検索実績の永続ロジック用クラス（PostgreSQL）
  */
 export class GetSearchWordRepositoryPostgres implements GetSearchWordRepositoryInterface {
 
@@ -14,56 +15,50 @@ export class GetSearchWordRepositoryPostgres implements GetSearchWordRepositoryI
 
     /**
      * 検索実績取得
-     * @param frontFavoriteVideoTagInfoMasterModel 
-     * @returns 
+     * @param frontUserIdModel
+     * @returns
      */
-    async selectSearchWord(frontUserIdModel: FrontUserIdModel): Promise<SearchWordType[]> {
+    async getRecentSearchWord(frontUserIdModel: FrontUserIdModel): Promise<SearchWordType[]> {
 
         const userId = frontUserIdModel.frontUserId;
-        const params = [];
-        params.push(userId);
 
-        let sql = `
-            WITH RECURSIVE folder_tree AS (
-                SELECT 
-                    id,
-                    name,
-                    folder_color,
-                    parent_id
-                FROM 
-                    folder_master
-                WHERE 
-                    user_id = $1 AND
-                    id = $2
+        return await PrismaClientInstance.getInstance().searchWordTransaction.findMany({
+            select: {
+                id: true,
+                word: true,
+            },
+            where: {
+                userId,
+            },
+            orderBy: {
+                updateDate: 'desc',
+            },
+            take: SEARCH_WORD_FETCH_LIMIT,
+        });
+    }
 
-                UNION ALL
+    /**
+     * よく検索するワードを取得
+     * @param frontUserIdModel
+     * @returns
+     */
+    async getFrequentlySearchWord(frontUserIdModel: FrontUserIdModel): Promise<SearchWordType[]> {
 
-                SELECT 
-                    f.id,
-                    f.name,
-                    f.folder_color,
-                    f.parent_id
-                FROM 
-                    folder_master f
-                INNER JOIN 
-                    folder_tree ft
-                ON 
-                    f.user_id = $1 AND
-                    f.id = ft.parent_id
-            )
+        const userId = frontUserIdModel.frontUserId;
 
-            SELECT
-                id,
-                name,
-                folder_color as "folderColor",
-                parent_id as "parentId"
-            FROM
-                folder_tree
-            ORDER BY
-                id
-        `;
-
-        const folderList = await PrismaClientInstance.getInstance().$queryRawUnsafe<SearchWordType[]>(sql, ...params);
-        return folderList;
+        return await PrismaClientInstance.getInstance().searchWordTransaction.findMany({
+            select: {
+                id: true,
+                word: true,
+            },
+            where: {
+                userId,
+            },
+            orderBy: [
+                { searchCount: 'desc' },
+                { updateDate: 'desc' },
+            ],
+            take: SEARCH_WORD_FETCH_LIMIT,
+        });
     }
 }
