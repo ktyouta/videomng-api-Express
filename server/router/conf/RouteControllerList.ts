@@ -1,5 +1,6 @@
 import { CreateBlockCommentController } from "../../createblockcomment/controller/CreateBlockCommentController";
 import { CreateFavoriteCommentController } from "../../createfavoritecomment/controller/CreateFavoriteCommentController";
+import { CreateFavoriteSearchWordController } from "../../createfavoritesearchword/controller/CreateFavoriteSearchWordController";
 import { CreateFavoriteVideoController } from "../../createfavoritevideo/controller/CreateFavoriteVideoController";
 import { CreateFavoriteVideoFolderController } from "../../createfavoritevideofolder/controller/CreateFavoriteVideoFolderController";
 import { CreateFavoriteVideoMemoController } from "../../createfavoritevideomemo/controller/CreateFavoriteVideoMemoController";
@@ -151,4 +152,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetSearchWordController(),
     // お気に入りワード取得
     new GetFavoriteSearchWordController(),
+    // お気に入りワード登録
+    new CreateFavoriteSearchWordController(),
 ]
