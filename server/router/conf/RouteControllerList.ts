@@ -8,6 +8,7 @@ import { CreateFolderController } from "../../createfolder/controller/CreateFold
 import { CreateFrontUserInfoController } from "../../createfrontuserinfo/controller/CreateFrontUserInfoController";
 import { DeleteBlockCommentController } from "../../deleteblockcomment/controller/DeleteBlockCommentController";
 import { DeleteFavoriteCommentController } from "../../deletefavoritecomment/controller/DeleteFavoriteCommentController";
+import { DeleteFavoriteSearchWordController } from "../../deletefavoritesearchword/controller/DeleteFavoriteSearchWordController";
 import { DeleteFavoriteVideoController } from "../../deletefavoritevideo/controller/DeleteFavoriteVideoController";
 import { DeleteFavoriteVideoFolderController } from "../../deletefavoritevideofolder/controller/DeleteFavoriteVideoFolderController";
 import { DeleteFavoriteVideoMemoController } from "../../deletefavoritevideomemo/controller/DeleteFavoriteVideoMemoController";
@@ -157,4 +158,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new CreateFavoriteSearchWordController(),
     // 検索実績削除
     new DeleteSearchWordController(),
+    // お気に入りワード削除
+    new DeleteFavoriteSearchWordController(),
 ]
