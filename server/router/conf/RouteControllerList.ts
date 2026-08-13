@@ -19,6 +19,7 @@ import { FrontUserLogoutController } from "../../frontuserlogout/controller/Fron
 import { GetBlockCommentListController } from "../../getblockcommentlist/controller/GetBlockCommentListController";
 import { GetChannelVideoListController } from "../../getchannelvideolist/controller/GetChannelVideoListController";
 import { GetFavoriteCommentListController } from "../../getfavoritecommentlist/controller/GetFavoriteCommentListController";
+import { GetFavoriteSearchWordController } from "../../getfavoritesearchword/controller/GetFavoriteSearchWordController";
 import { GetFavoriteVideoCommentController } from "../../getfavoritevideocomment/controller/GetFavoriteVideoCommentController";
 import { GetFavoriteVideoCustomController } from "../../getfavoritevideocustom/controller/GetFavoriteVideoCustomController";
 import { GetFavoriteVideoDetialController } from "../../getfavoritevideodetail/controller/GetFavoriteVideoDetialController";
@@ -29,6 +30,7 @@ import { GetFavoriteVideoSortListController } from "../../getfavoritevideosortli
 import { GetFavoriteVideoTagListController } from "../../getfavoritevideotag/controller/GetFavoriteVideoTagListController";
 import { GetFolderController } from "../../getfolder/controller/GetFolderController";
 import { GetFolderListController } from "../../getfolderlist/controller/GetFolderListController";
+import { GetSearchWordController } from "../../getsearchword/controller/GetSearchWordController";
 import { GetTagListController } from "../../gettaglist/controller/GetTagListController";
 import { GetVideoCategoryController } from "../../getvideocategory/controller/GetVideoCategoryController";
 import { GetVideoCommentController } from "../../getvideocomment/controller/GetVideoCommentController";
@@ -145,4 +147,8 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new FolderShareVideosController(),
     // トークンリフレッシュ
     new RefreshController(),
+    // 検索実績取得
+    new GetSearchWordController(),
+    // お気に入りワード取得
+    new GetFavoriteSearchWordController(),
 ]
