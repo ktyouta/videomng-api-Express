@@ -12,6 +12,7 @@ import { DeleteFavoriteVideoController } from "../../deletefavoritevideo/control
 import { DeleteFavoriteVideoFolderController } from "../../deletefavoritevideofolder/controller/DeleteFavoriteVideoFolderController";
 import { DeleteFavoriteVideoMemoController } from "../../deletefavoritevideomemo/controller/DeleteFavoriteVideoMemoController";
 import { DeleteFolderController } from "../../deletefolder/controller/DeleteFolderController";
+import { DeleteSearchWordController } from "../../deletesearchword/controller/DeleteSearchWordController";
 import { DownloadFavoriteVideoListCsvController } from "../../downloadfavoritevideolistcsv/controller/DownloadFavoriteVideoListCsvController";
 import { FolderShareVideosController } from "../../foldersharevideos/controller/FolderShareVideosController";
 import { FrontUserCheckAuthController } from "../../frontusercheckauth/controller/FrontUserCheckAuthController";
@@ -154,4 +155,6 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new GetFavoriteSearchWordController(),
     // お気に入りワード登録
     new CreateFavoriteSearchWordController(),
+    // 検索実績削除
+    new DeleteSearchWordController(),
 ]
