@@ -41,6 +41,6 @@ export class GetSearchWordController extends RouteController {
         // よく検索するワード取得
         const frequentlySearchWord = await this.getSearchWordService.getFrequentlySearchWord(frontUserIdModel);
 
-        return ApiResponse.create(res, HTTP_STATUS_OK, `検索実績を取得しました。`, new GetSearchWordResponseModel(recentSearchWord, frequentlySearchWord));
+        return ApiResponse.create(res, HTTP_STATUS_OK, `検索実績を取得しました。`, new GetSearchWordResponseModel(recentSearchWord, frequentlySearchWord).value);
     }
 }

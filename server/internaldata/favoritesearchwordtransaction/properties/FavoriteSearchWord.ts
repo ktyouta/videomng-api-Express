@@ -4,11 +4,11 @@ export class FavoriteSearchWord {
 
     constructor(value: string) {
 
-        if (!value) {
+        if (!value || !value.trim()) {
             throw Error(`お気に入りワードが設定されていません。`);
         }
 
-        this._value = value;
+        this._value = value.trim();
     }
 
     get value() {
