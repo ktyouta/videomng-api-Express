@@ -204,8 +204,19 @@ model FavoriteVideoFolderTransaction {
   @@map("favorite_video_folder_transaction") 
 }
 
-// 検索実績
-model SearchWordTransaction {
+// 最近の検索実績
+model RecentSearchWordTransaction {
+  id Int @id @default(autoincrement())
+  userId      Int   @map("user_id")
+  word      String   @db.VarChar(255)
+  createDate  DateTime @db.Timestamptz @map("create_date")
+  updateDate  DateTime @db.Timestamptz @map("update_date")
+  @@unique([userId, word])
+  @@map("recent_search_word_transaction") 
+}
+
+// よく検索するワード
+model FrequentSearchWordTransaction {
   id Int @id @default(autoincrement())
   userId      Int   @map("user_id")
   word      String   @db.VarChar(255)
@@ -213,7 +224,7 @@ model SearchWordTransaction {
   createDate  DateTime @db.Timestamptz @map("create_date")
   updateDate  DateTime @db.Timestamptz @map("update_date")
   @@unique([userId, word])
-  @@map("search_word_transaction") 
+  @@map("frequent_search_word_transaction") 
 }
 
 // お気に入りワード

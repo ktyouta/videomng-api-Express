@@ -15,16 +15,30 @@ export interface GetVideoListRepositoryInterface {
     selectVideo(getVideoListSelectEntity: GetVideoListSelectEntity): Promise<FavoriteVideoTransaction[]>;
 
     /**
-     * 検索実績登録（存在すれば検索回数を加算、なければ新規登録）
+     * 最近の検索実績登録
      * @param entity
      * @param tx
      */
-    upsertSearchWord(entity: CreateSearchWordEntity, tx: Prisma.TransactionClient): Promise<void>;
+    insertRecentSearchWord(entity: CreateSearchWordEntity, tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
+     * あなたがよく検索するワード登録（存在すれば検索回数を加算、なければ新規登録）
+     * @param entity
+     * @param tx
+     */
+    upsertFrequentSearchWord(entity: CreateSearchWordEntity, tx: Prisma.TransactionClient): Promise<void>;
 
     /**
      * 保持上限を超えた検索実績を削除する（LRU）
      * @param frontUserIdModel
      * @param tx
      */
-    deleteExcessSearchWord(frontUserIdModel: FrontUserIdModel, tx: Prisma.TransactionClient): Promise<void>;
+    deleteExcessRecentSearchWord(frontUserIdModel: FrontUserIdModel, tx: Prisma.TransactionClient): Promise<void>;
+
+    /**
+     * 保持上限を超えた検索実績を削除する（LRU）
+     * @param frontUserIdModel
+     * @param tx
+     */
+    deleteExcessFrequentSearchWord(frontUserIdModel: FrontUserIdModel, tx: Prisma.TransactionClient): Promise<void>;
 }

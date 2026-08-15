@@ -13,7 +13,8 @@ import { DeleteFavoriteVideoController } from "../../deletefavoritevideo/control
 import { DeleteFavoriteVideoFolderController } from "../../deletefavoritevideofolder/controller/DeleteFavoriteVideoFolderController";
 import { DeleteFavoriteVideoMemoController } from "../../deletefavoritevideomemo/controller/DeleteFavoriteVideoMemoController";
 import { DeleteFolderController } from "../../deletefolder/controller/DeleteFolderController";
-import { DeleteSearchWordController } from "../../deletesearchword/controller/DeleteSearchWordController";
+import { DeleteFrequentSearchWordController } from "../../deletefrequentsearchword/controller/DeleteFrequentSearchWordController";
+import { DeleteRecentSearchWordController } from "../../deleterecentsearchword/controller/DeleteRecentSearchWordController";
 import { DownloadFavoriteVideoListCsvController } from "../../downloadfavoritevideolistcsv/controller/DownloadFavoriteVideoListCsvController";
 import { FolderShareVideosController } from "../../foldersharevideos/controller/FolderShareVideosController";
 import { FrontUserCheckAuthController } from "../../frontusercheckauth/controller/FrontUserCheckAuthController";
@@ -33,7 +34,8 @@ import { GetFavoriteVideoSortListController } from "../../getfavoritevideosortli
 import { GetFavoriteVideoTagListController } from "../../getfavoritevideotag/controller/GetFavoriteVideoTagListController";
 import { GetFolderController } from "../../getfolder/controller/GetFolderController";
 import { GetFolderListController } from "../../getfolderlist/controller/GetFolderListController";
-import { GetSearchWordController } from "../../getsearchword/controller/GetSearchWordController";
+import { GetFrequentSearchWordController } from "../../getfrequentsearchword/controller/GetFrequentSearchWordController";
+import { GetRecentSearchWordController } from "../../getrecentsearchword/controller/GetRecentSearchWordController";
 import { GetTagListController } from "../../gettaglist/controller/GetTagListController";
 import { GetVideoCategoryController } from "../../getvideocategory/controller/GetVideoCategoryController";
 import { GetVideoCommentController } from "../../getvideocomment/controller/GetVideoCommentController";
@@ -150,14 +152,18 @@ export const ROUTE_CONTROLLER_LIST: ReadonlyArray<RouteController> = [
     new FolderShareVideosController(),
     // トークンリフレッシュ
     new RefreshController(),
-    // 検索実績取得
-    new GetSearchWordController(),
+    // 最近の検索実績取得
+    new GetRecentSearchWordController(),
+    // よく検索するワード取得
+    new GetFrequentSearchWordController(),
     // お気に入りワード取得
     new GetFavoriteSearchWordController(),
     // お気に入りワード登録
     new CreateFavoriteSearchWordController(),
-    // 検索実績削除
-    new DeleteSearchWordController(),
+    // 最近の検索実績削除
+    new DeleteRecentSearchWordController(),
+    // よく検索するワード削除
+    new DeleteFrequentSearchWordController(),
     // お気に入りワード削除
     new DeleteFavoriteSearchWordController(),
 ]

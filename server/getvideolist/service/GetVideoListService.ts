@@ -149,32 +149,62 @@ export class GetVideoListService {
     }
 
     /**
-     * 検索実績登録
+     * 最近の検索実績登録（既に存在する場合は何もしない）
      * @param accessTokenModel
      * @param keyword
      * @param tx
      */
-    async upsertSearchWord(accessTokenModel: AccessTokenModel, keyword: YouTubeDataApiVideoListKeyword, tx: Prisma.TransactionClient) {
+    async insertRecentSearchWord(accessTokenModel: AccessTokenModel, keyword: YouTubeDataApiVideoListKeyword, tx: Prisma.TransactionClient) {
 
         const userIdModel = FrontUserIdModel.fromHAccessToken(accessTokenModel);
 
         // 検索実績登録用Entity
         const createSearchWordEntity = new CreateSearchWordEntity(userIdModel, keyword);
 
-        // 検索実績を登録（存在すれば検索回数を加算）
-        await this.repository.upsertSearchWord(createSearchWordEntity, tx);
+        // 最近の検索実績を登録（既に存在する場合は何もしない）
+        await this.repository.insertRecentSearchWord(createSearchWordEntity, tx);
     }
 
     /**
-     * 保持上限を超えた検索実績を削除する
+     * 保持上限を超えた最近の検索実績を削除する
      * @param accessTokenModel
      * @param tx
      */
-    async deleteExcessSearchWord(accessTokenModel: AccessTokenModel, tx: Prisma.TransactionClient) {
+    async deleteExcessRecentSearchWord(accessTokenModel: AccessTokenModel, tx: Prisma.TransactionClient) {
 
         const userIdModel = FrontUserIdModel.fromHAccessToken(accessTokenModel);
 
-        // 保持上限を超えた検索実績を削除
-        await this.repository.deleteExcessSearchWord(userIdModel, tx);
+        // 保持上限を超えた最近の検索実績を削除
+        await this.repository.deleteExcessRecentSearchWord(userIdModel, tx);
+    }
+
+    /**
+     * よく検索するワード登録（存在すれば検索回数を加算、なければ新規登録）
+     * @param accessTokenModel
+     * @param keyword
+     * @param tx
+     */
+    async upsertFrequentSearchWord(accessTokenModel: AccessTokenModel, keyword: YouTubeDataApiVideoListKeyword, tx: Prisma.TransactionClient) {
+
+        const userIdModel = FrontUserIdModel.fromHAccessToken(accessTokenModel);
+
+        // 検索実績登録用Entity
+        const createSearchWordEntity = new CreateSearchWordEntity(userIdModel, keyword);
+
+        // よく検索するワードを登録（存在すれば検索回数を加算）
+        await this.repository.upsertFrequentSearchWord(createSearchWordEntity, tx);
+    }
+
+    /**
+     * 保持上限を超えたよく検索するワードを削除する
+     * @param accessTokenModel
+     * @param tx
+     */
+    async deleteExcessFrequentSearchWord(accessTokenModel: AccessTokenModel, tx: Prisma.TransactionClient) {
+
+        const userIdModel = FrontUserIdModel.fromHAccessToken(accessTokenModel);
+
+        // 保持上限を超えたよく検索するワードを削除
+        await this.repository.deleteExcessFrequentSearchWord(userIdModel, tx);
     }
 }

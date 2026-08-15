@@ -34,8 +34,10 @@ export enum ApiEndopoint {
     FAVORITE_VIDEO_FOLDER_ID = "/videomng/v1/folder/:folderId/favoritevideo/:videoId",
     FOLDER_SHARE_VIDEOS = "/videomng/v1/folder/:folderId/shared-videos",
     REFRESH = "/videomng/v1/refresh",
-    SEARCH_WORD = "/videomng/v1/searchword",
-    SEARCH_WORD_ID = "/videomng/v1/searchword/:id",
+    RECENT_SEARCH_WORD = "/videomng/v1/recentsearchword",
+    RECENT_SEARCH_WORD_ID = "/videomng/v1/recentsearchword/:id",
+    FREQUENT_SEARCH_WORD = "/videomng/v1/frequentsearchword",
+    FREQUENT_SEARCH_WORD_ID = "/videomng/v1/frequentsearchword/:id",
     FAVORITE_SEARCH_WORD = "/videomng/v1/favoritesearchword",
     FAVORITE_SEARCH_WORD_ID = "/videomng/v1/favoritesearchword/:id",
 }

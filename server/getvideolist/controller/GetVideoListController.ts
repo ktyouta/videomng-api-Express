@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { Request, Response } from 'express';
 import { ZodIssue } from 'zod';
 import { AccessTokenError } from '../../accesstoken/model/AccessTokenError';
@@ -10,7 +11,6 @@ import { YouTubeDataApiVideoListVideoType } from '../../external/youtubedataapi/
 import { ApiEndopoint } from '../../router/conf/ApiEndpoint';
 import { RouteController } from '../../router/controller/RouteController';
 import { HttpMethodType, RouteSettingModel } from '../../router/model/RouteSettingModel';
-import { Prisma } from '@prisma/client';
 import { ApiResponse } from '../../util/ApiResponse';
 import { PrismaClientInstance } from '../../util/PrismaClientInstance';
 import { SUCCESS_MESSAGE } from '../const/GetVideoListConst';
@@ -95,10 +95,17 @@ export class GetVideoListController extends RouteController {
                 try {
                     // 登録と超過分削除を同一トランザクションで実行する
                     await PrismaClientInstance.getInstance().$transaction(async (tx: Prisma.TransactionClient) => {
-                        // 検索実績を登録
-                        await this.getVideoListService.upsertSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword, tx);
-                        // 保持上限を超えた検索実績を削除
-                        await this.getVideoListService.deleteExcessSearchWord(accessTokenModel, tx);
+                        // 最近の検索実績を登録
+                        await this.getVideoListService.insertRecentSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword, tx);
+
+                        // あなたがよく検索するワードを登録
+                        await this.getVideoListService.upsertFrequentSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword, tx);
+
+                        // 保持上限を超えた最近の検索実績を削除
+                        await this.getVideoListService.deleteExcessRecentSearchWord(accessTokenModel, tx);
+
+                        // 保持上限を超えたよく検索するワードを削除
+                        await this.getVideoListService.deleteExcessFrequentSearchWord(accessTokenModel, tx);
                     });
                 } catch (err) {
                     if (err instanceof Error) {
