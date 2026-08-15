@@ -91,27 +91,29 @@ export class GetVideoListController extends RouteController {
                 // お気に入り登録チェック
                 convertedVideoList = await this.getVideoListService.checkFavorite(convertedVideoList, accessTokenModel);
 
-                // 検索実績登録（副次処理のため、失敗しても動画リスト返却は継続する）
-                try {
-                    // 登録と超過分削除を同一トランザクションで実行する
-                    await PrismaClientInstance.getInstance().$transaction(async (tx: Prisma.TransactionClient) => {
-                        // 最近の検索実績を登録
-                        await this.getVideoListService.insertRecentSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword, tx);
+                // 検索実績登録（副次処理のため、動画リスト返却を待たず裏側で非同期実行する。失敗してもレスポンスには影響させない）
+                (async () => {
+                    try {
+                        // 登録と超過分削除を同一トランザクションで実行する
+                        await PrismaClientInstance.getInstance().$transaction(async (tx: Prisma.TransactionClient) => {
+                            // 最近の検索実績を登録
+                            await this.getVideoListService.insertRecentSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword, tx);
 
-                        // あなたがよく検索するワードを登録
-                        await this.getVideoListService.upsertFrequentSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword, tx);
+                            // あなたがよく検索するワードを登録
+                            await this.getVideoListService.upsertFrequentSearchWord(accessTokenModel, youTubeDataApiVideoListKeyword, tx);
 
-                        // 保持上限を超えた最近の検索実績を削除
-                        await this.getVideoListService.deleteExcessRecentSearchWord(accessTokenModel, tx);
+                            // 保持上限を超えた最近の検索実績を削除
+                            await this.getVideoListService.deleteExcessRecentSearchWord(accessTokenModel, tx);
 
-                        // 保持上限を超えたよく検索するワードを削除
-                        await this.getVideoListService.deleteExcessFrequentSearchWord(accessTokenModel, tx);
-                    });
-                } catch (err) {
-                    if (err instanceof Error) {
-                        console.error(`検索実績の登録に失敗しました。err:${err.message}`);
+                            // 保持上限を超えたよく検索するワードを削除
+                            await this.getVideoListService.deleteExcessFrequentSearchWord(accessTokenModel, tx);
+                        });
+                    } catch (err) {
+                        if (err instanceof Error) {
+                            console.error(`検索実績の登録に失敗しました。err:${err.message}`);
+                        }
                     }
-                }
+                })();
             }
         } catch (err) {
             if (err instanceof AccessTokenError) {
