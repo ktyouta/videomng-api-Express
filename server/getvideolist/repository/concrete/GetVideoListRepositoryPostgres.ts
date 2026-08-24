@@ -44,15 +44,23 @@ export class GetVideoListRepositoryPostgres implements GetVideoListRepositoryInt
 
         const now = new Date();
 
-        // (user_id, word) の一意制約に既に存在する場合は何もしない（PostgreSQL の ON CONFLICT DO NOTHING 相当）。
-        await tx.recentSearchWordTransaction.createMany({
-            data: [{
+        // 存在すれば update_date を更新、なければ実績を作成する。
+        await tx.recentSearchWordTransaction.upsert({
+            where: {
+                userId_word: {
+                    userId: entity.frontUserId,
+                    word: entity.word,
+                },
+            },
+            update: {
+                updateDate: now,
+            },
+            create: {
                 userId: entity.frontUserId,
                 word: entity.word,
                 createDate: now,
                 updateDate: now,
-            }],
-            skipDuplicates: true,
+            },
         });
     };
 
